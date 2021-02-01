@@ -51,7 +51,7 @@ if(!function_exists('alom_protect')){
         if(!isset($settings['force_name']))
             $settings['force_name'] = basename($file);
         if(!isset($settings['title']))
-            $settings['title'] = 'Obfuscatored by ALOM 1.7 | Auto Protection';
+            $settings['title'] = 'Obfuscatored by ALOM 2.0 | Auto Protection';
 
         if(!class_exists('AlomEncoder'))
             require __DIR__."/alomencoder.obfs.php";
