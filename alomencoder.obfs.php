@@ -1,12 +1,15 @@
 <?php
-
 /**
+ * Alom 2.0
  * Unpacked by Tesla
  * https://github.com/0x11DFE
  */
 
-global $mt_prng_seed, $key, $fky, $src, $IW, $tokens, $src, $new, $c, $tokens, $iw, $ih, $ls, $ot, $i, $i, $c, $i, $token, $tokens, $i, $token, $tn, $ts, $token, $tname, $tn, $tn, $new, $ts, $iw, $tn, $ts, $ts, $ts, $ts, $ts, $ts, $ts, $new, $ts, $ot, $iw, $tn, $new, $ts, $ot, $iw, $tn, $ot, $new, $new, $ts, $ts, $new, $ts, $ot, $iw, $tn, $IW, $new, $ts, $iw, $tn, $tn, $ts, $ts, $ts, $new, $ts, $iw, $tn, $nt, $tokens, $i, $tokens, $i, $iw, $nt, $nt, $nt, $IW, $new, $nt, $tokens, $i, $tokens, $i, $tokens, $i, $tokens, $i, $tokens, $i, $new, $iw, $tn, $new, $iw, $ih, $tn, $new, $iw, $ih, $j, $i, $j, $c, $j, $tokens, $j, $tokens, $j, $i, $j, $tokens, $j, $tn, $tn, $iw, $new, $ts, $iw, $ls, $token, $token, $ls, $token, $new, $token, $ls, $token, $iw, $new, $st, $len, $st, $i, $i, $len, $i, $r, $len, $r, $i, $t, $st, $i, $st, $i, $st, $r, $st, $r, $t, $st, $arr, $len, $arr, $i, $i, $len, $i, $r, $len, $r, $i, $t, $arr, $i, $arr, $i, $arr, $r, $arr, $r, $t, $arr, $st, $s, $res, $i, $st, $i, $i, $i1, $st, $i, $a1, $st, $i, $a2, $i1, $st, $i, $res, $s, $a1, $res, $s, $a1, $a2, $i1, $i2, $st, $i, $a3, $i2, $st, $i, $res, $s, $a2, $a3, $i2, $res, $s, $a3, $res, $res, $res, $st, $sl1, $sl2, $sl1, $sl2, $sl1, $sl2, $t0, $t1, $t0, $t1, $u0, $t0, $t0, $u1, $t1, $t1, $len, $st, $sq, $len, $sl, $sl1, $sl2, $rounds, $sl, $sl, $sl2, $len, $sl, $sl, $sl1, $sl, $len, $len, $u1, $u0, $st, $sl, $sl, $sl, $st, $st, $l4, $sq, $round, $rounds, $round, $round, $sl1, $sl2, $round, $randpack, $i, $i, $l4, $i, $randpack, $l4, $i, $len, $randpack, $l4, $i, $len, $randpack, $l4, $i, $len, $randpack, $l4, $i, $len, $i, $i, $sq, $i, $p, $randpack, $i, $p1, $randpack, $i, $p2, $randpack, $i, $p3, $randpack, $i, $p1, $p, $p1, $p2, $p, $p2, $p3, $p, $p3, $st, $p2, $u0, $st, $p2, $st, $p, $st, $p, $sl, $st, $p3, $u1, $st, $p3, $st, $p, $st, $p, $sl, $st, $p1, $u0, $st, $p1, $st, $p, $st, $p, $sl, $st, $p, $u1, $u0, $st, $p, $t1, $st, $p1, $st, $p2, $st, $p3, $st, $p, $u1, $st, $p, $st, $p1, $st, $p1, $st, $p, $u0, $st, $p, $st, $p3, $st, $p3, $st, $p, $sl, $st, $p, $u1, $st, $p, $st, $p2, $st, $p1, $st, $p, $u0, $st, $p, $st, $p1, $st, $p3, $st, $p, $u1, $st, $p, $st, $p3, $st, $p2, $st, $st, $str, $sl1, $sl2, $sl1, $sl2, $str, $sl1, $sl2, $sl1, $sl2, $str, $str, $sl2, $sl1, $str, $st, $sl1, $sl2, $t0, $t1, $u0, $u1, $st, $t0, $t0, $t1, $t1, $u0, $t0, $t0, $u1, $t1, $t1, $sl1, $sl2, $sl1, $t0, $sl1, $sl2, $t1, $sl2, $len, $st, $sl, $sl1, $sl2, $rounds, $sl, $sl, $sl2, $len, $sl, $sl, $sl1, $sl, $len, $len, $u1, $u0, $st, $sl, $sl, $sl, $l1, $len, $st, $st, $round, $rounds, $round, $round, $i, $len, $i, $i, $p, $i, $len, $round, $len, $p1, $i, $l1, $p, $l1, $l1, $p2, $i, $l1, $p1, $l1, $l1, $p3, $i, $l1, $p2, $l1, $l1, $p1, $p, $p1, $p2, $p, $p2, $p3, $p, $p3, $st, $p2, $u0, $st, $p2, $st, $p, $st, $p, $sl, $st, $p3, $u1, $st, $p3, $st, $p, $st, $p, $sl, $st, $p1, $u0, $st, $p1, $st, $p, $st, $p, $sl, $st, $p, $u1, $u0, $st, $p, $t1, $st, $p1, $st, $p2, $st, $p3, $st, $p, $u1, $st, $p, $st, $p1, $st, $p1, $st, $p, $u0, $st, $p, $st, $p3, $st, $p3, $st, $p, $sl, $st, $p, $u1, $st, $p, $st, $p2, $st, $p1, $st, $p, $u0, $st, $p, $st, $p1, $st, $p3, $st, $p, $u1, $st, $p, $st, $p3, $st, $p2, $st, $st, $str, $sl1, $sl2, $str, $sl1, $sl2, $str, $str, $sl2, $sl1, $str, $t, $u, $table, $tab, $t0, $t1, $t2, $t3, $u0, $u1, $u2, $u3, $tab, $tab, $t0, $t1, $t2, $t3, $tab, $i, $x, $t0, $i, $x, $t1, $i, $x, $t2, $i, $x, $t3, $i, $x, $u0, $t0, $t0, $u1, $t1, $t1, $u2, $t2, $t2, $u3, $t3, $t3, $table, $tab, $t, $t0, $t1, $t2, $t3, $u, $u0, $u1, $u2, $u3, $next, $prev, $t, $u, $t0, $t1, $t2, $t3, $t, $u0, $u1, $u2, $u3, $u, $t, $u, $crc32, $next, $prev, $next, $m0, $prev, $m1, $prev, $m2, $prev, $m3, $prev, $c0, $next, $c1, $next, $c2, $next, $c3, $next, $x3, $u3, $c3, $x2, $u3, $c2, $t2, $x3, $x1, $u3, $c1, $t1, $x3, $t2, $x2, $x0, $u3, $c0, $t0, $x3, $t1, $x2, $t2, $x1, $s0, $x0, $m0, $s1, $x1, $t0, $x0, $m1, $s2, $x2, $t0, $x1, $t1, $x0, $m2, $s3, $x3, $t0, $x2, $t1, $x1, $t2, $x0, $m3, $r, $s0, $s1, $s2, $s3, $r, $first, $last, $next, $prev, $t, $u, $table, $prev, $next, $i, $first, $i, $i, $tab, $table, $prev, $first, $i, $prev, $tab, $prev, $i, $last, $i, $i, $lch, $u, $next, $next, $lch, $last, $i, $next, $table, $lch, $next, $prev, $mt_prng_seed, $mt_prng_seed, $seed, $mt_prng_seed, $seed, $mt_prng_seed, $mt_prng_seed, $mt_prng_seed, $seed, $tokens, $a, $b, $i, $str, $u, $tokens, $i, $str, $tokens, $i, $tokens, $i, $tokens, $i, $a, $u, $str, $tokens, $i, $tokens, $i, $a, $u, $tokens, $i, $b, $u, $tokens, $i, $u, $i, $str, $tokens, $a, $b, $i, $j, $nc, $str, $u, $tokens, $i, $j, $str, $tokens, $i, $j, $str, $tokens, $i, $j, $tokens, $i, $j, $a, $u, $nc, $tokens, $i, $j, $str, $tokens, $i, $j, $str, $tokens, $i, $j, $b, $u, $tokens, $i, $j, $a, $u, $j, $i, $j, $u, $j, $nc, $str, $str, $tokens, $i, $cama, $str, $bra, $cama, $i, $tokens, $i, $i, $tokens, $i, $bra, $tokens, $i, $str, $tokens, $i, $tokens, $i, $tokens, $i, $str, $tokens, $i, $i, $tokens, $i, $tokens, $i, $tokens, $i, $tokens, $i, $str, $tokens, $i, $tokens, $i, $tokens, $i, $tokens, $i, $i, $str, $tokens, $i, $tokens, $i, $tokens, $i, $str, $tokens, $i, $tokens, $i, $tokens, $i, $str, $tokens, $i, $tokens, $i, $tokens, $i, $str, $tokens, $i, $tokens, $i, $str, $tokens, $i, $tokens, $i, $str, $tokens, $i, $tokens, $i, $str, $tokens, $i, $tokens, $i, $tokens, $i, $i, $str, $tokens, $i, $tokens, $i, $tokens, $i, $str, $tokens, $i, $tokens, $i, $str, $tokens, $i, $tokens, $i, $tokens, $i, $i, $str, $tokens, $i, $tokens, $i, $tokens, $i, $str, $tokens, $i, $tokens, $i, $str, $tokens, $i, $tokens, $i, $str, $tokens, $i, $i, $str, $tokens, $i, $str, $j, $tokens, $i, $j, $str, $tokens, $i, $j, $str, $i, $j, $j, $tokens, $i, $j, $tokens, $i, $j, $tokens, $i, $j, $tokens, $i, $j, $tokens, $i, $j, $tokens, $i, $j, $j, $tokens, $i, $j, $j, $tokens, $i, $j, $tokens, $i, $j, $str, $tokens, $i, $j, $str, $tokens, $i, $j, $tokens, $i, $j, $str, $tokens, $i, $j, $str, $i, $j, $tokens, $i, $j, $tokens, $i, $j, $j, $str, $tokens, $i, $j, $tokens, $i, $j, $tokens, $i, $j, $str, $str, $tokens, $i, $j, $str, $tokens, $i, $j, $str, $tokens, $i, $j, $str, $tokens, $i, $j, $params, $tokens, $i, $j, $tokens, $i, $j, $tokens, $i, $j, $j, $str, $params, $str, $tokens, $i, $j, $str, $tokens, $i, $j, $str, $tokens, $i, $j, $params, $tokens, $i, $j, $params, $j, $str, $params, $str, $tokens, $i, $j, $str, $tokens, $i, $j, $str, $i, $j, $tokens, $i, $j, $j, $str, $tokens, $i, $j, $tokens, $i, $j, $tokens, $i, $j, $str, $str, $tokens, $i, $j, $str, $tokens, $i, $j, $str, $tokens, $i, $j, $str, $i, $j, $tokens, $i, $j, $j, $str, $tokens, $i, $j, $tokens, $i, $j, $tokens, $i, $j, $str, $str, $tokens, $i, $j, $str, $tokens, $i, $j, $str, $tokens, $i, $j, $str, $str, $tokens, $i, $cama, $str, $tokens, $i, $tokens, $i, $str, $tokens, $i, $tokens, $i, $i, $str, $tokens, $i, $tokens, $i, $i, $str, $tokens, $i, $str, $tokens, $i, $i, $str, $tokens, $i, $cama, $str, $code, $tokens, $i, $j, $i, $prev, $tokens, $i, $tokens, $i, $i, $code, $tokens, $i, $tokens, $i, $tokens, $i, $tokens, $code, $next, $tokens, $i, $j, $next, $prev, $code, $tokens, $i, $readed, $extra, $backspace, $readed, $i, $backspace, $extratokens, $extra, $backspacesize, $code, $backspace, $pc, $code, $code, $code, $backspace, $extra, $tokens, $tokens, $i, $backspacesize, $readed, $extratokens, $tokens, $i, $i, $extratokens, $backspacesize, $readed, $extratokens, $extra, $code, $extra, $tokens, $tokens, $i, $readed, $extratokens, $tokens, $i, $i, $extratokens, $readed, $i, $code, $tokens, $tokens, $tokens, $code, $code, $i, $tokens, $i, $i, $tokens, $i, $j, $i, $tokens, $i, $i, $str, $tokens, $i, $tokens, $i, $tokens, $i, $str, $tokens, $i, $tokens, $i, $tokens, $i, $str, $tokens, $i, $tokens, $i, $tokens, $i, $str, $tokens, $i, $tokens, $i, $prm, $tokens, $i, $tokens, $i, $tokens, $i, $prm, $tokens, $i, $tokens, $i, $prm, $tokens, $i, $str, $str, $extra, $str, $i, $code, $tokens, $i, $i, $j, $extra, $i, $j, $code, $str, $prm, $i, $str, $str, $extra, $str, $i, $code, $tokens, $i, $i, $j, $extra, $i, $j, $code, $str, $i, $tokens, $i, $i, $pe, $tokens, $i, $extra, $pe, $code, $tokens, $i, $i, $j, $extra, $i, $j, $tokens, $i, $i, $pe, $tokens, $i, $extra, $pe, $code, $tokens, $i, $i, $j, $extra, $i, $j, $tokens, $i, $i, $pe, $tokens, $i, $extra, $pe, $code, $tokens, $i, $i, $j, $extra, $i, $j, $tokens, $i, $sl, $tokens, $i, $extra, $sl, $code, $tokens, $i, $i, $j, $extra, $i, $j, $tokens, $i, $sl, $tokens, $i, $extra, $sl, $code, $tokens, $i, $i, $j, $extra, $i, $j, $tokens, $i, $sl, $tokens, $i, $extra, $sl, $code, $tokens, $i, $i, $j, $extra, $i, $j, $tokens, $i, $sl, $tokens, $i, $extra, $sl, $code, $tokens, $i, $i, $j, $extra, $i, $j, $tokens, $i, $sl, $tokens, $i, $extra, $sl, $code, $tokens, $i, $i, $j, $extra, $i, $j, $tokens, $i, $sl, $tokens, $i, $extra, $sl, $code, $tokens, $i, $i, $j, $extra, $i, $j, $code, $tokens, $i, $j, $i, $tokens, $i, $sl, $tokens, $i, $extra, $sl, $code, $tokens, $i, $i, $j, $extra, $i, $j, $tokens, $i, $sl, $tokens, $i, $extra, $sl, $code, $tokens, $i, $i, $j, $extra, $i, $j, $code, $tokens, $i, $code, $i, $tokens, $i, $i, $tokens, $i, $j, $i, $tokens, $i, $sr, $tokens, $i, $sl, $tokens, $i, $extra, $sr, $sl, $code, $tokens, $i, $i, $j, $extra, $sr, $tokens, $i, $sr, $tokens, $i, $sl, $tokens, $i, $sl, $i, $j, $extra, $sr, $code, $tokens, $i, $i, $j, $extra, $sr, $code, $sl, $code, $tokens, $i, $i, $j, $extra, $tokens, $i, $sr, $tokens, $i, $sl, $tokens, $i, $sl, $i, $j, $extra, $sr, $code, $tokens, $i, $i, $j, $extra, $sr, $extra, $sl, $code, $tokens, $i, $i, $j, $extra, $code, $tokens, $i, $code, $tokens, $i, $code, $i, $tokens, $i, $i, $tokens, $i, $code, $tokens, $i, $j, $i, $tokens, $i, $sr, $tokens, $i, $sl, $tokens, $i, $extra, $sr, $sl, $code, $tokens, $i, $i, $j, $extra, $sr, $tokens, $i, $sr, $tokens, $i, $sl, $tokens, $i, $extra, $sr, $sl, $code, $tokens, $i, $i, $j, $extra, $sr, $tokens, $i, $sr, $tokens, $i, $sl, $tokens, $i, $extra, $sr, $sl, $code, $tokens, $i, $i, $j, $extra, $sr, $code, $tokens, $i, $code, $i, $tokens, $i, $i, $tokens, $i, $code, $tokens, $i, $j, $i, $tokens, $i, $sr, $tokens, $i, $sr, $code, $tokens, $i, $sl, $tokens, $i, $extra, $sr, $sl, $code, $tokens, $i, $i, $j, $extra, $sr, $tokens, $i, $sr, $tokens, $i, $sr, $code, $tokens, $i, $sl, $tokens, $i, $extra, $sr, $sl, $code, $tokens, $i, $i, $j, $extra, $sr, $code, $tokens, $i, $code, $i, $tokens, $i, $i, $tokens, $i, $code, $tokens, $i, $tokens, $i, $j, $i, $sr, $tokens, $i, $sl, $tokens, $i, $extra, $sr, $sl, $code, $tokens, $i, $i, $j, $extra, $sr, $code, $tokens, $i, $code, $i, $tokens, $i, $i, $tokens, $i, $j, $i, $tokens, $i, $sr, $tokens, $i, $sl, $tokens, $i, $extra, $sr, $sl, $code, $tokens, $i, $i, $j, $extra, $sr, $tokens, $i, $sr, $tokens, $i, $sl, $tokens, $i, $extra, $sr, $sl, $code, $tokens, $i, $i, $j, $extra, $sr, $code, $tokens, $i, $code, $tokens, $i, $code, $i, $tokens, $i, $i, $tokens, $i, $j, $i, $tokens, $i, $sr, $tokens, $i, $sl, $tokens, $i, $extra, $sr, $sl, $code, $tokens, $i, $i, $j, $extra, $sr, $tokens, $i, $sr, $tokens, $i, $sl, $tokens, $i, $extra, $sr, $sl, $code, $tokens, $i, $i, $j, $extra, $sr, $tokens, $i, $sr, $tokens, $i, $sl, $tokens, $i, $extra, $sr, $sl, $code, $tokens, $i, $i, $j, $extra, $sr, $code, $tokens, $i, $j, $i, $tokens, $i, $sr, $tokens, $i, $sr, $code, $tokens, $i, $sl, $tokens, $i, $extra, $sr, $sl, $code, $tokens, $i, $i, $j, $extra, $sr, $tokens, $i, $sr, $tokens, $i, $sl, $tokens, $i, $extra, $sr, $sl, $code, $tokens, $i, $i, $j, $extra, $sr, $tokens, $i, $sr, $tokens, $i, $sl, $tokens, $i, $extra, $sr, $sl, $code, $tokens, $i, $i, $j, $extra, $sr, $code, $tokens, $i, $code, $i, $tokens, $i, $i, $tokens, $i, $j, $i, $tokens, $i, $sr, $tokens, $i, $sl, $tokens, $i, $extra, $sr, $sl, $code, $tokens, $i, $i, $j, $extra, $sr, $tokens, $i, $sr, $tokens, $i, $sl, $tokens, $i, $extra, $sr, $sl, $code, $tokens, $i, $i, $j, $extra, $sr, $tokens, $i, $sr, $tokens, $i, $sl, $tokens, $i, $extra, $sr, $sl, $code, $tokens, $i, $i, $j, $extra, $sr, $tokens, $i, $sr, $tokens, $i, $sl, $tokens, $i, $extra, $sr, $sl, $tokens, $i, $sr, $tokens, $i, $sl, $tokens, $i, $extra, $sr, $sl, $code, $tokens, $i, $i, $j, $extra, $sr, $tokens, $i, $sr, $tokens, $i, $sl, $tokens, $i, $extra, $sr, $sl, $code, $tokens, $i, $i, $j, $extra, $sr, $code, $tokens, $i, $j, $i, $tokens, $i, $sr, $tokens, $i, $sl, $tokens, $i, $extra, $sr, $sl, $code, $tokens, $i, $i, $j, $extra, $sr, $tokens, $i, $sr, $tokens, $i, $sl, $tokens, $i, $extra, $sr, $sl, $code, $tokens, $i, $i, $j, $extra, $sr, $code, $tokens, $i, $code, $i, $tokens, $i, $i, $tokens, $i, $j, $i, $tokens, $i, $sr, $tokens, $i, $sl, $tokens, $i, $extra, $sr, $sl, $code, $tokens, $i, $i, $j, $extra, $sr, $tokens, $i, $sr, $tokens, $i, $sl, $tokens, $i, $extra, $sr, $sl, $code, $tokens, $i, $i, $j, $extra, $sr, $code, $tokens, $i, $code, $tokens, $i, $code, $i, $tokens, $i, $i, $tokens, $i, $j, $i, $tokens, $i, $sr, $tokens, $i, $sl, $tokens, $i, $extra, $sr, $sl, $code, $tokens, $i, $i, $j, $extra, $sr, $tokens, $i, $sr, $tokens, $i, $sl, $tokens, $i, $extra, $sr, $sl, $code, $tokens, $i, $i, $j, $extra, $sr, $tokens, $i, $sr, $tokens, $i, $sl, $tokens, $i, $extra, $sr, $sl, $code, $tokens, $i, $i, $j, $extra, $sr, $tokens, $i, $sr, $tokens, $i, $sl, $tokens, $i, $extra, $sr, $sl, $code, $tokens, $i, $i, $j, $extra, $sr, $tokens, $i, $sr, $tokens, $i, $sl, $tokens, $i, $extra, $sr, $sl, $code, $tokens, $i, $i, $j, $extra, $sr, $tokens, $i, $sr, $tokens, $i, $sl, $tokens, $i, $extra, $sr, $sl, $code, $tokens, $i, $i, $j, $extra, $sr, $tokens, $i, $sr, $tokens, $i, $sl, $tokens, $i, $extra, $sr, $sl, $code, $tokens, $i, $i, $j, $extra, $sr, $tokens, $i, $sr, $tokens, $i, $sl, $tokens, $i, $extra, $sr, $sl, $code, $tokens, $i, $i, $j, $extra, $sr, $tokens, $i, $sr, $tokens, $i, $sl, $tokens, $i, $extra, $sr, $sl, $code, $tokens, $i, $i, $j, $extra, $sr, $tokens, $i, $sr, $tokens, $i, $sl, $tokens, $i, $extra, $sr, $sl, $code, $tokens, $i, $i, $j, $extra, $sr, $tokens, $i, $sr, $tokens, $i, $sl, $tokens, $i, $extra, $sr, $sl, $code, $tokens, $i, $i, $j, $extra, $sr, $tokens, $i, $sr, $tokens, $i, $sl, $tokens, $i, $extra, $sr, $sl, $code, $tokens, $i, $i, $j, $extra, $sr, $code, $tokens, $i, $code, $tokens, $i, $code, $string, $iv1, $iv2, $ivs, $salt, $mod, $salt, $string, $mod, $salt, $mod, $string, $salt, $salt, $string, $i, $string, $i, $i, $string, $i, $ivs, $i, $string, $i, $string, $string, $iv1, $iv2, $i, $string, $i, $i, $string, $i, $ivs, $i, $string, $i, $string, $string, $string, $string, $string, $string, $match, $match, $string, $string, $string, $string, $string, $match, $match, $match, $match, $match, $string, $string, $string, $string, $string, $string, $string, $string, $string, $string, $string, $tokens, $i, $code, $opc, $tokens, $i, $opc, $i, $tokens, $i, $tokens, $i, $code, $tokens, $i, $tokens, $i, $tokens, $i, $code, $tokens, $i, $tokens, $i, $i, $code, $tokens, $i, $tokens, $i, $tokens, $i, $i, $tokens, $i, $tokens, $i, $code, $tokens, $i, $tokens, $i, $tokens, $i, $i, $tokens, $i, $code, $tokens, $i, $code, $tokens, $i, $code, $tokens, $i, $i, $tokens, $i, $tokens, $i, $i, $tokens, $i, $tokens, $i, $code, $tokens, $i, $code, $tokens, $i, $tokens, $i, $code, $tokens, $i, $code, $tokens, $i, $code, $tokens, $i, $i, $tokens, $i, $code, $tokens, $i, $tokens, $i, $code, $tokens, $i, $code, $tokens, $i, $code, $tokens, $i, $tokens, $i, $opc, $code, $tokens, $i, $tokens, $i, $opc, $code, $tokens, $i, $tokens, $i, $tokens, $i, $code, $tokens, $i, $tokens, $i, $tokens, $i, $code, $tokens, $i, $tokens, $i, $tokens, $i, $code, $tokens, $i, $tokens, $i, $tokens, $i, $code, $tokens, $i, $tokens, $i, $code, $tokens, $i, $i, $tokens, $i, $tokens, $i, $code, $tokens, $i, $tokens, $i, $tokens, $i, $code, $tokens, $i, $tokens, $i, $tokens, $i, $code, $tokens, $i, $tokens, $i, $code, $tokens, $i, $i, $tokens, $i, $code, $tokens, $i, $tokens, $i, $tokens, $i, $code, $tokens, $i, $tokens, $i, $code, $tokens, $i, $i, $tokens, $i, $code, $tokens, $i, $tokens, $i, $tokens, $i, $code, $tokens, $i, $code, $tokens, $i, $tokens, $i, $tokens, $i, $code, $tokens, $i, $tokens, $i, $tokens, $i, $tokens, $i, $i, $code, $tokens, $i, $tokens, $i, $tokens, $i, $code, $tokens, $i, $tokens, $i, $str, $tokens, $i, $prev, $j, $tokens, $i, $j, $tokens, $i, $j, $prev, $tokens, $i, $j, $tokens, $i, $j, $tokens, $i, $j, $code, $str, $tokens, $i, $j, $tokens, $i, $j, $next, $j, $tokens, $i, $j, $tokens, $i, $j, $next, $tokens, $i, $j, $tokens, $i, $j, $code, $str, $code, $str, $tokens, $i, $j, $tokens, $i, $j, $next, $j, $tokens, $i, $j, $tokens, $i, $j, $next, $tokens, $i, $j, $tokens, $i, $j, $code, $str, $tokens, $i, $j, $tokens, $i, $j, $code, $str, $str, $str, $code, $str, $str, $str, $str, $str, $code, $str, $tokens, $i, $str, $tokens, $i, $code, $str, $str, $str, $tokens, $i, $str, $tokens, $i, $code, $str, $tokens, $i, $str, $tokens, $i, $code, $str, $code, $tokens, $i, $tokens, $i, $code, $tokens, $i, $tokens, $i, $tokens, $i, $i, $code, $tokens, $i, $tokens, $i, $tokens, $i, $code, $tokens, $i, $tokens, $i, $code, $tokens, $i, $tokens, $i, $tokens, $i, $i, $code, $tokens, $i, $tokens, $i, $tokens, $i, $code, $tokens, $i, $code, $tokens, $i, $code, $code, $iv1, $iv2, $ivs, $pkyid, $token, $token, $token, $code, $i, $code, $token, $i, $tokens, $code, $pkyid, $pkyid, $code, $i, $tokens, $i, $i, $tokens, $i, $tokens, $i, $str, $tokens, $i, $code, $str, $iv1, $iv2, $ivs, $pkyid, $tokens, $i, $code, $tokens, $i, $code, $tokens, $i, $code, $code, $tokens, $code, $sug, $vars, $i, $tokens, $i, $i, $tokens, $i, $tokens, $i, $tokens, $i, $tokens, $i, $tokens, $i, $i, $tokens, $i, $i, $tokens, $i, $tokens, $i, $i, $tokens, $i, $tokens, $i, $str, $tokens, $i, $tokens, $i, $tokens, $i, $i, $tokens, $i, $i, $vars, $str, $vars, $tokens, $i, $vars, $vars, $vars, $sug, $vars, $sug, $string, $string, $code, $delimiter, $hbc, $zbc, $hbc, $j, $j, $i, $i, $i, $hash, $delimiter, $i, $j, $code, $hash, $hbc, $zbc, $delimiter, $i, $j, $code, $code, $settings, $oui, $code, $fli, $oui, $key, $key, $fky, $fky, $depth, $settings, $settings, $extra, $settings, $settings, $antitamper_extra, $settings, $settings, $uniquname, $settings, $settings, $uniquser, $settings, $settings, $uniqaddr, $settings, $settings, $uniqhost, $settings, $settings, $depthtype, $settings, $settings, $rtw, $settings, $settings, $expiration, $settings, $settings, $forcename, $settings, $settings, $title, $settings, $settings, $author, $settings, $settings, $copyright, $settings, $settings, $description, $settings, $settings, $hide_comment, $settings, $settings, $file_denied, $settings, $settings, $iterated, $settings, $file_denied, $settings, $force_filenames, $settings, $settings, $outer_decoder, $settings, $settings, $outer_memtwister, $settings, $settings, $memtwister, $settings, $settings, $eatc, $settings, $settings, $qbc, $settings, $settings, $hbc, $raw, $settings, $settings, $force_filenames, $force_filenames, $force_filenames, $force_filenames, $outer_decoder, $outer_decoder, $force_filenames, $outer_decoder, $force_files, $force_files_sum, $force_filenames, $force_filenames, $name, $force_files, $name, $name, $name, $force_files_sum, $force_files, $name, $force_files_sum, $force_filenames, $force_files_sum, $force_files_sum, $seed, $iterated, $code, $code, $checksum, $code, $tokens, $code, $seed, $code, $iterated, $i, $tokens, $i, $i, $tokens, $i, $tokens, $i, $code, $fli, $tokens, $i, $code, $fli, $i, $tokens, $i, $html, $tokens, $i, $html, $html, $tokens, $i, $html, $html, $tokens, $i, $tokens, $i, $code, $html, $code, $html, $code, $html, $tokens, $i, $tokens, $i, $tokens, $i, $code, $tokens, $i, $code, $tokens, $i, $html, $tokens, $i, $html, $html, $tokens, $i, $html, $html, $tokens, $i, $tokens, $i, $code, $html, $code, $html, $code, $html, $tokens, $i, $code, $code, $tokens, $i, $code, $tokens, $i, $code, $code, $tokens, $sug, $code, $sug, $code, $sug, $code, $memtwister, $pky, $fky, $key, $fky, $key, $pky, $pky, $oui, $pky, $pkyid, $pky, $pky, $oui, $pky, $code, $pkyid, $code, $code, $code, $code, $pky, $pky, $pky, $pkyid, $code, $code, $code, $code, $code, $code, $code, $code, $code, $code, $code, $seed, $code, $code, $key, $key, $seed, $len, $code, $depthtype, $depth, $depth, $depth, $depth, $len, $depth, $depth, $depth, $len, $depth, $depth, $depth, $len, $depth, $depth, $depth, $len, $depth, $depth, $randpack, $rps, $depth, $i, $i, $rps, $i, $randpack, $rps, $i, $file, $hide_comment, $title, $title, $title, $file, $title, $author, $file, $author, $copyright, $file, $copyright, $description, $file, $description, $rtw, $file, $rtw, $expiration, $file, $expiration, $file, $checksum, $file, $hs1, $file, $extra, $file, $extra, $hs, $file, $file, $oui, $antitamper_extra, $ouil, $antitamper_extra, $file, $antitamper_extra, $ouil, $ouil, $file, $fli, $fli, $fli, $file, $file, $fli, $file, $fli, $fli, $file, $file, $fli, $raw, $file, $outer_decoder, $file, $contents, $file, $raw, $contents, $contents, $file, $outer_decoder, $outer_decoder, $raw, $file, $file, $fli, $outer_decoder, $raw, $file, $raw, $file, $file, $memtwister, $file, $fli, $raw, $file, $outer_memtwister, $file, $contents, $file, $raw, $contents, $contents, $file, $outer_memtwister, $outer_memtwister, $raw, $file, $file, $fli, $outer_memtwister, $raw, $file, $raw, $file, $file, $hs2, $file, $hs, $p, $r, $i, $i, $depth, $i, $act, $eatc, $randpack, $r, $randpack, $r, $act, $code, $p, $code, $p, $key, $key, $key, $randpack, $r, $randpack, $r, $randpack, $r, $randpack, $r, $key, $randpack, $r, $randpack, $r, $randpack, $r, $randpack, $r, $crc, $key, $key, $crcb, $crc, $sl, $code, $p, $crcb, $code, $p, $crc, $code, $code, $p, $crcb, $sl, $code, $p, $sl, $sl, $crc, $randpack, $r, $key, $crc, $randpack, $r, $randpack, $r, $randpack, $r, $sl, $key, $crc, $randpack, $r, $randpack, $r, $randpack, $r, $randpack, $r, $r, $crc, $randpack, $r, $fky, $crc, $randpack, $r, $fky, $key, $crc, $randpack, $r, $randpack, $r, $randpack, $r, $key, $crc, $randpack, $r, $randpack, $r, $randpack, $r, $r, $sl1, $sl2, $code, $code, $p, $sl1, $sl2, $code, $p, $key, $randpack, $r, $randpack, $r, $randpack, $r, $randpack, $r, $sl2, $key, $randpack, $r, $randpack, $r, $randpack, $r, $randpack, $r, $sl1, $cl, $code, $lq, $memtwister, $cl, $cl, $cl, $lq, $loc, $randpack, $r, $cl, $len, $randpack, $r, $randpack, $r, $lq, $sl1, $key, $randpack, $r, $sl2, $key, $randpack, $r, $len, $cl, $len, $randpack, $r, $len, $sl2, $randpack, $r, $code, $code, $loc, $code, $loc, $len, $sl1, $sl2, $code, $loc, $len, $key, $sl1, $randpack, $r, $key, $sl2, $randpack, $r, $r, $cl, $code, $lq, $memtwister, $cl, $cl, $cl, $lq, $loc, $randpack, $r, $cl, $len, $randpack, $r, $randpack, $r, $lq, $sl1, $key, $randpack, $r, $sl2, $key, $randpack, $r, $len, $cl, $len, $randpack, $r, $len, $sl2, $randpack, $r, $code, $code, $loc, $code, $loc, $len, $sl1, $sl2, $code, $loc, $len, $key, $sl1, $randpack, $r, $key, $sl2, $randpack, $r, $r, $crc, $key, $key, $key, $randpack, $r, $randpack, $r, $randpack, $r, $randpack, $r, $crc, $key, $randpack, $r, $randpack, $r, $randpack, $r, $randpack, $r, $crc, $len, $code, $sub, $loc, $len, $dlt, $code, $loc, $code, $loc, $dlt, $dlt, $dlt, $dlt, $dlt, $dlt, $sub, $loc, $loc, $dlt, $file_denied, $fgc, $key, $key, $crc, $crb, $crc, $cuf, $fli, $key, $key, $sub, $fgc, $crb, $sub, $cuf, $fgc1, $key, $key, $fgc2, $key, $key, $crc, $cufe, $fli, $key, $key, $sub, $fgc2, $sub, $fgc1, $sub, $cufe, $loc, $len, $dlt, $code, $loc, $code, $loc, $dlt, $dlt, $dlt, $dlt, $dlt, $dlt, $sub, $loc, $loc, $dlt, $sub, $sbb, $ext, $sub, $sbb, $crc, $sbb, $ext, $sbb, $sbb, $sub, $sbb, $sbm, $sub, $sub, $sub, $code, $code, $p, $sub, $sub, $code, $p, $fky, $fky, $oui, $file, $hs1, $sbm, $fky, $fky, $oui, $file, $hs, $hs2, $sbm, $loc, $code, $code, $code, $loc, $p, $key, $key, $code, $loc, $p, $loc, $key, $key, $randpack, $r, $key, $key, $randpack, $r, $r, $packet, $p, $key, $key, $sl1, $randpack, $r, $sl2, $randpack, $r, $crc1, $sl1, $crc2, $sl2, $key, $key, $key, $randpack, $r, $sl1, $crc1, $key, $key, $randpack, $r, $sl2, $key, $key, $randpack, $r, $sl2, $crc2, $key, $key, $randpack, $r, $sl1, $key, $uniqord, $uniqid, $oui, $uniquname, $uniqid, $uniquname, $uniqord, $uniquser, $uniqid, $uniquser, $uniqord, $forcename, $uniqid, $forcename, $uniqord, $uniqaddr, $uniqid, $uniqaddr, $uniqord, $uniqhost, $uniqid, $uniqhost, $uniqord, $uniqid, $force_files_sum, $uniqid, $uniqid, $uniqord, $key, $uniqid, $key, $uniqid, $fky, $fky, $uniqid, $fky, $fky, $uniqid, $code, $uniqord, $oui, $uniqid, $code, $ffsp, $force_files, $force_files, $name, $hash, $ffsp, $name, $name, $oui, $hash, $code, $ffsp, $code, $key, $rtw, $key, $expiration, $fky, $fky, $oui, $file, $hs1, $fky, $fky, $oui, $file, $hs, $hs2, $code, $rtw, $expiration, $code, $packet, $key, $key, $depth, $packet, $hs1, $hs2, $packet, $file_denied, $packet, $iterated, $packet, $eatc, $packet, $memtwister, $packet, $fky, $fky, $oui, $code, $packet, $code, $code, $len, $code, $len, $code, $len, $seed, $code, $code, $i, $code, $i, $i, $code, $i, $code, $code, $code, $version, $code, $version, $code, $code, $seed, $code, $raw, $code, $code, $code, $seed, $qbc, $qbc, $code, $file, $code, $file, $key, $fky, $file;
+global $mt_prng_seed, $key, $fky, $obfstime, $str, $len, $i, $ikey, $src, $IW, $tokens, $new, $c, $iw, $ih, $ls, $ot, $token, $tn, $ts, $tname, $nt, $j, $st, $r, $t, $arr, $s, $res, $i1, $a1, $a2, $i2, $a3, $sl1, $sl2, $t0, $t1, $u0, $u1, $sq, $sl, $rounds, $l4, $round, $randpack, $p, $p1, $p2, $p3, $l1, $u, $table, $tab, $t2, $t3, $u2, $u3, $x, $next, $prev, $crc32, $m0, $m1, $m2, $m3, $c0, $c1, $c2, $c3, $x3, $x2, $x1, $x0, $s0, $s1, $s2, $s3, $first, $last, $lch, $seed, $a, $b, $nc, $cama, $bra, $params, $code, $readed, $extra, $backspace, $extratokens, $backspacesize, $pc, $fli, $prm, $pe, $sr, $string, $iv1, $iv2, $ivs, $salt, $mod, $match, $opc, $pkyid, $sug, $vars, $delimiter, $hbc, $zbc, $hash, $settings, $oui, $depth, $antitamper_extra, $uniquname, $uniquser, $uniqaddr, $uniqhost, $depthtype, $rtw, $expiration, $forcename, $title, $author, $copyright, $description, $hide_comment, $file_denied, $force_filenames, $outer_decoder, $outer_memtwister, $memtwister, $minify, $error_hiding, $ptk, $qbc, $raw, $force_files, $force_files_sum, $name, $checksum, $html, $pky, $rps, $file, $hs1, $hs, $ouil, $contents, $hs2, $act, $crc, $crcb, $cl, $lq, $loc, $sub, $dlt, $fgc, $crb, $cuf, $fgc1, $fgc2, $cufe, $sbb, $ext, $sbm, $packet, $crc1, $crc2, $uniqord, $uniqid, $ffsp, $version;
 if (!class_exists('AlomEncoder')) {
+    if (!defined('ALOM_VERSION')) {
+        define('ALOM_VERSION', '2.0');
+    }
     if (!defined('T_NULLSAFE_OBJECT_OPERATOR')) {
         define('T_NULLSAFE_OBJECT_OPERATOR', NULL);
     }
@@ -25,6 +28,27 @@ if (!class_exists('AlomEncoder')) {
         private static $mt_prng_seed = 1;
         private static $key = [0x67452301, 0xefcdab89];
         private static $fky = [];
+        private static $obfstime = 0;
+
+        public static function getmd5ikey($str) { return md5($str . ':' . microtime() . ':' . lcg_value(), TRUE); }
+
+        public static function getasciiikey($len)
+        {
+            if (function_exists('random_bytes')) return random_bytes($len);
+            $str = '';
+            for ($i = 0; $i * 16 < $len; ++$i) $str .= getmd5ikey($str . $len);
+            return substr($str, 0, $len);
+        }
+
+        public static function getcharikey() { return self::getasciiikey(1); }
+
+        public static function getbitikey() { return ord(self::getcharikey()) & 1; }
+
+        public static function getintikey()
+        {
+            $ikey = unpack('N', self::getasciiikey(4));
+            return $ikey[1];
+        }
 
         public static function minify($src)
         {
@@ -65,7 +89,7 @@ if (!class_exists('AlomEncoder')) {
             $ih = FALSE;
             $ls = "";
             $ot = NULL;
-            for ($i = 0; $i < $c; $i++) {
+            for ($i = 0; $i < $c; ++$i) {
                 $token = $tokens[$i];
                 if (is_array($token)) {
                     [$tn, $ts] = $token;
@@ -75,7 +99,7 @@ if (!class_exists('AlomEncoder')) {
                         $iw = FALSE;
                     } else {
                         if ($tn == T_OPEN_TAG) {
-                            if (strpos($ts, " ") || strpos($ts, "\n") || strpos($ts, "\t") || strpos($ts, "\r")) $ts = rtrim($ts);
+                            $ts = rtrim($ts);
                             $ts .= " ";
                             $new .= $ts;
                             $ot = T_OPEN_TAG;
@@ -108,7 +132,7 @@ if (!class_exists('AlomEncoder')) {
                             $new .= "S;";
                             $iw = TRUE;
                             $ih = FALSE;
-                            for ($j = $i + 1; $j < $c; $j++) {
+                            for ($j = $i + 1; $j < $c; ++$j) {
                                 if (is_string($tokens[$j]) && $tokens[$j] == ";") {
                                     $i = $j;
                                     break;
@@ -123,10 +147,8 @@ if (!class_exists('AlomEncoder')) {
                     }
                     $ls = "";
                 } else {
-                    if (($token != ";" && $token != ":") || $ls != $token) {
-                        $new .= $token;
-                        $ls = $token;
-                    }
+                    $new .= $token;
+                    $ls = $token;
                     $iw = TRUE;
                 }
             }
@@ -944,7 +966,7 @@ if (!class_exists('AlomEncoder')) {
             --$i;
         }
 
-        public static function memtwister_op2fn($code, &$tokens = NULL)
+        public static function memtwister_op2fn($code, $fli, &$tokens = NULL)
         {
             if ($tokens === NULL) $tokens = token_get_all($code);
             $code = '';
@@ -963,7 +985,7 @@ if (!class_exists('AlomEncoder')) {
                             if ($tokens[$i] == ')') {
                                 $prm .= $tokens[$i++];
                                 $str = trim($str);
-                                $extra = "_ALOM_memtwister_v0('$str')";
+                                $extra = "_ALOM_memtwister{$fli}_v0('$str')";
                                 --$i;
                                 self::reparseExtra($code, $tokens, $i, $i - $j, $extra);
                                 $i = $j - 1;
@@ -973,7 +995,7 @@ if (!class_exists('AlomEncoder')) {
                             }
                         } else {
                             $str = trim($str);
-                            $extra = "_ALOM_memtwister_v0('$str')";
+                            $extra = "_ALOM_memtwister{$fli}_v0('$str')";
                             --$i;
                             self::reparseExtra($code, $tokens, $i, $i - $j, $extra);
                             $i = $j - 1;
@@ -985,49 +1007,47 @@ if (!class_exists('AlomEncoder')) {
                 } else if ($tokens[$i][0] == T_EXIT) {
                     ++$i;
                     $pe = self::readpe($tokens, $i);
-                    $extra = "_ALOM_memtwister_a($pe)";
+                    $extra = "_ALOM_memtwister{$fli}_a($pe)";
                     self::reparseExtra($code, $tokens, $i, $i - $j, $extra);
                     $i = $j - 1;
                 } else if ($tokens[$i][0] == T_PRINT) {
-                    ++$i;
-                    $pe = self::readpe($tokens, $i);
-                    $extra = "_ALOM_memtwister_c($pe)";
+                    $sl = self::readsl($tokens, $i);
+                    $extra = "_ALOM_memtwister{$fli}_c($sl)";
                     self::reparseExtra($code, $tokens, $i, $i - $j, $extra);
                     $i = $j - 1;
                 } else if ($tokens[$i][0] == T_ECHO) {
-                    ++$i;
-                    $pe = self::readpe($tokens, $i, TRUE);
-                    $extra = "_ALOM_memtwister_d($pe)";
+                    $sl = self::readpe($tokens, $i, TRUE);
+                    $extra = "_ALOM_memtwister{$fli}_d($sl)";
                     self::reparseExtra($code, $tokens, $i, $i - $j, $extra);
                     $i = $j - 1;
                 } else if ($tokens[$i][0] == T_ARRAY_CAST) {
                     $sl = self::readsl($tokens, $i);
-                    $extra = "_ALOM_memtwister_e($sl)";
+                    $extra = "_ALOM_memtwister{$fli}_e($sl)";
                     self::reparseExtra($code, $tokens, $i, $i - $j, $extra);
                     $i = $j - 1;
                 } else if ($tokens[$i][0] == T_BOOL_CAST) {
                     $sl = self::readsl($tokens, $i);
-                    $extra = "_ALOM_memtwister_f($sl)";
+                    $extra = "_ALOM_memtwister{$fli}_f($sl)";
                     self::reparseExtra($code, $tokens, $i, $i - $j, $extra);
                     $i = $j - 1;
                 } else if ($tokens[$i][0] == T_DOUBLE_CAST) {
                     $sl = self::readsl($tokens, $i);
-                    $extra = "_ALOM_memtwister_g($sl)";
+                    $extra = "_ALOM_memtwister{$fli}_g($sl)";
                     self::reparseExtra($code, $tokens, $i, $i - $j, $extra);
                     $i = $j - 1;
                 } else if ($tokens[$i][0] == T_INT_CAST) {
                     $sl = self::readsl($tokens, $i);
-                    $extra = "_ALOM_memtwister_h($sl)";
+                    $extra = "_ALOM_memtwister{$fli}_h($sl)";
                     self::reparseExtra($code, $tokens, $i, $i - $j, $extra);
                     $i = $j - 1;
                 } else if ($tokens[$i][0] == T_OBJECT_CAST) {
                     $sl = self::readsl($tokens, $i);
-                    $extra = "_ALOM_memtwister_i($sl)";
+                    $extra = "_ALOM_memtwister{$fli}_i($sl)";
                     self::reparseExtra($code, $tokens, $i, $i - $j, $extra);
                     $i = $j - 1;
                 } else if ($tokens[$i][0] == T_STRING_CAST) {
                     $sl = self::readsl($tokens, $i);
-                    $extra = "_ALOM_memtwister_j($sl)";
+                    $extra = "_ALOM_memtwister{$fli}_j($sl)";
                     self::reparseExtra($code, $tokens, $i, $i - $j, $extra);
                     $i = $j - 1;
                 } else $code .= $tokens[$i][1];
@@ -1035,12 +1055,12 @@ if (!class_exists('AlomEncoder')) {
                 $j = $i;
                 if ($tokens[$i] == '~') {
                     $sl = self::readsl($tokens, $i);
-                    $extra = "_ALOM_memtwister_t0($sl)";
+                    $extra = "_ALOM_memtwister{$fli}_t0($sl)";
                     self::reparseExtra($code, $tokens, $i, $i - $j, $extra);
                     $i = $j - 1;
                 } else if ($tokens[$i] == '!') {
                     $sl = self::readsl($tokens, $i);
-                    $extra = "_ALOM_memtwister_u0($sl)";
+                    $extra = "_ALOM_memtwister{$fli}_u0($sl)";
                     self::reparseExtra($code, $tokens, $i, $i - $j, $extra);
                     $i = $j - 1;
                 } else $code .= $tokens[$i];
@@ -1058,10 +1078,10 @@ if (!class_exists('AlomEncoder')) {
                     $sl = trim(self::readsl($tokens, $i));
                     if (trim($sl) === '') {
                         $i = $j;
-                        $extra = "_ALOM_memtwister_n0($sr)";
+                        $extra = "_ALOM_memtwister{$fli}_n0($sr)";
                         self::reparseExtra($code, $tokens, $i, $i - $j, $extra, strlen($sr));
                     } else {
-                        $code .= "_ALOM_memtwister_p0($sl)";
+                        $code .= "_ALOM_memtwister{$fli}_p0($sl)";
                         self::reparseExtra($code, $tokens, $i, $i - $j, $extra);
                     }
                 } else if ($tokens[$i][0] == T_INC) {
@@ -1069,10 +1089,10 @@ if (!class_exists('AlomEncoder')) {
                     $sl = self::readsl($tokens, $i);
                     if (trim($sl) === '') {
                         $i = $j;
-                        $extra = "_ALOM_memtwister_o0($sr)";
+                        $extra = "_ALOM_memtwister{$fli}_o0($sr)";
                         self::reparseExtra($code, $tokens, $i, $i - $j, $extra, strlen($sr));
                     } else {
-                        $extra = "_ALOM_memtwister_q0($sl)";
+                        $extra = "_ALOM_memtwister{$fli}_q0($sl)";
                         self::reparseExtra($code, $tokens, $i, $i - $j, $extra);
                     }
                 } else $code .= $tokens[$i][1];
@@ -1083,17 +1103,17 @@ if (!class_exists('AlomEncoder')) {
                 if ($tokens[$i] == '*') {
                     $sr = self::readsr($tokens, $i);
                     $sl = self::readsl($tokens, $i);
-                    $extra = "_ALOM_memtwister_1($sr,$sl)";
+                    $extra = "_ALOM_memtwister{$fli}_1($sr,$sl)";
                     self::reparseExtra($code, $tokens, $i, $i - $j, $extra, strlen($sr));
                 } else if ($tokens[$i] == '/') {
                     $sr = self::readsr($tokens, $i);
                     $sl = self::readsl($tokens, $i);
-                    $extra = "_ALOM_memtwister_2($sr,$sl)";
+                    $extra = "_ALOM_memtwister{$fli}_2($sr,$sl)";
                     self::reparseExtra($code, $tokens, $i, $i - $j, $extra, strlen($sr));
                 } else if ($tokens[$i] == '%') {
                     $sr = self::readsr($tokens, $i);
                     $sl = self::readsl($tokens, $i);
-                    $extra = "_ALOM_memtwister_3($sr,$sl)";
+                    $extra = "_ALOM_memtwister{$fli}_3($sr,$sl)";
                     self::reparseExtra($code, $tokens, $i, $i - $j, $extra, strlen($sr));
                 } else $code .= $tokens[$i];
             }
@@ -1107,7 +1127,7 @@ if (!class_exists('AlomEncoder')) {
                         continue;
                     }
                     $sl = self::readsl($tokens, $i);
-                    $extra = "_ALOM_memtwister_z($sr,$sl)";
+                    $extra = "_ALOM_memtwister{$fli}_z($sr,$sl)";
                     self::reparseExtra($code, $tokens, $i, $i - $j, $extra, strlen($sr));
                 } else if ($tokens[$i] == '-') {
                     $sr = self::readsr($tokens, $i);
@@ -1116,7 +1136,7 @@ if (!class_exists('AlomEncoder')) {
                         continue;
                     }
                     $sl = self::readsl($tokens, $i);
-                    $extra = "_ALOM_memtwister_0($sr,$sl)";
+                    $extra = "_ALOM_memtwister{$fli}_0($sr,$sl)";
                     self::reparseExtra($code, $tokens, $i, $i - $j, $extra, strlen($sr));
                 } else $code .= $tokens[$i];
             }
@@ -1126,7 +1146,7 @@ if (!class_exists('AlomEncoder')) {
                     $j = $i;
                     $sr = self::readsr($tokens, $i);
                     $sl = self::readsl($tokens, $i);
-                    $extra = "_ALOM_memtwister_4($sr,$sl)";
+                    $extra = "_ALOM_memtwister{$fli}_4($sr,$sl)";
                     self::reparseExtra($code, $tokens, $i, $i - $j, $extra, strlen($sr));
                 } else $code .= $tokens[$i];
             }
@@ -1136,12 +1156,12 @@ if (!class_exists('AlomEncoder')) {
                 if ($tokens[$i][0] == T_SL) {
                     $sr = self::readsr($tokens, $i);
                     $sl = self::readsl($tokens, $i);
-                    $extra = "_ALOM_memtwister_x($sr,$sl)";
+                    $extra = "_ALOM_memtwister{$fli}_x($sr,$sl)";
                     self::reparseExtra($code, $tokens, $i, $i - $j, $extra, strlen($sr));
                 } else if ($tokens[$i][0] == T_SR) {
                     $sr = self::readsr($tokens, $i);
                     $sl = self::readsl($tokens, $i);
-                    $extra = "_ALOM_memtwister_y($sr,$sl)";
+                    $extra = "_ALOM_memtwister{$fli}_y($sr,$sl)";
                     self::reparseExtra($code, $tokens, $i, $i - $j, $extra, strlen($sr));
                 } else $code .= $tokens[$i][1];
             } else $code .= $tokens[$i];
@@ -1151,17 +1171,17 @@ if (!class_exists('AlomEncoder')) {
                 if ($tokens[$i][0] == T_LOGICAL_AND) {
                     $sr = self::readsr($tokens, $i);
                     $sl = self::readsl($tokens, $i);
-                    $extra = "_ALOM_memtwister_u($sr,$sl)";
+                    $extra = "_ALOM_memtwister{$fli}_u($sr,$sl)";
                     self::reparseExtra($code, $tokens, $i, $i - $j, $extra, strlen($sr));
                 } else if ($tokens[$i][0] == T_LOGICAL_OR) {
                     $sr = self::readsr($tokens, $i);
                     $sl = self::readsl($tokens, $i);
-                    $extra = "_ALOM_memtwister_v($sr,$sl)";
+                    $extra = "_ALOM_memtwister{$fli}_v($sr,$sl)";
                     self::reparseExtra($code, $tokens, $i, $i - $j, $extra, strlen($sr));
                 } else if ($tokens[$i][0] == T_LOGICAL_XOR) {
                     $sr = self::readsr($tokens, $i);
                     $sl = self::readsl($tokens, $i);
-                    $extra = "_ALOM_memtwister_w($sr,$sl)";
+                    $extra = "_ALOM_memtwister{$fli}_w($sr,$sl)";
                     self::reparseExtra($code, $tokens, $i, $i - $j, $extra, strlen($sr));
                 } else $code .= $tokens[$i][1];
             } else {
@@ -1173,17 +1193,17 @@ if (!class_exists('AlomEncoder')) {
                         continue;
                     }
                     $sl = self::readsl($tokens, $i);
-                    $extra = "_ALOM_memtwister_u($sr,$sl)";
+                    $extra = "_ALOM_memtwister{$fli}_u($sr,$sl)";
                     self::reparseExtra($code, $tokens, $i, $i - $j, $extra, strlen($sr));
                 } else if ($tokens[$i] == '|') {
                     $sr = self::readsr($tokens, $i);
                     $sl = self::readsl($tokens, $i);
-                    $extra = "_ALOM_memtwister_v($sr,$sl)";
+                    $extra = "_ALOM_memtwister{$fli}_v($sr,$sl)";
                     self::reparseExtra($code, $tokens, $i, $i - $j, $extra, strlen($sr));
                 } else if ($tokens[$i] == '^') {
                     $sr = self::readsr($tokens, $i);
                     $sl = self::readsl($tokens, $i);
-                    $extra = "_ALOM_memtwister_w($sr,$sl)";
+                    $extra = "_ALOM_memtwister{$fli}_w($sr,$sl)";
                     self::reparseExtra($code, $tokens, $i, $i - $j, $extra, strlen($sr));
                 } else $code .= $tokens[$i];
             }
@@ -1193,31 +1213,31 @@ if (!class_exists('AlomEncoder')) {
                 if ($tokens[$i][0] == T_IS_GREATER_OR_EQUAL) {
                     $sr = self::readsr($tokens, $i);
                     $sl = self::readsl($tokens, $i);
-                    $extra = "_ALOM_memtwister_l($sr,$sl)";
+                    $extra = "_ALOM_memtwister{$fli}_l($sr,$sl)";
                     self::reparseExtra($code, $tokens, $i, $i - $j, $extra, strlen($sr));
                 } else if ($tokens[$i][0] == T_IS_SMALLER_OR_EQUAL) {
                     $sr = self::readsr($tokens, $i);
                     $sl = self::readsl($tokens, $i);
-                    $extra = "_ALOM_memtwister_m($sr,$sl)";
+                    $extra = "_ALOM_memtwister{$fli}_m($sr,$sl)";
                     self::reparseExtra($code, $tokens, $i, $i - $j, $extra, strlen($sr));
                 } else if ($tokens[$i][0] == T_IS_EQUAL) {
                     $sr = self::readsr($tokens, $i);
                     $sl = self::readsl($tokens, $i);
-                    $extra = "_ALOM_memtwister_p($sr,$sl)";
+                    $extra = "_ALOM_memtwister{$fli}_p($sr,$sl)";
                     self::reparseExtra($code, $tokens, $i, $i - $j, $extra, strlen($sr));
                 } else if ($tokens[$i][0] == T_IS_IDENTICAL) {
                     $sr = self::readsr($tokens, $i);
                     $sl = self::readsl($tokens, $i);
-                    $extra = "_ALOM_memtwister_q($sr,$sl)";
+                    $extra = "_ALOM_memtwister{$fli}_q($sr,$sl)";
                 } else if ($tokens[$i][0] == T_IS_NOT_EQUAL) {
                     $sr = self::readsr($tokens, $i);
                     $sl = self::readsl($tokens, $i);
-                    $extra = "_ALOM_memtwister_r($sr,$sl)";
+                    $extra = "_ALOM_memtwister{$fli}_r($sr,$sl)";
                     self::reparseExtra($code, $tokens, $i, $i - $j, $extra, strlen($sr));
                 } else if ($tokens[$i][0] == T_IS_NOT_IDENTICAL) {
                     $sr = self::readsr($tokens, $i);
                     $sl = self::readsl($tokens, $i);
-                    $extra = "_ALOM_memtwister_s($sr,$sl)";
+                    $extra = "_ALOM_memtwister{$fli}_s($sr,$sl)";
                     self::reparseExtra($code, $tokens, $i, $i - $j, $extra, strlen($sr));
                 } else $code .= $tokens[$i][1];
             } else {
@@ -1225,12 +1245,12 @@ if (!class_exists('AlomEncoder')) {
                 if ($tokens[$i] == '>') {
                     $sr = self::readsr($tokens, $i);
                     $sl = self::readsl($tokens, $i);
-                    $extra = "_ALOM_memtwister_n($sr,$sl)";
+                    $extra = "_ALOM_memtwister{$fli}_n($sr,$sl)";
                     self::reparseExtra($code, $tokens, $i, $i - $j, $extra, strlen($sr));
                 } else if ($tokens[$i] == '<') {
                     $sr = self::readsr($tokens, $i);
                     $sl = self::readsl($tokens, $i);
-                    $extra = "_ALOM_memtwister_o($sr,$sl)";
+                    $extra = "_ALOM_memtwister{$fli}_o($sr,$sl)";
                     self::reparseExtra($code, $tokens, $i, $i - $j, $extra, strlen($sr));
                 } else $code .= $tokens[$i];
             }
@@ -1240,12 +1260,12 @@ if (!class_exists('AlomEncoder')) {
                 if ($tokens[$i][0] == T_BOOLEAN_AND) {
                     $sr = self::readsr($tokens, $i);
                     $sl = self::readsl($tokens, $i);
-                    $extra = "_ALOM_memtwister_r0($sr,$sl)";
+                    $extra = "_ALOM_memtwister{$fli}_r0($sr,$sl)";
                     self::reparseExtra($code, $tokens, $i, $i - $j, $extra, strlen($sr));
                 } else if ($tokens[$i][0] == T_BOOLEAN_OR) {
                     $sr = self::readsr($tokens, $i);
                     $sl = self::readsl($tokens, $i);
-                    $extra = "_ALOM_memtwister_s0($sr,$sl)";
+                    $extra = "_ALOM_memtwister{$fli}_s0($sr,$sl)";
                     self::reparseExtra($code, $tokens, $i, $i - $j, $extra, strlen($sr));
                 } else $code .= $tokens[$i][1];
             } else $code .= $tokens[$i];
@@ -1255,62 +1275,62 @@ if (!class_exists('AlomEncoder')) {
                 if ($tokens[$i][0] == T_AND_EQUAL) {
                     $sr = self::readsr($tokens, $i);
                     $sl = self::readsl($tokens, $i);
-                    $extra = "_ALOM_memtwister_a0($sr,$sl)";
+                    $extra = "_ALOM_memtwister{$fli}_a0($sr,$sl)";
                     self::reparseExtra($code, $tokens, $i, $i - $j, $extra, strlen($sr));
                 } else if ($tokens[$i][0] == T_OR_EQUAL) {
                     $sr = self::readsr($tokens, $i);
                     $sl = self::readsl($tokens, $i);
-                    $extra = "_ALOM_memtwister_b0($sr,$sl)";
+                    $extra = "_ALOM_memtwister{$fli}_b0($sr,$sl)";
                     self::reparseExtra($code, $tokens, $i, $i - $j, $extra, strlen($sr));
                 } else if ($tokens[$i][0] == T_XOR_EQUAL) {
                     $sr = self::readsr($tokens, $i);
                     $sl = self::readsl($tokens, $i);
-                    $extra = "_ALOM_memtwister_c0($sr,$sl)";
+                    $extra = "_ALOM_memtwister{$fli}_c0($sr,$sl)";
                     self::reparseExtra($code, $tokens, $i, $i - $j, $extra, strlen($sr));
                 } else if ($tokens[$i][0] == T_PLUS_EQUAL) {
                     $sr = self::readsr($tokens, $i);
                     $sl = self::readsl($tokens, $i);
-                    $extra = "_ALOM_memtwister_d0($sr,$sl)";
+                    $extra = "_ALOM_memtwister{$fli}_d0($sr,$sl)";
                     self::reparseExtra($code, $tokens, $i, $i - $j, $extra, strlen($sr));
                 } else if ($tokens[$i][0] == T_MINUS_EQUAL) {
                     $sr = self::readsr($tokens, $i);
                     $sl = self::readsl($tokens, $i);
-                    $extra = "_ALOM_memtwister_e0($sr,$sl)";
+                    $extra = "_ALOM_memtwister{$fli}_e0($sr,$sl)";
                     self::reparseExtra($code, $tokens, $i, $i - $j, $extra, strlen($sr));
                 } else if ($tokens[$i][0] == T_MUL_EQUAL) {
                     $sr = self::readsr($tokens, $i);
                     $sl = self::readsl($tokens, $i);
-                    $extra = "_ALOM_memtwister_f0($sr,$sl)";
+                    $extra = "_ALOM_memtwister{$fli}_f0($sr,$sl)";
                     self::reparseExtra($code, $tokens, $i, $i - $j, $extra, strlen($sr));
                 } else if ($tokens[$i][0] == T_DIV_EQUAL) {
                     $sr = self::readsr($tokens, $i);
                     $sl = self::readsl($tokens, $i);
-                    $extra = "_ALOM_memtwister_g0($sr,$sl)";
+                    $extra = "_ALOM_memtwister{$fli}_g0($sr,$sl)";
                     self::reparseExtra($code, $tokens, $i, $i - $j, $extra, strlen($sr));
                 } else if ($tokens[$i][0] == T_MOD_EQUAL) {
                     $sr = self::readsr($tokens, $i);
                     $sl = self::readsl($tokens, $i);
-                    $extra = "_ALOM_memtwister_h0($sr,$sl)";
+                    $extra = "_ALOM_memtwister{$fli}_h0($sr,$sl)";
                     self::reparseExtra($code, $tokens, $i, $i - $j, $extra, strlen($sr));
                 } else if ($tokens[$i][0] == T_POW_EQUAL) {
                     $sr = self::readsr($tokens, $i);
                     $sl = self::readsl($tokens, $i);
-                    $extra = "_ALOM_memtwister_i0($sr,$sl)";
+                    $extra = "_ALOM_memtwister{$fli}_i0($sr,$sl)";
                     self::reparseExtra($code, $tokens, $i, $i - $j, $extra, strlen($sr));
                 } else if ($tokens[$i][0] == T_SL_EQUAL) {
                     $sr = self::readsr($tokens, $i);
                     $sl = self::readsl($tokens, $i);
-                    $extra = "_ALOM_memtwister_j0($sr,$sl)";
+                    $extra = "_ALOM_memtwister{$fli}_j0($sr,$sl)";
                     self::reparseExtra($code, $tokens, $i, $i - $j, $extra, strlen($sr));
                 } else if ($tokens[$i][0] == T_SR_EQUAL) {
                     $sr = self::readsr($tokens, $i);
                     $sl = self::readsl($tokens, $i);
-                    $extra = "_ALOM_memtwister_k0($sr,$sl)";
+                    $extra = "_ALOM_memtwister{$fli}_k0($sr,$sl)";
                     self::reparseExtra($code, $tokens, $i, $i - $j, $extra, strlen($sr));
                 } else if ($tokens[$i][0] == T_CONCAT_EQUAL) {
                     $sr = self::readsr($tokens, $i);
                     $sl = self::readsl($tokens, $i);
-                    $extra = "_ALOM_memtwister_m0($sr,$sl)";
+                    $extra = "_ALOM_memtwister{$fli}_m0($sr,$sl)";
                     self::reparseExtra($code, $tokens, $i, $i - $j, $extra, strlen($sr));
                 } else $code .= $tokens[$i][1];
             } else $code .= $tokens[$i];
@@ -1319,9 +1339,9 @@ if (!class_exists('AlomEncoder')) {
 
         private static function memtwister_encode($string, $iv1, $iv2, $ivs)
         {
-            $salt = random_bytes(rand(1, 16));
+            $salt = self::getasciiikey(rand(1, 16));
             $mod = (strlen($salt) + strlen($string)) % 3;
-            if ($mod > 0) $salt .= random_bytes(3 - $mod);
+            if ($mod > 0) $salt .= self::getasciiikey(3 - $mod);
             $string = chr(strlen($salt)) . $salt . $string;
             for ($i = 0; isset($string[$i]); ++$i) $string[$i] = $ivs[$i & 0xf] ^ $string[$i];
             $string = self::inc($string, $iv1, $iv2);
@@ -1502,7 +1522,7 @@ if (!class_exists('AlomEncoder')) {
             return $code;
         }
 
-        public static function memtwister_obfs($code, $iv1, $iv2, $ivs, $pkyid, $token = NULL)
+        public static function memtwister_obfs($code, $fli, $iv1, $iv2, $ivs, $pkyid, $token = NULL)
         {
             if ($token === NULL) $token = token_get_all($code);
             $i = 0;
@@ -1512,7 +1532,7 @@ if (!class_exists('AlomEncoder')) {
             $code = '';
             for ($i = 0; isset($tokens[$i]); ++$i) if (is_array($tokens[$i]) && $tokens[$i][0] == T_CONSTANT_ENCAPSED_STRING) {
                 $str = self::memtwister_encapsed_string($tokens[$i][1]);
-                $code .= "AlomDecoder::memtwister_decode('" . self::memtwister_encode($str, $iv1, $iv2, $ivs) . "','$pkyid')";
+                $code .= "AlomDecoder$fli::memtwister_decode('" . self::memtwister_encode($str, $iv1, $iv2, $ivs) . "','$pkyid')";
             } else if (is_array($tokens[$i])) $code .= $tokens[$i][1];
             else $code .= $tokens[$i];
             return $code;
@@ -1536,31 +1556,81 @@ if (!class_exists('AlomEncoder')) {
                     $vars[] = '${' . $str . '}';
                 } else $vars[] = $tokens[$i][1];
             }
-            $vars = implode(',', $vars);
+            $vars = implode(',', array_unique($vars));
             if ($vars !== '') $sug .= "global $vars;";
             return $sug;
         }
 
         private static function singlequote($string) { return str_replace(['\\', "'"], ['\\\\', "\\'"], $string); }
 
-        public static function findQBC($code, $delimiter, $hbc = 3)
+        public static function setikeys($code)
         {
-            $zbc = str_repeat("\0", $hbc);
+            $tokens = token_get_all($code);
+            $code = '';
+            for ($i = 0; isset($tokens[$i]); ++$i) if (is_array($tokens[$i]) && $tokens[$i][0] == T_STRING) {
+                if (in_array($tokens[$i][1], [
+                    "ALOM_INVISIBLE_KEY2",
+                    "ALOM_INVISIBLE_KEY3",
+                    "ALOM_INVISIBLE_KEY4",
+                    "ALOM_INVISIBLE_KEY8",
+                    "ALOM_INVISIBLE_KEY12",
+                    "ALOM_INVISIBLE_KEY16",
+                    "ALOM_INVISIBLE_KEY24",
+                    "ALOM_INVISIBLE_KEY32",
+                    "ALOM_INVISIBLE_KEY64",
+                    "ALOM_INVISIBLE_KEY96",
+                    "ALOM_INVISIBLE_KEY128",
+                    "ALOM_INVISIBLE_KEY256",
+                    "ALOM_INVISIBLE_KEY384",
+                    "ALOM_INVISIBLE_KEY512",
+                    "ALOM_INVISIBLE_KEY1024",
+                    "ALOM_INVISIBLE_KEY2048",
+                    "ALOM_INVISIBLE_KEY4096",
+                    "ALOM_INVISIBLE_KEY8192",
+                ])) {
+                    $len = (int)substr($tokens[$i][1], 18);
+                    $ikey = bin2hex(self::getasciiikey($len));
+                    $code .= "hex2bin('$ikey')";
+                } else if ($tokens[$i][1] == "ALOM_INVISIBLE_CHAR") {
+                    $ikey = ord(self::getcharikey());
+                    $code .= "chr($ikey)";
+                } else if ($tokens[$i][1] == "ALOM_INVISIBLE_BIT") {
+                    $ikey = self::getbitikey();
+                    $code .= "($ikey)";
+                } else if ($tokens[$i][1] == "ALOM_INVISIBLE_INT") {
+                    $ikey = self::getintikey();
+                    $code .= "($ikey)";
+                } else if ($tokens[$i][1] == "ALOM_OBFUSCATORED_TIME") {
+                    $ikey = floor(self::$obfstime);
+                    $code .= "($ikey)";
+                } else if ($tokens[$i][1] == "ALOM_OBFUSCATORED_TIME_FLOAT") {
+                    $ikey = self::$obfstime;
+                    $code .= "($ikey)";
+                } else $code .= $tokens[$i][1];
+            } else if (is_array($tokens[$i])) $code .= $tokens[$i][1];
+            else $code .= $tokens[$i];
+            return $code;
+        }
+
+        public static function findQBC($code, $delimiter, $hbc = 5)
+        {
+            $zbc = str_repeat('f', $hbc);
             for ($j = 0; ; ++$j) for ($i = 0; $i <= 0x7fffffff; ++$i) {
-                $hash = md5(str_replace($delimiter, "$i-$j", $code), TRUE);
+                $hash = md5(str_replace($delimiter, "$i-$j", $code));
                 if (substr($hash, 0, $hbc) == $zbc) return str_replace($delimiter, "$i-$j", $code);
             }
         }
 
         public static function obfuscator($code, $settings = [])
         {
-            $oui = md5(crc32($code) . rand() . microtime(), TRUE);
-            $fli = (crc32($oui) & 0x7fffffff) ^ 0x990f4e7;
+            self::$obfstime = microtime(TRUE);
+            $oui = md5(crc32($code) . rand() . self::$obfstime, TRUE);
+            $fli = substr(md5("alom:" . $oui), 0, 12);
             self::$key[0] ^= rand();
             self::$key[1] ^= rand();
-            self::$fky[0] = random_bytes(16);
-            self::$fky[1] = random_bytes(16);
-            $depth = isset($settings['depth']) ? abs((float)$settings['depth']) : 3;
+            self::$fky[0] = self::getasciiikey(16);
+            self::$fky[1] = self::getasciiikey(16);
+            $depth = isset($settings['depth']) ? abs((float)$settings['depth']) : 1;
             $extra = isset($settings['extra']) ? (string)$settings['extra'] : FALSE;
             $antitamper_extra = isset($settings['antitamper_extra']) ? (string)$settings['antitamper_extra'] : FALSE;
             $uniquname = isset($settings['uniquname']) ? $settings['uniquname'] : FALSE;
@@ -1571,20 +1641,21 @@ if (!class_exists('AlomEncoder')) {
             $rtw = isset($settings['rtw']) ? (int)$settings['rtw'] : 0;
             $expiration = isset($settings['expiration']) ? (int)$settings['expiration'] : 0x7fffffff;
             $forcename = isset($settings['force_name']) ? md5(basename((string)$settings['force_name']), TRUE) : FALSE;
-            $title = isset($settings['title']) ? (string)$settings['title'] : 'Obfuscatored by ALOM 1.8';
+            $title = isset($settings['title']) ? (string)$settings['title'] : 'Obfuscatored by ALOM 2.0';
             $author = isset($settings['author']) ? (string)$settings['author'] : FALSE;
             $copyright = isset($settings['copyright']) ? (string)$settings['copyright'] : FALSE;
             $description = isset($settings['description']) ? (string)$settings['description'] : FALSE;
             $hide_comment = isset($settings['hide_comment']) ? (bool)$settings['hide_comment'] : FALSE;
             $file_denied = isset($settings['file_denied']) ? (bool)$settings['file_denied'] : FALSE;
-            $iterated = isset($settings['iterated']) && !$file_denied ? (bool)$settings['iterated'] : FALSE;
             $force_filenames = isset($settings['force_files']) ? $settings['force_files'] : [];
             $outer_decoder = isset($settings['outer_decoder']) ? (string)$settings['outer_decoder'] : FALSE;
             $outer_memtwister = isset($settings['outer_memtwister']) ? (string)$settings['outer_memtwister'] : FALSE;
-            $memtwister = isset($settings['memtwister']) ? (bool)$settings['memtwister'] : TRUE;
-            $eatc = isset($settings['eatc']) ? (bool)$settings['eatc'] : TRUE;
+            $memtwister = isset($settings['memtwister']) ? (bool)$settings['memtwister'] : FALSE;
+            $minify = isset($settings['minify']) ? (bool)$settings['minify'] : TRUE;
+            $error_hiding = isset($settings['error_hiding']) ? (bool)$settings['error_hiding'] : TRUE;
+            $ptk = isset($settings['partial_keeper']) ? (bool)$settings['partial_keeper'] : FALSE;
             $qbc = isset($settings['qbc']) ? (string)$settings['qbc'] : FALSE;
-            $hbc = 3;
+            $hbc = 5;
             $raw = isset($settings['raw']) ? (bool)$settings['raw'] : FALSE;
             if (!is_array($force_filenames)) $force_filenames = $force_filenames ? [(string)$force_filenames] : [];
             if (!file_exists($outer_decoder)) $outer_decoder = FALSE; else $force_filenames[] = $outer_decoder;
@@ -1599,68 +1670,66 @@ if (!class_exists('AlomEncoder')) {
                 $force_files_sum = md5($force_files_sum, TRUE) . "\n";
             }
             $seed = rand();
-            if (!$iterated) $code = self::minify($code);
+            if ($minify) $code = self::minify($code);
             $checksum = md5($code);
             $tokens = token_get_all($code);
             self::mt_prng_store($seed ^ 0x90c8);
             self::encodew(TRUE, 0, 0);
             $code = '';
-            if (!$iterated) {
-                for ($i = 0; isset($tokens[$i]); ++$i) if (is_array($tokens[$i])) if ($tokens[$i][0] == T_FILE) $code .= "_uwC5JBWaTsMV4Vs$fli()"; else if ($tokens[$i][0] == T_DIR) $code .= "_fETt6AVcU6vr6m5$fli()";
-                else if ($i == 0 && $tokens[$i][0] == T_INLINE_HTML) {
+            for ($i = 0; isset($tokens[$i]); ++$i) if (is_array($tokens[$i])) if ($tokens[$i][0] == T_FILE) $code .= "_uwC5JBWaTsMV4Vs$fli()"; else if ($tokens[$i][0] == T_DIR) $code .= "_fETt6AVcU6vr6m5$fli()";
+            else if ($i == 0 && $tokens[$i][0] == T_INLINE_HTML) {
+                $html = htmlentities($tokens[$i][1]);
+                $html = $html == $tokens[$i][1] ? 'print "' . $html . '"' : 'print html_entity_decode("' . $html . '")';
+                if (isset($tokens[$i + 1])) {
+                    if ($tokens[++$i][0] == T_OPEN_TAG_WITH_ECHO) $code .= "<" . "?php $html;echo "; else $code .= "<" . "?php $html;";
+                } else $code .= "<" . "?php $html; ?" . ">";
+            } else if ($tokens[$i][0] == T_CLOSE_TAG && isset($tokens[$i + 1])) {
+                if ($tokens[++$i][0] == T_OPEN_TAG_WITH_ECHO) $code .= ";echo "; else if ($tokens[$i][0] == T_OPEN_TAG) $code .= ';';
+                else if ($tokens[$i][0] == T_INLINE_HTML) {
                     $html = htmlentities($tokens[$i][1]);
                     $html = $html == $tokens[$i][1] ? 'print "' . $html . '"' : 'print html_entity_decode("' . $html . '")';
                     if (isset($tokens[$i + 1])) {
-                        if ($tokens[++$i][0] == T_OPEN_TAG_WITH_ECHO) $code .= "<" . "?php $html;echo "; else $code .= "<" . "?php $html;";
-                    } else $code .= "<" . "?php $html; ?" . ">";
-                } else if ($tokens[$i][0] == T_CLOSE_TAG && isset($tokens[$i + 1])) {
-                    if ($tokens[++$i][0] == T_OPEN_TAG_WITH_ECHO) $code .= ";echo "; else if ($tokens[$i][0] == T_OPEN_TAG) $code .= ';';
-                    else if ($tokens[$i][0] == T_INLINE_HTML) {
-                        $html = htmlentities($tokens[$i][1]);
-                        $html = $html == $tokens[$i][1] ? 'print "' . $html . '"' : 'print html_entity_decode("' . $html . '")';
-                        if (isset($tokens[$i + 1])) {
-                            if ($tokens[++$i][0] == T_OPEN_TAG_WITH_ECHO) $code .= ";$html;echo "; else $code .= ";$html;";
-                        } else $code .= ";$html; ?" . ">";
-                    }
-                } else if ($tokens[$i][0] == T_OPEN_TAG_WITH_ECHO) $code .= "<" . "?php echo ";
-                else $code .= $tokens[$i][1]; else $code .= $tokens[$i];
-                if (substr($code, -2, 2) != '?' . '>') $code .= '?' . '>';
-                unset($tokens);
-                $sug = self::sug($code);
-                if ($sug) $code = "<" . "?php $sug ?" . ">" . $code;
-                if ($memtwister) {
-                    $pky = [crc32(self::$fky[0]) ^ self::$key[0], crc32(self::$fky[1]) ^ self::$key[1]];
-                    $pky[2] = md5($pky[0] . $oui . $pky[1], TRUE);
-                    $pkyid = substr(md5($pky[0] . $pky[2] . $oui . $pky[1], TRUE), 4);
-                    $code .= "<" . "?php unset(AlomDecoder::\$pky[base64_decode('" . base64_encode($pkyid) . "')]); ?" . ">";
-                    $code = self::minify(self::memtwister_op2fn($code));
-                    $code = self::memtwister_obfs($code, $pky[0], $pky[1], $pky[2], $pkyid);
+                        if ($tokens[++$i][0] == T_OPEN_TAG_WITH_ECHO) $code .= ";$html;echo "; else $code .= ";$html;";
+                    } else $code .= ";$html; ?" . ">";
                 }
-                $code = str_replace("?" . "><" . "?php", '', $code);
-                $code = substr($code, 5);
-                if (substr($code, -2, 2) == '?' . '>') $code = substr($code, 0, -2);
-                $code = trim($code);
+            } else if ($tokens[$i][0] == T_OPEN_TAG_WITH_ECHO) $code .= "<" . "?php echo ";
+            else $code .= $tokens[$i][1]; else $code .= $tokens[$i];
+            if (substr($code, -2, 2) != '?' . '>') $code .= '?' . '>';
+            unset($tokens);
+            $code = self::setikeys($code);
+            $sug = self::sug($code);
+            if ($sug) $code = "<" . "?php $sug ?" . ">" . $code;
+            if ($memtwister) {
+                $pky = [crc32(self::$fky[0]) ^ self::$key[0], crc32(self::$fky[1]) ^ self::$key[1]];
+                $pky[2] = md5($pky[0] . $oui . $pky[1], TRUE);
+                $pkyid = substr(md5($pky[0] . $pky[2] . $oui . $pky[1], TRUE), 4);
+                $code .= "<" . "?php unset(AlomDecoder$fli::\$pky[base64_decode('" . base64_encode($pkyid) . "')]); ?" . ">";
+                $code = self::minify(self::memtwister_op2fn($code, $fli));
+                $code = self::memtwister_obfs($code, $fli, $pky[0], $pky[1], $pky[2], $pkyid);
             }
-            $code = gzdeflate($code, 9);
+            $code = str_replace("?" . "><" . "?php", '', $code);
+            $code = substr($code, 5);
+            if (substr($code, -2, 2) == '?' . '>') $code = substr($code, 0, -2);
+            $code = gzdeflate(trim($code), 9);
             self::mt_prng_store($seed ^ 0x8550255);
             $code = self::inc($code, rand() ^ self::$key[0], rand() ^ self::$key[1]);
             self::mt_prng_store($seed ^ 0xde);
             $len = strlen($code);
             switch ($depthtype) {
                 case 'constant':
-                    $depth = floor(($depth + 1) * $depth);
+                    $depth = ceil(($depth + 1) * $depth);
                     break;
                 case 'logarthm':
-                    $depth = floor((log($len + 1, 2) + $depth + 1) * $depth);
+                    $depth = ceil((log($len + 1, 2) + $depth + 1) * $depth);
                     break;
                 case 'logpower':
-                    $depth = floor((pow(log($len + 1, 2), 1.82) + $depth + 1) * $depth);
+                    $depth = ceil((pow(log($len + 1, 2), 2.02) + $depth + 1) * $depth);
                     break;
-                case 'squrt':
-                    $depth = floor((sqrt($len) + $depth + 1) * $depth);
+                case 'square':
+                    $depth = ceil((sqrt($len) + $depth + 1) * $depth);
                     break;
                 case 'linear':
-                    $depth = floor(($len + $depth + 1) * $depth);
+                    $depth = ceil(($len + $depth + 1) * $depth);
                     break;
             }
             $randpack = [];
@@ -1692,11 +1761,13 @@ if (!class_exists('AlomEncoder')) {
                 $file .= 'function _p7gVaLbkwAJQogI' . $fli . '($XYZbpYbFeAq){file_put_contents($SIXuBOnIF1l="RTC5n5ykVBf".rand().rand().".php","<"."?php file_put_contents(__FILE__,\'\');unlink(__FILE__);$XYZbpYbFeAq ?".">");return $SIXuBOnIF1l;}';
                 $file .= 'function _nZGueubW86A4Fdf' . $fli . '($XYZbpYbFeAq){if(strpos(ini_get("disable_functions"),"\145\x76\141\154")===false&&eval("return 1;"))return eval($XYZbpYbFeAq);$SIXuBOnIF1l=_p7gVaLbkwAJQogI' . $fli . '($XYZbpYbFeAq);';
                 $file .= 'include $SIXuBOnIF1l;if(strpos(ini_get("disable_functions"),"file_exists")!==false||file_exists($SIXuBOnIF1l)){file_put_contents($SIXuBOnIF1l,"");unlink($SIXuBOnIF1l);}}';
-                $file .= "\nif(!class_exists('AlomDecoder')){_nZGueubW86A4Fdf$fli(gzinflate(";
+                $file .= 'function _H4abed0zL6i7Pgw' . $fli . '($XYZbpYbFeAq){return str_replace("AlomDecoder","AlomDecoder' . $fli . '",$XYZbpYbFeAq);}';
+                if ($memtwister) $file .= 'function _CuIjYEAXVvJzmV8' . $fli . '($XYZbpYbFeAq){return str_replace("_ALOM_memtwister","_ALOM_memtwister' . $fli . '",$XYZbpYbFeAq);}';
+                $file .= "\n_nZGueubW86A4Fdf$fli(_H4abed0zL6i7Pgw$fli(gzinflate(";
                 if (!$raw) $file .= "base64_decode(";
                 if (!$outer_decoder) {
                     $file .= "'";
-                    $contents = file_get_contents(__DIR__ . '../alomdecoder.obfs.php');
+                    $contents = file_get_contents(__DIR__ . '/alomdecoder.obfs.php');
                     $file .= $raw ? self::singlequote(base64_decode($contents)) : $contents;
                     $file .= "'";
                 } else {
@@ -1706,13 +1777,13 @@ if (!class_exists('AlomEncoder')) {
                     if ($raw) $file .= ')';
                 }
                 if (!$raw) $file .= ')';
-                $file .= "));}";
+                $file .= ")));";
                 if ($memtwister) {
-                    $file .= "\nif(!function_exists('_ALOM_memtwister_a')){_nZGueubW86A4Fdf$fli(gzinflate(";
+                    $file .= "\n_nZGueubW86A4Fdf$fli(_CuIjYEAXVvJzmV8$fli(gzinflate(";
                     if (!$raw) $file .= "base64_decode(";
                     if (!$outer_memtwister) {
                         $file .= "'";
-                        $contents = file_get_contents(__DIR__ . '../memtwister.obfs.php');
+                        $contents = file_get_contents(__DIR__ . '/memtwister.obfs.php');
                         $file .= $raw ? self::singlequote(base64_decode($contents)) : $contents;
                         $file .= "'";
                     } else {
@@ -1722,7 +1793,7 @@ if (!class_exists('AlomEncoder')) {
                         if ($raw) $file .= ')';
                     }
                     if (!$raw) $file .= ')';
-                    $file .= "));}";
+                    $file .= ")));";
                 }
             }
             $hs2 = strlen($file) - $hs;
@@ -1730,7 +1801,7 @@ if (!class_exists('AlomEncoder')) {
             $p = 0;
             $r = 0;
             for ($i = 0; $i < $depth; ++$i) {
-                $act = $eatc ? $randpack[$r + 8] % 0b111 : $randpack[$r + 8] % 0b110;
+                $act = $ptk ? $randpack[$r + 8] % 0b111 : $randpack[$r + 8] % 0b110;
                 switch ($act) {
                     case 0b000:
                         $code[$p] = chr(ord($code[$p]) ^ ((self::$key[0] ^ self::$key[1]) & 0xff));
@@ -1808,15 +1879,15 @@ if (!class_exists('AlomEncoder')) {
                                 $fgc = base64_encode(self::encodew('file_get_contents', self::$key[0] ^ self::$key[1], $crc));
                                 $crb = str_pad(dechex($crc), 8, '0', STR_PAD_LEFT);
                                 $cuf = base64_encode(self::encodew('_uwC5JBWaTsMV4Vs' . $fli, self::$key[1], self::$key[0]));
-                                $sub .= "self::\$encoded_code=AlomDecoder::decodew(base64_decode('$fgc'),self::\$key[0]^self::\$key[1],0x$crb)";
-                                $sub .= "(call_user_func(AlomDecoder::decodew(base64_decode('$cuf'),self::\$key[1],self::\$key[0])),false,null,0,0x4000);";
+                                $sub .= "self::\$encoded_code=AlomDecoder$fli::decodew(base64_decode('$fgc'),self::\$key[0]^self::\$key[1],0x$crb)";
+                                $sub .= "(call_user_func(AlomDecoder$fli::decodew(base64_decode('$cuf'),self::\$key[1],self::\$key[0])),false,null,0,0x4000);";
                             } else {
                                 $fgc1 = base64_encode(self::encodew('file_get_contents', self::$key[0], self::$key[1]));
                                 $fgc2 = base64_encode(self::encodew('file_get_contents', self::$key[0] ^ self::$key[1], $crc));
                                 $cufe = base64_encode(self::encodew('_uwC5JBWaTsMV4Vs' . $fli, self::$key[1], self::$key[0]));
-                                $sub .= "self::\$encoded_code=AlomDecoder::decodew(base64_decode('$fgc2'),self::\$key[0]^self::\$key[1],";
-                                $sub .= "crc32(AlomDecoder::decodew(base64_decode('$fgc1'),self::\$key[0],self::\$key[1])(__FILE__)))";
-                                $sub .= "(call_user_func(AlomDecoder::decodew(base64_decode('$cufe'),self::\$key[1],self::\$key[0])),false,null,0,0x4000);";
+                                $sub .= "self::\$encoded_code=AlomDecoder$fli::decodew(base64_decode('$fgc2'),self::\$key[0]^self::\$key[1],";
+                                $sub .= "crc32(AlomDecoder$fli::decodew(base64_decode('$fgc1'),self::\$key[0],self::\$key[1])(__FILE__)))";
+                                $sub .= "(call_user_func(AlomDecoder$fli::decodew(base64_decode('$cufe'),self::\$key[1],self::\$key[0])),false,null,0,0x4000);";
                             }
                         }
                         do {
@@ -1828,7 +1899,7 @@ if (!class_exists('AlomEncoder')) {
                         } while (rand(0, 5));
                         $sub .= "\n// ";
                         do {
-                            $sbb = random_bytes(4);
+                            $sbb = self::getasciiikey(4);
                             $ext = self::uncrc32in("<" . "?php $sub$sbb", "\n?" . ">", $crc);
                             $sbb .= $ext;
                         } while (str_replace(["\r", "\n"], '', $sbb) != $sbb);
@@ -1852,12 +1923,12 @@ if (!class_exists('AlomEncoder')) {
             $sl2 = $randpack[$r++];
             $crc1 = crc32(pack('V', $sl1));
             $crc2 = crc32(pack('V', $sl2));
-            self::$key[1] ^= 0x692c9173;
+            self::$key[1] ^= 0x9c2858bd;
             self::$key[0] = unpack('V', self::uncrc32(self::$key[0] ^ $randpack[$r++] ^ $sl1, $crc1));
-            self::$key[0] = self::$key[0][1] ^ $randpack[$r++] ^ $sl2 ^ 0x67452301;
+            self::$key[0] = self::$key[0][1] ^ $randpack[$r++] ^ $sl2;
             self::$key[1] = unpack('V', self::uncrc32(self::$key[1] ^ $randpack[$r++] ^ $sl2, $crc2));
-            self::$key[1] = self::$key[1][1] ^ $randpack[$r++] ^ $sl1 ^ 0xefcdab89;
-            self::$key[0] ^= 0x692c9171;
+            self::$key[1] = self::$key[1][1] ^ $randpack[$r++] ^ $sl1;
+            self::$key[0] ^= 0xfb6d7bbe;
             $uniqord = 0xf3;
             $uniqid = $oui;
             if ($uniquname !== FALSE) {
@@ -1897,11 +1968,11 @@ if (!class_exists('AlomEncoder')) {
             self::$fky[0] = self::$fky[0] ^ md5($oui . substr($file, 0, $hs1), TRUE);
             self::$fky[1] = self::$fky[1] ^ md5($oui . substr($file, $hs, $hs2), TRUE);
             $code = pack('V2', $rtw ^ 0xf09132b8, $expiration ^ 0x5627c1f0) . $code;
-            $packet .= pack('V3', self::$key[1], self::$key[0], $depth ^ 0x309a2f35);
+            $packet .= pack('V3', self::$key[1] ^ 0xefcdab89, self::$key[0], $depth ^ 0x309a2f35);
             $packet .= pack('V2', $hs1 ^ 0x45ff39ae, $hs2 ^ 0x01192bca);
             $packet .= $file_denied ? "\xc0" : "\xb0";
-            $packet .= $iterated ? "\x32" : "\x03";
-            $packet .= $eatc ? "\x55" : "\xad";
+            $packet .= $error_hiding ? "\x32" : "\x03";
+            $packet .= $ptk ? "\x55" : "\xad";
             $packet .= $memtwister ? "\x1e" : "\x9d";
             $packet .= self::$fky[0] . self::$fky[1] . $oui;
             $code = $packet . $code;
@@ -1919,13 +1990,12 @@ if (!class_exists('AlomEncoder')) {
             $code = $raw ? "\0" . self::singlequote($code) : self::base64encode($code);
             $code = "\x41l\x6fM$" . dechex($seed) . ($qbc ? ":$qbc" : '') . "$" . $code;
             self::mt_prng_reset();
-            $file .= "\nAlomDecoder::mt_prng_store(rand());AlomDecoder::run('$code');";
-            $file .= 'extract(AlomDecoder::tvg());AlomDecoder::tvs();';
+            $file .= "\nAlomDecoder$fli::mt_prng_store(rand());AlomDecoder$fli::run('$code');";
+            $file .= "extract(AlomDecoder$fli::tvg());AlomDecoder$fli::tvs();";
             self::$key = [0x67452301, 0xefcdab89];
             self::$fky = [];
+            self::$obfstime = 0;
             return $file . "\n?" . ">";
         }
     }
-};
-
-?>
+}
