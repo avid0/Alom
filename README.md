@@ -21,7 +21,7 @@ $settings = [
   'title' => 'example',
   'author' => 'Avid'
 ];
-$code = file_get_contents("file.php"); // for example <?php print 'hello world'; ?>
+$code = file_get_contents("file.php"); // for example <?php print 'hello world';
 $obfs = AlomEncoder::Obfuscator($code, $settings);
 file_put_contents("file.obfs.php", $obfs); // save obfuscatored script
 ```
