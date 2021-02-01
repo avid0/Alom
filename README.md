@@ -53,6 +53,7 @@ __minify__ | true | boolean | enable/disable minifier#1 round.
 __memtwister__ | false | boolean | enable/disable memtwister#2 round.
 __partial_keeper__ | false | boolean | enable/disable partial_keeper#3 round.
 __error_hiding__ | true | boolean | enable/disable display errors.
+__raw__ | false | boolean | raw/base64 display style
 
 ## rounds
 - **main**
