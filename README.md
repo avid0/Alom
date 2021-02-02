@@ -67,11 +67,11 @@ __raw__ | false | boolean | raw/base64 display style
   - % Resistant to `reading and editing program memory`
   - ? Slowly obfuscatoring and Increase script size
 
-!! Alom version 2.0 is weak without memtwister round. But it is disabled by default. Be careful in choosing options.
+> :warning: Alom version 2.0 is weak without memtwister round. But it is disabled by default. Be careful in choosing options.
 
 ## Properties
 
-##### alom auto protection
+#### alom auto protection
 You can use this feature to automatically protect scripts on your system.
 ```php
 require_once "alomprotection.php";
@@ -85,7 +85,7 @@ require_once "alomprotection.php";
 alom_protect(__FILE__); // Protect the current file
 ```
 
-##### invisible keys
+#### invisible keys
 You can use invisible keys to encrypt data. Invisible keys will only be available to the running program.
 Each time the desired constant is used, it will generate a random and fixed key for the program.
 ```php
@@ -105,7 +105,7 @@ invisible keys:
 * ALOM_INVISIBLE_BIT (one bit)
 * ALOM_INVISIBLE_INT (int32)
 
-##### variable protection
+#### variable protection
 Protecting variables hides them and no one but the running program can access the contents of the variables. The protected variable will be removed at the end of the program.
 ```php
 if(alom_protect(__FILE__)) // Protect current file for using invisible keys
@@ -121,12 +121,12 @@ $contents = decrypt(file_get_contents("file.txt"), $key, $iv); // decrypt file c
 file_put_contents("file.txt", encrypt($contents, $key, $iv)); // encrypt file contents
 ```
 
-##### information constants
+#### information constants
 * ALOM_VERSION
 * ALOM_OBFUSCATORED_TIME
 * ALOM_OBFUSCATORED_TIME_FLOAT
 
-##### minify script
+#### minify script
 The act of removing comments and spaces and extra code from a script is called minifying.
 ```php
 /**
