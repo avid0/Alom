@@ -49,9 +49,9 @@ __uniqhost__ | null | string(hostname) | If you set this section, no system or u
 __force_files__ | [] | array | If you specify the address of the files in this section, it means that the program need these files to run.
 __outer_decoder__ | null | string | If you put the address of the file alomdecoder.obfs.php in this section, this file will be prevented from being repeated and program files will use this file to run.
 __outer_memtwister__ | null | string | If you put the address of the file memtwister.obfs.php in this section, this file will be prevented from being repeated and program files will use this file to run. It will only be used when the round memtwister is active.
-__minify__ | true | boolean | enable/disable minifier#1 round.
-__memtwister__ | false | boolean | enable/disable memtwister#2 round.
-__partial_keeper__ | false | boolean | enable/disable partial_keeper#3 round.
+__minify__ | true | boolean | enable/disable minifier round.
+__memtwister__ | false | boolean | enable/disable memtwister round.
+__partial_keeper__ | false | boolean | enable/disable partial_keeper round.
 __error_hiding__ | true | boolean | enable/disable display errors.
 __raw__ | false | boolean | raw/base64 display style
 
@@ -67,11 +67,14 @@ __raw__ | false | boolean | raw/base64 display style
   - % Resistant to `reading and editing program memory`
   - ? Slowly obfuscatoring and Increase script size
 
+!! Alom version 2.0 is weak without memtwister round. But it is disabled by default. Be careful in choosing options.
+
 ## Properties
 
 ##### alom auto protection
 You can use this feature to automatically protect scripts on your system.
 ```php
+require_once "alomprotection.php";
 /**
  * Alom auto protection method
  * @method alom_protect
