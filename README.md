@@ -1,4 +1,4 @@
-# Alom Obfuscator / PHP Encoder version 2.0
+# Alom Obfuscator / PHP Encoder version 2.1
 
 This powerful php-base obfuscator can protect from your codes for making non-readable scripts.
 Of the capabilities of this mixer is setting access for specific system, antitamper, expiration of application, license, obfuscator output style (raw/base64), etc.
@@ -52,6 +52,8 @@ __outer_memtwister__ | null | string | If you put the address of the file memtwi
 __minify__ | true | boolean | enable/disable minifier round.
 __memtwister__ | false | boolean | enable/disable memtwister round.
 __partial_keeper__ | false | boolean | enable/disable partial_keeper round.
+__partitioning__ | false | boolean | enable/disable slow partitioning round.
+__fast_partitioning__ | true | boolean | enable/disable fast partitioning round.
 __error_hiding__ | true | boolean | enable/disable display errors.
 __raw__ | false | boolean | raw/base64 display style
 
@@ -66,8 +68,13 @@ __raw__ | false | boolean | raw/base64 display style
   - % Resistant to `forging keys and hashes to disable antitamper`
   - % Resistant to `reading and editing program memory`
   - ? Slowly obfuscatoring and Increase script size
+- **partitioning** (and fast_partitioning)
+  - % Resistant to `forging keys and hashes to disable antitamper`
+  - % Resistant to `reading and editing program memory`
+  - ? Slight increase in script size and Very faster than memtwister
 
-> :warning: Alom version 2.0 is weak without memtwister round. But it is disabled by default. Be careful in choosing options.
+> :warning: Alom version 2.1 is weak without memtwister and partitioning rounds. Be careful in choosing options.
+> Of course, alomencoder.obfs.php file does not use any of these rounds.
 
 ## Properties
 
@@ -139,6 +146,6 @@ file_put_contents("file.min.php", $dst); // save code
 ```
 
 ## Fixed vulnerabilities
-- [x] [version >= 1.6] `forging keys and hashes to disable antitamper` with partial_keeper round
 - [x] [version >= 2.0] [`__FILE__ Vulnerability`](/../../issues/1)
-- [x] [version >= 2.0] `reading and editing program memory` (lossy mining) with memtwister round
+- [x] [version >= 2.1] `forging keys and hashes to disable antitamper` with partitioning round
+- [x] [version >= 2.1] `reading and editing program memory` (lossy mining) with partitioning round
