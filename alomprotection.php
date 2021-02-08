@@ -1,6 +1,6 @@
 <?php
 /**
- * ALOM 1.7 Auto Protection
+ * ALOM 2.1 Auto Protection
  * Author: Avid [@Av_id]
  */
 if(!function_exists('alom_protect')){
@@ -18,7 +18,7 @@ if(!function_exists('alom_protect')){
         $stream = fopen($file, 'r');
         if(!$stream)
             return false;
-        $source = fread($stream, 8192);
+        $source = fread($stream, 4096);
         if(strpos($source, "\x2f\x2f\x20\x4f\x55\x49\x20\x64\x34\x37\x32\x62\x36\x30\x30\x30\x36\x61\x39\x39\x36\x37\x39\x3a") !== false){
             fclose($stream);
             return false;
@@ -44,14 +44,10 @@ if(!function_exists('alom_protect')){
             $settings['depth'] = 2;
         if(!isset($settings['outer_decoder']))
             $settings['outer_decoder'] = __DIR__."/alomdecoder.obfs.php";
-        if(!isset($settings['memtwister']))
-            $settings['memtwister'] = false;
-        if(!isset($settings['eatc_round']))
-            $settings['eatc_round'] = false;
         if(!isset($settings['force_name']))
             $settings['force_name'] = basename($file);
         if(!isset($settings['title']))
-            $settings['title'] = 'Obfuscatored by ALOM 2.0 | Auto Protection';
+            $settings['title'] = 'Obfuscatored by ALOM 2.1 | Auto Protection';
 
         if(!class_exists('AlomEncoder'))
             require __DIR__."/alomencoder.obfs.php";
