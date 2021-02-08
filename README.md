@@ -30,7 +30,7 @@ file_put_contents("file.obfs.php", $obfs); // save obfuscatored script
 
 Index | default | type | description
 ----- | ------- | ---- | -----------
-__depth__ | 1 | float | Complexity of obfuscator steps. This value take time computational O((x/lnx)^2.5 + depthType(messageLength) * (x/lnx)^1.2)
+__depth__ | 1 | float | Complexity of obfuscator steps.<br/> This value take time computational O((x/lnx)^2.5 + depthType(messageLength) * (x/lnx)^1.2)
 __depth_type__ | logpower | string | Complexity function of depth. It can be one of the values of constant, logarithm, logpower, square, linear
 __title__ | "Obfuscatored by ALOM 2.0" | string | Title of obfuscatored script. This parameter is displayed in the comments section at the beginning of the file.
 __author__ | null | string | Author of main script. This parameter is displayed in the comments section.
@@ -73,7 +73,7 @@ __raw__ | false | boolean | raw/base64 display style
   - % Resistant to `reading and editing program memory`
   - ? Slight increase in script size and Very faster than memtwister
 
-> :warning: Alom version 2.1 is weak without memtwister and partitioning rounds. Be careful in choosing options.
+> :warning: Alom version 2.1 is weak without memtwister and partitioning rounds. Be careful in choosing options.<br/>
 > Of course, alomencoder.obfs.php file does not use any of these rounds.
 
 ## Properties
