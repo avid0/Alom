@@ -1,14 +1,14 @@
 <?php
+
 /**
- * Alom 2.0
+ * Alom 2.1
  * Unpacked by Tesla
  * https://github.com/0x11DFE
  */
 
-global $mt_prng_seed, $key, $fky, $obfstime, $str, $len, $i, $ikey, $src, $IW, $tokens, $new, $c, $iw, $ih, $ls, $ot, $token, $tn, $ts, $tname, $nt, $j, $st, $r, $t, $arr, $s, $res, $i1, $a1, $a2, $i2, $a3, $sl1, $sl2, $t0, $t1, $u0, $u1, $sq, $sl, $rounds, $l4, $round, $randpack, $p, $p1, $p2, $p3, $l1, $u, $table, $tab, $t2, $t3, $u2, $u3, $x, $next, $prev, $crc32, $m0, $m1, $m2, $m3, $c0, $c1, $c2, $c3, $x3, $x2, $x1, $x0, $s0, $s1, $s2, $s3, $first, $last, $lch, $seed, $a, $b, $nc, $cama, $bra, $params, $code, $readed, $extra, $backspace, $extratokens, $backspacesize, $pc, $fli, $prm, $pe, $sr, $string, $iv1, $iv2, $ivs, $salt, $mod, $match, $opc, $pkyid, $sug, $vars, $delimiter, $hbc, $zbc, $hash, $settings, $oui, $depth, $antitamper_extra, $uniquname, $uniquser, $uniqaddr, $uniqhost, $depthtype, $rtw, $expiration, $forcename, $title, $author, $copyright, $description, $hide_comment, $file_denied, $force_filenames, $outer_decoder, $outer_memtwister, $memtwister, $minify, $error_hiding, $ptk, $qbc, $raw, $force_files, $force_files_sum, $name, $checksum, $html, $pky, $rps, $file, $hs1, $hs, $ouil, $contents, $hs2, $act, $crc, $crcb, $cl, $lq, $loc, $sub, $dlt, $fgc, $crb, $cuf, $fgc1, $fgc2, $cufe, $sbb, $ext, $sbm, $packet, $crc1, $crc2, $uniqord, $uniqid, $ffsp, $version;
 if (!class_exists('AlomEncoder')) {
     if (!defined('ALOM_VERSION')) {
-        define('ALOM_VERSION', '2.0');
+        define('ALOM_VERSION', '2.1');
     }
     if (!defined('T_NULLSAFE_OBJECT_OPERATOR')) {
         define('T_NULLSAFE_OBJECT_OPERATOR', NULL);
@@ -203,11 +203,32 @@ if (!class_exists('AlomEncoder')) {
             return $res;
         }
 
-        private static function encode($st, $sl1, $sl2)
+        private static function encode($st, $sl1, $sl2, $fa = FALSE)
         {
             srand($sl1 ^ $sl2 & 0x7fffffff);
             $sl1 ^= rand();
             $sl2 ^= rand();
+            if ($fa) {
+                if (strlen($st) < 2) return $st;
+                $sl = $sl1 ^ $sl2 ^ rand();
+                $st = array_values(unpack('C*', $st));
+                $r = [rand(0, 0xff), rand(0, 0xff), rand(0, 0xff), rand(0, 0xff)];
+                $st[0] ^= $r[3];
+                $i = count($st) - 1;
+                $st[0] = ($st[0] - (($sl >> ($i & 63)) & 0xff) + 0x100 & 0xff) ^ $st[$i];
+                for (--$i; $i >= 0; --$i) $st[$i + 1] = ($st[$i + 1] - (($sl >> ($i & 63)) & 0xff) + 0x100 & 0xff) ^ $st[$i];
+                $st[0] ^= $r[2];
+                $i = count($st) - 1;
+                $st[0] = ($st[0] ^ (($sl2 >> ($i & 63)) & 0xff)) - $st[$i] + 0x100 & 0xff;
+                for (--$i; $i >= 0; --$i) $st[$i + 1] = ($st[$i + 1] ^ (($sl2 >> ($i & 63)) & 0xff)) - $st[$i] + 0x100 & 0xff;
+                $st[0] ^= $r[1];
+                $i = count($st) - 1;
+                $st[0] = ($st[0] ^ (($sl1 >> ($i & 63)) & 0xff)) - $st[$i] + 0x100 & 0xff;
+                for (--$i; $i >= 0; --$i) $st[$i + 1] = ($st[$i + 1] ^ (($sl1 >> ($i & 63)) & 0xff)) - $st[$i] + 0x100 & 0xff;
+                $st[0] ^= $r[0];
+                array_unshift($st, 'C*');
+                return call_user_func_array('pack', $st);
+            }
             $t0 = range(0, 0xff);
             $t1 = range(0, 0xff);
             self::arrayshuffle($t0);
@@ -217,7 +238,7 @@ if (!class_exists('AlomEncoder')) {
             $len = strlen($st);
             $sq = ceil(pow($len, 5 / 11));
             $sl = (int)($sl1 + $sl2) & 0xffffffff;
-            $rounds = (($sl & 0x3) ^ (($sl >> 8) & 0x3) ^ ($sl2 & 0x3)) + 0x1a + floor(log($len + 2, 2) - 1);
+            $rounds = ($fa ? -1 : (($sl & 0x3) ^ (($sl >> 8) & 0x3) ^ ($sl2 & 0x3)) + 0x1a) + floor(log($len + 2, 2) - 1);
             $sl = ($sl & 0xff) ^ ($sl1 & 0xff) ^ (($sl >> 16) & 0xff) ^ 1;
             if ($len == 0) return '';
             if ($len == 1) return chr($u1[$u0[ord($st) ^ $sl] ^ $sl] ^ $sl);
@@ -256,13 +277,13 @@ if (!class_exists('AlomEncoder')) {
             return call_user_func_array('pack', $st);
         }
 
-        private static function inc($str, $sl1, $sl2)
+        private static function inc($str, $sl1, $sl2, $fa = FALSE)
         {
             AlomEncoder::mt_prng_reset();
             AlomEncoder::mt_prng_store($sl1 ^ $sl2 ^ rand());
             $str .= pack('V2', rand() ^ $sl1, rand() ^ $sl2);
             srand($sl1 ^ $sl2 & 0x7fffffff);
-            $str = self::encode($str, rand() ^ $sl2, rand() ^ $sl1);
+            $str = self::encode($str, rand() ^ $sl2, rand() ^ $sl1, $fa);
             return $str;
         }
 
@@ -697,6 +718,80 @@ if (!class_exists('AlomEncoder')) {
             return $str;
         }
 
+        private static function reads($tokens, &$i)
+        {
+            $str = '';
+            for (; isset($tokens[$i]); ++$i) if (in_array($tokens[$i], [')', ']', '}', ',', ';'])) break; else if (is_array($tokens[$i]) && $tokens[$i][0] == T_CLOSE_TAG) break;
+            else if (is_array($tokens[$i]) && $tokens[$i][0] == T_START_HEREDOC) {
+                $str .= $tokens[$i++][1];
+                for (; isset($tokens[$i]) && (!is_array($tokens[$i]) || $tokens[$i][0] != T_END_HEREDOC); ++$i) $str .= is_array($tokens[$i]) ? $tokens[$i][1] : $tokens[$i];
+                $str .= $tokens[$i][1];
+            } else if (is_array($tokens[$i]) && in_array($tokens[$i][0], [T_WHILE, T_FOR, T_IF, T_ELSEIF, T_ELSE, T_FOREACH, T_DECLARE])) {
+                for (; isset($tokens[$i]); ++$i) if (is_array($tokens[$i]) && in_array($tokens[$i][0], [T_WHILE, T_FOR, T_FOREACH, T_DECLARE])) {
+                    $str .= $tokens[$i++][1];
+                    if (is_array($tokens[$i]) && $tokens[$i][0] == T_WHITESPACE) $str .= $tokens[$i++][1];
+                    if ($tokens[$i] == '(') {
+                        $str .= self::readl($tokens, '(', ')', $i);
+                        ++$i;
+                        if (is_array($tokens[$i]) && $tokens[$i][0] == T_WHITESPACE) $str .= $tokens[$i++][1];
+                        if ($tokens[$i] == '{') {
+                            $str .= self::readl($tokens, '{', '}', $i);
+                            ++$i;
+                            break;
+                        }
+                    }
+                    --$i;
+                } else if (is_array($tokens[$i]) && $tokens[$i][0] == T_IF) {
+                    while (TRUE) {
+                        $str .= $tokens[$i++][1];
+                        if (is_array($tokens[$i]) && $tokens[$i][0] == T_WHITESPACE) $str .= $tokens[$i++][1];
+                        if ($tokens[$i] == '(') {
+                            $str .= self::readl($tokens, '(', ')', $i);
+                            ++$i;
+                        }
+                        if (is_array($tokens[$i]) && $tokens[$i][0] == T_WHITESPACE) $str .= $tokens[$i++][1];
+                        if ($tokens[$i] == '{') {
+                            $str .= self::readl($tokens, '{', '}', $i);
+                            ++$i;
+                        } else {
+                            $str .= self::reads($tokens, $i);
+                            if (isset($tokens[$i]) && $tokens[$i] == ';') $str .= $tokens[$i++];
+                        }
+                        if (isset($tokens[$i]) && is_array($tokens[$i]) && $tokens[$i][0] == T_WHITESPACE) $str .= $tokens[$i++][1];
+                        if (!isset($tokens[$i])) break;
+                        if (is_array($tokens[$i]) && $tokens[$i][0] == T_ELSEIF) continue; else if (is_array($tokens[$i]) && $tokens[$i][0] == T_ELSE) {
+                            $str .= $tokens[$i++][1];
+                            if (is_array($tokens[$i]) && $tokens[$i][0] == T_WHITESPACE) $str .= $tokens[$i++][1];
+                            if ($tokens[$i] == '{') {
+                                $str .= self::readl($tokens, '{', '}', $i);
+                                ++$i;
+                            } else {
+                                $str .= self::reads($tokens, $i);
+                                if (isset($tokens[$i]) && $tokens[$i] == ';') $str .= $tokens[$i++];
+                            }
+                            break;
+                        } else break;
+                    }
+                    break;
+                }
+                if (isset($tokens[$i]) && $tokens[$i] == ';') $str .= $tokens[$i++];
+                break;
+            } else if (is_array($tokens[$i])) $str .= $tokens[$i][1];
+            else if ($tokens[$i] == '(') $str .= self::readl($tokens, '(', ')', $i);
+            else if ($tokens[$i] == '[') $str .= self::readl($tokens, '[', ']', $i);
+            else if ($tokens[$i] == '{') $str .= self::readl($tokens, '{', '}', $i);
+            else if ($tokens[$i] == '"') {
+                $str .= $tokens[$i++];
+                for (; isset($tokens[$i]) && $tokens[$i] != '"'; ++$i) $str .= is_array($tokens[$i]) ? $tokens[$i][1] : $tokens[$i];
+                $str .= $tokens[$i];
+            } else if ($tokens[$i] == '`') {
+                $str .= $tokens[$i++];
+                for (; isset($tokens[$i]) && $tokens[$i] != '`'; ++$i) $str .= is_array($tokens[$i]) ? $tokens[$i][1] : $tokens[$i];
+                $str .= $tokens[$i];
+            } else $str .= $tokens[$i];
+            return $str;
+        }
+
         private static function readsl($tokens, &$i, $cama = FALSE)
         {
             $str = '';
@@ -761,6 +856,7 @@ if (!class_exists('AlomEncoder')) {
                     T_SL,
                     T_SR,
                     T_POW,
+                    T_NS_SEPARATOR,
                     T_AND_EQUAL,
                     T_OR_EQUAL,
                     T_XOR_EQUAL,
@@ -866,6 +962,7 @@ if (!class_exists('AlomEncoder')) {
                         T_SL,
                         T_SR,
                         T_POW,
+                        T_NS_SEPARATOR,
                         T_AND_EQUAL,
                         T_OR_EQUAL,
                         T_XOR_EQUAL,
@@ -951,14 +1048,14 @@ if (!class_exists('AlomEncoder')) {
             ++$readed;
             ++$i;
             if ($backspace !== 0) {
-                $extratokens = array_slice(token_get_all("<?php $extra"), 1);
-                $backspacesize = count(token_get_all("<?php " . substr($code, -$backspace))) - 1;
+                $extratokens = array_slice(token_get_all("<?" . "php $extra"), 1);
+                $backspacesize = count(token_get_all("<?" . "php " . substr($code, -$backspace))) - 1;
                 $pc = $code;
                 $code = substr($code, 0, -$backspace) . $extra;
                 $tokens = array_merge(array_slice($tokens, 0, $i - $backspacesize - $readed), $extratokens, array_slice($tokens, $i));
                 $i += count($extratokens) - $backspacesize - $readed;
             } else {
-                $extratokens = array_slice(token_get_all("<?php $extra"), 1);
+                $extratokens = array_slice(token_get_all("<?" . "php $extra"), 1);
                 $code .= $extra;
                 $tokens = array_merge(array_slice($tokens, 0, $i - $readed), $extratokens, array_slice($tokens, $i));
                 $i += count($extratokens) - $readed;
@@ -966,7 +1063,7 @@ if (!class_exists('AlomEncoder')) {
             --$i;
         }
 
-        public static function memtwister_op2fn($code, $fli, &$tokens = NULL)
+        private static function memtwister_op2fn($code, $fli, &$tokens = NULL)
         {
             if ($tokens === NULL) $tokens = token_get_all($code);
             $code = '';
@@ -1016,8 +1113,9 @@ if (!class_exists('AlomEncoder')) {
                     self::reparseExtra($code, $tokens, $i, $i - $j, $extra);
                     $i = $j - 1;
                 } else if ($tokens[$i][0] == T_ECHO) {
-                    $sl = self::readpe($tokens, $i, TRUE);
-                    $extra = "_ALOM_memtwister{$fli}_d($sl)";
+                    ++$i;
+                    $pe = self::readpe($tokens, $i, TRUE);
+                    $extra = "_ALOM_memtwister{$fli}_d($pe)";
                     self::reparseExtra($code, $tokens, $i, $i - $j, $extra);
                     $i = $j - 1;
                 } else if ($tokens[$i][0] == T_ARRAY_CAST) {
@@ -1344,9 +1442,9 @@ if (!class_exists('AlomEncoder')) {
             if ($mod > 0) $salt .= self::getasciiikey(3 - $mod);
             $string = chr(strlen($salt)) . $salt . $string;
             for ($i = 0; isset($string[$i]); ++$i) $string[$i] = $ivs[$i & 0xf] ^ $string[$i];
-            $string = self::inc($string, $iv1, $iv2);
+            $string = self::inc($string, $iv1, $iv2, TRUE);
             for ($i = 0; isset($string[$i]); ++$i) $string[$i] = $ivs[$i & 0xf] ^ $string[$i];
-            return base64_encode($string);
+            return $string;
         }
 
         private static function memtwister_encapsed_string($string)
@@ -1394,7 +1492,7 @@ if (!class_exists('AlomEncoder')) {
             } else return $string;
         }
 
-        private static function memtwister_stringify(&$tokens, &$i)
+        private static function memtwister_stringify(&$tokens, $fli, &$i)
         {
             $code = '';
             $opc = 1;
@@ -1418,7 +1516,7 @@ if (!class_exists('AlomEncoder')) {
                         continue;
                     }
                     $code .= $tokens[$i++];
-                    $code .= self::memtwister_stringify($tokens, $i);
+                    $code .= self::memtwister_stringify($tokens, $fli, $i);
                     --$i;
                 } else if (is_array($tokens[$i])) $code .= $tokens[$i][1];
                 else if ($tokens[$i] == '{') $code .= self::readl($tokens, '{', '}', $i);
@@ -1448,7 +1546,7 @@ if (!class_exists('AlomEncoder')) {
                         if (is_array($tokens[$i]) && $tokens[$i][0] == T_WHITESPACE) $code .= $tokens[$i++][1];
                     }
                     if ($tokens[$i] == '(') $code .= '(' . self::readpe($tokens, $i) . ')'; else--$i;
-                } else if ($tokens[$i][0] == T_FN) {
+                } else if ($tokens[$i][0] == T_FN || $tokens[$i][0] == T_DECLARE) {
                     $code .= $tokens[$i++][1];
                     if (is_array($tokens[$i]) && $tokens[$i][0] == T_WHITESPACE) $code .= $tokens[$i++][1];
                     if ($tokens[$i] == '(') $code .= '(' . self::readpe($tokens, $i) . ')'; else--$i;
@@ -1456,6 +1554,16 @@ if (!class_exists('AlomEncoder')) {
                     $code .= $tokens[$i++][1];
                     if (is_array($tokens[$i]) && $tokens[$i][0] == T_WHITESPACE) $code .= $tokens[$i++][1];
                     $code .= self::readpe($tokens, $i, TRUE);
+                } else if ($tokens[$i][0] == T_NAMESPACE) {
+                    $code .= $tokens[$i++][1];
+                    while (is_array($tokens[$i]) && in_array($tokens[$i][0], [T_WHITESPACE, T_STRING, T_NS_SEPARATOR])) $code .= $tokens[$i++][1];
+                    if ($tokens[$i] != '{') {
+                        --$i;
+                        continue;
+                    }
+                    $code .= $tokens[$i++];
+                    $code .= self::memtwister_stringify($tokens, $fli, $i);
+                    --$i;
                 } else if (is_array($tokens[$i]) && $tokens[$i][0] == T_START_HEREDOC) {
                     $code .= $tokens[$i++][1];
                     for (; isset($tokens[$i]) && (!is_array($tokens[$i]) || $tokens[$i][0] != T_END_HEREDOC); ++$i) $code .= is_array($tokens[$i]) ? $tokens[$i][1] : $tokens[$i];
@@ -1490,25 +1598,77 @@ if (!class_exists('AlomEncoder')) {
                             T_IMPLEMENTS,
                         ])) {
                         $next = '';
-                        $j = 1;
-                        if (is_array($tokens[$i + $j]) && $tokens[$i + $j][0] == T_WHITESPACE) $next .= $tokens[$i + ($j++)][1];
-                        if ($tokens[$i + $j] == '(') {
+                        for ($j = 1; isset($tokens[$i + $j]) && is_array($tokens[$i + $j]) && in_array($tokens[$i + $j][0], [
+                            T_STRING,
+                            T_WHITESPACE,
+                            T_NS_SEPARATOR,
+                        ]); ++$j) if ($j > 1 && $tokens[$i + $j - 1][0] == T_WHITESPACE && $tokens[$i + $j - 2][0] == $tokens[$i + $j][0]) break; else $next .= $tokens[$i + $j][1];
+                        $i += $j;
+                        $str = str_replace([' ', "\n", "\r", "\t"], '', $str . $next);
+                        if (is_array($tokens[$i]) && $tokens[$i][0] == T_WHITESPACE) $next .= $tokens[$i++][1];
+                        if ($tokens[$i] == '(') {
+                            $code .= "(function_exists(__NAMESPACE__.'\\$str')?__NAMESPACE__.'\\$str':(function_exists('$str')?'$str':__NAMESPACE__.'\\$str'))";
+                        } else if (is_array($tokens[$i]) && $tokens[$i][0] == T_DOUBLE_COLON) {
+                            $code .= in_array(strtolower($str), [
+                                'self',
+                                'static',
+                                'parent',
+                            ]) ? $str : "(class_exists(__NAMESPACE__.'\\$str')?__NAMESPACE__.'\\$str':" . "(class_exists('$str')?'$str':__NAMESPACE__.'\\$str'))";
+                        } else {
+                            $code .= in_array(strtolower($str), [
+                                'null',
+                                'true',
+                                'false',
+                            ]) ? "('constant')('$str')" : "(defined(__NAMESPACE__.'$str')?('constant')(__NAMESPACE__.'\\$str'):" . "(defined('$str')?('constant')('$str'):'$str'))";
+                        }
+                        --$i;
+                    } else $code .= $str;
+                } else if ($tokens[$i][0] == T_NS_SEPARATOR) {
+                    $str = $tokens[$i][1];
+                    $j = 1;
+                    if (is_array($tokens[$i - $j]) && $tokens[$i - $j][0] == T_WHITESPACE) ++$j;
+                    if (!is_array($tokens[$i - $j]) || !in_array($tokens[$i - $j][0], [
+                            T_FUNCTION,
+                            T_FN,
+                            T_NEW,
+                            T_CLASS,
+                            T_PUBLIC,
+                            T_PROTECTED,
+                            T_STATIC,
+                            T_PRIVATE,
+                            T_VAR,
+                            T_TRAIT,
+                            T_INTERFACE,
+                            T_EXTENDS,
+                            T_IMPLEMENTS,
+                        ])) {
+                        $next = '';
+                        for ($j = 1; isset($tokens[$i + $j]) && is_array($tokens[$i + $j]) && in_array($tokens[$i + $j][0], [
+                            T_STRING,
+                            T_WHITESPACE,
+                            T_NS_SEPARATOR,
+                        ]); ++$j) if ($j > 1 && $tokens[$i + $j - 1][0] == T_WHITESPACE && $tokens[$i + $j - 2][0] == $tokens[$i + $j][0]) break; else $next .= $tokens[$i + $j][1];
+                        $i += $j;
+                        $str = str_replace([' ', "\n", "\r", "\t"], '', $str . $next);
+                        if (is_array($tokens[$i]) && $tokens[$i][0] == T_WHITESPACE) $next .= $tokens[$i++][1];
+                        if ($tokens[$i] == '(') {
                             $code .= "('$str')";
-                        } else if (is_array($tokens[$i + $j]) && $tokens[$i + $j][0] == T_DOUBLE_COLON) {
+                        } else if (is_array($tokens[$i]) && $tokens[$i][0] == T_DOUBLE_COLON) {
                             $code .= in_array(strtolower($str), ['self', 'static', 'parent']) ? $str : "('$str')";
                         } else {
-                            $code .= in_array(strtolower($str), ['null', 'true', 'false']) ? "('constant')('$str')" : "(defined('$str')?('constant')('$str'):'$str')";
+                            $code .= "('constant')('$str')";
                         }
-                    } else $code .= $str;
+                        --$i;
+                    } else $code .= $tokens[$i][1];
                 } else if ($tokens[$i][0] == T_VARIABLE) {
                     $str = substr($tokens[$i][1], 1);
                     $code .= $str == '$this' ? $str : "\${'$str'}";
                 } else if ($tokens[$i][0] == T_LNUMBER) {
                     $str = self::memtwister_lnumber($tokens[$i][1]);
-                    $code .= "('_ALOM_memtwister_h')('$str')";
+                    $code .= "('_ALOM_memtwister{$fli}_h')('$str')";
                 } else if ($tokens[$i][0] == T_DNUMBER) {
                     $str = $tokens[$i][1];
-                    $code .= "('_ALOM_memtwister_g')('$str')";
+                    $code .= "('_ALOM_memtwister{$fli}_g')('$str')";
                 } else $code .= $tokens[$i][1];
             } else if ($tokens[$i] == '"') {
                 $code .= $tokens[$i++];
@@ -1522,23 +1682,23 @@ if (!class_exists('AlomEncoder')) {
             return $code;
         }
 
-        public static function memtwister_obfs($code, $fli, $iv1, $iv2, $ivs, $pkyid, $token = NULL)
+        private static function memtwister_obfs($code, $fli, $iv1, $iv2, $ivs, $pkyid, $token = NULL)
         {
             if ($token === NULL) $token = token_get_all($code);
             $i = 0;
-            $code = self::memtwister_stringify($token, $i);
+            $code = self::memtwister_stringify($token, $fli, $i);
             $tokens = token_get_all($code);
             $pkyid = base64_encode($pkyid);
             $code = '';
             for ($i = 0; isset($tokens[$i]); ++$i) if (is_array($tokens[$i]) && $tokens[$i][0] == T_CONSTANT_ENCAPSED_STRING) {
                 $str = self::memtwister_encapsed_string($tokens[$i][1]);
-                $code .= "AlomDecoder$fli::memtwister_decode('" . self::memtwister_encode($str, $iv1, $iv2, $ivs) . "','$pkyid')";
+                $code .= "\AlomDecoder$fli::memtwister_decode('" . base64_encode(self::memtwister_encode($str, $iv1, $iv2, $ivs)) . "','$pkyid')";
             } else if (is_array($tokens[$i])) $code .= $tokens[$i][1];
             else $code .= $tokens[$i];
             return $code;
         }
 
-        private static function sug($code)
+        public static function sug($code, $fli)
         {
             $tokens = token_get_all($code);
             $sug = '';
@@ -1557,13 +1717,52 @@ if (!class_exists('AlomEncoder')) {
                 } else $vars[] = $tokens[$i][1];
             }
             $vars = implode(',', array_unique($vars));
-            if ($vars !== '') $sug .= "global $vars;";
-            return $sug;
+            if ($vars !== '') $sug .= "if(\AlomDecoder$fli::\$vgb){global $vars;}";
+            $code = '';
+            $i = 0;
+            $code .= $tokens[$i++][1];
+            while (isset($tokens[$i]) && ((is_array($tokens[$i]) && in_array($tokens[$i][0], [
+                            T_WHITESPACE,
+                            T_COMMENT,
+                            T_DOC_COMMENT,
+                        ])) || $tokens[$i] == ';')) $code .= is_array($tokens[$i]) ? $tokens[$i++][1] : $tokens[$i++];
+            if (isset($tokens[$i]) && is_array($tokens[$i]) && $tokens[$i][0] == T_NAMESPACE) {
+                $code .= $tokens[$i++][1];
+                while (is_array($tokens[$i]) && in_array($tokens[$i][0], [T_WHITESPACE, T_STRING, T_NS_SEPARATOR])) $code .= $tokens[$i++][1];
+                if ($tokens[$i] == '{') {
+                    $code .= $tokens[$i++];
+                    $code .= "if(\$_ALOM_beforeeval){\$_ALOM_code='';unset(\$_ALOM_code,\$_ALOM_beforeeval);}else{file_put_contents(\$_ALOM_code,'');unlink(\$_ALOM_code);\$_ALOM_code='';unset(\$_ALOM_code,\$_ALOM_beforeeval);}";
+                    $code .= $sug;
+                    for (; isset($tokens[$i]); ++$i) $code .= is_array($tokens[$i]) ? $tokens[$i][1] : $tokens[$i];
+                    return $code;
+                } else {
+                    $code .= $tokens[$i++];
+                    while (isset($tokens[$i]) && ((is_array($tokens[$i]) && in_array($tokens[$i][0], [
+                                    T_WHITESPACE,
+                                    T_COMMENT,
+                                    T_DOC_COMMENT,
+                                ])) || $tokens[$i] == ';')) $code .= is_array($tokens[$i]) ? $tokens[$i++][1] : $tokens[$i++];
+                }
+            }
+            while (isset($tokens[$i]) && is_array($tokens[$i]) && $tokens[$i][0] == T_NAMESPACE) {
+                $code .= $tokens[$i++][1];
+                while (is_array($tokens[$i]) && in_array($tokens[$i][0], [T_WHITESPACE, T_STRING, T_NS_SEPARATOR])) $code .= $tokens[$i++][1];
+                $code .= $tokens[$i++];
+                while (isset($tokens[$i]) && ((is_array($tokens[$i]) && in_array($tokens[$i][0], [
+                                T_WHITESPACE,
+                                T_COMMENT,
+                                T_DOC_COMMENT,
+                            ])) || $tokens[$i] == ';')) $code .= $tokens[$i++][1];
+            }
+            $code .= "if(\$_ALOM_beforeeval){\$_ALOM_code='';unset(\$_ALOM_code,\$_ALOM_beforeeval);}else{file_put_contents(\$_ALOM_code,'');unlink(\$_ALOM_code);\$_ALOM_code='';unset(\$_ALOM_code,\$_ALOM_beforeeval);}";
+            $code .= $sug;
+            for (; isset($tokens[$i]); ++$i) $code .= is_array($tokens[$i]) ? $tokens[$i][1] : $tokens[$i];
+            return $code;
         }
 
         private static function singlequote($string) { return str_replace(['\\', "'"], ['\\\\', "\\'"], $string); }
 
-        public static function setikeys($code)
+        private static function setikeys($code)
         {
             $tokens = token_get_all($code);
             $code = '';
@@ -1612,6 +1811,395 @@ if (!class_exists('AlomEncoder')) {
             return $code;
         }
 
+        public static function partition_encode($string, $key, $iv1, $iv2, $ivs)
+        {
+            $string = gzdeflate($string, 9);
+            for ($i = 0; isset($string[$i]); ++$i) $string[$i] = $key[$i & 0xf] ^ $string[$i];
+            $string = self::memtwister_encode($string, $iv1, $iv2, $ivs);
+            for ($i = 0; isset($string[$i]); ++$i) $string[$i] = $key[$i & 0xf] ^ $string[$i];
+            return $string;
+        }
+
+        public static function nspartitioning(&$partition, $code, $memtwister, $fli, $iv1, $iv2, $ivs, $pkyid, $fast = FALSE, $ns = '', &$ua = [], $rnt = FALSE)
+        {
+            $tokens = token_get_all("<?" . "php $code");
+            array_shift($tokens);
+            $part = $code = '';
+            for ($i = 0; isset($tokens[$i]); ++$i) {
+                if (is_array($tokens[$i]) && in_array($tokens[$i][0], [T_CLASS, T_TRAIT, T_INTERFACE])) {
+                    $part .= $tokens[$i++][1];
+                    while (is_array($tokens[$i]) && in_array($tokens[$i][0], [T_WHITESPACE, T_STRING, T_NS_SEPARATOR, T_EXTENDS, T_IMPLEMENTS])) $part .= $tokens[$i++][1];
+                    if ($tokens[$i] != '{') {
+                        --$i;
+                        continue;
+                    }
+                    $part .= $tokens[$i++];
+                    for (; isset($tokens[$i]) && $tokens[$i] != '}'; ++$i) if (is_array($tokens[$i]) && $tokens[$i][0] == T_FUNCTION) {
+                        $part .= $tokens[$i++][1];
+                        for (; isset($tokens[$i]) && $tokens[$i] != '('; ++$i) if (is_array($tokens[$i])) $part .= $tokens[$i][1]; else $part .= $tokens[$i];
+                        $part .= self::readl($tokens, '(', ')', $i);
+                        ++$i;
+                        for (; isset($tokens[$i]) && $tokens[$i] != '{'; ++$i) if ($tokens[$i] == ';') break; else if (is_array($tokens[$i])) $part .= $tokens[$i][1];
+                        else $part .= $tokens[$i];
+                        if ($tokens[$i] == ';') {
+                            $part .= $tokens[$i];
+                            continue;
+                        }
+                        $rl = self::readl($tokens, '{', '}', $i);
+                        $rl = self::nspartitioning($partition, substr($rl, 1, -1), $memtwister, $fli, $iv1, $iv2, $ivs, $pkyid, $fast, $ns);
+                        $part .= '{' . $rl . '}';
+                    } else if (is_array($tokens[$i])) $part .= $tokens[$i][1];
+                    else if ($tokens[$i] == '{') $part .= self::readl($tokens, '{', '}', $i);
+                    else $part .= $tokens[$i];
+                    $part = $ns . $part . $tokens[$i];
+                    if (!isset($partition[$part])) {
+                        $key = random_bytes(16);
+                        $partition[$part] = [count($partition), $key, self::partition_encode($part, $key, $iv1, $iv2, $ivs)];
+                    }
+                    $code .= "if((isset(\$_ALOM_continue)&&\$_ALOM_continue>0)||(isset(\$_ALOM_break)&&\$_ALOM_break>0))return;";
+                    $code .= "if(isset(\$_ALOM_return))return \$_ALOM_result;\$_ALOM_result=eval(\AlomDecoder$fli::partition_decode(\AlomDecoder$fli::\$partition[" . $partition[$part][0] . "],'" . base64_encode($partition[$part][1]) . "','$pkyid'));";
+                    $part = '';
+                } else if ($tokens[$i][0] == T_FUNCTION) {
+                    $part .= $tokens[$i++][1];
+                    if (is_array($tokens[$i]) && $tokens[$i][0] == T_WHITESPACE) $part .= $tokens[$i++][1];
+                    if (is_array($tokens[$i]) && $tokens[$i][0] == T_STRING) {
+                        $part .= $tokens[$i++][1];
+                        if (is_array($tokens[$i]) && $tokens[$i][0] == T_WHITESPACE) $part .= $tokens[$i++][1];
+                        if ($tokens[$i] == '(') {
+                            $part .= '(' . self::readpe($tokens, $i) . ')';
+                            if (is_array($tokens[++$i]) && $tokens[$i][0] == T_WHITESPACE) $part .= $tokens[$i++][1];
+                            if ($tokens[$i] == '{') {
+                                $rl = self::readl($tokens, '{', '}', $i);
+                                $rl = self::nspartitioning($partition, substr($rl, 1, -1), $memtwister, $fli, $iv1, $iv2, $ivs, $pkyid, $fast, $ns);
+                                $part = $ns . $part . '{' . $rl . '}';
+                                if (!isset($partition[$part])) {
+                                    $key = random_bytes(16);
+                                    $partition[$part] = [count($partition), $key, self::partition_encode($part, $key, $iv1, $iv2, $ivs)];
+                                }
+                                $code .= "if((isset(\$_ALOM_continue)&&\$_ALOM_continue>0)||(isset(\$_ALOM_break)&&\$_ALOM_break>0))return;";
+                                $code .= "if(isset(\$_ALOM_return))return \$_ALOM_result;\$_ALOM_result=eval(\AlomDecoder$fli::partition_decode(\AlomDecoder$fli::\$partition[" . $partition[$part][0] . "],'" . base64_encode($partition[$part][1]) . "','$pkyid'));";
+                                $part = '';
+                            } else--$i;
+                        } else--$i;
+                    } else {
+                        if (is_array($tokens[$i]) && $tokens[$i][0] == T_USE) {
+                            $part .= $tokens[$i++][1];
+                            if (is_array($tokens[$i]) && $tokens[$i][0] == T_WHITESPACE) $part .= $tokens[$i++][1];
+                        }
+                        if ($tokens[$i] == '(') $part .= '(' . self::readpe($tokens, $i) . ')'; else--$i;
+                    }
+                } else if ($tokens[$i][0] == T_FN || $tokens[$i][0] == T_DECLARE) {
+                    $part .= $tokens[$i++][1];
+                    if (is_array($tokens[$i]) && $tokens[$i][0] == T_WHITESPACE) $part .= $tokens[$i++][1];
+                    if ($tokens[$i] == '(') $part .= '(' . self::readpe($tokens, $i) . ')'; else--$i;
+                } else if (in_array($tokens[$i][0], [T_STATIC, T_ECHO, T_GLOBAL])) {
+                    $part .= $tokens[$i++][1];
+                    if (is_array($tokens[$i]) && $tokens[$i][0] == T_WHITESPACE) $part .= $tokens[$i++][1];
+                    $part .= self::readpe($tokens, $i, TRUE);
+                } else if ($tokens[$i][0] == T_RETURN) {
+                    $part .= $tokens[$i++][1];
+                    $part .= self::readpe($tokens, $i, TRUE);
+                    if ($tokens[$i + 1] == ';') $part .= $tokens[($i++) + 1];
+                    $ua[] = count($partition);
+                    if (!isset($partition[$part])) {
+                        $key = random_bytes(16);
+                        $partition[$part] = [count($partition), $key, self::partition_encode($part, $key, $iv1, $iv2, $ivs)];
+                    }
+                    $code .= "if((isset(\$_ALOM_continue)&&\$_ALOM_continue>0)||(isset(\$_ALOM_break)&&\$_ALOM_break>0))return;";
+                    $code .= "\$_ALOM_return=true;return \$_ALOM_result=eval(\AlomDecoder$fli::partition_decode(\AlomDecoder$fli::\$partition[" . $partition[$part][0] . "],'" . base64_encode($partition[$part][1]) . "','$pkyid'));";
+                    $part = '';
+                } else if ($tokens[$i][0] == T_CONTINUE) {
+                    ++$i;
+                    $pe = max(1, (int)self::readpe($tokens, $i, TRUE));
+                    if ($tokens[$i + 1] == ';') ++$i;
+                    $part .= "\$_ALOM_continue=$pe;";
+                    $ua[] = count($partition);
+                    if (!isset($partition[$part])) {
+                        $key = random_bytes(16);
+                        $partition[$part] = [count($partition), $key, self::partition_encode($part, $key, $iv1, $iv2, $ivs)];
+                    }
+                    $code .= "if((isset(\$_ALOM_continue)&&\$_ALOM_continue>0)||(isset(\$_ALOM_break)&&\$_ALOM_break>0))return;";
+                    $code .= "if(isset(\$_ALOM_return))return \$_ALOM_result;\$_ALOM_result=eval(\AlomDecoder$fli::partition_decode(\AlomDecoder$fli::\$partition[" . $partition[$part][0] . "],'" . base64_encode($partition[$part][1]) . "','$pkyid'));";
+                    $part = '';
+                } else if ($tokens[$i][0] == T_BREAK) {
+                    ++$i;
+                    $pe = max(1, (int)self::readpe($tokens, $i, TRUE));
+                    if ($tokens[$i + 1] == ';') ++$i;
+                    $part .= "\$_ALOM_break=$pe;";
+                    $ua[] = count($partition);
+                    if (!isset($partition[$part])) {
+                        $key = random_bytes(16);
+                        $partition[$part] = [count($partition), $key, self::partition_encode($part, $key, $iv1, $iv2, $ivs)];
+                    }
+                    $code .= "if((isset(\$_ALOM_continue)&&\$_ALOM_continue>0)||(isset(\$_ALOM_break)&&\$_ALOM_break>0))return;";
+                    $code .= "if(isset(\$_ALOM_return))return \$_ALOM_result;\$_ALOM_result=eval(\AlomDecoder$fli::partition_decode(\AlomDecoder$fli::\$partition[" . $partition[$part][0] . "],'" . base64_encode($partition[$part][1]) . "','$pkyid'));";
+                    $part = '';
+                } else if ($tokens[$i][0] == T_NAMESPACE) {
+                    $code .= $tokens[$i++][1];
+                    while (is_array($tokens[$i]) && in_array($tokens[$i][0], [T_WHITESPACE, T_STRING, T_NS_SEPARATOR])) $code .= $tokens[$i++][1];
+                    if ($tokens[$i] != '{') {
+                        --$i;
+                        continue;
+                    }
+                    $rl = self::readl($tokens, '{', '}', $i);
+                    $rl = self::nspartitioning($partition, substr($rl, 1, -1), $memtwister, $fli, $iv1, $iv2, $ivs, $pkyid, $fast, $ns, $ua);
+                    $part .= '{' . $rl . '}';
+                } else if ($tokens[$i] == ';') {
+                    $part = $ns . $part . ';';
+                    $ua[] = count($partition);
+                    if (!isset($partition[$part])) {
+                        $key = random_bytes(16);
+                        $partition[$part] = [count($partition), $key, self::partition_encode($part, $key, $iv1, $iv2, $ivs)];
+                    }
+                    $code .= "if((isset(\$_ALOM_continue)&&\$_ALOM_continue>0)||(isset(\$_ALOM_break)&&\$_ALOM_break>0))return;";
+                    $code .= "if(isset(\$_ALOM_return))return \$_ALOM_result;\$_ALOM_result=eval(\AlomDecoder$fli::partition_decode(\AlomDecoder$fli::\$partition[" . $partition[$part][0] . "],'" . base64_encode($partition[$part][1]) . "','$pkyid'));";
+                    $part = '';
+                } else if ($tokens[$i] == ',') {
+                    $part = $ns . "return $part;";
+                    $ua[] = count($partition);
+                    if (!isset($partition[$part])) {
+                        $key = random_bytes(16);
+                        $partition[$part] = [count($partition), $key, self::partition_encode($part, $key, $iv1, $iv2, $ivs)];
+                    }
+                    $code .= "eval(\AlomDecoder$fli::partition_decode(\AlomDecoder$fli::\$partition[" . $partition[$part][0] . "],'" . base64_encode($partition[$part][1]) . "','$pkyid')),";
+                    $part = '';
+                } else if (is_array($tokens[$i]) && $tokens[$i][0] == T_OBJECT_OPERATOR) {
+                    $part .= $tokens[$i++][1];
+                    if (is_array($tokens[$i]) && $tokens[$i][0] == T_WHITESPACE) $part .= $tokens[$i++][1];
+                    $rl = self::readl($tokens, '{', '}', $i);
+                    $rl = self::nspartitioning($partition, 'return ' . substr($rl, 1, -1) . ';', $memtwister, $fli, $iv1, $iv2, $ivs, $pkyid, $fast, $ns, $ua);
+                    $part .= '{' . $rl . '}';
+                } else if (is_array($tokens[$i]) && in_array($tokens[$i][0], [T_ISSET, T_UNSET, T_EMPTY, T_ARRAY, T_LIST])) {
+                    $part .= $tokens[$i++][1];
+                    if (is_array($tokens[$i]) && $tokens[$i][0] == T_WHITESPACE) $part .= $tokens[$i++][1];
+                    if ($tokens[$i] == '(') {
+                        $rl = self::readl($tokens, '(', ')', $i);
+                        $part .= $rl;
+                    } else--$i;
+                } else if (is_array($tokens[$i]) && in_array($tokens[$i][0], [T_WHILE, T_FOR, T_IF, T_ELSEIF, T_ELSE, T_FOREACH, T_DECLARE])) {
+                    $code .= 'if(!isset($_ALOM_continue))$_ALOM_continue=0;if(!isset($_ALOM_break))$_ALOM_break=0;';
+                    for (; isset($tokens[$i]); ++$i) if (is_array($tokens[$i]) && in_array($tokens[$i][0], [T_WHILE, T_FOR, T_FOREACH, T_DECLARE])) {
+                        $lf = $tokens[$i][0] == T_FOR;
+                        $part .= $tokens[$i++][1];
+                        if (is_array($tokens[$i]) && $tokens[$i][0] == T_WHITESPACE) $part .= $tokens[$i++][1];
+                        if ($tokens[$i] == '(') {
+                            $rl = self::readl($tokens, '(', ')', $i);
+                            ++$i;
+                            if ($fast || $lf) {
+                                $part .= $rl;
+                            } else {
+                                $rl = self::nspartitioning($partition, substr($rl, 1, -1), $memtwister, $fli, $iv1, $iv2, $ivs, $pkyid, $fast, $ns, $ua, TRUE);
+                                $part .= '(' . $rl . ')';
+                            }
+                            if (is_array($tokens[$i]) && $tokens[$i][0] == T_WHITESPACE) $part .= $tokens[$i++][1];
+                            if ($tokens[$i] == '{') {
+                                $rl = self::readl($tokens, '{', '}', $i);
+                                ++$i;
+                                $rl = self::nspartitioning($partition, substr($rl, 1, -1), $memtwister, $fli, $iv1, $iv2, $ivs, $pkyid, $fast, $ns, $ua);
+                                $rl = substr($rl, strpos($rl, ';') + 1);
+                                $part .= '{' . $rl . 'if($_ALOM_continue>0){--$_ALOM_continue;if($_ALOM_continue>0)break;}if($_ALOM_break>0){--$_ALOM_break;break;}}';
+                                $ua[] = count($partition);
+                                if (!isset($partition[$part])) {
+                                    $key = random_bytes(16);
+                                    $partition[$part] = [count($partition), $key, self::partition_encode($part, $key, $iv1, $iv2, $ivs)];
+                                }
+                                $code .= "if((isset(\$_ALOM_continue)&&\$_ALOM_continue>0)||(isset(\$_ALOM_break)&&\$_ALOM_break>0))return;";
+                                $code .= "if(isset(\$_ALOM_return))return \$_ALOM_result;\$_ALOM_result=eval(\AlomDecoder$fli::partition_decode(\AlomDecoder$fli::\$partition[" . $partition[$part][0] . "],'" . base64_encode($partition[$part][1]) . "','$pkyid'));";
+                                $part = '';
+                                break;
+                            }
+                            $rs = self::reads($tokens, $i);
+                            if (isset($tokens[$i]) && $tokens[$i] == ';') $rs .= $tokens[$i++];
+                            $rs = self::nspartitioning($partition, $rs, $memtwister, $fli, $iv1, $iv2, $ivs, $pkyid, $fast, $ns, $ua);
+                            $part .= '{' . $rs . '}';
+                            $ua[] = count($partition);
+                            if (!isset($partition[$part])) {
+                                $key = random_bytes(16);
+                                $partition[$part] = [count($partition), $key, self::partition_encode($part, $key, $iv1, $iv2, $ivs)];
+                            }
+                            $code .= "if((isset(\$_ALOM_continue)&&\$_ALOM_continue>0)||(isset(\$_ALOM_break)&&\$_ALOM_break>0))return;";
+                            $code .= "if(isset(\$_ALOM_return))return \$_ALOM_result;\$_ALOM_result=eval(\AlomDecoder$fli::partition_decode(\AlomDecoder$fli::\$partition[" . $partition[$part][0] . "],'" . base64_encode($partition[$part][1]) . "','$pkyid'));";
+                            $part = '';
+                        }
+                        --$i;
+                    } else if (is_array($tokens[$i]) && $tokens[$i][0] == T_IF) {
+                        while (TRUE) {
+                            $part .= $tokens[$i++][1];
+                            if (is_array($tokens[$i]) && $tokens[$i][0] == T_WHITESPACE) $part .= $tokens[$i++][1];
+                            if ($tokens[$i] == '(') {
+                                $rl = self::readl($tokens, '(', ')', $i);
+                                ++$i;
+                                if ($fast) {
+                                    $part .= $rl;
+                                } else {
+                                    $rl = self::nspartitioning($partition, substr($rl, 1, -1), $memtwister, $fli, $iv1, $iv2, $ivs, $pkyid, $fast, $ns, $ua, TRUE);
+                                    $part .= '(' . $rl . ')';
+                                }
+                            }
+                            if (is_array($tokens[$i]) && $tokens[$i][0] == T_WHITESPACE) $part .= $tokens[$i++][1];
+                            if ($tokens[$i] == '{') {
+                                $rl = self::readl($tokens, '{', '}', $i);
+                                ++$i;
+                                $rl = self::nspartitioning($partition, substr($rl, 1, -1), $memtwister, $fli, $iv1, $iv2, $ivs, $pkyid, $fast, $ns, $ua);
+                                $part .= '{' . $rl . '}';
+                            } else {
+                                $rs = self::reads($tokens, $i);
+                                if (isset($tokens[$i]) && $tokens[$i] == ';') $rs .= $tokens[$i++];
+                                $rs = self::nspartitioning($partition, $rs, $memtwister, $fli, $iv1, $iv2, $ivs, $pkyid, $fast, $ns, $ua);
+                                $part .= '{' . $rs . '}';
+                            }
+                            if (isset($tokens[$i]) && is_array($tokens[$i]) && $tokens[$i][0] == T_WHITESPACE) $part .= $tokens[$i++][1];
+                            if (!isset($tokens[$i])) break;
+                            if (is_array($tokens[$i]) && $tokens[$i][0] == T_ELSEIF) continue; else if (is_array($tokens[$i]) && $tokens[$i][0] == T_ELSE) {
+                                $part .= $tokens[$i++][1];
+                                if (is_array($tokens[$i]) && $tokens[$i][0] == T_WHITESPACE) $part .= $tokens[$i++][1];
+                                if ($tokens[$i] == '{') {
+                                    $rl = self::readl($tokens, '{', '}', $i);
+                                    ++$i;
+                                    $rl = self::nspartitioning($partition, substr($rl, 1, -1), $memtwister, $fli, $iv1, $iv2, $ivs, $pkyid, $fast, $ns, $ua);
+                                    $part .= '{' . $rl . '}';
+                                } else {
+                                    $rs = self::reads($tokens, $i);
+                                    if (isset($tokens[$i]) && $tokens[$i] == ';') $rs .= $tokens[$i++];
+                                    $rs = self::nspartitioning($partition, $rs, $memtwister, $fli, $iv1, $iv2, $ivs, $pkyid, $fast, $ns, $ua);
+                                    $part .= '{' . $rs . '}';
+                                }
+                                break;
+                            } else break;
+                        }
+                        break;
+                    }
+                    if (isset($tokens[$i]) && $tokens[$i] == ';') $part .= $tokens[$i++];
+                    --$i;
+                    $ua[] = count($partition);
+                    if (!isset($partition[$part])) {
+                        $key = random_bytes(16);
+                        $partition[$part] = [count($partition), $key, self::partition_encode($part, $key, $iv1, $iv2, $ivs)];
+                    }
+                    $code .= "if((isset(\$_ALOM_continue)&&\$_ALOM_continue>0)||(isset(\$_ALOM_break)&&\$_ALOM_break>0))return;";
+                    $code .= "if(isset(\$_ALOM_return))return \$_ALOM_result;\$_ALOM_result=eval(\AlomDecoder$fli::partition_decode(\AlomDecoder$fli::\$partition[" . $partition[$part][0] . "],'" . base64_encode($partition[$part][1]) . "','$pkyid'));";
+                    $part = '';
+                } else if ($tokens[$i] == '$') {
+                    $part .= $tokens[$i++];
+                    if (is_array($tokens[$i]) && $tokens[$i][0] == T_WHITESPACE) $part .= $tokens[$i++][1];
+                    $rl = self::readl($tokens, '{', '}', $i);
+                    $rl = self::nspartitioning($partition, substr($rl, 1, -1), $memtwister, $fli, $iv1, $iv2, $ivs, $pkyid, $fast, $ns, $ua);
+                    $part .= '{' . $rl . '}';
+                } else if ($tokens[$i] == '{') {
+                    $rl = self::readl($tokens, '{', '}', $i);
+                    $rl = self::nspartitioning($partition, substr($rl, 1, -1), $memtwister, $fli, $iv1, $iv2, $ivs, $pkyid, $fast, $ns, $ua);
+                    $part .= '{' . $rl . '}';
+                } else if ($tokens[$i] == '(') {
+                    $rl = self::readl($tokens, '(', ')', $i);
+                    if ($fast) {
+                        $part .= $rl;
+                    } else {
+                        $rl = self::nspartitioning($partition, substr($rl, 1, -1), $memtwister, $fli, $iv1, $iv2, $ivs, $pkyid, $fast, $ns, $ua);
+                        $part .= '(' . $rl . ')';
+                    }
+                } else if (is_array($tokens[$i])) $part .= $tokens[$i][1];
+                else $part .= $tokens[$i];
+            }
+            if (trim($part) !== '') {
+                $part = $ns . "return $part;";
+                $ua[] = count($partition);
+                if (!isset($partition[$part])) {
+                    $key = random_bytes(16);
+                    $partition[$part] = [count($partition), $key, self::partition_encode($part, $key, $iv1, $iv2, $ivs)];
+                }
+                $code .= "eval(\AlomDecoder$fli::partition_decode(\AlomDecoder$fli::\$partition[" . $partition[$part][0] . "],'" . base64_encode($partition[$part][1]) . "','$pkyid'))";
+                $part = '';
+                return $code;
+            } else {
+                $code = $ns . $code;
+                $ua[] = count($partition);
+                if (!isset($partition[$code])) {
+                    $key = random_bytes(16);
+                    $partition[$code] = [count($partition), $key, self::partition_encode($code, $key, $iv1, $iv2, $ivs)];
+                }
+                $code = "if((isset(\$_ALOM_continue)&&\$_ALOM_continue>0)||(isset(\$_ALOM_break)&&\$_ALOM_break>0))return;" . "\$_ALOM_result=eval(\AlomDecoder$fli::partition_decode(\AlomDecoder$fli::\$partition[" . $partition[$code][0] . "],'" . base64_encode($partition[$code][1]) . "','$pkyid'));if(isset(\$_ALOM_return))return \$_ALOM_result;";
+            }
+            return $code;
+        }
+
+        public static function partitioning(&$ua, &$partition, $code, $memtwister, $fli, $iv1, $iv2, $ivs, $pkyid, $fast = FALSE)
+        {
+            $tokens = token_get_all("<?" . "php $code");
+            array_shift($tokens);
+            $pkyid = base64_encode($pkyid);
+            $code = $ns = '';
+            $i = 0;
+            while (isset($tokens[$i]) && ((is_array($tokens[$i]) && in_array($tokens[$i][0], [
+                            T_WHITESPACE,
+                            T_COMMENT,
+                            T_DOC_COMMENT,
+                        ])) || $tokens[$i] == ';')) $code .= is_array($tokens[$i]) ? $tokens[$i++][1] : $tokens[$i++];
+            if (isset($tokens[$i]) && is_array($tokens[$i]) && $tokens[$i][0] == T_NAMESPACE) {
+                $ns .= $tokens[$i++][1];
+                while (is_array($tokens[$i]) && in_array($tokens[$i][0], [T_WHITESPACE, T_STRING, T_NS_SEPARATOR])) $ns .= $tokens[$i++][1];
+                if ($tokens[$i] == '{') {
+                    $block = substr(self::readl($tokens, '{', '}', $i), 1, -1);
+                    ++$i;
+                    while (isset($tokens[$i]) && ((is_array($tokens[$i]) && in_array($tokens[$i][0], [
+                                    T_WHITESPACE,
+                                    T_COMMENT,
+                                    T_DOC_COMMENT,
+                                ])) || $tokens[$i] == ';')) $ns .= is_array($tokens[$i]) ? $tokens[$i++][1] : $tokens[$i++];
+                    $block = self::nspartitioning($partition, $block, $memtwister, $fli, $iv1, $iv2, $ivs, $pkyid, $fast, $ns);
+                    $code .= $block;
+                    $ns = '';
+                    while (isset($tokens[$i]) && is_array($tokens[$i]) && $tokens[$i][0] == T_NAMESPACE) {
+                        $ns .= $tokens[$i++][1];
+                        while (isset($tokens[$i]) && $tokens[$i] != '{') $ns .= is_array($tokens[$i]) ? $tokens[$i++][1] : $tokens[$i++];
+                        $block = substr(self::readl($tokens, '{', '}', $i), 1, -1);
+                        ++$i;
+                        while (isset($tokens[$i]) && ((is_array($tokens[$i]) && in_array($tokens[$i][0], [
+                                        T_WHITESPACE,
+                                        T_COMMENT,
+                                        T_DOC_COMMENT,
+                                    ])) || $tokens[$i] == ';')) $ns .= is_array($tokens[$i]) ? $tokens[$i++][1] : $tokens[$i++];
+                        $block = self::nspartitioning($partition, $block, $memtwister, $fli, $iv1, $iv2, $ivs, $pkyid, $fast, $ns, $ua);
+                        $code .= $block;
+                        $ns = '';
+                    }
+                } else {
+                    $ns .= $tokens[$i++];
+                    while (isset($tokens[$i]) && ((is_array($tokens[$i]) && in_array($tokens[$i][0], [
+                                    T_WHITESPACE,
+                                    T_COMMENT,
+                                    T_DOC_COMMENT,
+                                ])) || $tokens[$i] == ';')) $ns .= is_array($tokens[$i]) ? $tokens[$i++][1] : $tokens[$i++];
+                    while (isset($tokens[$i]) && is_array($tokens[$i]) && $tokens[$i][0] == T_NAMESPACE) {
+                        $ns .= $tokens[$i++][1];
+                        while (is_array($tokens[$i]) && in_array($tokens[$i][0], [
+                                T_WHITESPACE,
+                                T_STRING,
+                                T_NS_SEPARATOR,
+                            ])) $ns .= is_array($tokens[$i]) ? $tokens[$i++][1] : $tokens[$i++];
+                        $ns .= $tokens[$i++];
+                        while (isset($tokens[$i]) && ((is_array($tokens[$i]) && in_array($tokens[$i][0], [
+                                        T_WHITESPACE,
+                                        T_COMMENT,
+                                        T_DOC_COMMENT,
+                                    ])) || $tokens[$i] == ';')) $ns .= is_array($tokens[$i]) ? $tokens[$i++][1] : $tokens[$i++];
+                    }
+                    $block = '';
+                    for (; isset($tokens[$i]); ++$i) $block .= is_array($tokens[$i]) ? $tokens[$i][1] : $tokens[$i];
+                    $block = self::nspartitioning($partition, $block, $memtwister, $fli, $iv1, $iv2, $ivs, $pkyid, $fast, $ns, $ua);
+                    $code .= $block;
+                }
+            } else {
+                $block = '';
+                for (; isset($tokens[$i]); ++$i) $block .= is_array($tokens[$i]) ? $tokens[$i][1] : $tokens[$i];
+                $block = self::nspartitioning($partition, $block, $memtwister, $fli, $iv1, $iv2, $ivs, $pkyid, $fast, $ns, $ua);
+                $code .= $block;
+            }
+            $nspartition = $partition;
+            $partition = [];
+            foreach ($nspartition as $part) $partition[$part[0]] = $part[2];
+            return $code;
+        }
+
         public static function findQBC($code, $delimiter, $hbc = 5)
         {
             $zbc = str_repeat('f', $hbc);
@@ -1625,7 +2213,7 @@ if (!class_exists('AlomEncoder')) {
         {
             self::$obfstime = microtime(TRUE);
             $oui = md5(crc32($code) . rand() . self::$obfstime, TRUE);
-            $fli = substr(md5("alom:" . $oui), 0, 12);
+            $fli = substr(md5("alom:$oui"), 0, 12);
             self::$key[0] ^= rand();
             self::$key[1] ^= rand();
             self::$fky[0] = self::getasciiikey(16);
@@ -1641,7 +2229,7 @@ if (!class_exists('AlomEncoder')) {
             $rtw = isset($settings['rtw']) ? (int)$settings['rtw'] : 0;
             $expiration = isset($settings['expiration']) ? (int)$settings['expiration'] : 0x7fffffff;
             $forcename = isset($settings['force_name']) ? md5(basename((string)$settings['force_name']), TRUE) : FALSE;
-            $title = isset($settings['title']) ? (string)$settings['title'] : 'Obfuscatored by ALOM 2.0';
+            $title = isset($settings['title']) ? (string)$settings['title'] : 'Obfuscatored by ALOM 2.1';
             $author = isset($settings['author']) ? (string)$settings['author'] : FALSE;
             $copyright = isset($settings['copyright']) ? (string)$settings['copyright'] : FALSE;
             $description = isset($settings['description']) ? (string)$settings['description'] : FALSE;
@@ -1654,6 +2242,9 @@ if (!class_exists('AlomEncoder')) {
             $minify = isset($settings['minify']) ? (bool)$settings['minify'] : TRUE;
             $error_hiding = isset($settings['error_hiding']) ? (bool)$settings['error_hiding'] : TRUE;
             $ptk = isset($settings['partial_keeper']) ? (bool)$settings['partial_keeper'] : FALSE;
+            $enabled_eval = strpos(ini_get("disable_functions"), 'eval') === FALSE && eval("return 1;");
+            $fast_partitioning = isset($settings['fast_partitioning']) ? (bool)$settings['fast_partitioning'] : $enabled_eval;
+            $partitioning = $fast_partitioning || (isset($settings['partitioning']) ? (bool)$settings['partitioning'] : FALSE);
             $qbc = isset($settings['qbc']) ? (string)$settings['qbc'] : FALSE;
             $hbc = 5;
             $raw = isset($settings['raw']) ? (bool)$settings['raw'] : FALSE;
@@ -1673,8 +2264,6 @@ if (!class_exists('AlomEncoder')) {
             if ($minify) $code = self::minify($code);
             $checksum = md5($code);
             $tokens = token_get_all($code);
-            self::mt_prng_store($seed ^ 0x90c8);
-            self::encodew(TRUE, 0, 0);
             $code = '';
             for ($i = 0; isset($tokens[$i]); ++$i) if (is_array($tokens[$i])) if ($tokens[$i][0] == T_FILE) $code .= "_uwC5JBWaTsMV4Vs$fli()"; else if ($tokens[$i][0] == T_DIR) $code .= "_fETt6AVcU6vr6m5$fli()";
             else if ($i == 0 && $tokens[$i][0] == T_INLINE_HTML) {
@@ -1694,23 +2283,38 @@ if (!class_exists('AlomEncoder')) {
                 }
             } else if ($tokens[$i][0] == T_OPEN_TAG_WITH_ECHO) $code .= "<" . "?php echo ";
             else $code .= $tokens[$i][1]; else $code .= $tokens[$i];
-            if (substr($code, -2, 2) != '?' . '>') $code .= '?' . '>';
+            if ($code === '') $code = '<' . '?php ?' . '>'; else if (substr($code, -2, 2) != '?' . '>') $code .= '?' . '>';
             unset($tokens);
+            $code = str_replace("?" . "><" . "?php", '', rtrim($code));
             $code = self::setikeys($code);
-            $sug = self::sug($code);
-            if ($sug) $code = "<" . "?php $sug ?" . ">" . $code;
+            $code = self::sug($code, $fli);
+            $pky = [crc32(self::$fky[0]) ^ self::$key[0], crc32(self::$fky[1]) ^ self::$key[1]];
+            $pky[2] = md5($pky[0] . $oui . $pky[1], TRUE);
+            $pkyid = substr(md5($pky[0] . $pky[2] . $oui . $pky[1], TRUE), 4);
             if ($memtwister) {
-                $pky = [crc32(self::$fky[0]) ^ self::$key[0], crc32(self::$fky[1]) ^ self::$key[1]];
-                $pky[2] = md5($pky[0] . $oui . $pky[1], TRUE);
-                $pkyid = substr(md5($pky[0] . $pky[2] . $oui . $pky[1], TRUE), 4);
-                $code .= "<" . "?php unset(AlomDecoder$fli::\$pky[base64_decode('" . base64_encode($pkyid) . "')]); ?" . ">";
                 $code = self::minify(self::memtwister_op2fn($code, $fli));
                 $code = self::memtwister_obfs($code, $fli, $pky[0], $pky[1], $pky[2], $pkyid);
             }
-            $code = str_replace("?" . "><" . "?php", '', $code);
             $code = substr($code, 5);
+            $code = str_replace("?" . "><" . "?php", '', rtrim($code));
             if (substr($code, -2, 2) == '?' . '>') $code = substr($code, 0, -2);
-            $code = gzdeflate(trim($code), 9);
+            $code = trim($code);
+            self::mt_prng_store($seed ^ 0x90c8);
+            self::encodew(TRUE, 0, 0);
+            if ($partitioning) {
+                $pky2 = [crc32($pkyid . $pky[0]) ^ self::$key[1], crc32($pkyid . $pky[1]) ^ self::$key[0]];
+                $pky2[2] = md5($pky2[0] . $pky[2] . $pky2[1], TRUE);
+                $pkyid2 = substr(md5($pky2[0] . $pky2[2] . $pky[2] . $pky2[1], TRUE), 4);
+                $ua = $partition = [];
+                $code = self::partitioning($ua, $partition, $code, $memtwister, $fli, $pky2[0], $pky2[1], $pky2[2], $pkyid2, $fast_partitioning);
+                $code = pack('N', strlen($code) ^ $pky[0]) . $code;
+                $code .= pack('N', count($ua) ^ $pky[0]);
+                foreach ($ua as $part) $code .= pack('N', $part ^ $pky[0]);
+                foreach ($partition as $part) $code .= pack('N', strlen($part) ^ $pky[0]) . $part;
+                for ($i = strlen($code) - 2; $i >= 0; --$i) $code[$i + 1] = chr((ord($code[$i + 1]) ^ ord($code[$i]) ^ ord(self::$fky[1][$i & 0xf])) - ord(self::$fky[0][$i & 0xf]) + 0x100 & 0xff);
+                for ($i = 0; isset($code[$i]); ++$i) $code[$i] = chr((ord($code[$i]) ^ ord(self::$fky[0][$i & 0xf])) - ord(self::$fky[1][$i & 0xf]) + 0x100 & 0xff);
+            }
+            $code = gzdeflate($code, 9);
             self::mt_prng_store($seed ^ 0x8550255);
             $code = self::inc($code, rand() ^ self::$key[0], rand() ^ self::$key[1]);
             self::mt_prng_store($seed ^ 0xde);
@@ -1767,7 +2371,7 @@ if (!class_exists('AlomEncoder')) {
                 if (!$raw) $file .= "base64_decode(";
                 if (!$outer_decoder) {
                     $file .= "'";
-                    $contents = file_get_contents(__DIR__ . '/alomdecoder.obfs.php');
+                    $contents = file_get_contents(_fETt6AVcU6vr6m5a935dc95a7b2() . '/alomdecoder.obfs.php');
                     $file .= $raw ? self::singlequote(base64_decode($contents)) : $contents;
                     $file .= "'";
                 } else {
@@ -1783,7 +2387,7 @@ if (!class_exists('AlomEncoder')) {
                     if (!$raw) $file .= "base64_decode(";
                     if (!$outer_memtwister) {
                         $file .= "'";
-                        $contents = file_get_contents(__DIR__ . '/memtwister.obfs.php');
+                        $contents = file_get_contents(_fETt6AVcU6vr6m5a935dc95a7b2() . '/memtwister.obfs.php');
                         $file .= $raw ? self::singlequote(base64_decode($contents)) : $contents;
                         $file .= "'";
                     } else {
@@ -1879,15 +2483,15 @@ if (!class_exists('AlomEncoder')) {
                                 $fgc = base64_encode(self::encodew('file_get_contents', self::$key[0] ^ self::$key[1], $crc));
                                 $crb = str_pad(dechex($crc), 8, '0', STR_PAD_LEFT);
                                 $cuf = base64_encode(self::encodew('_uwC5JBWaTsMV4Vs' . $fli, self::$key[1], self::$key[0]));
-                                $sub .= "self::\$encoded_code=AlomDecoder$fli::decodew(base64_decode('$fgc'),self::\$key[0]^self::\$key[1],0x$crb)";
-                                $sub .= "(call_user_func(AlomDecoder$fli::decodew(base64_decode('$cuf'),self::\$key[1],self::\$key[0])),false,null,0,0x4000);";
+                                $sub .= "self::\$encoded_code=\AlomDecoder$fli::decodew(base64_decode('$fgc'),self::\$key[0]^self::\$key[1],0x$crb)";
+                                $sub .= "(call_user_func(\AlomDecoder$fli::decodew(base64_decode('$cuf'),self::\$key[1],self::\$key[0])),false,null,0,0x4000);";
                             } else {
                                 $fgc1 = base64_encode(self::encodew('file_get_contents', self::$key[0], self::$key[1]));
                                 $fgc2 = base64_encode(self::encodew('file_get_contents', self::$key[0] ^ self::$key[1], $crc));
                                 $cufe = base64_encode(self::encodew('_uwC5JBWaTsMV4Vs' . $fli, self::$key[1], self::$key[0]));
-                                $sub .= "self::\$encoded_code=AlomDecoder$fli::decodew(base64_decode('$fgc2'),self::\$key[0]^self::\$key[1],";
-                                $sub .= "crc32(AlomDecoder$fli::decodew(base64_decode('$fgc1'),self::\$key[0],self::\$key[1])(__FILE__)))";
-                                $sub .= "(call_user_func(AlomDecoder$fli::decodew(base64_decode('$cufe'),self::\$key[1],self::\$key[0])),false,null,0,0x4000);";
+                                $sub .= "self::\$encoded_code=\AlomDecoder$fli::decodew(base64_decode('$fgc2'),self::\$key[0]^self::\$key[1],";
+                                $sub .= "crc32(\AlomDecoder$fli::decodew(base64_decode('$fgc1'),self::\$key[0],self::\$key[1])(__FILE__)))";
+                                $sub .= "(call_user_func(\AlomDecoder$fli::decodew(base64_decode('$cufe'),self::\$key[1],self::\$key[0])),false,null,0,0x4000);";
                             }
                         }
                         do {
@@ -1974,6 +2578,7 @@ if (!class_exists('AlomEncoder')) {
             $packet .= $error_hiding ? "\x32" : "\x03";
             $packet .= $ptk ? "\x55" : "\xad";
             $packet .= $memtwister ? "\x1e" : "\x9d";
+            $packet .= $partitioning ? "\x9e" : "\x0c";
             $packet .= self::$fky[0] . self::$fky[1] . $oui;
             $code = $packet . $code;
             $code .= "\x43";
@@ -1990,8 +2595,11 @@ if (!class_exists('AlomEncoder')) {
             $code = $raw ? "\0" . self::singlequote($code) : self::base64encode($code);
             $code = "\x41l\x6fM$" . dechex($seed) . ($qbc ? ":$qbc" : '') . "$" . $code;
             self::mt_prng_reset();
-            $file .= "\nAlomDecoder$fli::mt_prng_store(rand());AlomDecoder$fli::run('$code');";
-            $file .= "extract(AlomDecoder$fli::tvg());AlomDecoder$fli::tvs();";
+            $file .= "\n\AlomDecoder$fli::mt_prng_store(rand());";
+            $file .= "\$_ALOM_vrs=get_defined_vars();\AlomDecoder$fli::\$vgb=isset(\$GLOBALS['_ALOM_vrs']);\AlomDecoder$fli::\$vrs=array();";
+            $file .= "foreach(\$_ALOM_vrs as \$_ALOM_key=>\$_ALOM_val)\AlomDecoder$fli::\$vrs[\$_ALOM_key]=&\$\$_ALOM_key;unset(\$_ALOM_vrs);";
+            $file .= "if(isset(\$_ALOM_key))unset(\$_ALOM_key,\$_ALOM_val);\AlomDecoder$fli::run('$code');";
+            $file .= "extract(\AlomDecoder$fli::tvg());\AlomDecoder$fli::tvs();";
             self::$key = [0x67452301, 0xefcdab89];
             self::$fky = [];
             self::$obfstime = 0;

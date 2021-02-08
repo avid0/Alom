@@ -1,7 +1,7 @@
 # Alom
 #### Reversing of the protected "Protector" [alomencoder.obfs.php](https://github.com/avid0/Alom/blob/main/alomencoder.obfs.php).
 
-### 2.0 `gzinflate` BP Vulnerability
+### 2.1 `gzinflate` BP Vulnerability
 - Add breakpoint at call of `gzinflate`
 - Start debugging
 - Once it hit the breakpoint a second time step in until you see the evaluated variable named `$code` there should be your unprotected code.
