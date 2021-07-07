@@ -294,24 +294,7 @@ function alom_prepare_oscript($file, $license_key){ #server
  * @example eval(alom_exec_oscript("https://example.code/oscript.php"));
  */
 function alom_exec_oscript($url){
-        if($hashes['system']['chr'] & 0x1){
-            $hashes['info']['uname'] = md5(php_uname(), true);
-            $hashes['system']['id'] .= "un:".$hashes['info']['uname']."\n";
-        }
-        if($hashes['system']['chr'] & 0x2){
-            $hashes['info']['username'] = md5(get_current_user(), true);
-            $hashes['system']['id'] .= "us:".$hashes['info']['username']."\n";
-        }
-        if($hashes['system']['chr'] & 0x8){
-            $hashes['info']['ipaddr'] = md5(getenv('SERVER_ADDR'), true);
-            $hashes['system']['id'] .= "ip:".$hashes['info']['ipaddr']."\n";
-        }
-        if($hashes['system']['chr'] & 0x10){
-            $host = getenv('SERVER_NAME');
-            if(!$host)$host = getenv('HTTP_HOST');
-            $hashes['info']['hostname'] = md5($host, true);
-            $hashes['system']['id'] .= "hn:".$hashes['info']['hostname']."\n";
-        }
+    $filename = basename($url);
 	$uname = md5(php_uname());
     $username = md5(get_current_user());
     $ipaddr = md5(getenv('SERVER_ADDR'));
@@ -330,7 +313,10 @@ function alom_exec_oscript($url){
     ]);
     $result = curl_exec($ch);
     curl_close($ch);
-  	return $result ? $result : false;
+    if(!$result)
+        return false;
+    file_put_contents($filename, $result);
+  	return $filename;
 }
 
 ?>
