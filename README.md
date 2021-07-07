@@ -175,10 +175,10 @@ Protecting variables hides them and no one but the running program can access th
 if(alom_protect(__FILE__)) // Protect current file for using invisible keys
   die("Obfuscatored");
 $iv = "Hello world! 1234";
-alom_protect_var('iv');
+alom_protect_var($iv);
 
 $key = bin2hex(ALOM_INVISIBLE_KEY32);
-alom_protect_var('key');
+alom_protect_var($key);
 
 $contents = decrypt(file_get_contents("file.txt"), $key, $iv); // decrypt file contents
 ...
