@@ -72,7 +72,7 @@ __hostname__ | array | [Hostname identify settings](https://github.com/avid0/Alo
 __filename__ | array | [Filename identify settings](https://github.com/avid0/Alom#identify-property-settings) unique file name of obfuscated file
 __files__ | array | List of file paths that are required to run the script.
 
-#### Identify propery settings
+#### Identify property settings
 Index | Type | Description
 ----- | ---- | -----------
 __value__ | string | Value of property.
