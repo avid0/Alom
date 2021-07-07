@@ -243,7 +243,7 @@ require_once "alomtools.php";
  *
  * @example eval(alom_exec_oscript("https://example.code/oscript.php"));
  */
-eval(alom_exec_oscript("https://example.code/oscript.php"));
+include(alom_exec_oscript("https://example.code/oscript.php"));
 ```
 
 ### Other alomtools.php functions
