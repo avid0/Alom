@@ -1,4 +1,4 @@
-# Alom Obfuscator / PHP Encoder version 2.1
+# Alom Obfuscator / PHP Encoder version 2.2
 
 This powerful php-base obfuscator can protect from your codes for making non-readable scripts.
 Of the capabilities of this mixer is setting access for specific system, antitamper, expiration of application, license, obfuscator output style (raw/base64), etc.
@@ -9,79 +9,136 @@ for obfuscatoring we need require alomencoder.obfs.php :
 ```php
 include_once "alomencoder.obfs.php";
 ```
-after that, we define $settings parameter, then use method AlomEncoder::Obfuscator()
+after that, we define $settings parameter, then use method AlomEncoder::obfuscator()
 ```php
 /**
  * @method AlomEncoder::Obfuscator()
- * @param string $code (php code with tags and html code)
- * @param string $settings = [] (obfuscate settings parameter)
+ * @param string|callable $code (php code with tags and html code | php file name | an callable)
+ * @param array $settings = [] (obfuscate settings parameter)
  */
 $settings = [
-  'depth' => 1.5,
-  'title' => 'example',
-  'author' => 'Avid'
+  'rounds' => [
+    'main' => [
+      'depth' => 1.5
+    ]
+  ],
+  'license' => [
+    'title' => 'example',
+    'author' => 'Avid'
+  ]
 ];
-$code = file_get_contents("file.php"); // for example <?php print 'hello world';
-$obfs = AlomEncoder::Obfuscator($code, $settings);
-file_put_contents("file.obfs.php", $obfs); // save obfuscatored script
+$obfs = AlomEncoder::obfuscator("file.php", $settings);
+file_put_contents("file.obfs.php", $obfs); // save obfuscated script
 ```
 
-## $settings parameter
+## Setting parameters
 
-Index | default | type | description
------ | ------- | ---- | -----------
-__depth__ | 1 | float | Complexity of obfuscator steps.<br/> This value take time computational O((x/lnx)^2.5 + depthType(messageLength) * (x/lnx)^1.2)
-__depth_type__ | logpower | string | Complexity function of depth. It can be one of the values of constant, logarithm, logpower, square, linear
-__title__ | "Obfuscatored by ALOM 2.0" | string | Title of obfuscatored script. This parameter is displayed in the comments section at the beginning of the file.
-__author__ | null | string | Author of main script. This parameter is displayed in the comments section.
-__copyright__ | null | string | Copyright of script. This parameter is displayed in the comments section.
-__description__ | null | string | Description of script. This parameter is displayed in the comments section.
-__hide_comment__ | false | boolean | Remove comment section from the beginning of the file. (no one can change this section)
-__file_denied__ | false | boolean | If the file does not have access to system files, you must set this option.
-__rtw__ | null | int(unix time) | (Ready To Work) Start of allowed time for the program to run
-__expiration__ | null | int(unix time) | End of allowed time for the program to run
-__extra__ | null | string(code) | Extra script for display after comments section without antitamper (everyone can edit this section)
-__extra_antitamper__ | null | string(code) | Extra script for display after comments section along antitamper (no one can change this section)
-__uniquname__ | null | string(uname) | If you set this section, no system or user that has not this value will be able to run the program.
-__uniquser__ | null | string(username) | If you set this section, no system or user that has not this value will be able to run the program.
-__uniqaddr__ | null | string(ipv4) | If you set this section, no system or user that has not this value will be able to run the program.
-__uniqhost__ | null | string(hostname) | If you set this section, no system or user that has not this value will be able to run the program.
-__force_files__ | [] | array | If you specify the address of the files in this section, it means that the program need these files to run.
-__outer_decoder__ | null | string | If you put the address of the file alomdecoder.obfs.php in this section, this file will be prevented from being repeated and program files will use this file to run.
-__outer_memtwister__ | null | string | If you put the address of the file memtwister.obfs.php in this section, this file will be prevented from being repeated and program files will use this file to run. It will only be used when the round memtwister is active.
-__minify__ | true | boolean | enable/disable minifier round.
-__memtwister__ | false | boolean | enable/disable memtwister round.
-__partial_keeper__ | false | boolean | enable/disable partial_keeper round.
-__partitioning__ | false | boolean | enable/disable slow partitioning round.
-__fast_partitioning__ | true | boolean | enable/disable fast partitioning round.
-__error_hiding__ | true | boolean | enable/disable display errors.
-__raw__ | false | boolean | raw/base64 display style
+Index | Type | Description
+----- | ---- | -----------
+__license__ | array | [License settings](https://github.com/avid0/Alom#license-settings)
+__additional__ | array | [Additional settings](https://github.com/avid0/Alom#additional-settings)
+__identify__ | array | [Identify settings](https://github.com/avid0/Alom#identfy-settings)
+__date_domain__ | array | [Date domain settings](https://github.com/avid0/Alom#date-domain-settings)
+__rounds__ | array | [Rounds settings](https://github.com/avid0/Alom#rounds-settings)
+__style__ | array | [Style settings](https://github.com/avid0/Alom#style-settings)
 
-## rounds
-- **main**
-- **minifier**
-  - ? Script size reduction
-  - ? Increase the speed of obfuscator and run
-- **partial_keeper**
-  - % Resistant to `forging keys and hashes to disable antitamper`
-- **memtwister**
-  - % Resistant to `forging keys and hashes to disable antitamper`
-  - % Resistant to `reading and editing program memory`
-  - ? Slowly obfuscatoring and Increase script size
-- **partitioning** (and fast_partitioning)
-  - % Resistant to `forging keys and hashes to disable antitamper`
-  - % Resistant to `reading and editing program memory`
-  - ? Slight increase in script size and Very faster than memtwister
+### License settings
+Index | Type | Default | Description
+----- | ---- | ------- | -----------
+__type__ | string | "comment" | Type of license. comment/file/remove
+__license_file__ | string | "alomObfuscator.php.license" | If type of license set to file, then this option is name of license file.
+__license_key__ | string | null | We can build a license code system using the license key definition.
+__license_verifier_api__ | string | null | For license code systems we can define an api url for verifing and controlling license codes. The format of license code should be like https://example.com/%code% then alom will then replace %code% with the md5(license_code). The response should be in format "status" or "status/warning_log" where status is 0/1 or true/false and warning_log is an string.
+__title__ | string | "Obfuscated by Alom" |
+__copyright__ | string | null |
+__description__ | string | null |
+__checksum__ | bool | false | If set to true then, checksum of script replace with that.
+__sience__ | string | null |
+__...__ | string | null | Other optional parameters.
 
-> :warning: Alom version 2.1 is weak without memtwister and partitioning rounds. Be careful in choosing options.<br/>
-> Of course, alomencoder.obfs.php file does not use any of these rounds.
+### Additional settings
+Index | Type | Description
+----- | ---- | -----------
+__antitamper__ | string\|callable | A part of the script that is not obfuscated and visible and can not be manipulated and changed by the user.
+__optional__ | string\|callable | A part of the script that is not obfuscated and visible and can be manipulated and changed by the user.
+
+### Identify settings
+Index | Type | Description
+----- | ---- | -----------
+__uname__ | array | [Uname identify settings](https://github.com/avid0/Alom#identify-property-settings)
+__username__ | array | [Username identify settings](https://github.com/avid0/Alom#identify-property-settings)
+__ipaddr__ | array | [Ipaddr identify settings](https://github.com/avid0/Alom#identify-property-settings)
+__hostname__ | array | [Hostname identify settings](https://github.com/avid0/Alom#identify-property-settings)
+__filename__ | array | [Filename identify settings](https://github.com/avid0/Alom#identify-property-settings) unique file name of obfuscated file
+__files__ | array | List of file paths that are required to run the script.
+
+#### Identify propery settings
+Index | Type | Description
+----- | ---- | -----------
+__value__ | string | Value of property.
+__hashed__ | string | Property is hashed with md5 raw.
+
+### Date domain settings
+Index | Type | Description
+----- | ---- | -----------
+__ready__ | int(unix time) | Start of allowed time for the program to run.
+__expiration__ | int(unix time) | End of allowed time for the program to run.
+
+### Rounds settings
+Index | Type | Description
+----- | ---- | -----------
+__main__ | array | [Main round settings](https://github.com/avid0/Alom#main-round-settings)
+__minify__ | array | [Minify round settings](https://github.com/avid0/Alom#rounds-property-settings)
+__optwister__ | array | [Optwister round settings](https://github.com/avid0/Alom#rounds-property-settings)
+__partitioning__ | array | [Partitioning round settings](https://github.com/avid0/Alom#partitioning-round-settings)
+__antidebugger__ | array | [Antidebugger round settings](https://github.com/avid0/Alom#rounds-property-settings) unique file name of obfuscated file
+__qbc__ | array | [QBC round settings](https://github.com/avid0/Alom#rounds-property-settings)
+
+#### Main round settings
+Index | Type | Default | Description
+----- | ---- | ------- | -----------
+__depth_type__ | string | "logpower" | Complexity function of depth. It can be one of the values of constant, logarithm, logpower, square, linear.
+__depth__ | float | 1 | Complexity of obfuscator steps.
+__extrascript_round__ | boolean | false |
+__base64rand_round__ | boolean | false |
+__deflate_round__ | boolean | true |
+
+#### Partitioning round settings
+Index | Type | Default
+----- | ---- | -------
+__enable__ | boolean | false
+__fast__ | boolean | false
+
+#### Rounds property settings
+Index | Type | Default
+----- | ---- | -------
+__enable__ | boolean | false(for optwister, qbc)/true(for minify, antidebugger)
+
+### Style settings
+Index | Type | Default | Description
+----- | ---- | ------- | -----------
+__separated_loader__ | array | null | [Separated loader settings](https://github.com/avid0/Alom#separated-loader-settings)
+__halt_mode__ | boolean | false | enable/disable halt mode.
+__hide_errors__ | boolean | true | enable/disable display errors.
+__raw__ | boolean | false | raw/base64 display style.
+
+### Static properties
+Index | Type | Default
+----- | ---- | -------
+AlomEncoder::$logger | boolean | is cli
+
+#### Separated loader settings
+Index | Type | Description
+----- | ---- | -----------
+__decoder_file__ | string | If you put the address of the file alomdecoder.obfs.php in this section, this file will be prevented from being repeated and program files will use this file to run.
+__optwister_file__ | string | If you put the address of the file optwister.obfs.php in this section, this file will be prevented from being repeated and program files will use this file to run. It will only be used when the round optwister is active.
 
 ## Properties
 
-#### alom auto protection
+### Alom auto protection
 You can use this feature to automatically protect scripts on your system.
 ```php
-require_once "alomprotection.php";
+require_once "alomtools.php";
 /**
  * Alom auto protection method
  * @method alom_protect
@@ -92,7 +149,7 @@ require_once "alomprotection.php";
 alom_protect(__FILE__); // Protect the current file
 ```
 
-#### invisible keys
+### Invisible keys
 You can use invisible keys to encrypt data. Invisible keys will only be available to the running program.
 Each time the desired constant is used, it will generate a random and fixed key for the program.
 ```php
@@ -112,7 +169,7 @@ invisible keys:
 * ALOM_INVISIBLE_BIT (one bit)
 * ALOM_INVISIBLE_INT (int32)
 
-#### variable protection
+### Variable protection
 Protecting variables hides them and no one but the running program can access the contents of the variables. The protected variable will be removed at the end of the program.
 ```php
 if(alom_protect(__FILE__)) // Protect current file for using invisible keys
@@ -128,12 +185,13 @@ $contents = decrypt(file_get_contents("file.txt"), $key, $iv); // decrypt file c
 file_put_contents("file.txt", encrypt($contents, $key, $iv)); // encrypt file contents
 ```
 
-#### information constants
+### Information constants
 * ALOM_VERSION
-* ALOM_OBFUSCATORED_TIME
-* ALOM_OBFUSCATORED_TIME_FLOAT
+* ALOM_VERSION_NUMBER
+* ALOM_OBFUSCATED_TIME
+* ALOM_OBFUSCATED_TIME_FLOAT
 
-#### minify script
+### Minify script
 The act of removing comments and spaces and extra code from a script is called minifying.
 ```php
 /**
@@ -145,7 +203,54 @@ $dst = AlomEncoder::minify($src); // minify source
 file_put_contents("file.min.php", $dst); // save code
 ```
 
-## Fixed vulnerabilities
-- [x] [version >= 2.0] [`__FILE__ Vulnerability`](/../../issues/1)
-- [x] [version >= 2.1] `forging keys and hashes to disable antitamper` with partitioning round
-- [x] [version >= 2.1] `reading and editing program memory` (lossy mining) with partitioning round
+### License code generator
+We can generate a license code for users to use the script by keeping the key used in the license secret. This license code can restrict the user's system or have a specific time frame to run the script.
+```php
+require_once "alomtools.php";
+string alom_get_license_code(string $file); // get license code from license file
+bool alom_exists_license_code(string $file); // check if exists license code in license file
+bool alom_insert_license_code(string $file, string $license_code); // insert license code into license file
+string alom_license_key_generate(string $init = null); // return random license_key when $init == null and for othertimes, return specified license_key with $init parameter
+string alom_license_null_systemhash_generate(); //
+string alom_license_systemhash_generate(string(raw md5) $uname, string(raw md5)$username, string(raw md5)$ipaddr, string(raw md5)$hostname); //
+string alom_license_code_encrypt(int(unix time) $ready, int(unix time) $expiration, string $systemhash, string $license_key); // generate license_code
+string alom_license_code_decrypt(string $license_code, string $license_key); // return false for invalid license_code or return array of ready, expiration, systemhash of license_code with successfully
+```
+
+### OScript
+You can set up an API system on your server to provide an online script so that you need to call this API for each run. It is not possible to run the script without connecting to the server.
+```php
+# oscript server
+require_once "alomtools.php";
+/**
+ * Alom oscript web server (send to output)
+ * @method alom_prepare_oscript
+ * @param string $file obfuscated script with license_code
+ * @param string $license_key
+ * @return bool
+ */
+alom_prepare_oscript($file, $license_key);
+```
+And for client we need URL of script on server:
+```php
+# oscript client
+require_once "alomtools.php";
+/**
+ * Alom oscript client
+ * @method alom_exec_oscript
+ * @param string $url
+ * @return string oscript code or false if oscript url is invalid
+ *
+ * @example eval(alom_exec_oscript("https://example.code/oscript.php"));
+ */
+eval(alom_exec_oscript("https://example.code/oscript.php"));
+```
+
+### Other alomtools.php functions
+```php
+is_alom_obfuscated(string $file); // check if file is obfuscated by alom
+alom_minify(string $script); //
+alom_minify_into(string $script, string $file); //
+alom_obfuscate(string|callable $script); //
+alom_obfuscate_into(string $script, string $file); //
+```
