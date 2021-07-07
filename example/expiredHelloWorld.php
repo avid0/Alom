@@ -15,7 +15,7 @@ $settings = [
 $obfuscatored = AlomEncoder::Obfuscator(function(){
   $var = "Hello I am hidden! find me";
   print "Hello world!";
-  unset($var);
+  alom_protect_var($var);
 }, $settings);
 file_put_contents('expiredHelloWorld.obfs.php', $obfuscatored);
 
