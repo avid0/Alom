@@ -241,7 +241,7 @@ require_once "alomtools.php";
  * @param string $url
  * @return string oscript code or false if oscript url is invalid
  *
- * @example eval(alom_exec_oscript("https://example.code/oscript.php"));
+ * @example include(alom_exec_oscript("https://example.code/oscript.php"));
  */
 include(alom_exec_oscript("https://example.code/oscript.php"));
 ```
