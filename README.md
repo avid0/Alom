@@ -91,7 +91,7 @@ __main__ | array | [Main round settings](https://github.com/avid0/Alom#main-roun
 __minify__ | array | [Minify round settings](https://github.com/avid0/Alom#rounds-property-settings)
 __optwister__ | array | [Optwister round settings](https://github.com/avid0/Alom#rounds-property-settings) (slow running)
 __partitioning__ | array | [Partitioning round settings](https://github.com/avid0/Alom#partitioning-round-settings) (slow running)
-__antidebugger__ | array | [Antidebugger round settings](https://github.com/avid0/Alom#rounds-property-settings) unique file name of obfuscated file
+__antidebugger__ | array | [Antidebugger round settings](https://github.com/avid0/Alom#rounds-property-settings)
 __qbc__ | array | [QBC round settings](https://github.com/avid0/Alom#rounds-property-settings)
 
 #### Main round settings
@@ -125,7 +125,7 @@ __raw__ | boolean | false | raw/base64 display style.
 ### Static properties
 Index | Type | Default
 ----- | ---- | -------
-AlomEncoder::$logger | boolean | is cli
+__AlomEncoder::$logger__ | boolean | is cli
 
 #### Separated loader settings
 Index | Type | Description
