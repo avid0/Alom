@@ -122,16 +122,16 @@ __halt_mode__ | boolean | false | enable/disable halt mode.
 __hide_errors__ | boolean | true | enable/disable display errors.
 __raw__ | boolean | false | raw/base64 display style.
 
-### Static properties
-Index | Type | Default
------ | ---- | -------
-__AlomEncoder::$logger__ | boolean | is cli
-
 #### Separated loader settings
 Index | Type | Description
 ----- | ---- | -----------
 __decoder_file__ | string | If you put the address of the file alomdecoder.obfs.php in this section, this file will be prevented from being repeated and program files will use this file to run.
 __optwister_file__ | string | If you put the address of the file optwister.obfs.php in this section, this file will be prevented from being repeated and program files will use this file to run. It will only be used when the round optwister is active.
+
+### Static properties
+Index | Type | Default
+----- | ---- | -------
+__AlomEncoder::$logger__ | boolean | is cli
 
 ## Properties
 
