@@ -89,8 +89,8 @@ Index | Type | Description
 ----- | ---- | -----------
 __main__ | array | [Main round settings](https://github.com/avid0/Alom#main-round-settings)
 __minify__ | array | [Minify round settings](https://github.com/avid0/Alom#rounds-property-settings)
-__optwister__ | array | [Optwister round settings](https://github.com/avid0/Alom#rounds-property-settings)
-__partitioning__ | array | [Partitioning round settings](https://github.com/avid0/Alom#partitioning-round-settings)
+__optwister__ | array | [Optwister round settings](https://github.com/avid0/Alom#rounds-property-settings) (slow running)
+__partitioning__ | array | [Partitioning round settings](https://github.com/avid0/Alom#partitioning-round-settings) (slow running)
 __antidebugger__ | array | [Antidebugger round settings](https://github.com/avid0/Alom#rounds-property-settings) unique file name of obfuscated file
 __qbc__ | array | [QBC round settings](https://github.com/avid0/Alom#rounds-property-settings)
 
@@ -99,7 +99,7 @@ Index | Type | Default | Description
 ----- | ---- | ------- | -----------
 __depth_type__ | string | "logpower" | Complexity function of depth. It can be one of the values of constant, logarithm, logpower, square, linear.
 __depth__ | float | 1 | Complexity of obfuscator steps.
-__extrascript_round__ | boolean | false |
+__extrascript_round__ | boolean | true |
 __base64rand_round__ | boolean | false |
 __deflate_round__ | boolean | true |
 
