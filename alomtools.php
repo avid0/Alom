@@ -254,9 +254,10 @@ function alom_license_code_decrypt($license_code, $license_key){
  * @method alom_prepare_oscript
  * @param string $file obfuscated script with license_code
  * @param string $license_key
+ * @param string $password = ''
  * @return bool
  */
-function alom_prepare_oscript($file, $license_key){ #server
+function alom_prepare_oscript($file, $license_key, $password = ''){ #server
     if(!is_alom_obfuscated($file))
         return false;
     $contents = @file_get_contents($file);
@@ -265,35 +266,36 @@ function alom_prepare_oscript($file, $license_key){ #server
     $license_code = AlomEncoder::license_find_code($contents);
     if(!$license_code)
         return false; // obfuscated script do not need license_code
-    $condition = (isset($_POST['ipaddr']) && isset($_POST['username']) && isset($_POST['uname']) && isset($_POST['hostname']));
-    if($condition == true){ // $_POST hamishe hast
-        $ipaddr = hex2bin($_POST['ipaddr']);
-        $username = hex2bin($_POST['username']);
-        $uname = hex2bin($_POST['uname']);
-        $hostname = hex2bin($_POST['hostname']);
-    	$systemhash = alom_license_systemhash_generate($uname, $username, $ipaddr, $hostname);
-        $now = time();
-  		$license_code = alom_license_code_encrypt($now, $now + 3, $systemhash, $license_key);
-        $contents = alom_license_insert_code($contents, $license_code);
-        if(!send_headers()){
-         	header("Content-Type: text/plain");
-        }
-        print $contents;
-        return true;
-    } else {
-      return false
+    if(!isset($_POST['ipaddr']) || !isset($_POST['username']) || !isset($_POST['uname']) || !isset($_POST['hostname']) || !isset($_POST['password']))
+        return false;
+    $ipaddr = hex2bin($_POST['ipaddr']);
+    $username = hex2bin($_POST['username']);
+    $uname = hex2bin($_POST['uname']);
+    $hostname = hex2bin($_POST['hostname']);
+    $password = md5('alom-oscript-rY^!1bV&r[o4[=Jk2-'.$password);
+    if($password != $_POST['password'])
+        return false;
+    $systemhash = alom_license_systemhash_generate($uname, $username, $ipaddr, $hostname);
+    $now = time();
+    $license_code = alom_license_code_encrypt($now, $now + 3, $systemhash, $license_key);
+    $contents = alom_license_insert_code($contents, $license_code);
+    if(!send_headers()){
+        header("Content-Type: text/plain");
     }
+    print $contents;
+    return true;
 }
 
 /**
  * Alom oscript client
  * @method alom_exec_oscript
  * @param string $url
+ * @param string $password = ''
  * @return string oscript code or false if oscript url is invalid
  *
  * @example include(alom_exec_oscript("https://example.code/oscript.php"));
  */
-function alom_exec_oscript($url){
+function alom_exec_oscript($url, $password = ''){
 	$uname = md5(php_uname());
     $username = md5(get_current_user());
     $ipaddr = md5(getenv('SERVER_ADDR'));
@@ -301,6 +303,7 @@ function alom_exec_oscript($url){
     if(!$hostname)
       	$hostname = getenv('HTTP_HOST');
 	$hostname = md5($hostname);
+    $password = md5('alom-oscript-rY^!1bV&r[o4[=Jk2-'.$password);
     $ch = curl_init($url);
   	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_POST, true);
@@ -308,7 +311,8 @@ function alom_exec_oscript($url){
         'uname' => $uname,
         'username' => $username,
         'ipaddr' => $ipaddr,
-        'hostname' => $hostname
+        'hostname' => $hostname,
+        'password' => $password
     ]);
     $result = curl_exec($ch);
     curl_close($ch);
