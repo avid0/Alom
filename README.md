@@ -76,7 +76,7 @@ __files__ | array | List of file paths that are required to run the script.
 Index | Type | Description
 ----- | ---- | -----------
 __value__ | string | Value of property.
-__hashed__ | string | Property is hashed with md5 raw.
+__hashed__ | boolean | Property is hashed with md5 raw. default=false
 
 ### Date domain settings
 Index | Type | Description
