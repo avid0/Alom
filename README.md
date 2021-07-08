@@ -227,6 +227,7 @@ require_once "alomtools.php";
  * @method alom_prepare_oscript
  * @param string $file obfuscated script with license_code
  * @param string $license_key
+ * @param string $password = ''
  * @return bool
  */
 alom_prepare_oscript($file, $license_key);
@@ -239,6 +240,7 @@ require_once "alomtools.php";
  * Alom oscript client
  * @method alom_exec_oscript
  * @param string $url
+ * @param string $password = ''
  * @return string oscript code or false if oscript url is invalid
  *
  * @example include(alom_exec_oscript("https://example.code/oscript.php"));
