@@ -291,10 +291,9 @@ function alom_prepare_oscript($file, $license_key){ #server
  * @param string $url
  * @return string oscript code or false if oscript url is invalid
  *
- * @example eval(alom_exec_oscript("https://example.code/oscript.php"));
+ * @example include(alom_exec_oscript("https://example.code/oscript.php"));
  */
 function alom_exec_oscript($url){
-    $filename = basename($url);
 	$uname = md5(php_uname());
     $username = md5(get_current_user());
     $ipaddr = md5(getenv('SERVER_ADDR'));
@@ -315,6 +314,8 @@ function alom_exec_oscript($url){
     curl_close($ch);
     if(!$result)
         return false;
+    $filename = "alom.oscript.".bin2hex(random_bytes(8)).".php";
+    $result = "<?php file_put_contents(__FILE__,substr(file_get_contents(__FILE__),79,-25));?>$result<?php unlink(__FILE__);?>";
     file_put_contents($filename, $result);
   	return $filename;
 }
