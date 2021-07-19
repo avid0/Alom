@@ -1,11 +1,35 @@
 # Alom
 #### Reversing of the protected "Protector" [alomencoder.obfs.php](https://github.com/avid0/Alom/blob/main/alomencoder.obfs.php).
 
+### 2.2 Bypass Anti Debug
+- Modify your XDebug configuration to my own.
+Note: The bypass is due to a bad anti debug setup and we can bypass it by changing `xdebug.remote_enable`, `xdebug.remote_autostart`, `xdebug.profiler_enable` and trick the anti debug into believing XDebug is not enabled.
+```ini
+xdebug.start_with_request = yes;
+xdebug.remote_enable = 0
+xdebug.remote_autostart = 0
+xdebug.profiler_enable = 0
+xdebug.auto_trace = 1
+xdebug.collect_params = 4
+xdebug.collect_return = 1
+xdebug.collect_vars = 1
+xdebug.cli_color = 1
+xdebug.show_local_vars = 1
+xdebug.scream = false
+xdebug.discover_client_host = true
+xdebug.mode = develop,debug,profile
+zend_extension = "C:\PHP\ext\php_xdebug.dll"
+```
+- Put the breakpoint as seen on the guide for the version [2.1](#21-gzinflate-bp-vulnerability)
+- Now the tricky part is to get the `$code` which contains the real code, It is hidden between multiple `gzinflate` calls so we will need to go in and out of each call in order to find the hidden and truely decoded `$code`.
+ ![BP Vulnerability demo 2.2](demo/bp_vulnerability.demo-2.2.gif)
+
+ 
 ### 2.1 `gzinflate` BP Vulnerability
 - Add breakpoint at call of `gzinflate`
 - Start debugging
 - Once it hit the breakpoint a second time step in until you see the evaluated variable named `$code` there should be your unprotected code.
-![BP Vulnerability demo](demo/bp_vulnerability.demo.gif)
+![BP Vulnerability demo 2.1](demo/bp_vulnerability.demo-2.1.gif)
 
 
 ### 1.8 `__FILE__` Vulnerability

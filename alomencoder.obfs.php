@@ -1,26 +1,38 @@
 <?php
 
 /**
- * Alom 2.1
+ * Alom 2.2
  * Unpacked by Tesla
  * https://github.com/0x11DFE
  */
 
-if (!class_exists('AlomEncoder')) {
-    if (!defined('ALOM_VERSION')) {
-        define('ALOM_VERSION', '2.1');
+if ($_ALOM_beforeeval) {
+    $_ALOM_code = "";
+    unset($_ALOM_code, $_ALOM_beforeeval);
+} else {
+    file_put_contents($_ALOM_code, "");
+    unlink($_ALOM_code);
+    $_ALOM_code = "";
+    unset($_ALOM_code, $_ALOM_beforeeval);
+}
+if (!class_exists("AlomEncoder")) {
+    if (!defined("ALOM_VERSION")) {
+        define("ALOM_VERSION", "2.2");
     }
-    if (!defined('T_NULLSAFE_OBJECT_OPERATOR')) {
-        define('T_NULLSAFE_OBJECT_OPERATOR', NULL);
+    if (!defined("ALOM_VERSION_NUMBER")) {
+        define("ALOM_VERSION_NUMBER", 20200);
     }
-    if (!defined('T_FN')) {
-        define('T_FN', NULL);
+    if (!defined("T_NULLSAFE_OBJECT_OPERATOR")) {
+        define("T_NULLSAFE_OBJECT_OPERATOR", NULL);
     }
-    if (!defined('T_COALESCE')) {
-        define('T_COALESCE', NULL);
+    if (!defined("T_FN")) {
+        define("T_FN", NULL);
     }
-    if (!defined('T_COALESCE_EQUAL')) {
-        define('T_COALESCE_EQUAL', NULL);
+    if (!defined("T_COALESCE")) {
+        define("T_COALESCE", NULL);
+    }
+    if (!defined("T_COALESCE_EQUAL")) {
+        define("T_COALESCE_EQUAL", NULL);
     }
 
     class AlomEncoder
@@ -29,24 +41,555 @@ if (!class_exists('AlomEncoder')) {
         private static $key = [0x67452301, 0xefcdab89];
         private static $fky = [];
         private static $obfstime = 0;
+        public static $iscli = TRUE;
+        public static $logger = TRUE;
+        private static $license_code_sbox = [
+            0x7c,
+            0x12,
+            0x9a,
+            0x4d,
+            0x03,
+            0xd8,
+            0x63,
+            0x51,
+            0x75,
+            0x5b,
+            0x70,
+            0x7d,
+            0x58,
+            0x20,
+            0x0a,
+            0x60,
+            0xe3,
+            0xfd,
+            0x8d,
+            0xc2,
+            0xeb,
+            0x05,
+            0x6f,
+            0x09,
+            0x7a,
+            0x25,
+            0xce,
+            0xe9,
+            0x9c,
+            0x48,
+            0x35,
+            0x33,
+            0xb8,
+            0x07,
+            0x14,
+            0xef,
+            0x66,
+            0x16,
+            0xa6,
+            0xd2,
+            0xc0,
+            0x61,
+            0xe2,
+            0x1b,
+            0x0c,
+            0xf8,
+            0x4f,
+            0x95,
+            0x45,
+            0x3b,
+            0xc4,
+            0xdc,
+            0x84,
+            0x6d,
+            0x5e,
+            0xa8,
+            0xea,
+            0x54,
+            0x0f,
+            0x6c,
+            0x78,
+            0x34,
+            0x8e,
+            0x0e,
+            0x19,
+            0x5a,
+            0x97,
+            0xcd,
+            0x5d,
+            0x00,
+            0x1a,
+            0xab,
+            0xd9,
+            0x29,
+            0x01,
+            0x43,
+            0xe0,
+            0xc5,
+            0x15,
+            0xc6,
+            0x82,
+            0xae,
+            0xe7,
+            0xa1,
+            0xc7,
+            0x99,
+            0x4c,
+            0x06,
+            0x90,
+            0xaa,
+            0xf6,
+            0xdd,
+            0x2b,
+            0xe8,
+            0x1d,
+            0xdb,
+            0x3d,
+            0xe5,
+            0xbf,
+            0xf2,
+            0xc3,
+            0x5f,
+            0x89,
+            0xe1,
+            0x9d,
+            0x4b,
+            0x27,
+            0x77,
+            0x2c,
+            0x62,
+            0x68,
+            0x57,
+            0x73,
+            0x59,
+            0x38,
+            0x6e,
+            0xa0,
+            0x2a,
+            0x1f,
+            0xf9,
+            0xa9,
+            0xde,
+            0x92,
+            0x0b,
+            0xf5,
+            0xee,
+            0x88,
+            0xf7,
+            0x36,
+            0x8b,
+            0xc8,
+            0x08,
+            0x24,
+            0x2e,
+            0x7e,
+            0xda,
+            0x79,
+            0xa5,
+            0x69,
+            0x10,
+            0x3a,
+            0x23,
+            0x87,
+            0xa4,
+            0xcf,
+            0xe6,
+            0x02,
+            0xf3,
+            0x3f,
+            0x7b,
+            0xd6,
+            0x50,
+            0x44,
+            0x37,
+            0xb7,
+            0x72,
+            0x6b,
+            0xd0,
+            0x3e,
+            0xa3,
+            0xfc,
+            0x91,
+            0x74,
+            0xfa,
+            0x0d,
+            0xcc,
+            0x7f,
+            0xe4,
+            0xbb,
+            0x71,
+            0x31,
+            0x56,
+            0x9f,
+            0x53,
+            0x98,
+            0xf4,
+            0xb4,
+            0xc1,
+            0x39,
+            0xad,
+            0x85,
+            0x80,
+            0x96,
+            0x1e,
+            0x28,
+            0xbe,
+            0xff,
+            0xf0,
+            0xed,
+            0x9b,
+            0x55,
+            0xaf,
+            0xa2,
+            0x2f,
+            0x86,
+            0x32,
+            0x3c,
+            0x1c,
+            0xba,
+            0xb1,
+            0x21,
+            0xca,
+            0xb0,
+            0x13,
+            0x46,
+            0xd1,
+            0x18,
+            0xb2,
+            0x47,
+            0x26,
+            0xd4,
+            0x30,
+            0xc9,
+            0xac,
+            0x81,
+            0x8f,
+            0xd7,
+            0xbc,
+            0xb5,
+            0x93,
+            0x9e,
+            0x41,
+            0x65,
+            0x64,
+            0xfb,
+            0xb3,
+            0xb6,
+            0xcb,
+            0x8c,
+            0xdf,
+            0x42,
+            0xfe,
+            0x40,
+            0x17,
+            0x2d,
+            0xbd,
+            0x11,
+            0xd5,
+            0x83,
+            0x04,
+            0x49,
+            0xd3,
+            0xa7,
+            0x4a,
+            0x4e,
+            0x94,
+            0xec,
+            0xb9,
+            0x5c,
+            0xf1,
+            0x52,
+            0x67,
+            0x76,
+            0x6a,
+            0x22,
+            0x8a,
+        ];
+        private static $license_code_ubox = [
+            0x45,
+            0x4a,
+            0x92,
+            0x04,
+            0xef,
+            0x15,
+            0x57,
+            0x21,
+            0x83,
+            0x17,
+            0x0e,
+            0x7b,
+            0x2c,
+            0xa4,
+            0x3f,
+            0x3a,
+            0x8b,
+            0xec,
+            0x01,
+            0xcb,
+            0x22,
+            0x4e,
+            0x25,
+            0xe9,
+            0xce,
+            0x40,
+            0x46,
+            0x2b,
+            0xc5,
+            0x5e,
+            0xb7,
+            0x76,
+            0x0d,
+            0xc8,
+            0xfe,
+            0x8d,
+            0x84,
+            0x19,
+            0xd1,
+            0x6a,
+            0xb8,
+            0x49,
+            0x75,
+            0x5c,
+            0x6c,
+            0xea,
+            0x85,
+            0xc1,
+            0xd3,
+            0xaa,
+            0xc3,
+            0x1f,
+            0x3d,
+            0x1e,
+            0x80,
+            0x99,
+            0x72,
+            0xb2,
+            0x8c,
+            0x31,
+            0xc4,
+            0x60,
+            0x9e,
+            0x94,
+            0xe8,
+            0xdd,
+            0xe6,
+            0x4b,
+            0x98,
+            0x30,
+            0xcc,
+            0xd0,
+            0x1d,
+            0xf0,
+            0xf3,
+            0x69,
+            0x56,
+            0x03,
+            0xf4,
+            0x2e,
+            0x97,
+            0x07,
+            0xfa,
+            0xad,
+            0x39,
+            0xbe,
+            0xab,
+            0x6f,
+            0x0c,
+            0x71,
+            0x41,
+            0x09,
+            0xf8,
+            0x44,
+            0x36,
+            0x65,
+            0x0f,
+            0x29,
+            0x6d,
+            0x06,
+            0xdf,
+            0xde,
+            0x24,
+            0xfb,
+            0x6e,
+            0x8a,
+            0xfd,
+            0x9c,
+            0x3b,
+            0x35,
+            0x73,
+            0x16,
+            0x0a,
+            0xa9,
+            0x9b,
+            0x70,
+            0xa2,
+            0x08,
+            0xfc,
+            0x6b,
+            0x3c,
+            0x88,
+            0x18,
+            0x95,
+            0x00,
+            0x0b,
+            0x86,
+            0xa6,
+            0xb5,
+            0xd6,
+            0x50,
+            0xee,
+            0x34,
+            0xb4,
+            0xc2,
+            0x8e,
+            0x7e,
+            0x66,
+            0xff,
+            0x81,
+            0xe4,
+            0x12,
+            0x3e,
+            0xd7,
+            0x58,
+            0xa1,
+            0x7a,
+            0xdb,
+            0xf5,
+            0x2f,
+            0xb6,
+            0x42,
+            0xae,
+            0x55,
+            0x02,
+            0xbd,
+            0x1c,
+            0x68,
+            0xdc,
+            0xac,
+            0x74,
+            0x53,
+            0xc0,
+            0x9f,
+            0x8f,
+            0x89,
+            0x26,
+            0xf2,
+            0x37,
+            0x78,
+            0x59,
+            0x47,
+            0xd5,
+            0xb3,
+            0x51,
+            0xbf,
+            0xca,
+            0xc7,
+            0xcf,
+            0xe1,
+            0xb0,
+            0xda,
+            0xe2,
+            0x9a,
+            0x20,
+            0xf7,
+            0xc6,
+            0xa8,
+            0xd9,
+            0xeb,
+            0xb9,
+            0x62,
+            0x28,
+            0xb1,
+            0x13,
+            0x64,
+            0x32,
+            0x4d,
+            0x4f,
+            0x54,
+            0x82,
+            0xd4,
+            0xc9,
+            0xe3,
+            0xa5,
+            0x43,
+            0x1a,
+            0x90,
+            0x9d,
+            0xcd,
+            0x27,
+            0xf1,
+            0xd2,
+            0xed,
+            0x96,
+            0xd8,
+            0x05,
+            0x48,
+            0x87,
+            0x5f,
+            0x33,
+            0x5b,
+            0x79,
+            0xe5,
+            0x4c,
+            0x67,
+            0x2a,
+            0x10,
+            0xa7,
+            0x61,
+            0x91,
+            0x52,
+            0x5d,
+            0x1b,
+            0x38,
+            0x14,
+            0xf6,
+            0xbc,
+            0x7d,
+            0x23,
+            0xbb,
+            0xf9,
+            0x63,
+            0x93,
+            0xaf,
+            0x7c,
+            0x5a,
+            0x7f,
+            0x2d,
+            0x77,
+            0xa3,
+            0xe0,
+            0xa0,
+            0x11,
+            0xe7,
+            0xba,
+        ];
 
-        public static function getmd5ikey($str) { return md5($str . ':' . microtime() . ':' . lcg_value(), TRUE); }
+        public static function getmd5ikey($str)
+        {
+            return md5($str . ":" . microtime() . ":" . lcg_value(), TRUE);
+        }
 
         public static function getasciiikey($len)
         {
-            if (function_exists('random_bytes')) return random_bytes($len);
-            $str = '';
-            for ($i = 0; $i * 16 < $len; ++$i) $str .= getmd5ikey($str . $len);
+            if (function_exists("random_bytes")) {
+                return random_bytes($len);
+            }
+            $str = "";
+            for ($i = 0; $i * 16 < $len; ++$i) {
+                $str .= getmd5ikey($str . $len);
+            }
             return substr($str, 0, $len);
         }
 
-        public static function getcharikey() { return self::getasciiikey(1); }
+        public static function getcharikey()
+        {
+            return self::getasciiikey(1);
+        }
 
-        public static function getbitikey() { return ord(self::getcharikey()) & 1; }
+        public static function getbitikey()
+        {
+            return ord(self::getcharikey()) & 1;
+        }
 
         public static function getintikey()
         {
-            $ikey = unpack('N', self::getasciiikey(4));
+            $ikey = unpack("N", self::getasciiikey(4));
             return $ikey[1];
         }
 
@@ -109,20 +652,46 @@ if (!class_exists('AlomEncoder')) {
                             $ot = T_OPEN_TAG_WITH_ECHO;
                             $iw = TRUE;
                         } else if ($tn == T_CLOSE_TAG) {
-                            if ($ot == T_OPEN_TAG_WITH_ECHO) $new = rtrim($new, "; "); else $ts = " " . $ts;
+                            if ($ot == T_OPEN_TAG_WITH_ECHO) {
+                                $new = rtrim($new, "; ");
+                            } else {
+                                $ts = " " . $ts;
+                            }
                             $new .= $ts;
                             $ot = NULL;
                             $iw = FALSE;
                         } else if (in_array($tn, $IW)) {
                             $new .= $ts;
                             $iw = TRUE;
-                        } else if ($tn == T_CONSTANT_ENCAPSED_STRING || $tn == T_ENCAPSED_AND_WHITESPACE) {
-                            if ($ts[0] == '"') $ts = addcslashes($ts, "\n\t\r");
+                        } else if (
+                            $tn == T_CONSTANT_ENCAPSED_STRING ||
+                            $tn == T_ENCAPSED_AND_WHITESPACE
+                        ) {
+                            if ($ts[0] == '"') {
+                                $ts = addcslashes($ts, "\n\t\r");
+                            }
                             $new .= $ts;
                             $iw = TRUE;
                         } else if ($tn == T_WHITESPACE) {
-                            $nt = isset($tokens[$i + 1]) ? $tokens[$i + 1] : NULL;
-                            if (!$iw && (!is_string($nt) || $nt == '$') && !in_array($nt[0], $IW)) $new .= " "; else if ($nt !== NULL && isset($tokens[$i - 1]) && ($tokens[$i - 1] == '.' || $tokens[$i + 1] == '.') && ($tokens[$i - 1][0] == T_LNUMBER || $tokens[$i + 1][0] == T_LNUMBER)) $new .= " ";
+                            $nt = isset($tokens[$i + 1])
+                                ? $tokens[$i + 1]
+                                : NULL;
+                            if (
+                                !$iw &&
+                                (!is_string($nt) || $nt == '$') &&
+                                !in_array($nt[0], $IW)
+                            ) {
+                                $new .= " ";
+                            } else if (
+                                $nt !== NULL &&
+                                isset($tokens[$i - 1]) &&
+                                ($tokens[$i - 1] == "." ||
+                                    $tokens[$i + 1] == ".") &&
+                                ($tokens[$i - 1][0] == T_LNUMBER ||
+                                    $tokens[$i + 1][0] == T_LNUMBER)
+                            ) {
+                                $new .= " ";
+                            }
                             $iw = FALSE;
                         } else if ($tn == T_START_HEREDOC) {
                             $new .= "<<<S\n";
@@ -133,10 +702,15 @@ if (!class_exists('AlomEncoder')) {
                             $iw = TRUE;
                             $ih = FALSE;
                             for ($j = $i + 1; $j < $c; ++$j) {
-                                if (is_string($tokens[$j]) && $tokens[$j] == ";") {
+                                if (
+                                    is_string($tokens[$j]) &&
+                                    $tokens[$j] == ";"
+                                ) {
                                     $i = $j;
                                     break;
-                                } else if ($tokens[$j][0] == T_CLOSE_TAG) break;
+                                } else if ($tokens[$j][0] == T_CLOSE_TAG) {
+                                    break;
+                                }
                             }
                         } else if ($tn == T_COMMENT || $tn == T_DOC_COMMENT) {
                             $iw = TRUE;
@@ -185,8 +759,10 @@ if (!class_exists('AlomEncoder')) {
 
         private static function base64encode($st)
         {
-            $s = self::strshuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPRSTUVWXYZ+/=");
-            $res = '';
+            $s = self::strshuffle(
+                "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPRSTUVWXYZ+/="
+            );
+            $res = "";
             for ($i = 0; isset($st[$i]); $i += 3) {
                 $i1 = isset($st[$i + 1]);
                 $a1 = ord($st[$i]);
@@ -197,37 +773,77 @@ if (!class_exists('AlomEncoder')) {
                     $i2 = isset($st[$i + 2]);
                     $a3 = $i2 ? ord($st[$i + 2]) : 0;
                     $res .= $s[(($a2 & 15) << 2) | ($a3 >> 6)];
-                    if ($i2) $res .= $s[$a3 & 63]; else $res .= 'Q';
-                } else $res .= 'QQ';
+                    if ($i2) {
+                        $res .= $s[$a3 & 63];
+                    } else {
+                        $res .= "Q";
+                    }
+                } else {
+                    $res .= "QQ";
+                }
             }
             return $res;
         }
 
         private static function encode($st, $sl1, $sl2, $fa = FALSE)
         {
-            srand($sl1 ^ $sl2 & 0x7fffffff);
+            srand($sl1 ^ ($sl2 & 0x7fffffff));
             $sl1 ^= rand();
             $sl2 ^= rand();
             if ($fa) {
-                if (strlen($st) < 2) return $st;
+                if (strlen($st) < 2) {
+                    return $st;
+                }
                 $sl = $sl1 ^ $sl2 ^ rand();
-                $st = array_values(unpack('C*', $st));
-                $r = [rand(0, 0xff), rand(0, 0xff), rand(0, 0xff), rand(0, 0xff)];
+                $st = array_values(unpack("C*", $st));
+                $r = [
+                    rand(0, 0xff),
+                    rand(0, 0xff),
+                    rand(0, 0xff),
+                    rand(0, 0xff),
+                ];
                 $st[0] ^= $r[3];
                 $i = count($st) - 1;
-                $st[0] = ($st[0] - (($sl >> ($i & 63)) & 0xff) + 0x100 & 0xff) ^ $st[$i];
-                for (--$i; $i >= 0; --$i) $st[$i + 1] = ($st[$i + 1] - (($sl >> ($i & 63)) & 0xff) + 0x100 & 0xff) ^ $st[$i];
+                $st[0] =
+                    (($st[0] - (($sl >> ($i & 63)) & 0xff) + 0x100) & 0xff) ^
+                    $st[$i];
+                for (--$i; $i >= 0; --$i) {
+                    $st[$i + 1] =
+                        (($st[$i + 1] - (($sl >> ($i & 63)) & 0xff) + 0x100) &
+                            0xff) ^
+                        $st[$i];
+                }
                 $st[0] ^= $r[2];
                 $i = count($st) - 1;
-                $st[0] = ($st[0] ^ (($sl2 >> ($i & 63)) & 0xff)) - $st[$i] + 0x100 & 0xff;
-                for (--$i; $i >= 0; --$i) $st[$i + 1] = ($st[$i + 1] ^ (($sl2 >> ($i & 63)) & 0xff)) - $st[$i] + 0x100 & 0xff;
+                $st[0] =
+                    (($st[0] ^ (($sl2 >> ($i & 63)) & 0xff)) -
+                        $st[$i] +
+                        0x100) &
+                    0xff;
+                for (--$i; $i >= 0; --$i) {
+                    $st[$i + 1] =
+                        (($st[$i + 1] ^ (($sl2 >> ($i & 63)) & 0xff)) -
+                            $st[$i] +
+                            0x100) &
+                        0xff;
+                }
                 $st[0] ^= $r[1];
                 $i = count($st) - 1;
-                $st[0] = ($st[0] ^ (($sl1 >> ($i & 63)) & 0xff)) - $st[$i] + 0x100 & 0xff;
-                for (--$i; $i >= 0; --$i) $st[$i + 1] = ($st[$i + 1] ^ (($sl1 >> ($i & 63)) & 0xff)) - $st[$i] + 0x100 & 0xff;
+                $st[0] =
+                    (($st[0] ^ (($sl1 >> ($i & 63)) & 0xff)) -
+                        $st[$i] +
+                        0x100) &
+                    0xff;
+                for (--$i; $i >= 0; --$i) {
+                    $st[$i + 1] =
+                        (($st[$i + 1] ^ (($sl1 >> ($i & 63)) & 0xff)) -
+                            $st[$i] +
+                            0x100) &
+                        0xff;
+                }
                 $st[0] ^= $r[0];
-                array_unshift($st, 'C*');
-                return call_user_func_array('pack', $st);
+                array_unshift($st, "C*");
+                return call_user_func_array("pack", $st);
             }
             $t0 = range(0, 0xff);
             $t1 = range(0, 0xff);
@@ -238,14 +854,22 @@ if (!class_exists('AlomEncoder')) {
             $len = strlen($st);
             $sq = ceil(pow($len, 5 / 11));
             $sl = (int)($sl1 + $sl2) & 0xffffffff;
-            $rounds = ($fa ? -1 : (($sl & 0x3) ^ (($sl >> 8) & 0x3) ^ ($sl2 & 0x3)) + 0x1a) + floor(log($len + 2, 2) - 1);
+            $rounds =
+                ($fa
+                    ? -1
+                    : (($sl & 0x3) ^ (($sl >> 8) & 0x3) ^ ($sl2 & 0x3)) +
+                    0x1a) + floor(log($len + 2, 2) - 1);
             $sl = ($sl & 0xff) ^ ($sl1 & 0xff) ^ (($sl >> 16) & 0xff) ^ 1;
-            if ($len == 0) return '';
-            if ($len == 1) return chr($u1[$u0[ord($st) ^ $sl] ^ $sl] ^ $sl);
-            $st = array_values(unpack('C*', $st));
+            if ($len == 0) {
+                return "";
+            }
+            if ($len == 1) {
+                return chr($u1[$u0[ord($st) ^ $sl] ^ $sl] ^ $sl);
+            }
+            $st = array_values(unpack("C*", $st));
             $l4 = $sq * 4;
             for ($round = $rounds - 1; $round >= 0; --$round) {
-                srand(($sl1 ^ $sl2) + ($round * 12329) & 0x7fffffff);
+                srand((($sl1 ^ $sl2) + $round * 12329) & 0x7fffffff);
                 $randpack = [];
                 for ($i = 1; $i <= $l4; $i += 4) {
                     $randpack[$l4 - $i] = rand(0, $len - 1);
@@ -258,31 +882,56 @@ if (!class_exists('AlomEncoder')) {
                     $p1 = $randpack[$i * 4 + 2];
                     $p2 = $randpack[$i * 4 + 1];
                     $p3 = $randpack[$i * 4 + 0];
-                    if ($p1 >= $p) ++$p1;
-                    if ($p2 >= $p) ++$p2;
-                    if ($p3 >= $p) ++$p3;
-                    $st[$p2] = $u0[$st[$p2] - $st[$p] + 0x100 & 0xff] ^ $st[$p] ^ $sl;
-                    $st[$p3] = $u1[$st[$p3] - $st[$p] + 0x100 & 0xff] ^ $st[$p] ^ $sl;
-                    $st[$p1] = $u0[$st[$p1] - $st[$p] + 0x100 & 0xff] ^ $st[$p] ^ $sl;
-                    $st[$p] = $u1[$u0[$st[$p] ^ $t1[$st[$p1]]] - $st[$p2] + 0x100 & 0xff] ^ $st[$p3];
-                    $st[$p] = $u1[$st[$p] - $st[$p1] + 0x100 & 0xff] - $st[$p1] + 0x100 & 0xff;
-                    $st[$p] = $u0[$st[$p] - $st[$p3] + 0x100 & 0xff] ^ $st[$p3];
+                    if ($p1 >= $p) {
+                        ++$p1;
+                    }
+                    if ($p2 >= $p) {
+                        ++$p2;
+                    }
+                    if ($p3 >= $p) {
+                        ++$p3;
+                    }
+                    $st[$p2] =
+                        $u0[($st[$p2] - $st[$p] + 0x100) & 0xff] ^
+                        $st[$p] ^
+                        $sl;
+                    $st[$p3] =
+                        $u1[($st[$p3] - $st[$p] + 0x100) & 0xff] ^
+                        $st[$p] ^
+                        $sl;
+                    $st[$p1] =
+                        $u0[($st[$p1] - $st[$p] + 0x100) & 0xff] ^
+                        $st[$p] ^
+                        $sl;
+                    $st[$p] =
+                        $u1[($u0[$st[$p] ^ $t1[$st[$p1]]] - $st[$p2] + 0x100) &
+                        0xff] ^ $st[$p3];
+                    $st[$p] =
+                        ($u1[($st[$p] - $st[$p1] + 0x100) & 0xff] -
+                            $st[$p1] +
+                            0x100) &
+                        0xff;
+                    $st[$p] =
+                        $u0[($st[$p] - $st[$p3] + 0x100) & 0xff] ^ $st[$p3];
                     $st[$p] ^= $sl;
-                    $st[$p] = $u1[$st[$p] - $st[$p2] + 0x100 & 0xff] ^ $st[$p1];
-                    $st[$p] = $u0[$st[$p] ^ $st[$p1]] - $st[$p3] + 0x100 & 0xff;
-                    $st[$p] = $u1[$st[$p] ^ $st[$p3]] - $st[$p2] + 0x100 & 0xff;
+                    $st[$p] =
+                        $u1[($st[$p] - $st[$p2] + 0x100) & 0xff] ^ $st[$p1];
+                    $st[$p] =
+                        ($u0[$st[$p] ^ $st[$p1]] - $st[$p3] + 0x100) & 0xff;
+                    $st[$p] =
+                        ($u1[$st[$p] ^ $st[$p3]] - $st[$p2] + 0x100) & 0xff;
                 }
             }
-            array_unshift($st, 'C*');
-            return call_user_func_array('pack', $st);
+            array_unshift($st, "C*");
+            return call_user_func_array("pack", $st);
         }
 
         private static function inc($str, $sl1, $sl2, $fa = FALSE)
         {
             AlomEncoder::mt_prng_reset();
             AlomEncoder::mt_prng_store($sl1 ^ $sl2 ^ rand());
-            $str .= pack('V2', rand() ^ $sl1, rand() ^ $sl2);
-            srand($sl1 ^ $sl2 & 0x7fffffff);
+            $str .= pack("V2", rand() ^ $sl1, rand() ^ $sl2);
+            srand($sl1 ^ ($sl2 & 0x7fffffff));
             $str = self::encode($str, rand() ^ $sl2, rand() ^ $sl1, $fa);
             return $str;
         }
@@ -305,40 +954,78 @@ if (!class_exists('AlomEncoder')) {
             $sl2 ^= $t1[$sl2 & 0xff] ^ 0x9cd52c07;
             $len = strlen($st);
             $sl = (int)($sl1 + $sl2) & 0xffffffff;
-            $rounds = (($sl & 0x5) ^ (($sl >> 8) & 0x5) ^ ($sl2 & 0x5)) + 0xa + floor(log($len + 2, 2) - 1);
+            $rounds =
+                (($sl & 0x5) ^ (($sl >> 8) & 0x5) ^ ($sl2 & 0x5)) +
+                0xa +
+                floor(log($len + 2, 2) - 1);
             $sl = ($sl & 0xff) ^ ($sl1 & 0xff) ^ (($sl >> 16) & 0xff);
-            if ($len == 0) return '';
-            if ($len == 1) return chr($u1[$u0[ord($st) ^ $sl] ^ $sl] ^ $sl);
+            if ($len == 0) {
+                return "";
+            }
+            if ($len == 1) {
+                return chr($u1[$u0[ord($st) ^ $sl] ^ $sl] ^ $sl);
+            }
             $l1 = $len - 1;
-            $st = array_values(unpack('C*', $st));
+            $st = array_values(unpack("C*", $st));
             for ($round = $rounds - 1; $round >= 0; --$round) {
                 for ($i = $len - 1; $i >= 0; --$i) {
-                    $p = (($i * 0xf) % $len + 0x37d973 + $round) % $len;
-                    $p1 = (($i * 0xb) % $l1 + ($p * 0x9) % $l1 + 0x2e1081) % $l1;
-                    $p2 = (($i * 0x7) % $l1 + ($p1 * 0x9) % $l1 + 0x105977) % $l1;
-                    $p3 = (($i * 0x3) % $l1 + ($p2 * 0x1) % $l1 + 0x17d10f) % $l1;
-                    if ($p1 >= $p) ++$p1;
-                    if ($p2 >= $p) ++$p2;
-                    if ($p3 >= $p) ++$p3;
-                    $st[$p2] = $u0[$st[$p2] - $st[$p] + 0x100 & 0xff] ^ $st[$p] ^ $sl;
-                    $st[$p3] = $u1[$st[$p3] - $st[$p] + 0x100 & 0xff] ^ $st[$p] ^ $sl;
-                    $st[$p1] = $u0[$st[$p1] - $st[$p] + 0x100 & 0xff] ^ $st[$p] ^ $sl;
-                    $st[$p] = $u1[$u0[$st[$p] ^ $t1[$st[$p1]]] - $st[$p2] + 0x100 & 0xff] ^ $st[$p3];
-                    $st[$p] = $u1[$st[$p] - $st[$p1] + 0x100 & 0xff] - $st[$p1] + 0x100 & 0xff;
-                    $st[$p] = $u0[$st[$p] - $st[$p3] + 0x100 & 0xff] ^ $st[$p3];
+                    $p = ((($i * 0xf) % $len) + 0x37d973 + $round) % $len;
+                    $p1 =
+                        ((($i * 0xb) % $l1) + (($p * 0x9) % $l1) + 0x2e1081) %
+                        $l1;
+                    $p2 =
+                        ((($i * 0x7) % $l1) + (($p1 * 0x9) % $l1) + 0x105977) %
+                        $l1;
+                    $p3 =
+                        ((($i * 0x3) % $l1) + (($p2 * 0x1) % $l1) + 0x17d10f) %
+                        $l1;
+                    if ($p1 >= $p) {
+                        ++$p1;
+                    }
+                    if ($p2 >= $p) {
+                        ++$p2;
+                    }
+                    if ($p3 >= $p) {
+                        ++$p3;
+                    }
+                    $st[$p2] =
+                        $u0[($st[$p2] - $st[$p] + 0x100) & 0xff] ^
+                        $st[$p] ^
+                        $sl;
+                    $st[$p3] =
+                        $u1[($st[$p3] - $st[$p] + 0x100) & 0xff] ^
+                        $st[$p] ^
+                        $sl;
+                    $st[$p1] =
+                        $u0[($st[$p1] - $st[$p] + 0x100) & 0xff] ^
+                        $st[$p] ^
+                        $sl;
+                    $st[$p] =
+                        $u1[($u0[$st[$p] ^ $t1[$st[$p1]]] - $st[$p2] + 0x100) &
+                        0xff] ^ $st[$p3];
+                    $st[$p] =
+                        ($u1[($st[$p] - $st[$p1] + 0x100) & 0xff] -
+                            $st[$p1] +
+                            0x100) &
+                        0xff;
+                    $st[$p] =
+                        $u0[($st[$p] - $st[$p3] + 0x100) & 0xff] ^ $st[$p3];
                     $st[$p] ^= $sl;
-                    $st[$p] = $u1[$st[$p] - $st[$p2] + 0x100 & 0xff] ^ $st[$p1];
-                    $st[$p] = $u0[$st[$p] ^ $st[$p1]] - $st[$p3] + 0x100 & 0xff;
-                    $st[$p] = $u1[$st[$p] ^ $st[$p3]] - $st[$p2] + 0x100 & 0xff;
+                    $st[$p] =
+                        $u1[($st[$p] - $st[$p2] + 0x100) & 0xff] ^ $st[$p1];
+                    $st[$p] =
+                        ($u0[$st[$p] ^ $st[$p1]] - $st[$p3] + 0x100) & 0xff;
+                    $st[$p] =
+                        ($u1[$st[$p] ^ $st[$p3]] - $st[$p2] + 0x100) & 0xff;
                 }
             }
-            array_unshift($st, 'C*');
-            return call_user_func_array('pack', $st);
+            array_unshift($st, "C*");
+            return call_user_func_array("pack", $st);
         }
 
         private static function incw($str, $sl1, $sl2)
         {
-            $str .= pack('V', $sl1 ^ $sl2 ^ 0x72f70fec);
+            $str .= pack("V", $sl1 ^ $sl2 ^ 0x72f70fec);
             $str = self::encodew($str, $sl2 ^ 0x47b426f6, $sl1 ^ 0xaad9d133);
             return $str;
         }
@@ -647,7 +1334,7 @@ if (!class_exists('AlomEncoder')) {
             $s1 = $x1 ^ $t0[$x0] ^ $m1;
             $s2 = $x2 ^ $t0[$x1] ^ $t1[$x0] ^ $m2;
             $s3 = $x3 ^ $t0[$x2] ^ $t1[$x1] ^ $t2[$x0] ^ $m3;
-            $r = pack('C4', $s0, $s1, $s2, $s3);
+            $r = pack("C4", $s0, $s1, $s2, $s3);
             return $r;
         }
 
@@ -658,11 +1345,11 @@ if (!class_exists('AlomEncoder')) {
             $next ^= 0xffffffff;
             for ($i = 0; isset($first[$i]); ++$i) {
                 $tab = $table[($prev ^ ord($first[$i])) & 0xff];
-                $prev = ($tab ^ (($prev >> 8) & 0x00ffffff));
+                $prev = $tab ^ (($prev >> 8) & 0x00ffffff);
             }
             for ($i = strlen($last) - 1; $i >= 0; --$i) {
                 $lch = $u[3][($next >> 24) & 0xff];
-                $next = (($lch ^ ord($last[$i])) | (($next ^ $table[$lch]) << 8));
+                $next = ($lch ^ ord($last[$i])) | (($next ^ $table[$lch]) << 8);
             }
             return self::uncrc32($next ^ 0xffffffff, $prev ^ 0xffffffff);
         }
@@ -676,22 +1363,33 @@ if (!class_exists('AlomEncoder')) {
         public static function mt_prng_store($seed)
         {
             self::$mt_prng_seed ^= rand() ^ $seed;
-            self::$mt_prng_seed = (int)(self::$mt_prng_seed + 7012329) & 0xffffffff;
+            self::$mt_prng_seed =
+                (int)(self::$mt_prng_seed + 7012329) & 0xffffffff;
             self::$mt_prng_seed ^= 0x23958cde;
             return srand($seed);
         }
 
         private static function readl($tokens, $a, $b, &$i)
         {
-            $str = '';
+            $str = "";
             $u = 0;
             do {
                 if (is_array($tokens[$i])) {
                     $str .= $tokens[$i][1];
-                    if (($tokens[$i][0] == T_CURLY_OPEN || $tokens[$i][0] == T_DOLLAR_OPEN_CURLY_BRACES) && $a == '{') ++$u;
+                    if (
+                        ($tokens[$i][0] == T_CURLY_OPEN ||
+                            $tokens[$i][0] == T_DOLLAR_OPEN_CURLY_BRACES) &&
+                        $a == "{"
+                    ) {
+                        ++$u;
+                    }
                 } else {
                     $str .= $tokens[$i];
-                    if ($tokens[$i] == $a) ++$u; else if ($tokens[$i] == $b) --$u;
+                    if ($tokens[$i] == $a) {
+                        ++$u;
+                    } else if ($tokens[$i] == $b) {
+                        --$u;
+                    }
                 }
             } while (isset($tokens[++$i]) && $u != 0);
             --$i;
@@ -700,218 +1398,273 @@ if (!class_exists('AlomEncoder')) {
 
         private static function readr($tokens, $a, $b, $i, &$j, $nc = FALSE)
         {
-            $str = '';
+            $str = "";
             $u = 0;
             do {
                 if (is_array($tokens[$i - $j])) {
                     $str = $tokens[$i - $j][1] . $str;
-                    if (($tokens[$i - $j][0] == T_CURLY_OPEN || $tokens[$i - $j][0] == T_DOLLAR_OPEN_CURLY_BRACES) && $a == '{') --$u;
+                    if (
+                        ($tokens[$i - $j][0] == T_CURLY_OPEN ||
+                            $tokens[$i - $j][0] ==
+                            T_DOLLAR_OPEN_CURLY_BRACES) &&
+                        $a == "{"
+                    ) {
+                        --$u;
+                    }
                 } else {
-                    if ($nc && $tokens[$i - $j] == ';') return FALSE;
+                    if ($nc && $tokens[$i - $j] == ";") {
+                        return FALSE;
+                    }
                     $str = $tokens[$i - $j] . $str;
-                    if ($tokens[$i - $j] == $b) ++$u; else if ($tokens[$i - $j] == $a) --$u;
+                    if ($tokens[$i - $j] == $b) {
+                        ++$u;
+                    } else if ($tokens[$i - $j] == $a) {
+                        --$u;
+                    }
                 }
                 ++$j;
             } while ($i >= $j && $u != 0);
             --$j;
-            if ($nc && $str[0] != '{') return FALSE;
+            if ($nc && $str[0] != "{") {
+                return FALSE;
+            }
             return $str;
         }
 
         private static function reads($tokens, &$i)
         {
-            $str = '';
-            for (; isset($tokens[$i]); ++$i) if (in_array($tokens[$i], [')', ']', '}', ',', ';'])) break; else if (is_array($tokens[$i]) && $tokens[$i][0] == T_CLOSE_TAG) break;
-            else if (is_array($tokens[$i]) && $tokens[$i][0] == T_START_HEREDOC) {
-                $str .= $tokens[$i++][1];
-                for (; isset($tokens[$i]) && (!is_array($tokens[$i]) || $tokens[$i][0] != T_END_HEREDOC); ++$i) $str .= is_array($tokens[$i]) ? $tokens[$i][1] : $tokens[$i];
-                $str .= $tokens[$i][1];
-            } else if (is_array($tokens[$i]) && in_array($tokens[$i][0], [T_WHILE, T_FOR, T_IF, T_ELSEIF, T_ELSE, T_FOREACH, T_DECLARE])) {
-                for (; isset($tokens[$i]); ++$i) if (is_array($tokens[$i]) && in_array($tokens[$i][0], [T_WHILE, T_FOR, T_FOREACH, T_DECLARE])) {
+            $str = "";
+            for (; isset($tokens[$i]); ++$i) {
+                if (in_array($tokens[$i], [")", "]", "}", ",", ";"])) {
+                    break;
+                } else if (
+                    is_array($tokens[$i]) &&
+                    $tokens[$i][0] == T_CLOSE_TAG
+                ) {
+                    break;
+                } else if (
+                    is_array($tokens[$i]) &&
+                    $tokens[$i][0] == T_START_HEREDOC
+                ) {
                     $str .= $tokens[$i++][1];
-                    if (is_array($tokens[$i]) && $tokens[$i][0] == T_WHITESPACE) $str .= $tokens[$i++][1];
-                    if ($tokens[$i] == '(') {
-                        $str .= self::readl($tokens, '(', ')', $i);
-                        ++$i;
-                        if (is_array($tokens[$i]) && $tokens[$i][0] == T_WHITESPACE) $str .= $tokens[$i++][1];
-                        if ($tokens[$i] == '{') {
-                            $str .= self::readl($tokens, '{', '}', $i);
-                            ++$i;
-                            break;
-                        }
+                    for (
+                    ;
+                        isset($tokens[$i]) &&
+                        (!is_array($tokens[$i]) ||
+                            $tokens[$i][0] != T_END_HEREDOC);
+                        ++$i
+                    ) {
+                        $str .= is_array($tokens[$i])
+                            ? $tokens[$i][1]
+                            : $tokens[$i];
                     }
-                    --$i;
-                } else if (is_array($tokens[$i]) && $tokens[$i][0] == T_IF) {
-                    while (TRUE) {
-                        $str .= $tokens[$i++][1];
-                        if (is_array($tokens[$i]) && $tokens[$i][0] == T_WHITESPACE) $str .= $tokens[$i++][1];
-                        if ($tokens[$i] == '(') {
-                            $str .= self::readl($tokens, '(', ')', $i);
-                            ++$i;
-                        }
-                        if (is_array($tokens[$i]) && $tokens[$i][0] == T_WHITESPACE) $str .= $tokens[$i++][1];
-                        if ($tokens[$i] == '{') {
-                            $str .= self::readl($tokens, '{', '}', $i);
-                            ++$i;
-                        } else {
-                            $str .= self::reads($tokens, $i);
-                            if (isset($tokens[$i]) && $tokens[$i] == ';') $str .= $tokens[$i++];
-                        }
-                        if (isset($tokens[$i]) && is_array($tokens[$i]) && $tokens[$i][0] == T_WHITESPACE) $str .= $tokens[$i++][1];
-                        if (!isset($tokens[$i])) break;
-                        if (is_array($tokens[$i]) && $tokens[$i][0] == T_ELSEIF) continue; else if (is_array($tokens[$i]) && $tokens[$i][0] == T_ELSE) {
+                    $str .= $tokens[$i][1];
+                } else if (
+                    is_array($tokens[$i]) &&
+                    in_array($tokens[$i][0], [
+                        T_WHILE,
+                        T_FOR,
+                        T_IF,
+                        T_ELSEIF,
+                        T_ELSE,
+                        T_FOREACH,
+                        T_DECLARE,
+                    ])
+                ) {
+                    for (; isset($tokens[$i]); ++$i) {
+                        if (
+                            is_array($tokens[$i]) &&
+                            in_array($tokens[$i][0], [
+                                T_WHILE,
+                                T_FOR,
+                                T_FOREACH,
+                                T_DECLARE,
+                            ])
+                        ) {
                             $str .= $tokens[$i++][1];
-                            if (is_array($tokens[$i]) && $tokens[$i][0] == T_WHITESPACE) $str .= $tokens[$i++][1];
-                            if ($tokens[$i] == '{') {
-                                $str .= self::readl($tokens, '{', '}', $i);
+                            if (
+                                is_array($tokens[$i]) &&
+                                $tokens[$i][0] == T_WHITESPACE
+                            ) {
+                                $str .= $tokens[$i++][1];
+                            }
+                            if ($tokens[$i] == "(") {
+                                $str .= self::readl($tokens, "(", ")", $i);
                                 ++$i;
-                            } else {
-                                $str .= self::reads($tokens, $i);
-                                if (isset($tokens[$i]) && $tokens[$i] == ';') $str .= $tokens[$i++];
+                                if (
+                                    is_array($tokens[$i]) &&
+                                    $tokens[$i][0] == T_WHITESPACE
+                                ) {
+                                    $str .= $tokens[$i++][1];
+                                }
+                                if ($tokens[$i] == "{") {
+                                    $str .= self::readl($tokens, "{", "}", $i);
+                                    ++$i;
+                                    break;
+                                }
+                            }
+                            --$i;
+                        } else if (
+                            is_array($tokens[$i]) &&
+                            $tokens[$i][0] == T_IF
+                        ) {
+                            while (TRUE) {
+                                $str .= $tokens[$i++][1];
+                                if (
+                                    is_array($tokens[$i]) &&
+                                    $tokens[$i][0] == T_WHITESPACE
+                                ) {
+                                    $str .= $tokens[$i++][1];
+                                }
+                                if ($tokens[$i] == "(") {
+                                    $str .= self::readl($tokens, "(", ")", $i);
+                                    ++$i;
+                                }
+                                if (
+                                    is_array($tokens[$i]) &&
+                                    $tokens[$i][0] == T_WHITESPACE
+                                ) {
+                                    $str .= $tokens[$i++][1];
+                                }
+                                if ($tokens[$i] == "{") {
+                                    $str .= self::readl($tokens, "{", "}", $i);
+                                    ++$i;
+                                } else {
+                                    $str .= self::reads($tokens, $i);
+                                    if (
+                                        isset($tokens[$i]) &&
+                                        $tokens[$i] == ";"
+                                    ) {
+                                        $str .= $tokens[$i++];
+                                    }
+                                }
+                                if (
+                                    isset($tokens[$i]) &&
+                                    is_array($tokens[$i]) &&
+                                    $tokens[$i][0] == T_WHITESPACE
+                                ) {
+                                    $str .= $tokens[$i++][1];
+                                }
+                                if (!isset($tokens[$i])) {
+                                    break;
+                                }
+                                if (
+                                    is_array($tokens[$i]) &&
+                                    $tokens[$i][0] == T_ELSEIF
+                                ) {
+                                    continue;
+                                } else if (
+                                    is_array($tokens[$i]) &&
+                                    $tokens[$i][0] == T_ELSE
+                                ) {
+                                    $str .= $tokens[$i++][1];
+                                    if (
+                                        is_array($tokens[$i]) &&
+                                        $tokens[$i][0] == T_WHITESPACE
+                                    ) {
+                                        $str .= $tokens[$i++][1];
+                                    }
+                                    if ($tokens[$i] == "{") {
+                                        $str .= self::readl(
+                                            $tokens,
+                                            "{",
+                                            "}",
+                                            $i
+                                        );
+                                        ++$i;
+                                    } else {
+                                        $str .= self::reads($tokens, $i);
+                                        if (
+                                            isset($tokens[$i]) &&
+                                            $tokens[$i] == ";"
+                                        ) {
+                                            $str .= $tokens[$i++];
+                                        }
+                                    }
+                                    break;
+                                } else {
+                                    break;
+                                }
                             }
                             break;
-                        } else break;
+                        }
+                    }
+                    if (isset($tokens[$i]) && $tokens[$i] == ";") {
+                        $str .= $tokens[$i++];
                     }
                     break;
+                } else if (is_array($tokens[$i])) {
+                    $str .= $tokens[$i][1];
+                } else if ($tokens[$i] == "(") {
+                    $str .= self::readl($tokens, "(", ")", $i);
+                } else if ($tokens[$i] == "[") {
+                    $str .= self::readl($tokens, "[", "]", $i);
+                } else if ($tokens[$i] == "{") {
+                    $str .= self::readl($tokens, "{", "}", $i);
+                } else if ($tokens[$i] == '"') {
+                    $str .= $tokens[$i++];
+                    for (; isset($tokens[$i]) && $tokens[$i] != '"'; ++$i) {
+                        $str .= is_array($tokens[$i])
+                            ? $tokens[$i][1]
+                            : $tokens[$i];
+                    }
+                    $str .= $tokens[$i];
+                } else if ($tokens[$i] == "`") {
+                    $str .= $tokens[$i++];
+                    for (; isset($tokens[$i]) && $tokens[$i] != "`"; ++$i) {
+                        $str .= is_array($tokens[$i])
+                            ? $tokens[$i][1]
+                            : $tokens[$i];
+                    }
+                    $str .= $tokens[$i];
+                } else {
+                    $str .= $tokens[$i];
                 }
-                if (isset($tokens[$i]) && $tokens[$i] == ';') $str .= $tokens[$i++];
-                break;
-            } else if (is_array($tokens[$i])) $str .= $tokens[$i][1];
-            else if ($tokens[$i] == '(') $str .= self::readl($tokens, '(', ')', $i);
-            else if ($tokens[$i] == '[') $str .= self::readl($tokens, '[', ']', $i);
-            else if ($tokens[$i] == '{') $str .= self::readl($tokens, '{', '}', $i);
-            else if ($tokens[$i] == '"') {
-                $str .= $tokens[$i++];
-                for (; isset($tokens[$i]) && $tokens[$i] != '"'; ++$i) $str .= is_array($tokens[$i]) ? $tokens[$i][1] : $tokens[$i];
-                $str .= $tokens[$i];
-            } else if ($tokens[$i] == '`') {
-                $str .= $tokens[$i++];
-                for (; isset($tokens[$i]) && $tokens[$i] != '`'; ++$i) $str .= is_array($tokens[$i]) ? $tokens[$i][1] : $tokens[$i];
-                $str .= $tokens[$i];
-            } else $str .= $tokens[$i];
+            }
             return $str;
         }
 
         private static function readsl($tokens, &$i, $cama = FALSE)
         {
-            $str = '';
-            $bra = $cama ? [')', ']', '}', ';'] : [')', ']', '}', ',', ';'];
-            for (++$i; isset($tokens[$i]); ++$i) if (in_array($tokens[$i], $bra)) break; else if ($tokens[$i] == ',') {
-                $str .= $tokens[$i++];
-                if (is_array($tokens[$i]) && $tokens[$i][0] == T_WHITESPACE) $str .= $tokens[$i++][1];
-                --$i;
-            } else if (is_array($tokens[$i]) && $tokens[$i][0] == T_CLOSE_TAG) break;
-            else if (is_array($tokens[$i]) && $tokens[$i][0] == T_START_HEREDOC) {
-                $str .= $tokens[$i++][1];
-                for (; isset($tokens[$i]) && (!is_array($tokens[$i]) || $tokens[$i][0] != T_END_HEREDOC); ++$i) $str .= is_array($tokens[$i]) ? $tokens[$i][1] : $tokens[$i];
-                $str .= $tokens[$i][1];
-            } else if (is_array($tokens[$i]) && in_array($tokens[$i][0], [
-                    T_STRING,
-                    T_WHITESPACE,
-                    T_VARIABLE,
-                    T_CONSTANT_ENCAPSED_STRING,
-                    T_LNUMBER,
-                    T_DNUMBER,
-                    T_DIR,
-                    T_FILE,
-                    T_FUNC_C,
-                    T_LINE,
-                    T_METHOD_C,
-                    T_NS_C,
-                    T_TRAIT_C,
-                    T_CLASS_C,
-                    T_ARRAY_CAST,
-                    T_BOOL_CAST,
-                    T_DOUBLE_CAST,
-                    T_INT_CAST,
-                    T_OBJECT_CAST,
-                    T_STRING_CAST,
-                    T_UNSET_CAST,
-                    T_PRINT,
-                    T_ECHO,
-                    T_EXIT,
-                    T_ISSET,
-                    T_UNSET,
-                    T_ARRAY,
-                    T_EVAL,
-                    T_FN,
-                    T_INCLUDE,
-                    T_INCLUDE_ONCE,
-                    T_REQUIRE,
-                    T_REQUIRE_ONCE,
-                    T_DOUBLE_COLON,
-                    T_OBJECT_OPERATOR,
-                    T_NULLSAFE_OBJECT_OPERATOR,
-                    T_COALESCE,
-                    T_COALESCE_EQUAL,
-                    T_IS_GREATER_OR_EQUAL,
-                    T_IS_SMALLER_OR_EQUAL,
-                    T_IS_EQUAL,
-                    T_IS_IDENTICAL,
-                    T_IS_NOT_EQUAL,
-                    T_IS_NOT_IDENTICAL,
-                    T_LOGICAL_AND,
-                    T_LOGICAL_OR,
-                    T_LOGICAL_XOR,
-                    T_SL,
-                    T_SR,
-                    T_POW,
-                    T_NS_SEPARATOR,
-                    T_AND_EQUAL,
-                    T_OR_EQUAL,
-                    T_XOR_EQUAL,
-                    T_PLUS_EQUAL,
-                    T_MINUS_EQUAL,
-                    T_MUL_EQUAL,
-                    T_DIV_EQUAL,
-                    T_MOD_EQUAL,
-                    T_POW_EQUAL,
-                    T_SL_EQUAL,
-                    T_SR_EQUAL,
-                    T_CONCAT_EQUAL,
-                    T_DEC,
-                    T_INC,
-                    T_BOOLEAN_AND,
-                    T_BOOLEAN_OR,
-                ])) {
-                $str .= $tokens[$i][1];
-            } else if (is_array($tokens[$i])) break;
-            else if ($tokens[$i] == '(') $str .= self::readl($tokens, '(', ')', $i);
-            else if ($tokens[$i] == '[') $str .= self::readl($tokens, '[', ']', $i);
-            else if ($tokens[$i] == '{') $str .= self::readl($tokens, '{', '}', $i);
-            else if ($tokens[$i] == '"') {
-                $str .= $tokens[$i++];
-                for (; isset($tokens[$i]) && $tokens[$i] != '"'; ++$i) $str .= is_array($tokens[$i]) ? $tokens[$i][1] : $tokens[$i];
-                $str .= $tokens[$i];
-            } else if ($tokens[$i] == '`') {
-                $str .= $tokens[$i++];
-                for (; isset($tokens[$i]) && $tokens[$i] != '`'; ++$i) $str .= is_array($tokens[$i]) ? $tokens[$i][1] : $tokens[$i];
-                $str .= $tokens[$i];
-            } else if ($tokens[$i] == '$') $str .= $tokens[$i];
-            else if (in_array($tokens[$i], ['~', '!', '<', '>', '+', '-', '*', '/', '%', '.'])) $str .= $tokens[$i];
-            else break;
-            --$i;
-            return $str;
-        }
-
-        private static function readsr($tokens, $i)
-        {
-            $str = '';
-            $j = 1;
-            if ($tokens[$i - $j][0] == T_WHITESPACE) $str = $tokens[$i - ($j++)][1] . $str;
-            for (; $i >= $j; ++$j) {
-                if (in_array($tokens[$i - $j], ['(', '[', '{', ',', ';'])) break;
-                if (isset($tokens[$i - $j + 3]) && is_array($tokens[$i - $j + 1]) && $tokens[$i - $j + 1][0] == T_WHITESPACE) {
-                    if (is_array($tokens[$i - $j + 2]) && in_array($tokens[$i - $j + 2][0], [T_STRING, T_VARIABLE, T_CONSTANT_ENCAPSED_STRING, T_ARRAY])) {
-                        --$j;
-                        break;
-                    } else if (in_array($tokens[$i - $j + 2], ['$', '"'])) {
-                        --$j;
-                        break;
+            $str = "";
+            $bra = $cama ? [")", "]", "}", ";"] : [")", "]", "}", ",", ";"];
+            for (++$i; isset($tokens[$i]); ++$i) {
+                if (in_array($tokens[$i], $bra)) {
+                    break;
+                } else if ($tokens[$i] == ",") {
+                    $str .= $tokens[$i++];
+                    if (
+                        is_array($tokens[$i]) &&
+                        $tokens[$i][0] == T_WHITESPACE
+                    ) {
+                        $str .= $tokens[$i++][1];
                     }
-                }
-                if (is_array($tokens[$i - $j])) {
-                    if (in_array($tokens[$i - $j][0], [
+                    --$i;
+                } else if (
+                    is_array($tokens[$i]) &&
+                    $tokens[$i][0] == T_CLOSE_TAG
+                ) {
+                    break;
+                } else if (
+                    is_array($tokens[$i]) &&
+                    $tokens[$i][0] == T_START_HEREDOC
+                ) {
+                    $str .= $tokens[$i++][1];
+                    for (
+                    ;
+                        isset($tokens[$i]) &&
+                        (!is_array($tokens[$i]) ||
+                            $tokens[$i][0] != T_END_HEREDOC);
+                        ++$i
+                    ) {
+                        $str .= is_array($tokens[$i])
+                            ? $tokens[$i][1]
+                            : $tokens[$i];
+                    }
+                    $str .= $tokens[$i][1];
+                } else if (
+                    is_array($tokens[$i]) &&
+                    in_array($tokens[$i][0], [
                         T_STRING,
                         T_WHITESPACE,
                         T_VARIABLE,
@@ -979,46 +1732,260 @@ if (!class_exists('AlomEncoder')) {
                         T_INC,
                         T_BOOLEAN_AND,
                         T_BOOLEAN_OR,
-                    ])) $str = $tokens[$i - $j][1] . $str; else if (is_array($tokens[$i - $j]) && $tokens[$i - $j][0] == T_END_HEREDOC) {
-                        $str = $tokens[$i - ($j++)] . $str;
-                        for (; $i >= $j && (!is_array($tokens[$i - $j]) || $tokens[$i - $j][0] != T_START_HEREDOC); ++$j) $str = (is_array($tokens[$i - $j]) ? $tokens[$i - $j][1] : $tokens[$i - $j]) . $str;
+                    ])
+                ) {
+                    $str .= $tokens[$i][1];
+                } else if (is_array($tokens[$i])) {
+                    break;
+                } else if ($tokens[$i] == "(") {
+                    $str .= self::readl($tokens, "(", ")", $i);
+                } else if ($tokens[$i] == "[") {
+                    $str .= self::readl($tokens, "[", "]", $i);
+                } else if ($tokens[$i] == "{") {
+                    $str .= self::readl($tokens, "{", "}", $i);
+                } else if ($tokens[$i] == '"') {
+                    $str .= $tokens[$i++];
+                    for (; isset($tokens[$i]) && $tokens[$i] != '"'; ++$i) {
+                        $str .= is_array($tokens[$i])
+                            ? $tokens[$i][1]
+                            : $tokens[$i];
+                    }
+                    $str .= $tokens[$i];
+                } else if ($tokens[$i] == "`") {
+                    $str .= $tokens[$i++];
+                    for (; isset($tokens[$i]) && $tokens[$i] != "`"; ++$i) {
+                        $str .= is_array($tokens[$i])
+                            ? $tokens[$i][1]
+                            : $tokens[$i];
+                    }
+                    $str .= $tokens[$i];
+                } else if ($tokens[$i] == '$') {
+                    $str .= $tokens[$i];
+                } else if (
+                in_array($tokens[$i], [
+                    "~",
+                    "!",
+                    "<",
+                    ">",
+                    "+",
+                    "-",
+                    "*",
+                    "/",
+                    "%",
+                    ".",
+                ])
+                ) {
+                    $str .= $tokens[$i];
+                } else {
+                    break;
+                }
+            }
+            --$i;
+            return $str;
+        }
+
+        private static function readsr($tokens, $i)
+        {
+            $str = "";
+            $j = 1;
+            if ($tokens[$i - $j][0] == T_WHITESPACE) {
+                $str = $tokens[$i - $j++][1] . $str;
+            }
+            for (; $i >= $j; ++$j) {
+                if (in_array($tokens[$i - $j], ["(", "[", "{", ",", ";"])) {
+                    break;
+                }
+                if (
+                    isset($tokens[$i - $j + 3]) &&
+                    is_array($tokens[$i - $j + 1]) &&
+                    $tokens[$i - $j + 1][0] == T_WHITESPACE
+                ) {
+                    if (
+                        is_array($tokens[$i - $j + 2]) &&
+                        in_array($tokens[$i - $j + 2][0], [
+                            T_STRING,
+                            T_VARIABLE,
+                            T_CONSTANT_ENCAPSED_STRING,
+                            T_ARRAY,
+                        ])
+                    ) {
+                        --$j;
+                        break;
+                    } else if (in_array($tokens[$i - $j + 2], ['$', '"'])) {
+                        --$j;
+                        break;
+                    }
+                }
+                if (is_array($tokens[$i - $j])) {
+                    if (
+                    in_array($tokens[$i - $j][0], [
+                        T_STRING,
+                        T_WHITESPACE,
+                        T_VARIABLE,
+                        T_CONSTANT_ENCAPSED_STRING,
+                        T_LNUMBER,
+                        T_DNUMBER,
+                        T_DIR,
+                        T_FILE,
+                        T_FUNC_C,
+                        T_LINE,
+                        T_METHOD_C,
+                        T_NS_C,
+                        T_TRAIT_C,
+                        T_CLASS_C,
+                        T_ARRAY_CAST,
+                        T_BOOL_CAST,
+                        T_DOUBLE_CAST,
+                        T_INT_CAST,
+                        T_OBJECT_CAST,
+                        T_STRING_CAST,
+                        T_UNSET_CAST,
+                        T_PRINT,
+                        T_ECHO,
+                        T_EXIT,
+                        T_ISSET,
+                        T_UNSET,
+                        T_ARRAY,
+                        T_EVAL,
+                        T_FN,
+                        T_INCLUDE,
+                        T_INCLUDE_ONCE,
+                        T_REQUIRE,
+                        T_REQUIRE_ONCE,
+                        T_DOUBLE_COLON,
+                        T_OBJECT_OPERATOR,
+                        T_NULLSAFE_OBJECT_OPERATOR,
+                        T_COALESCE,
+                        T_COALESCE_EQUAL,
+                        T_IS_GREATER_OR_EQUAL,
+                        T_IS_SMALLER_OR_EQUAL,
+                        T_IS_EQUAL,
+                        T_IS_IDENTICAL,
+                        T_IS_NOT_EQUAL,
+                        T_IS_NOT_IDENTICAL,
+                        T_LOGICAL_AND,
+                        T_LOGICAL_OR,
+                        T_LOGICAL_XOR,
+                        T_SL,
+                        T_SR,
+                        T_POW,
+                        T_NS_SEPARATOR,
+                        T_AND_EQUAL,
+                        T_OR_EQUAL,
+                        T_XOR_EQUAL,
+                        T_PLUS_EQUAL,
+                        T_MINUS_EQUAL,
+                        T_MUL_EQUAL,
+                        T_DIV_EQUAL,
+                        T_MOD_EQUAL,
+                        T_POW_EQUAL,
+                        T_SL_EQUAL,
+                        T_SR_EQUAL,
+                        T_CONCAT_EQUAL,
+                        T_DEC,
+                        T_INC,
+                        T_BOOLEAN_AND,
+                        T_BOOLEAN_OR,
+                    ])
+                    ) {
+                        $str = $tokens[$i - $j][1] . $str;
+                    } else if (
+                        is_array($tokens[$i - $j]) &&
+                        $tokens[$i - $j][0] == T_END_HEREDOC
+                    ) {
+                        $str = $tokens[$i - $j++] . $str;
+                        for (
+                        ;
+                            $i >= $j &&
+                            (!is_array($tokens[$i - $j]) ||
+                                $tokens[$i - $j][0] != T_START_HEREDOC);
+                            ++$j
+                        ) {
+                            $str =
+                                (is_array($tokens[$i - $j])
+                                    ? $tokens[$i - $j][1]
+                                    : $tokens[$i - $j]) . $str;
+                        }
                         $str = $tokens[$i - $j] . $str;
-                    } else break;
-                } else if ($tokens[$i - $j] == '$') $str = $tokens[$i - $j] . $str;
-                else if ($tokens[$i - $j] == ')') {
-                    $params = self::readr($tokens, '(', ')', $i, $j);
-                    if (is_array($tokens[$i - $j - 1]) && in_array($tokens[$i - $j - 1][0], [T_IF, T_ELSEIF, T_WHILE, T_FOR, T_DECLARE, T_ARRAY, T_FOREACH])) {
+                    } else {
+                        break;
+                    }
+                } else if ($tokens[$i - $j] == '$') {
+                    $str = $tokens[$i - $j] . $str;
+                } else if ($tokens[$i - $j] == ")") {
+                    $params = self::readr($tokens, "(", ")", $i, $j);
+                    if (
+                        is_array($tokens[$i - $j - 1]) &&
+                        in_array($tokens[$i - $j - 1][0], [
+                            T_IF,
+                            T_ELSEIF,
+                            T_WHILE,
+                            T_FOR,
+                            T_DECLARE,
+                            T_ARRAY,
+                            T_FOREACH,
+                        ])
+                    ) {
                         ++$j;
                         break;
                     }
                     $str = $params . $str;
-                } else if ($tokens[$i - $j] == ']') $str = self::readr($tokens, '[', ']', $i, $j) . $str;
-                else if ($tokens[$i - $j] == '}') {
-                    $params = self::readr($tokens, '{', '}', $i, $j, TRUE);
+                } else if ($tokens[$i - $j] == "]") {
+                    $str = self::readr($tokens, "[", "]", $i, $j) . $str;
+                } else if ($tokens[$i - $j] == "}") {
+                    $params = self::readr($tokens, "{", "}", $i, $j, TRUE);
                     if (!$params) {
                         ++$j;
                         break;
                     }
                     $str = $params . $str;
                 } else if ($tokens[$i - $j] == '"') {
-                    $str = $tokens[$i - ($j++)] . $str;
-                    for (; $i >= $j && $tokens[$i - $j] != '"'; ++$j) $str = (is_array($tokens[$i - $j]) ? $tokens[$i - $j][1] : $tokens[$i - $j]) . $str;
+                    $str = $tokens[$i - $j++] . $str;
+                    for (; $i >= $j && $tokens[$i - $j] != '"'; ++$j) {
+                        $str =
+                            (is_array($tokens[$i - $j])
+                                ? $tokens[$i - $j][1]
+                                : $tokens[$i - $j]) . $str;
+                    }
                     $str = $tokens[$i - $j] . $str;
-                } else if ($tokens[$i - $j] == '`') {
-                    $str = $tokens[$i - ($j++)] . $str;
-                    for (; $i >= $j && $tokens[$i - $j] != '`'; ++$j) $str = (is_array($tokens[$i - $j]) ? $tokens[$i - $j][1] : $tokens[$i - $j]) . $str;
+                } else if ($tokens[$i - $j] == "`") {
+                    $str = $tokens[$i - $j++] . $str;
+                    for (; $i >= $j && $tokens[$i - $j] != "`"; ++$j) {
+                        $str =
+                            (is_array($tokens[$i - $j])
+                                ? $tokens[$i - $j][1]
+                                : $tokens[$i - $j]) . $str;
+                    }
                     $str = $tokens[$i - $j] . $str;
-                } else if (in_array($tokens[$i - $j], ['!', '~', '<', '>', '+', '-', '*', '/', '%', '.'])) $str = $tokens[$i - $j] . $str;
-                else break;
+                } else if (
+                in_array($tokens[$i - $j], [
+                    "!",
+                    "~",
+                    "<",
+                    ">",
+                    "+",
+                    "-",
+                    "*",
+                    "/",
+                    "%",
+                    ".",
+                ])
+                ) {
+                    $str = $tokens[$i - $j] . $str;
+                } else {
+                    break;
+                }
             }
             return ltrim($str);
         }
 
         private static function readpe($tokens, &$i, $cama = FALSE)
         {
-            $str = '';
-            if (is_array($tokens[$i]) && $tokens[$i][0] == T_WHITESPACE) $str .= $tokens[$i++][1];
-            if ($tokens[$i] == ';') {
+            $str = "";
+            if (is_array($tokens[$i]) && $tokens[$i][0] == T_WHITESPACE) {
+                $str .= $tokens[$i++][1];
+            }
+            if ($tokens[$i] == ";") {
                 --$i;
                 return $str;
             }
@@ -1026,7 +1993,9 @@ if (!class_exists('AlomEncoder')) {
                 --$i;
                 return $str;
             }
-            if ($tokens[$i] == '(') $str .= substr(self::readl($tokens, '(', ')', $i), 1, -1); else {
+            if ($tokens[$i] == "(") {
+                $str .= substr(self::readl($tokens, "(", ")", $i), 1, -1);
+            } else {
                 --$i;
                 $str .= self::readsl($tokens, $i, $cama);
             }
@@ -1037,1573 +2006,4444 @@ if (!class_exists('AlomEncoder')) {
         {
             $j = $i;
             $prev = count($tokens);
-            for (++$i; isset($tokens[$i]); ++$i) $code .= is_array($tokens[$i]) ? $tokens[$i][1] : $tokens[$i];
+            for (++$i; isset($tokens[$i]); ++$i) {
+                $code .= is_array($tokens[$i]) ? $tokens[$i][1] : $tokens[$i];
+            }
             $tokens = token_get_all($code);
             $next = count($tokens);
             $i = $j + $next - $prev;
         }
 
-        private static function reparseExtra(&$code, &$tokens, &$i, $readed, $extra, $backspace = 0)
+        private static function reparseExtra(
+            &$code,
+            &$tokens,
+            &$i,
+            $readed,
+            $extra,
+            $backspace = 0
+        )
         {
             ++$readed;
             ++$i;
             if ($backspace !== 0) {
-                $extratokens = array_slice(token_get_all("<?" . "php $extra"), 1);
-                $backspacesize = count(token_get_all("<?" . "php " . substr($code, -$backspace))) - 1;
+                $extratokens = array_slice(
+                    token_get_all("<?" . "php $extra"),
+                    1
+                );
+                $backspacesize =
+                    count(
+                        token_get_all(
+                            "<?" . "php " . substr($code, -$backspace)
+                        )
+                    ) - 1;
                 $pc = $code;
                 $code = substr($code, 0, -$backspace) . $extra;
-                $tokens = array_merge(array_slice($tokens, 0, $i - $backspacesize - $readed), $extratokens, array_slice($tokens, $i));
+                $tokens = array_merge(
+                    array_slice($tokens, 0, $i - $backspacesize - $readed),
+                    $extratokens,
+                    array_slice($tokens, $i)
+                );
                 $i += count($extratokens) - $backspacesize - $readed;
             } else {
-                $extratokens = array_slice(token_get_all("<?" . "php $extra"), 1);
+                $extratokens = array_slice(
+                    token_get_all("<?" . "php $extra"),
+                    1
+                );
                 $code .= $extra;
-                $tokens = array_merge(array_slice($tokens, 0, $i - $readed), $extratokens, array_slice($tokens, $i));
+                $tokens = array_merge(
+                    array_slice($tokens, 0, $i - $readed),
+                    $extratokens,
+                    array_slice($tokens, $i)
+                );
                 $i += count($extratokens) - $readed;
             }
             --$i;
         }
 
-        private static function memtwister_op2fn($code, $fli, &$tokens = NULL)
+        private static function optwister_op2fn(
+            $code,
+            $signflag,
+            &$tokens = NULL
+        )
         {
-            if ($tokens === NULL) $tokens = token_get_all($code);
-            $code = '';
-            for ($i = 0; isset($tokens[$i]); ++$i) if (is_array($tokens[$i])) {
-                $j = $i;
-                if ($tokens[$i][0] == T_NEW) {
-                    ++$i;
-                    $str = $tokens[$i][1];
-                    if (is_array($tokens[$i]) && $tokens[$i][0] == T_WHITESPACE) $str .= $tokens[$i++][1];
-                    if (is_array($tokens[$i]) && $tokens[$i][0] == T_STRING) {
-                        $str .= $tokens[$i++][1];
-                        if (is_array($tokens[$i]) && $tokens[$i][0] == T_WHITESPACE) $str .= $tokens[$i++][1];
-                        if ($tokens[$i] == '(') {
-                            $prm = $tokens[$i++];
-                            if (is_array($tokens[$i]) && $tokens[$i][0] == T_WHITESPACE) $prm .= $tokens[$i++][1];
-                            if ($tokens[$i] == ')') {
-                                $prm .= $tokens[$i++];
-                                $str = trim($str);
-                                $extra = "_ALOM_memtwister{$fli}_v0('$str')";
-                                --$i;
-                                self::reparseExtra($code, $tokens, $i, $i - $j, $extra);
-                                $i = $j - 1;
+            if ($tokens === NULL) {
+                $tokens = token_get_all($code);
+            }
+            $code = "";
+            for ($i = 0; isset($tokens[$i]); ++$i) {
+                if (is_array($tokens[$i])) {
+                    $j = $i;
+                    if ($tokens[$i][0] == T_NEW) {
+                        ++$i;
+                        $str = $tokens[$i][1];
+                        if (
+                            is_array($tokens[$i]) &&
+                            $tokens[$i][0] == T_WHITESPACE
+                        ) {
+                            $str .= $tokens[$i++][1];
+                        }
+                        if (
+                            is_array($tokens[$i]) &&
+                            $tokens[$i][0] == T_STRING
+                        ) {
+                            $str .= $tokens[$i++][1];
+                            if (
+                                is_array($tokens[$i]) &&
+                                $tokens[$i][0] == T_WHITESPACE
+                            ) {
+                                $str .= $tokens[$i++][1];
+                            }
+                            if ($tokens[$i] == "(") {
+                                $prm = $tokens[$i++];
+                                if (
+                                    is_array($tokens[$i]) &&
+                                    $tokens[$i][0] == T_WHITESPACE
+                                ) {
+                                    $prm .= $tokens[$i++][1];
+                                }
+                                if ($tokens[$i] == ")") {
+                                    $prm .= $tokens[$i++];
+                                    $str = trim($str);
+                                    $extra = "_ALOM_optwister{$signflag}_v0('$str')";
+                                    --$i;
+                                    self::reparseExtra(
+                                        $code,
+                                        $tokens,
+                                        $i,
+                                        $i - $j,
+                                        $extra
+                                    );
+                                    $i = $j - 1;
+                                } else {
+                                    $code .= $str . $prm;
+                                    --$i;
+                                }
                             } else {
-                                $code .= $str . $prm;
+                                $str = trim($str);
+                                $extra = "_ALOM_optwister{$signflag}_v0('$str')";
                                 --$i;
+                                self::reparseExtra(
+                                    $code,
+                                    $tokens,
+                                    $i,
+                                    $i - $j,
+                                    $extra
+                                );
+                                $i = $j - 1;
                             }
                         } else {
-                            $str = trim($str);
-                            $extra = "_ALOM_memtwister{$fli}_v0('$str')";
+                            $code .= $str;
                             --$i;
-                            self::reparseExtra($code, $tokens, $i, $i - $j, $extra);
-                            $i = $j - 1;
+                        }
+                    } else if ($tokens[$i][0] == T_EXIT) {
+                        ++$i;
+                        $pe = self::readpe($tokens, $i);
+                        $extra = "_ALOM_optwister{$signflag}_a($pe)";
+                        self::reparseExtra($code, $tokens, $i, $i - $j, $extra);
+                        $i = $j - 1;
+                    } else if ($tokens[$i][0] == T_PRINT) {
+                        $sl = self::readsl($tokens, $i);
+                        $extra = "_ALOM_optwister{$signflag}_c($sl)";
+                        self::reparseExtra($code, $tokens, $i, $i - $j, $extra);
+                        $i = $j - 1;
+                    } else if ($tokens[$i][0] == T_ECHO) {
+                        ++$i;
+                        $pe = self::readpe($tokens, $i, TRUE);
+                        $extra = "_ALOM_optwister{$signflag}_d($pe)";
+                        self::reparseExtra($code, $tokens, $i, $i - $j, $extra);
+                        $i = $j - 1;
+                    } else if ($tokens[$i][0] == T_ARRAY_CAST) {
+                        $sl = self::readsl($tokens, $i);
+                        $extra = "_ALOM_optwister{$signflag}_e($sl)";
+                        self::reparseExtra($code, $tokens, $i, $i - $j, $extra);
+                        $i = $j - 1;
+                    } else if ($tokens[$i][0] == T_BOOL_CAST) {
+                        $sl = self::readsl($tokens, $i);
+                        $extra = "_ALOM_optwister{$signflag}_f($sl)";
+                        self::reparseExtra($code, $tokens, $i, $i - $j, $extra);
+                        $i = $j - 1;
+                    } else if ($tokens[$i][0] == T_DOUBLE_CAST) {
+                        $sl = self::readsl($tokens, $i);
+                        $extra = "_ALOM_optwister{$signflag}_g($sl)";
+                        self::reparseExtra($code, $tokens, $i, $i - $j, $extra);
+                        $i = $j - 1;
+                    } else if ($tokens[$i][0] == T_INT_CAST) {
+                        $sl = self::readsl($tokens, $i);
+                        $extra = "_ALOM_optwister{$signflag}_h($sl)";
+                        self::reparseExtra($code, $tokens, $i, $i - $j, $extra);
+                        $i = $j - 1;
+                    } else if ($tokens[$i][0] == T_OBJECT_CAST) {
+                        $sl = self::readsl($tokens, $i);
+                        $extra = "_ALOM_optwister{$signflag}_i($sl)";
+                        self::reparseExtra($code, $tokens, $i, $i - $j, $extra);
+                        $i = $j - 1;
+                    } else if ($tokens[$i][0] == T_STRING_CAST) {
+                        $sl = self::readsl($tokens, $i);
+                        $extra = "_ALOM_optwister{$signflag}_j($sl)";
+                        self::reparseExtra($code, $tokens, $i, $i - $j, $extra);
+                        $i = $j - 1;
+                    } else {
+                        $code .= $tokens[$i][1];
+                    }
+                } else {
+                    $j = $i;
+                    if ($tokens[$i] == "~") {
+                        $sl = self::readsl($tokens, $i);
+                        $extra = "_ALOM_optwister{$signflag}_t0($sl)";
+                        self::reparseExtra($code, $tokens, $i, $i - $j, $extra);
+                        $i = $j - 1;
+                    } else if ($tokens[$i] == "!") {
+                        $sl = self::readsl($tokens, $i);
+                        $extra = "_ALOM_optwister{$signflag}_u0($sl)";
+                        self::reparseExtra($code, $tokens, $i, $i - $j, $extra);
+                        $i = $j - 1;
+                    } else {
+                        $code .= $tokens[$i];
+                    }
+                }
+            }
+            $code = "";
+            for ($i = 0; isset($tokens[$i]); ++$i) {
+                if (is_array($tokens[$i])) {
+                    $j = $i;
+                    if ($tokens[$i][0] == T_POW) {
+                        $sr = self::readsr($tokens, $i);
+                        $sl = self::readsl($tokens, $i);
+                        $extra = "pow($sr,$sl)";
+                        self::reparseExtra(
+                            $code,
+                            $tokens,
+                            $i,
+                            $i - $j,
+                            $extra,
+                            strlen($sr)
+                        );
+                    } else if ($tokens[$i][0] == T_DEC) {
+                        $sr = trim(self::readsr($tokens, $i));
+                        $sl = trim(self::readsl($tokens, $i));
+                        if (trim($sl) === "") {
+                            $i = $j;
+                            $extra = "_ALOM_optwister{$signflag}_n0($sr)";
+                            self::reparseExtra(
+                                $code,
+                                $tokens,
+                                $i,
+                                $i - $j,
+                                $extra,
+                                strlen($sr)
+                            );
+                        } else {
+                            $extra = "_ALOM_optwister{$signflag}_p0($sl)";
+                            self::reparseExtra(
+                                $code,
+                                $tokens,
+                                $i,
+                                $i - $j,
+                                $extra
+                            );
+                        }
+                    } else if ($tokens[$i][0] == T_INC) {
+                        $sr = self::readsr($tokens, $i);
+                        $sl = self::readsl($tokens, $i);
+                        if (trim($sl) === "") {
+                            $i = $j;
+                            $extra = "_ALOM_optwister{$signflag}_o0($sr)";
+                            self::reparseExtra(
+                                $code,
+                                $tokens,
+                                $i,
+                                $i - $j,
+                                $extra,
+                                strlen($sr)
+                            );
+                        } else {
+                            $extra = "_ALOM_optwister{$signflag}_q0($sl)";
+                            self::reparseExtra(
+                                $code,
+                                $tokens,
+                                $i,
+                                $i - $j,
+                                $extra
+                            );
                         }
                     } else {
-                        $code .= $str;
-                        --$i;
+                        $code .= $tokens[$i][1];
                     }
-                } else if ($tokens[$i][0] == T_EXIT) {
-                    ++$i;
-                    $pe = self::readpe($tokens, $i);
-                    $extra = "_ALOM_memtwister{$fli}_a($pe)";
-                    self::reparseExtra($code, $tokens, $i, $i - $j, $extra);
-                    $i = $j - 1;
-                } else if ($tokens[$i][0] == T_PRINT) {
-                    $sl = self::readsl($tokens, $i);
-                    $extra = "_ALOM_memtwister{$fli}_c($sl)";
-                    self::reparseExtra($code, $tokens, $i, $i - $j, $extra);
-                    $i = $j - 1;
-                } else if ($tokens[$i][0] == T_ECHO) {
-                    ++$i;
-                    $pe = self::readpe($tokens, $i, TRUE);
-                    $extra = "_ALOM_memtwister{$fli}_d($pe)";
-                    self::reparseExtra($code, $tokens, $i, $i - $j, $extra);
-                    $i = $j - 1;
-                } else if ($tokens[$i][0] == T_ARRAY_CAST) {
-                    $sl = self::readsl($tokens, $i);
-                    $extra = "_ALOM_memtwister{$fli}_e($sl)";
-                    self::reparseExtra($code, $tokens, $i, $i - $j, $extra);
-                    $i = $j - 1;
-                } else if ($tokens[$i][0] == T_BOOL_CAST) {
-                    $sl = self::readsl($tokens, $i);
-                    $extra = "_ALOM_memtwister{$fli}_f($sl)";
-                    self::reparseExtra($code, $tokens, $i, $i - $j, $extra);
-                    $i = $j - 1;
-                } else if ($tokens[$i][0] == T_DOUBLE_CAST) {
-                    $sl = self::readsl($tokens, $i);
-                    $extra = "_ALOM_memtwister{$fli}_g($sl)";
-                    self::reparseExtra($code, $tokens, $i, $i - $j, $extra);
-                    $i = $j - 1;
-                } else if ($tokens[$i][0] == T_INT_CAST) {
-                    $sl = self::readsl($tokens, $i);
-                    $extra = "_ALOM_memtwister{$fli}_h($sl)";
-                    self::reparseExtra($code, $tokens, $i, $i - $j, $extra);
-                    $i = $j - 1;
-                } else if ($tokens[$i][0] == T_OBJECT_CAST) {
-                    $sl = self::readsl($tokens, $i);
-                    $extra = "_ALOM_memtwister{$fli}_i($sl)";
-                    self::reparseExtra($code, $tokens, $i, $i - $j, $extra);
-                    $i = $j - 1;
-                } else if ($tokens[$i][0] == T_STRING_CAST) {
-                    $sl = self::readsl($tokens, $i);
-                    $extra = "_ALOM_memtwister{$fli}_j($sl)";
-                    self::reparseExtra($code, $tokens, $i, $i - $j, $extra);
-                    $i = $j - 1;
-                } else $code .= $tokens[$i][1];
-            } else {
-                $j = $i;
-                if ($tokens[$i] == '~') {
-                    $sl = self::readsl($tokens, $i);
-                    $extra = "_ALOM_memtwister{$fli}_t0($sl)";
-                    self::reparseExtra($code, $tokens, $i, $i - $j, $extra);
-                    $i = $j - 1;
-                } else if ($tokens[$i] == '!') {
-                    $sl = self::readsl($tokens, $i);
-                    $extra = "_ALOM_memtwister{$fli}_u0($sl)";
-                    self::reparseExtra($code, $tokens, $i, $i - $j, $extra);
-                    $i = $j - 1;
-                } else $code .= $tokens[$i];
+                } else {
+                    $code .= $tokens[$i];
+                }
             }
-            $code = '';
-            for ($i = 0; isset($tokens[$i]); ++$i) if (is_array($tokens[$i])) {
-                $j = $i;
-                if ($tokens[$i][0] == T_POW) {
-                    $sr = self::readsr($tokens, $i);
-                    $sl = self::readsl($tokens, $i);
-                    $extra = "pow($sr,$sl)";
-                    self::reparseExtra($code, $tokens, $i, $i - $j, $extra, strlen($sr));
-                } else if ($tokens[$i][0] == T_DEC) {
-                    $sr = trim(self::readsr($tokens, $i));
-                    $sl = trim(self::readsl($tokens, $i));
-                    if (trim($sl) === '') {
-                        $i = $j;
-                        $extra = "_ALOM_memtwister{$fli}_n0($sr)";
-                        self::reparseExtra($code, $tokens, $i, $i - $j, $extra, strlen($sr));
-                    } else {
-                        $code .= "_ALOM_memtwister{$fli}_p0($sl)";
-                        self::reparseExtra($code, $tokens, $i, $i - $j, $extra);
-                    }
-                } else if ($tokens[$i][0] == T_INC) {
-                    $sr = self::readsr($tokens, $i);
-                    $sl = self::readsl($tokens, $i);
-                    if (trim($sl) === '') {
-                        $i = $j;
-                        $extra = "_ALOM_memtwister{$fli}_o0($sr)";
-                        self::reparseExtra($code, $tokens, $i, $i - $j, $extra, strlen($sr));
-                    } else {
-                        $extra = "_ALOM_memtwister{$fli}_q0($sl)";
-                        self::reparseExtra($code, $tokens, $i, $i - $j, $extra);
-                    }
-                } else $code .= $tokens[$i][1];
-            } else $code .= $tokens[$i];
-            $code = '';
-            for ($i = 0; isset($tokens[$i]); ++$i) if (is_array($tokens[$i])) $code .= $tokens[$i][1]; else {
-                $j = $i;
-                if ($tokens[$i] == '*') {
-                    $sr = self::readsr($tokens, $i);
-                    $sl = self::readsl($tokens, $i);
-                    $extra = "_ALOM_memtwister{$fli}_1($sr,$sl)";
-                    self::reparseExtra($code, $tokens, $i, $i - $j, $extra, strlen($sr));
-                } else if ($tokens[$i] == '/') {
-                    $sr = self::readsr($tokens, $i);
-                    $sl = self::readsl($tokens, $i);
-                    $extra = "_ALOM_memtwister{$fli}_2($sr,$sl)";
-                    self::reparseExtra($code, $tokens, $i, $i - $j, $extra, strlen($sr));
-                } else if ($tokens[$i] == '%') {
-                    $sr = self::readsr($tokens, $i);
-                    $sl = self::readsl($tokens, $i);
-                    $extra = "_ALOM_memtwister{$fli}_3($sr,$sl)";
-                    self::reparseExtra($code, $tokens, $i, $i - $j, $extra, strlen($sr));
-                } else $code .= $tokens[$i];
-            }
-            $code = '';
-            for ($i = 0; isset($tokens[$i]); ++$i) if (is_array($tokens[$i])) $code .= $tokens[$i][1]; else {
-                $j = $i;
-                if ($tokens[$i] == '+') {
-                    $sr = self::readsr($tokens, $i);
-                    if (trim($sr) === '') {
-                        $code .= $tokens[$i];
-                        continue;
-                    }
-                    $sl = self::readsl($tokens, $i);
-                    $extra = "_ALOM_memtwister{$fli}_z($sr,$sl)";
-                    self::reparseExtra($code, $tokens, $i, $i - $j, $extra, strlen($sr));
-                } else if ($tokens[$i] == '-') {
-                    $sr = self::readsr($tokens, $i);
-                    if (trim($sr) === '') {
-                        $code .= $tokens[$i];
-                        continue;
-                    }
-                    $sl = self::readsl($tokens, $i);
-                    $extra = "_ALOM_memtwister{$fli}_0($sr,$sl)";
-                    self::reparseExtra($code, $tokens, $i, $i - $j, $extra, strlen($sr));
-                } else $code .= $tokens[$i];
-            }
-            $code = '';
-            for ($i = 0; isset($tokens[$i]); ++$i) if (is_array($tokens[$i])) $code .= $tokens[$i][1]; else {
-                if ($tokens[$i] == '.') {
+            $code = "";
+            for ($i = 0; isset($tokens[$i]); ++$i) {
+                if (is_array($tokens[$i])) {
+                    $code .= $tokens[$i][1];
+                } else {
                     $j = $i;
-                    $sr = self::readsr($tokens, $i);
-                    $sl = self::readsl($tokens, $i);
-                    $extra = "_ALOM_memtwister{$fli}_4($sr,$sl)";
-                    self::reparseExtra($code, $tokens, $i, $i - $j, $extra, strlen($sr));
-                } else $code .= $tokens[$i];
-            }
-            $code = '';
-            for ($i = 0; isset($tokens[$i]); ++$i) if (is_array($tokens[$i])) {
-                $j = $i;
-                if ($tokens[$i][0] == T_SL) {
-                    $sr = self::readsr($tokens, $i);
-                    $sl = self::readsl($tokens, $i);
-                    $extra = "_ALOM_memtwister{$fli}_x($sr,$sl)";
-                    self::reparseExtra($code, $tokens, $i, $i - $j, $extra, strlen($sr));
-                } else if ($tokens[$i][0] == T_SR) {
-                    $sr = self::readsr($tokens, $i);
-                    $sl = self::readsl($tokens, $i);
-                    $extra = "_ALOM_memtwister{$fli}_y($sr,$sl)";
-                    self::reparseExtra($code, $tokens, $i, $i - $j, $extra, strlen($sr));
-                } else $code .= $tokens[$i][1];
-            } else $code .= $tokens[$i];
-            $code = '';
-            for ($i = 0; isset($tokens[$i]); ++$i) if (is_array($tokens[$i])) {
-                $j = $i;
-                if ($tokens[$i][0] == T_LOGICAL_AND) {
-                    $sr = self::readsr($tokens, $i);
-                    $sl = self::readsl($tokens, $i);
-                    $extra = "_ALOM_memtwister{$fli}_u($sr,$sl)";
-                    self::reparseExtra($code, $tokens, $i, $i - $j, $extra, strlen($sr));
-                } else if ($tokens[$i][0] == T_LOGICAL_OR) {
-                    $sr = self::readsr($tokens, $i);
-                    $sl = self::readsl($tokens, $i);
-                    $extra = "_ALOM_memtwister{$fli}_v($sr,$sl)";
-                    self::reparseExtra($code, $tokens, $i, $i - $j, $extra, strlen($sr));
-                } else if ($tokens[$i][0] == T_LOGICAL_XOR) {
-                    $sr = self::readsr($tokens, $i);
-                    $sl = self::readsl($tokens, $i);
-                    $extra = "_ALOM_memtwister{$fli}_w($sr,$sl)";
-                    self::reparseExtra($code, $tokens, $i, $i - $j, $extra, strlen($sr));
-                } else $code .= $tokens[$i][1];
-            } else {
-                $j = $i;
-                if ($tokens[$i] == '&') {
-                    $sr = self::readsr($tokens, $i);
-                    if (trim($sr) === '') {
+                    if ($tokens[$i] == "*") {
+                        $sr = self::readsr($tokens, $i);
+                        $sl = self::readsl($tokens, $i);
+                        $extra = "_ALOM_optwister{$signflag}_1($sr,$sl)";
+                        self::reparseExtra(
+                            $code,
+                            $tokens,
+                            $i,
+                            $i - $j,
+                            $extra,
+                            strlen($sr)
+                        );
+                    } else if ($tokens[$i] == "/") {
+                        $sr = self::readsr($tokens, $i);
+                        $sl = self::readsl($tokens, $i);
+                        $extra = "_ALOM_optwister{$signflag}_2($sr,$sl)";
+                        self::reparseExtra(
+                            $code,
+                            $tokens,
+                            $i,
+                            $i - $j,
+                            $extra,
+                            strlen($sr)
+                        );
+                    } else if ($tokens[$i] == "%") {
+                        $sr = self::readsr($tokens, $i);
+                        $sl = self::readsl($tokens, $i);
+                        $extra = "_ALOM_optwister{$signflag}_3($sr,$sl)";
+                        self::reparseExtra(
+                            $code,
+                            $tokens,
+                            $i,
+                            $i - $j,
+                            $extra,
+                            strlen($sr)
+                        );
+                    } else {
                         $code .= $tokens[$i];
-                        continue;
                     }
-                    $sl = self::readsl($tokens, $i);
-                    $extra = "_ALOM_memtwister{$fli}_u($sr,$sl)";
-                    self::reparseExtra($code, $tokens, $i, $i - $j, $extra, strlen($sr));
-                } else if ($tokens[$i] == '|') {
-                    $sr = self::readsr($tokens, $i);
-                    $sl = self::readsl($tokens, $i);
-                    $extra = "_ALOM_memtwister{$fli}_v($sr,$sl)";
-                    self::reparseExtra($code, $tokens, $i, $i - $j, $extra, strlen($sr));
-                } else if ($tokens[$i] == '^') {
-                    $sr = self::readsr($tokens, $i);
-                    $sl = self::readsl($tokens, $i);
-                    $extra = "_ALOM_memtwister{$fli}_w($sr,$sl)";
-                    self::reparseExtra($code, $tokens, $i, $i - $j, $extra, strlen($sr));
-                } else $code .= $tokens[$i];
+                }
             }
-            $code = '';
-            for ($i = 0; isset($tokens[$i]); ++$i) if (is_array($tokens[$i])) {
-                $j = $i;
-                if ($tokens[$i][0] == T_IS_GREATER_OR_EQUAL) {
-                    $sr = self::readsr($tokens, $i);
-                    $sl = self::readsl($tokens, $i);
-                    $extra = "_ALOM_memtwister{$fli}_l($sr,$sl)";
-                    self::reparseExtra($code, $tokens, $i, $i - $j, $extra, strlen($sr));
-                } else if ($tokens[$i][0] == T_IS_SMALLER_OR_EQUAL) {
-                    $sr = self::readsr($tokens, $i);
-                    $sl = self::readsl($tokens, $i);
-                    $extra = "_ALOM_memtwister{$fli}_m($sr,$sl)";
-                    self::reparseExtra($code, $tokens, $i, $i - $j, $extra, strlen($sr));
-                } else if ($tokens[$i][0] == T_IS_EQUAL) {
-                    $sr = self::readsr($tokens, $i);
-                    $sl = self::readsl($tokens, $i);
-                    $extra = "_ALOM_memtwister{$fli}_p($sr,$sl)";
-                    self::reparseExtra($code, $tokens, $i, $i - $j, $extra, strlen($sr));
-                } else if ($tokens[$i][0] == T_IS_IDENTICAL) {
-                    $sr = self::readsr($tokens, $i);
-                    $sl = self::readsl($tokens, $i);
-                    $extra = "_ALOM_memtwister{$fli}_q($sr,$sl)";
-                } else if ($tokens[$i][0] == T_IS_NOT_EQUAL) {
-                    $sr = self::readsr($tokens, $i);
-                    $sl = self::readsl($tokens, $i);
-                    $extra = "_ALOM_memtwister{$fli}_r($sr,$sl)";
-                    self::reparseExtra($code, $tokens, $i, $i - $j, $extra, strlen($sr));
-                } else if ($tokens[$i][0] == T_IS_NOT_IDENTICAL) {
-                    $sr = self::readsr($tokens, $i);
-                    $sl = self::readsl($tokens, $i);
-                    $extra = "_ALOM_memtwister{$fli}_s($sr,$sl)";
-                    self::reparseExtra($code, $tokens, $i, $i - $j, $extra, strlen($sr));
-                } else $code .= $tokens[$i][1];
-            } else {
-                $j = $i;
-                if ($tokens[$i] == '>') {
-                    $sr = self::readsr($tokens, $i);
-                    $sl = self::readsl($tokens, $i);
-                    $extra = "_ALOM_memtwister{$fli}_n($sr,$sl)";
-                    self::reparseExtra($code, $tokens, $i, $i - $j, $extra, strlen($sr));
-                } else if ($tokens[$i] == '<') {
-                    $sr = self::readsr($tokens, $i);
-                    $sl = self::readsl($tokens, $i);
-                    $extra = "_ALOM_memtwister{$fli}_o($sr,$sl)";
-                    self::reparseExtra($code, $tokens, $i, $i - $j, $extra, strlen($sr));
-                } else $code .= $tokens[$i];
+            $code = "";
+            for ($i = 0; isset($tokens[$i]); ++$i) {
+                if (is_array($tokens[$i])) {
+                    $code .= $tokens[$i][1];
+                } else {
+                    $j = $i;
+                    if ($tokens[$i] == "+") {
+                        $sr = self::readsr($tokens, $i);
+                        if (trim($sr) === "") {
+                            $code .= $tokens[$i];
+                            continue;
+                        }
+                        $sl = self::readsl($tokens, $i);
+                        $extra = "_ALOM_optwister{$signflag}_z($sr,$sl)";
+                        self::reparseExtra(
+                            $code,
+                            $tokens,
+                            $i,
+                            $i - $j,
+                            $extra,
+                            strlen($sr)
+                        );
+                    } else if ($tokens[$i] == "-") {
+                        $sr = self::readsr($tokens, $i);
+                        if (trim($sr) === "") {
+                            $code .= $tokens[$i];
+                            continue;
+                        }
+                        $sl = self::readsl($tokens, $i);
+                        $extra = "_ALOM_optwister{$signflag}_0($sr,$sl)";
+                        self::reparseExtra(
+                            $code,
+                            $tokens,
+                            $i,
+                            $i - $j,
+                            $extra,
+                            strlen($sr)
+                        );
+                    } else {
+                        $code .= $tokens[$i];
+                    }
+                }
             }
-            $code = '';
-            for ($i = 0; isset($tokens[$i]); ++$i) if (is_array($tokens[$i])) {
-                $j = $i;
-                if ($tokens[$i][0] == T_BOOLEAN_AND) {
-                    $sr = self::readsr($tokens, $i);
-                    $sl = self::readsl($tokens, $i);
-                    $extra = "_ALOM_memtwister{$fli}_r0($sr,$sl)";
-                    self::reparseExtra($code, $tokens, $i, $i - $j, $extra, strlen($sr));
-                } else if ($tokens[$i][0] == T_BOOLEAN_OR) {
-                    $sr = self::readsr($tokens, $i);
-                    $sl = self::readsl($tokens, $i);
-                    $extra = "_ALOM_memtwister{$fli}_s0($sr,$sl)";
-                    self::reparseExtra($code, $tokens, $i, $i - $j, $extra, strlen($sr));
-                } else $code .= $tokens[$i][1];
-            } else $code .= $tokens[$i];
-            $code = '';
-            for ($i = 0; isset($tokens[$i]); ++$i) if (is_array($tokens[$i])) {
-                $j = $i;
-                if ($tokens[$i][0] == T_AND_EQUAL) {
-                    $sr = self::readsr($tokens, $i);
-                    $sl = self::readsl($tokens, $i);
-                    $extra = "_ALOM_memtwister{$fli}_a0($sr,$sl)";
-                    self::reparseExtra($code, $tokens, $i, $i - $j, $extra, strlen($sr));
-                } else if ($tokens[$i][0] == T_OR_EQUAL) {
-                    $sr = self::readsr($tokens, $i);
-                    $sl = self::readsl($tokens, $i);
-                    $extra = "_ALOM_memtwister{$fli}_b0($sr,$sl)";
-                    self::reparseExtra($code, $tokens, $i, $i - $j, $extra, strlen($sr));
-                } else if ($tokens[$i][0] == T_XOR_EQUAL) {
-                    $sr = self::readsr($tokens, $i);
-                    $sl = self::readsl($tokens, $i);
-                    $extra = "_ALOM_memtwister{$fli}_c0($sr,$sl)";
-                    self::reparseExtra($code, $tokens, $i, $i - $j, $extra, strlen($sr));
-                } else if ($tokens[$i][0] == T_PLUS_EQUAL) {
-                    $sr = self::readsr($tokens, $i);
-                    $sl = self::readsl($tokens, $i);
-                    $extra = "_ALOM_memtwister{$fli}_d0($sr,$sl)";
-                    self::reparseExtra($code, $tokens, $i, $i - $j, $extra, strlen($sr));
-                } else if ($tokens[$i][0] == T_MINUS_EQUAL) {
-                    $sr = self::readsr($tokens, $i);
-                    $sl = self::readsl($tokens, $i);
-                    $extra = "_ALOM_memtwister{$fli}_e0($sr,$sl)";
-                    self::reparseExtra($code, $tokens, $i, $i - $j, $extra, strlen($sr));
-                } else if ($tokens[$i][0] == T_MUL_EQUAL) {
-                    $sr = self::readsr($tokens, $i);
-                    $sl = self::readsl($tokens, $i);
-                    $extra = "_ALOM_memtwister{$fli}_f0($sr,$sl)";
-                    self::reparseExtra($code, $tokens, $i, $i - $j, $extra, strlen($sr));
-                } else if ($tokens[$i][0] == T_DIV_EQUAL) {
-                    $sr = self::readsr($tokens, $i);
-                    $sl = self::readsl($tokens, $i);
-                    $extra = "_ALOM_memtwister{$fli}_g0($sr,$sl)";
-                    self::reparseExtra($code, $tokens, $i, $i - $j, $extra, strlen($sr));
-                } else if ($tokens[$i][0] == T_MOD_EQUAL) {
-                    $sr = self::readsr($tokens, $i);
-                    $sl = self::readsl($tokens, $i);
-                    $extra = "_ALOM_memtwister{$fli}_h0($sr,$sl)";
-                    self::reparseExtra($code, $tokens, $i, $i - $j, $extra, strlen($sr));
-                } else if ($tokens[$i][0] == T_POW_EQUAL) {
-                    $sr = self::readsr($tokens, $i);
-                    $sl = self::readsl($tokens, $i);
-                    $extra = "_ALOM_memtwister{$fli}_i0($sr,$sl)";
-                    self::reparseExtra($code, $tokens, $i, $i - $j, $extra, strlen($sr));
-                } else if ($tokens[$i][0] == T_SL_EQUAL) {
-                    $sr = self::readsr($tokens, $i);
-                    $sl = self::readsl($tokens, $i);
-                    $extra = "_ALOM_memtwister{$fli}_j0($sr,$sl)";
-                    self::reparseExtra($code, $tokens, $i, $i - $j, $extra, strlen($sr));
-                } else if ($tokens[$i][0] == T_SR_EQUAL) {
-                    $sr = self::readsr($tokens, $i);
-                    $sl = self::readsl($tokens, $i);
-                    $extra = "_ALOM_memtwister{$fli}_k0($sr,$sl)";
-                    self::reparseExtra($code, $tokens, $i, $i - $j, $extra, strlen($sr));
-                } else if ($tokens[$i][0] == T_CONCAT_EQUAL) {
-                    $sr = self::readsr($tokens, $i);
-                    $sl = self::readsl($tokens, $i);
-                    $extra = "_ALOM_memtwister{$fli}_m0($sr,$sl)";
-                    self::reparseExtra($code, $tokens, $i, $i - $j, $extra, strlen($sr));
-                } else $code .= $tokens[$i][1];
-            } else $code .= $tokens[$i];
+            $code = "";
+            for ($i = 0; isset($tokens[$i]); ++$i) {
+                if (is_array($tokens[$i])) {
+                    $code .= $tokens[$i][1];
+                } else {
+                    if ($tokens[$i] == ".") {
+                        $j = $i;
+                        $sr = self::readsr($tokens, $i);
+                        $sl = self::readsl($tokens, $i);
+                        $extra = "_ALOM_optwister{$signflag}_4($sr,$sl)";
+                        self::reparseExtra(
+                            $code,
+                            $tokens,
+                            $i,
+                            $i - $j,
+                            $extra,
+                            strlen($sr)
+                        );
+                    } else {
+                        $code .= $tokens[$i];
+                    }
+                }
+            }
+            $code = "";
+            for ($i = 0; isset($tokens[$i]); ++$i) {
+                if (is_array($tokens[$i])) {
+                    $j = $i;
+                    if ($tokens[$i][0] == T_SL) {
+                        $sr = self::readsr($tokens, $i);
+                        $sl = self::readsl($tokens, $i);
+                        $extra = "_ALOM_optwister{$signflag}_x($sr,$sl)";
+                        self::reparseExtra(
+                            $code,
+                            $tokens,
+                            $i,
+                            $i - $j,
+                            $extra,
+                            strlen($sr)
+                        );
+                    } else if ($tokens[$i][0] == T_SR) {
+                        $sr = self::readsr($tokens, $i);
+                        $sl = self::readsl($tokens, $i);
+                        $extra = "_ALOM_optwister{$signflag}_y($sr,$sl)";
+                        self::reparseExtra(
+                            $code,
+                            $tokens,
+                            $i,
+                            $i - $j,
+                            $extra,
+                            strlen($sr)
+                        );
+                    } else {
+                        $code .= $tokens[$i][1];
+                    }
+                } else {
+                    $code .= $tokens[$i];
+                }
+            }
+            $code = "";
+            for ($i = 0; isset($tokens[$i]); ++$i) {
+                if (is_array($tokens[$i])) {
+                    $j = $i;
+                    if ($tokens[$i][0] == T_LOGICAL_AND) {
+                        $sr = self::readsr($tokens, $i);
+                        $sl = self::readsl($tokens, $i);
+                        $extra = "_ALOM_optwister{$signflag}_u($sr,$sl)";
+                        self::reparseExtra(
+                            $code,
+                            $tokens,
+                            $i,
+                            $i - $j,
+                            $extra,
+                            strlen($sr)
+                        );
+                    } else if ($tokens[$i][0] == T_LOGICAL_OR) {
+                        $sr = self::readsr($tokens, $i);
+                        $sl = self::readsl($tokens, $i);
+                        $extra = "_ALOM_optwister{$signflag}_v($sr,$sl)";
+                        self::reparseExtra(
+                            $code,
+                            $tokens,
+                            $i,
+                            $i - $j,
+                            $extra,
+                            strlen($sr)
+                        );
+                    } else if ($tokens[$i][0] == T_LOGICAL_XOR) {
+                        $sr = self::readsr($tokens, $i);
+                        $sl = self::readsl($tokens, $i);
+                        $extra = "_ALOM_optwister{$signflag}_w($sr,$sl)";
+                        self::reparseExtra(
+                            $code,
+                            $tokens,
+                            $i,
+                            $i - $j,
+                            $extra,
+                            strlen($sr)
+                        );
+                    } else {
+                        $code .= $tokens[$i][1];
+                    }
+                } else {
+                    $j = $i;
+                    if ($tokens[$i] == "&") {
+                        $sr = self::readsr($tokens, $i);
+                        if (trim($sr) === "") {
+                            $code .= $tokens[$i];
+                            continue;
+                        }
+                        $sl = self::readsl($tokens, $i);
+                        $extra = "_ALOM_optwister{$signflag}_u($sr,$sl)";
+                        self::reparseExtra(
+                            $code,
+                            $tokens,
+                            $i,
+                            $i - $j,
+                            $extra,
+                            strlen($sr)
+                        );
+                    } else if ($tokens[$i] == "|") {
+                        $sr = self::readsr($tokens, $i);
+                        $sl = self::readsl($tokens, $i);
+                        $extra = "_ALOM_optwister{$signflag}_v($sr,$sl)";
+                        self::reparseExtra(
+                            $code,
+                            $tokens,
+                            $i,
+                            $i - $j,
+                            $extra,
+                            strlen($sr)
+                        );
+                    } else if ($tokens[$i] == "^") {
+                        $sr = self::readsr($tokens, $i);
+                        $sl = self::readsl($tokens, $i);
+                        $extra = "_ALOM_optwister{$signflag}_w($sr,$sl)";
+                        self::reparseExtra(
+                            $code,
+                            $tokens,
+                            $i,
+                            $i - $j,
+                            $extra,
+                            strlen($sr)
+                        );
+                    } else {
+                        $code .= $tokens[$i];
+                    }
+                }
+            }
+            $code = "";
+            for ($i = 0; isset($tokens[$i]); ++$i) {
+                if (is_array($tokens[$i])) {
+                    $j = $i;
+                    if ($tokens[$i][0] == T_IS_GREATER_OR_EQUAL) {
+                        $sr = self::readsr($tokens, $i);
+                        $sl = self::readsl($tokens, $i);
+                        $extra = "_ALOM_optwister{$signflag}_l($sr,$sl)";
+                        self::reparseExtra(
+                            $code,
+                            $tokens,
+                            $i,
+                            $i - $j,
+                            $extra,
+                            strlen($sr)
+                        );
+                    } else if ($tokens[$i][0] == T_IS_SMALLER_OR_EQUAL) {
+                        $sr = self::readsr($tokens, $i);
+                        $sl = self::readsl($tokens, $i);
+                        $extra = "_ALOM_optwister{$signflag}_m($sr,$sl)";
+                        self::reparseExtra(
+                            $code,
+                            $tokens,
+                            $i,
+                            $i - $j,
+                            $extra,
+                            strlen($sr)
+                        );
+                    } else if ($tokens[$i][0] == T_IS_EQUAL) {
+                        $sr = self::readsr($tokens, $i);
+                        $sl = self::readsl($tokens, $i);
+                        $extra = "_ALOM_optwister{$signflag}_p($sr,$sl)";
+                        self::reparseExtra(
+                            $code,
+                            $tokens,
+                            $i,
+                            $i - $j,
+                            $extra,
+                            strlen($sr)
+                        );
+                    } else if ($tokens[$i][0] == T_IS_IDENTICAL) {
+                        $sr = self::readsr($tokens, $i);
+                        $sl = self::readsl($tokens, $i);
+                        $extra = "_ALOM_optwister{$signflag}_q($sr,$sl)";
+                    } else if ($tokens[$i][0] == T_IS_NOT_EQUAL) {
+                        $sr = self::readsr($tokens, $i);
+                        $sl = self::readsl($tokens, $i);
+                        $extra = "_ALOM_optwister{$signflag}_r($sr,$sl)";
+                        self::reparseExtra(
+                            $code,
+                            $tokens,
+                            $i,
+                            $i - $j,
+                            $extra,
+                            strlen($sr)
+                        );
+                    } else if ($tokens[$i][0] == T_IS_NOT_IDENTICAL) {
+                        $sr = self::readsr($tokens, $i);
+                        $sl = self::readsl($tokens, $i);
+                        $extra = "_ALOM_optwister{$signflag}_s($sr,$sl)";
+                        self::reparseExtra(
+                            $code,
+                            $tokens,
+                            $i,
+                            $i - $j,
+                            $extra,
+                            strlen($sr)
+                        );
+                    } else {
+                        $code .= $tokens[$i][1];
+                    }
+                } else {
+                    $j = $i;
+                    if ($tokens[$i] == ">") {
+                        $sr = self::readsr($tokens, $i);
+                        $sl = self::readsl($tokens, $i);
+                        $extra = "_ALOM_optwister{$signflag}_n($sr,$sl)";
+                        self::reparseExtra(
+                            $code,
+                            $tokens,
+                            $i,
+                            $i - $j,
+                            $extra,
+                            strlen($sr)
+                        );
+                    } else if ($tokens[$i] == "<") {
+                        $sr = self::readsr($tokens, $i);
+                        $sl = self::readsl($tokens, $i);
+                        $extra = "_ALOM_optwister{$signflag}_o($sr,$sl)";
+                        self::reparseExtra(
+                            $code,
+                            $tokens,
+                            $i,
+                            $i - $j,
+                            $extra,
+                            strlen($sr)
+                        );
+                    } else {
+                        $code .= $tokens[$i];
+                    }
+                }
+            }
+            $code = "";
+            for ($i = 0; isset($tokens[$i]); ++$i) {
+                if (is_array($tokens[$i])) {
+                    $j = $i;
+                    if ($tokens[$i][0] == T_BOOLEAN_AND) {
+                        $sr = self::readsr($tokens, $i);
+                        $sl = self::readsl($tokens, $i);
+                        $extra = "_ALOM_optwister{$signflag}_r0($sr,$sl)";
+                        self::reparseExtra(
+                            $code,
+                            $tokens,
+                            $i,
+                            $i - $j,
+                            $extra,
+                            strlen($sr)
+                        );
+                    } else if ($tokens[$i][0] == T_BOOLEAN_OR) {
+                        $sr = self::readsr($tokens, $i);
+                        $sl = self::readsl($tokens, $i);
+                        $extra = "_ALOM_optwister{$signflag}_s0($sr,$sl)";
+                        self::reparseExtra(
+                            $code,
+                            $tokens,
+                            $i,
+                            $i - $j,
+                            $extra,
+                            strlen($sr)
+                        );
+                    } else {
+                        $code .= $tokens[$i][1];
+                    }
+                } else {
+                    $code .= $tokens[$i];
+                }
+            }
+            $code = "";
+            for ($i = 0; isset($tokens[$i]); ++$i) {
+                if (is_array($tokens[$i])) {
+                    $j = $i;
+                    if ($tokens[$i][0] == T_AND_EQUAL) {
+                        $sr = self::readsr($tokens, $i);
+                        $sl = self::readsl($tokens, $i);
+                        $extra = "_ALOM_optwister{$signflag}_a0($sr,$sl)";
+                        self::reparseExtra(
+                            $code,
+                            $tokens,
+                            $i,
+                            $i - $j,
+                            $extra,
+                            strlen($sr)
+                        );
+                    } else if ($tokens[$i][0] == T_OR_EQUAL) {
+                        $sr = self::readsr($tokens, $i);
+                        $sl = self::readsl($tokens, $i);
+                        $extra = "_ALOM_optwister{$signflag}_b0($sr,$sl)";
+                        self::reparseExtra(
+                            $code,
+                            $tokens,
+                            $i,
+                            $i - $j,
+                            $extra,
+                            strlen($sr)
+                        );
+                    } else if ($tokens[$i][0] == T_XOR_EQUAL) {
+                        $sr = self::readsr($tokens, $i);
+                        $sl = self::readsl($tokens, $i);
+                        $extra = "_ALOM_optwister{$signflag}_c0($sr,$sl)";
+                        self::reparseExtra(
+                            $code,
+                            $tokens,
+                            $i,
+                            $i - $j,
+                            $extra,
+                            strlen($sr)
+                        );
+                    } else if ($tokens[$i][0] == T_PLUS_EQUAL) {
+                        $sr = self::readsr($tokens, $i);
+                        $sl = self::readsl($tokens, $i);
+                        $extra = "_ALOM_optwister{$signflag}_d0($sr,$sl)";
+                        self::reparseExtra(
+                            $code,
+                            $tokens,
+                            $i,
+                            $i - $j,
+                            $extra,
+                            strlen($sr)
+                        );
+                    } else if ($tokens[$i][0] == T_MINUS_EQUAL) {
+                        $sr = self::readsr($tokens, $i);
+                        $sl = self::readsl($tokens, $i);
+                        $extra = "_ALOM_optwister{$signflag}_e0($sr,$sl)";
+                        self::reparseExtra(
+                            $code,
+                            $tokens,
+                            $i,
+                            $i - $j,
+                            $extra,
+                            strlen($sr)
+                        );
+                    } else if ($tokens[$i][0] == T_MUL_EQUAL) {
+                        $sr = self::readsr($tokens, $i);
+                        $sl = self::readsl($tokens, $i);
+                        $extra = "_ALOM_optwister{$signflag}_f0($sr,$sl)";
+                        self::reparseExtra(
+                            $code,
+                            $tokens,
+                            $i,
+                            $i - $j,
+                            $extra,
+                            strlen($sr)
+                        );
+                    } else if ($tokens[$i][0] == T_DIV_EQUAL) {
+                        $sr = self::readsr($tokens, $i);
+                        $sl = self::readsl($tokens, $i);
+                        $extra = "_ALOM_optwister{$signflag}_g0($sr,$sl)";
+                        self::reparseExtra(
+                            $code,
+                            $tokens,
+                            $i,
+                            $i - $j,
+                            $extra,
+                            strlen($sr)
+                        );
+                    } else if ($tokens[$i][0] == T_MOD_EQUAL) {
+                        $sr = self::readsr($tokens, $i);
+                        $sl = self::readsl($tokens, $i);
+                        $extra = "_ALOM_optwister{$signflag}_h0($sr,$sl)";
+                        self::reparseExtra(
+                            $code,
+                            $tokens,
+                            $i,
+                            $i - $j,
+                            $extra,
+                            strlen($sr)
+                        );
+                    } else if ($tokens[$i][0] == T_POW_EQUAL) {
+                        $sr = self::readsr($tokens, $i);
+                        $sl = self::readsl($tokens, $i);
+                        $extra = "_ALOM_optwister{$signflag}_i0($sr,$sl)";
+                        self::reparseExtra(
+                            $code,
+                            $tokens,
+                            $i,
+                            $i - $j,
+                            $extra,
+                            strlen($sr)
+                        );
+                    } else if ($tokens[$i][0] == T_SL_EQUAL) {
+                        $sr = self::readsr($tokens, $i);
+                        $sl = self::readsl($tokens, $i);
+                        $extra = "_ALOM_optwister{$signflag}_j0($sr,$sl)";
+                        self::reparseExtra(
+                            $code,
+                            $tokens,
+                            $i,
+                            $i - $j,
+                            $extra,
+                            strlen($sr)
+                        );
+                    } else if ($tokens[$i][0] == T_SR_EQUAL) {
+                        $sr = self::readsr($tokens, $i);
+                        $sl = self::readsl($tokens, $i);
+                        $extra = "_ALOM_optwister{$signflag}_k0($sr,$sl)";
+                        self::reparseExtra(
+                            $code,
+                            $tokens,
+                            $i,
+                            $i - $j,
+                            $extra,
+                            strlen($sr)
+                        );
+                    } else if ($tokens[$i][0] == T_CONCAT_EQUAL) {
+                        $sr = self::readsr($tokens, $i);
+                        $sl = self::readsl($tokens, $i);
+                        $extra = "_ALOM_optwister{$signflag}_m0($sr,$sl)";
+                        self::reparseExtra(
+                            $code,
+                            $tokens,
+                            $i,
+                            $i - $j,
+                            $extra,
+                            strlen($sr)
+                        );
+                    } else {
+                        $code .= $tokens[$i][1];
+                    }
+                } else {
+                    $code .= $tokens[$i];
+                }
+            }
             return $code;
         }
 
-        private static function memtwister_encode($string, $iv1, $iv2, $ivs)
+        private static function optwister_encode($string, $iv1, $iv2, $ivs)
         {
             $salt = self::getasciiikey(rand(1, 16));
             $mod = (strlen($salt) + strlen($string)) % 3;
-            if ($mod > 0) $salt .= self::getasciiikey(3 - $mod);
+            if ($mod > 0) {
+                $salt .= self::getasciiikey(3 - $mod);
+            }
             $string = chr(strlen($salt)) . $salt . $string;
-            for ($i = 0; isset($string[$i]); ++$i) $string[$i] = $ivs[$i & 0xf] ^ $string[$i];
+            for ($i = 0; isset($string[$i]); ++$i) {
+                $string[$i] = $ivs[$i & 0xf] ^ $string[$i];
+            }
             $string = self::inc($string, $iv1, $iv2, TRUE);
-            for ($i = 0; isset($string[$i]); ++$i) $string[$i] = $ivs[$i & 0xf] ^ $string[$i];
+            for ($i = 0; isset($string[$i]); ++$i) {
+                $string[$i] = $ivs[$i & 0xf] ^ $string[$i];
+            }
             return $string;
         }
 
-        private static function memtwister_encapsed_string($string)
+        private static function optwister_encapsed_string($string)
         {
             if ($string[0] == "'") {
                 $string = substr($string, 1, -1);
-                $string = preg_replace_callback("/(?<!(?<!\\\\)\\\\)\\\\('|\\\\)/", function ($match) { return $match[1]; }, $string);
+                $string = preg_replace_callback(
+                    "/(?<!(?<!\\\\)\\\\)\\\\('|\\\\)/",
+                    function ($match) {
+                        return $match[1];
+                    },
+                    $string
+                );
                 return $string;
             }
             $string = substr($string, 1, -1);
-            $string = preg_replace_callback("/(?<!(?<!\\\\)\\\\)\\\\([0-7]{1,3}|x[0-9a-fA-F]{1,2}|[ertvnf]|\\\$|\"|\\\\)/", function ($match) {
-                switch ($match[1][0]) {
-                    case 'e':
-                        return "\e";
-                    case 'r':
-                        return "\r";
-                    case 't':
-                        return "\t";
-                    case 'v':
-                        return "\v";
-                    case 'n':
-                        return "\n";
-                    case 'f':
-                        return "\f";
-                    case '"':
-                    case '\\':
-                    case '$':
-                        return $match[1];
-                    case 'x':
-                        return chr(hexdec(substr($match[1], 1)));
-                    default:
-                        return chr(octdec($match[1]));
-                }
-            }, $string);
+            $string = preg_replace_callback(
+                "/(?<!(?<!\\\\)\\\\)\\\\([0-7]{1,3}|x[0-9a-fA-F]{1,2}|[ertvnf]|\\\$|\"|\\\\)/",
+                function ($match) {
+                    switch ($match[1][0]) {
+                        case "e":
+                            return "\e";
+                        case "r":
+                            return "\r";
+                        case "t":
+                            return "\t";
+                        case "v":
+                            return "\v";
+                        case "n":
+                            return "\n";
+                        case "f":
+                            return "\f";
+                        case '"':
+                        case "\\":
+                        case '$':
+                            return $match[1];
+                        case "x":
+                            return chr(hexdec(substr($match[1], 1)));
+                        default:
+                            return chr(octdec($match[1]));
+                    }
+                },
+                $string
+            );
             return $string;
         }
 
-        private static function memtwister_lnumber($string)
+        private static function optwister_lnumber($string)
         {
-            if ($string == 0) return '0';
-            if ($string[0] == '0') {
-                if ($string[1] == 'x') return (string)hexdec(substr($string, 2));
-                if ($string[1] == 'b') return (string)bindec(substr($string, 2));
+            if ($string == 0) {
+                return "0";
+            }
+            if ($string[0] == "0") {
+                if ($string[1] == "x") {
+                    return (string)hexdec(substr($string, 2));
+                }
+                if ($string[1] == "b") {
+                    return (string)bindec(substr($string, 2));
+                }
                 return (string)octdec(substr($string, 1));
-            } else return $string;
+            } else {
+                return $string;
+            }
         }
 
-        private static function memtwister_stringify(&$tokens, $fli, &$i)
+        private static function optwister_stringify(&$tokens, $signflag, &$i)
         {
-            $code = '';
+            $code = "";
             $opc = 1;
-            for (; isset($tokens[$i]) && $opc != 0; ++$i) if (is_array($tokens[$i]) && in_array($tokens[$i][0], [T_CLASS, T_TRAIT, T_INTERFACE])) {
-                $code .= $tokens[$i++][1];
-                while (is_array($tokens[$i]) && in_array($tokens[$i][0], [T_WHITESPACE, T_STRING, T_NS_SEPARATOR, T_EXTENDS, T_IMPLEMENTS])) $code .= $tokens[$i++][1];
-                if ($tokens[$i] != '{') {
-                    --$i;
-                    continue;
-                }
-                $code .= $tokens[$i++];
-                for (; isset($tokens[$i]) && $tokens[$i] != '}'; ++$i) if (is_array($tokens[$i]) && $tokens[$i][0] == T_FUNCTION) {
+            for (; isset($tokens[$i]) && $opc != 0; ++$i) {
+                if (
+                    is_array($tokens[$i]) &&
+                    in_array($tokens[$i][0], [T_CLASS, T_TRAIT, T_INTERFACE])
+                ) {
                     $code .= $tokens[$i++][1];
-                    for (; isset($tokens[$i]) && $tokens[$i] != '('; ++$i) if (is_array($tokens[$i])) $code .= $tokens[$i][1]; else $code .= $tokens[$i];
-                    $code .= self::readl($tokens, '(', ')', $i);
-                    ++$i;
-                    for (; isset($tokens[$i]) && $tokens[$i] != '{'; ++$i) if ($tokens[$i] == ';') break; else if (is_array($tokens[$i])) $code .= $tokens[$i][1];
-                    else $code .= $tokens[$i];
-                    if ($tokens[$i] == ';') {
-                        $code .= $tokens[$i];
-                        continue;
-                    }
-                    $code .= $tokens[$i++];
-                    $code .= self::memtwister_stringify($tokens, $fli, $i);
-                    --$i;
-                } else if (is_array($tokens[$i])) $code .= $tokens[$i][1];
-                else if ($tokens[$i] == '{') $code .= self::readl($tokens, '{', '}', $i);
-                else $code .= $tokens[$i];
-                $code .= $tokens[$i];
-            } else if ($tokens[$i] == '{') {
-                ++$opc;
-                $code .= $tokens[$i];
-            } else if ($tokens[$i] == '}') {
-                --$opc;
-                $code .= $tokens[$i];
-            } else if (is_array($tokens[$i])) {
-                if ($tokens[$i][0] == T_FUNCTION) {
-                    $code .= $tokens[$i++][1];
-                    if (is_array($tokens[$i]) && $tokens[$i][0] == T_WHITESPACE) $code .= $tokens[$i++][1];
-                    if (is_array($tokens[$i]) && $tokens[$i][0] == T_STRING) {
+                    while (
+                        is_array($tokens[$i]) &&
+                        in_array($tokens[$i][0], [
+                            T_WHITESPACE,
+                            T_STRING,
+                            T_NS_SEPARATOR,
+                            T_EXTENDS,
+                            T_IMPLEMENTS,
+                        ])
+                    ) {
                         $code .= $tokens[$i++][1];
-                        if (is_array($tokens[$i]) && $tokens[$i][0] == T_WHITESPACE) $code .= $tokens[$i++][1];
                     }
-                    if ($tokens[$i] == '(') {
-                        $code .= '(' . self::readpe($tokens, $i) . ')';
-                        ++$i;
-                    }
-                    if (is_array($tokens[$i]) && $tokens[$i][0] == T_WHITESPACE) $code .= $tokens[$i++][1];
-                    if (is_array($tokens[$i]) && $tokens[$i][0] == T_USE) {
-                        $code .= $tokens[$i++][1];
-                        if (is_array($tokens[$i]) && $tokens[$i][0] == T_WHITESPACE) $code .= $tokens[$i++][1];
-                    }
-                    if ($tokens[$i] == '(') $code .= '(' . self::readpe($tokens, $i) . ')'; else--$i;
-                } else if ($tokens[$i][0] == T_FN || $tokens[$i][0] == T_DECLARE) {
-                    $code .= $tokens[$i++][1];
-                    if (is_array($tokens[$i]) && $tokens[$i][0] == T_WHITESPACE) $code .= $tokens[$i++][1];
-                    if ($tokens[$i] == '(') $code .= '(' . self::readpe($tokens, $i) . ')'; else--$i;
-                } else if ($tokens[$i][0] == T_STATIC) {
-                    $code .= $tokens[$i++][1];
-                    if (is_array($tokens[$i]) && $tokens[$i][0] == T_WHITESPACE) $code .= $tokens[$i++][1];
-                    $code .= self::readpe($tokens, $i, TRUE);
-                } else if ($tokens[$i][0] == T_NAMESPACE) {
-                    $code .= $tokens[$i++][1];
-                    while (is_array($tokens[$i]) && in_array($tokens[$i][0], [T_WHITESPACE, T_STRING, T_NS_SEPARATOR])) $code .= $tokens[$i++][1];
-                    if ($tokens[$i] != '{') {
+                    if ($tokens[$i] != "{") {
                         --$i;
                         continue;
                     }
                     $code .= $tokens[$i++];
-                    $code .= self::memtwister_stringify($tokens, $fli, $i);
-                    --$i;
-                } else if (is_array($tokens[$i]) && $tokens[$i][0] == T_START_HEREDOC) {
-                    $code .= $tokens[$i++][1];
-                    for (; isset($tokens[$i]) && (!is_array($tokens[$i]) || $tokens[$i][0] != T_END_HEREDOC); ++$i) $code .= is_array($tokens[$i]) ? $tokens[$i][1] : $tokens[$i];
-                    $code .= $tokens[$i][1];
-                } else if ($tokens[$i][0] == T_STRING) {
-                    $str = $tokens[$i][1];
-                    $prev = '';
-                    $j = 1;
-                    if (is_array($tokens[$i - $j]) && $tokens[$i - $j][0] == T_WHITESPACE) $prev .= $tokens[$i - ($j++)][1];
-                    if (is_array($tokens[$i - $j]) && in_array($tokens[$i - $j][0], [T_OBJECT_OPERATOR, T_NULLSAFE_OBJECT_OPERATOR])) {
-                        $code .= "{'$str'}";
-                    } else if (is_array($tokens[$i - $j]) && $tokens[$i - $j][0] == T_DOUBLE_COLON) {
-                        $next = '';
+                    for (; isset($tokens[$i]) && $tokens[$i] != "}"; ++$i) {
+                        if (
+                            is_array($tokens[$i]) &&
+                            $tokens[$i][0] == T_FUNCTION
+                        ) {
+                            $code .= $tokens[$i++][1];
+                            for (
+                            ;
+                                isset($tokens[$i]) && $tokens[$i] != "(";
+                                ++$i
+                            ) {
+                                if (is_array($tokens[$i])) {
+                                    $code .= $tokens[$i][1];
+                                } else {
+                                    $code .= $tokens[$i];
+                                }
+                            }
+                            $code .= self::readl($tokens, "(", ")", $i);
+                            ++$i;
+                            for (
+                            ;
+                                isset($tokens[$i]) && $tokens[$i] != "{";
+                                ++$i
+                            ) {
+                                if ($tokens[$i] == ";") {
+                                    break;
+                                } else if (is_array($tokens[$i])) {
+                                    $code .= $tokens[$i][1];
+                                } else {
+                                    $code .= $tokens[$i];
+                                }
+                            }
+                            if ($tokens[$i] == ";") {
+                                $code .= $tokens[$i];
+                                continue;
+                            }
+                            $code .= $tokens[$i++];
+                            $code .= self::optwister_stringify(
+                                $tokens,
+                                $signflag,
+                                $i
+                            );
+                            --$i;
+                        } else if (is_array($tokens[$i])) {
+                            $code .= $tokens[$i][1];
+                        } else if ($tokens[$i] == "{") {
+                            $code .= self::readl($tokens, "{", "}", $i);
+                        } else {
+                            $code .= $tokens[$i];
+                        }
+                    }
+                    $code .= $tokens[$i];
+                } else if ($tokens[$i] == "{") {
+                    ++$opc;
+                    $code .= $tokens[$i];
+                } else if ($tokens[$i] == "}") {
+                    --$opc;
+                    $code .= $tokens[$i];
+                } else if (is_array($tokens[$i])) {
+                    if ($tokens[$i][0] == T_FUNCTION) {
+                        $code .= $tokens[$i++][1];
+                        if (
+                            is_array($tokens[$i]) &&
+                            $tokens[$i][0] == T_WHITESPACE
+                        ) {
+                            $code .= $tokens[$i++][1];
+                        }
+                        if (
+                            is_array($tokens[$i]) &&
+                            $tokens[$i][0] == T_STRING
+                        ) {
+                            $code .= $tokens[$i++][1];
+                            if (
+                                is_array($tokens[$i]) &&
+                                $tokens[$i][0] == T_WHITESPACE
+                            ) {
+                                $code .= $tokens[$i++][1];
+                            }
+                        }
+                        if ($tokens[$i] == "(") {
+                            $code .= "(" . self::readpe($tokens, $i) . ")";
+                            ++$i;
+                        }
+                        if (
+                            is_array($tokens[$i]) &&
+                            $tokens[$i][0] == T_WHITESPACE
+                        ) {
+                            $code .= $tokens[$i++][1];
+                        }
+                        if (is_array($tokens[$i]) && $tokens[$i][0] == T_USE) {
+                            $code .= $tokens[$i++][1];
+                            if (
+                                is_array($tokens[$i]) &&
+                                $tokens[$i][0] == T_WHITESPACE
+                            ) {
+                                $code .= $tokens[$i++][1];
+                            }
+                        }
+                        if ($tokens[$i] == "(") {
+                            $code .= "(" . self::readpe($tokens, $i) . ")";
+                        } else {
+                            --$i;
+                        }
+                    } else if (
+                        $tokens[$i][0] == T_FN ||
+                        $tokens[$i][0] == T_DECLARE
+                    ) {
+                        $code .= $tokens[$i++][1];
+                        if (
+                            is_array($tokens[$i]) &&
+                            $tokens[$i][0] == T_WHITESPACE
+                        ) {
+                            $code .= $tokens[$i++][1];
+                        }
+                        if ($tokens[$i] == "(") {
+                            $code .= "(" . self::readpe($tokens, $i) . ")";
+                        } else {
+                            --$i;
+                        }
+                    } else if ($tokens[$i][0] == T_STATIC) {
+                        $code .= $tokens[$i++][1];
+                        if (
+                            is_array($tokens[$i]) &&
+                            $tokens[$i][0] == T_WHITESPACE
+                        ) {
+                            $code .= $tokens[$i++][1];
+                        }
+                        $code .= self::readpe($tokens, $i, TRUE);
+                    } else if ($tokens[$i][0] == T_NAMESPACE) {
+                        $code .= $tokens[$i++][1];
+                        while (
+                            is_array($tokens[$i]) &&
+                            in_array($tokens[$i][0], [
+                                T_WHITESPACE,
+                                T_STRING,
+                                T_NS_SEPARATOR,
+                            ])
+                        ) {
+                            $code .= $tokens[$i++][1];
+                        }
+                        if ($tokens[$i] != "{") {
+                            --$i;
+                            continue;
+                        }
+                        $code .= $tokens[$i++];
+                        $code .= self::optwister_stringify(
+                            $tokens,
+                            $signflag,
+                            $i
+                        );
+                        --$i;
+                    } else if (
+                        is_array($tokens[$i]) &&
+                        $tokens[$i][0] == T_START_HEREDOC
+                    ) {
+                        $code .= $tokens[$i++][1];
+                        for (
+                        ;
+                            isset($tokens[$i]) &&
+                            (!is_array($tokens[$i]) ||
+                                $tokens[$i][0] != T_END_HEREDOC);
+                            ++$i
+                        ) {
+                            $code .= is_array($tokens[$i])
+                                ? $tokens[$i][1]
+                                : $tokens[$i];
+                        }
+                        $code .= $tokens[$i][1];
+                    } else if ($tokens[$i][0] == T_STRING) {
+                        $str = $tokens[$i][1];
+                        $prev = "";
                         $j = 1;
-                        if (is_array($tokens[$i + $j]) && $tokens[$i + $j][0] == T_WHITESPACE) $next .= $tokens[$i + ($j++)][1];
-                        if ($tokens[$i + $j] == '(') {
+                        if (
+                            is_array($tokens[$i - $j]) &&
+                            $tokens[$i - $j][0] == T_WHITESPACE
+                        ) {
+                            $prev .= $tokens[$i - $j++][1];
+                        }
+                        if (
+                            is_array($tokens[$i - $j]) &&
+                            in_array($tokens[$i - $j][0], [
+                                T_OBJECT_OPERATOR,
+                                T_NULLSAFE_OBJECT_OPERATOR,
+                            ])
+                        ) {
                             $code .= "{'$str'}";
-                        } else $code .= $str;
-                    } else if (!is_array($tokens[$i - $j]) || !in_array($tokens[$i - $j][0], [
-                            T_FUNCTION,
-                            T_FN,
-                            T_NEW,
-                            T_CLASS,
-                            T_PUBLIC,
-                            T_PROTECTED,
-                            T_STATIC,
-                            T_PRIVATE,
-                            T_VAR,
-                            T_TRAIT,
-                            T_INTERFACE,
-                            T_EXTENDS,
-                            T_IMPLEMENTS,
-                        ])) {
-                        $next = '';
-                        for ($j = 1; isset($tokens[$i + $j]) && is_array($tokens[$i + $j]) && in_array($tokens[$i + $j][0], [
-                            T_STRING,
-                            T_WHITESPACE,
-                            T_NS_SEPARATOR,
-                        ]); ++$j) if ($j > 1 && $tokens[$i + $j - 1][0] == T_WHITESPACE && $tokens[$i + $j - 2][0] == $tokens[$i + $j][0]) break; else $next .= $tokens[$i + $j][1];
-                        $i += $j;
-                        $str = str_replace([' ', "\n", "\r", "\t"], '', $str . $next);
-                        if (is_array($tokens[$i]) && $tokens[$i][0] == T_WHITESPACE) $next .= $tokens[$i++][1];
-                        if ($tokens[$i] == '(') {
-                            $code .= "(function_exists(__NAMESPACE__.'\\$str')?__NAMESPACE__.'\\$str':(function_exists('$str')?'$str':__NAMESPACE__.'\\$str'))";
-                        } else if (is_array($tokens[$i]) && $tokens[$i][0] == T_DOUBLE_COLON) {
-                            $code .= in_array(strtolower($str), [
-                                'self',
-                                'static',
-                                'parent',
-                            ]) ? $str : "(class_exists(__NAMESPACE__.'\\$str')?__NAMESPACE__.'\\$str':" . "(class_exists('$str')?'$str':__NAMESPACE__.'\\$str'))";
+                        } else if (
+                            is_array($tokens[$i - $j]) &&
+                            $tokens[$i - $j][0] == T_DOUBLE_COLON
+                        ) {
+                            $next = "";
+                            $j = 1;
+                            if (
+                                is_array($tokens[$i + $j]) &&
+                                $tokens[$i + $j][0] == T_WHITESPACE
+                            ) {
+                                $next .= $tokens[$i + $j++][1];
+                            }
+                            if ($tokens[$i + $j] == "(") {
+                                $code .= "{'$str'}";
+                            } else {
+                                $code .= $str;
+                            }
+                        } else if (
+                            !is_array($tokens[$i - $j]) ||
+                            !in_array($tokens[$i - $j][0], [
+                                T_FUNCTION,
+                                T_FN,
+                                T_NEW,
+                                T_CLASS,
+                                T_PUBLIC,
+                                T_PROTECTED,
+                                T_STATIC,
+                                T_PRIVATE,
+                                T_VAR,
+                                T_TRAIT,
+                                T_INTERFACE,
+                                T_EXTENDS,
+                                T_IMPLEMENTS,
+                            ])
+                        ) {
+                            $next = "";
+                            for (
+                                $j = 1;
+                                isset($tokens[$i + $j]) &&
+                                is_array($tokens[$i + $j]) &&
+                                in_array($tokens[$i + $j][0], [
+                                    T_STRING,
+                                    T_WHITESPACE,
+                                    T_NS_SEPARATOR,
+                                ]);
+                                ++$j
+                            ) {
+                                if (
+                                    $j > 1 &&
+                                    $tokens[$i + $j - 1][0] == T_WHITESPACE &&
+                                    $tokens[$i + $j - 2][0] ==
+                                    $tokens[$i + $j][0]
+                                ) {
+                                    break;
+                                } else {
+                                    $next .= $tokens[$i + $j][1];
+                                }
+                            }
+                            $i += $j;
+                            $str = str_replace(
+                                [" ", "\n", "\r", "\t"],
+                                "",
+                                $str . $next
+                            );
+                            if (
+                                is_array($tokens[$i]) &&
+                                $tokens[$i][0] == T_WHITESPACE
+                            ) {
+                                $next .= $tokens[$i++][1];
+                            }
+                            if ($tokens[$i] == "(") {
+                                $code .= "(function_exists(__NAMESPACE__.'\\$str')?__NAMESPACE__.'\\$str':(function_exists('$str')?'$str':__NAMESPACE__.'\\$str'))";
+                            } else if (
+                                is_array($tokens[$i]) &&
+                                $tokens[$i][0] == T_DOUBLE_COLON
+                            ) {
+                                $code .= in_array(strtolower($str), [
+                                    "self",
+                                    "static",
+                                    "parent",
+                                ])
+                                    ? $str
+                                    : "(class_exists(__NAMESPACE__.'\\$str')?__NAMESPACE__.'\\$str':" .
+                                    "(class_exists('$str')?'$str':__NAMESPACE__.'\\$str'))";
+                            } else {
+                                $code .= in_array(strtolower($str), [
+                                    "null",
+                                    "true",
+                                    "false",
+                                ])
+                                    ? "('constant')('$str')"
+                                    : "(defined(__NAMESPACE__.'$str')?('constant')(__NAMESPACE__.'\\$str'):" .
+                                    "(defined('$str')?('constant')('$str'):'$str'))";
+                            }
+                            --$i;
                         } else {
-                            $code .= in_array(strtolower($str), [
-                                'null',
-                                'true',
-                                'false',
-                            ]) ? "('constant')('$str')" : "(defined(__NAMESPACE__.'$str')?('constant')(__NAMESPACE__.'\\$str'):" . "(defined('$str')?('constant')('$str'):'$str'))";
+                            $code .= $str;
                         }
-                        --$i;
-                    } else $code .= $str;
-                } else if ($tokens[$i][0] == T_NS_SEPARATOR) {
-                    $str = $tokens[$i][1];
-                    $j = 1;
-                    if (is_array($tokens[$i - $j]) && $tokens[$i - $j][0] == T_WHITESPACE) ++$j;
-                    if (!is_array($tokens[$i - $j]) || !in_array($tokens[$i - $j][0], [
-                            T_FUNCTION,
-                            T_FN,
-                            T_NEW,
-                            T_CLASS,
-                            T_PUBLIC,
-                            T_PROTECTED,
-                            T_STATIC,
-                            T_PRIVATE,
-                            T_VAR,
-                            T_TRAIT,
-                            T_INTERFACE,
-                            T_EXTENDS,
-                            T_IMPLEMENTS,
-                        ])) {
-                        $next = '';
-                        for ($j = 1; isset($tokens[$i + $j]) && is_array($tokens[$i + $j]) && in_array($tokens[$i + $j][0], [
-                            T_STRING,
-                            T_WHITESPACE,
-                            T_NS_SEPARATOR,
-                        ]); ++$j) if ($j > 1 && $tokens[$i + $j - 1][0] == T_WHITESPACE && $tokens[$i + $j - 2][0] == $tokens[$i + $j][0]) break; else $next .= $tokens[$i + $j][1];
-                        $i += $j;
-                        $str = str_replace([' ', "\n", "\r", "\t"], '', $str . $next);
-                        if (is_array($tokens[$i]) && $tokens[$i][0] == T_WHITESPACE) $next .= $tokens[$i++][1];
-                        if ($tokens[$i] == '(') {
-                            $code .= "('$str')";
-                        } else if (is_array($tokens[$i]) && $tokens[$i][0] == T_DOUBLE_COLON) {
-                            $code .= in_array(strtolower($str), ['self', 'static', 'parent']) ? $str : "('$str')";
+                    } else if ($tokens[$i][0] == T_NS_SEPARATOR) {
+                        $str = $tokens[$i][1];
+                        $j = 1;
+                        if (
+                            is_array($tokens[$i - $j]) &&
+                            $tokens[$i - $j][0] == T_WHITESPACE
+                        ) {
+                            ++$j;
+                        }
+                        if (
+                            !is_array($tokens[$i - $j]) ||
+                            !in_array($tokens[$i - $j][0], [
+                                T_FUNCTION,
+                                T_FN,
+                                T_NEW,
+                                T_CLASS,
+                                T_PUBLIC,
+                                T_PROTECTED,
+                                T_STATIC,
+                                T_PRIVATE,
+                                T_VAR,
+                                T_TRAIT,
+                                T_INTERFACE,
+                                T_EXTENDS,
+                                T_IMPLEMENTS,
+                            ])
+                        ) {
+                            $next = "";
+                            for (
+                                $j = 1;
+                                isset($tokens[$i + $j]) &&
+                                is_array($tokens[$i + $j]) &&
+                                in_array($tokens[$i + $j][0], [
+                                    T_STRING,
+                                    T_WHITESPACE,
+                                    T_NS_SEPARATOR,
+                                ]);
+                                ++$j
+                            ) {
+                                if (
+                                    $j > 1 &&
+                                    $tokens[$i + $j - 1][0] == T_WHITESPACE &&
+                                    $tokens[$i + $j - 2][0] ==
+                                    $tokens[$i + $j][0]
+                                ) {
+                                    break;
+                                } else {
+                                    $next .= $tokens[$i + $j][1];
+                                }
+                            }
+                            $i += $j;
+                            $str = str_replace(
+                                [" ", "\n", "\r", "\t"],
+                                "",
+                                $str . $next
+                            );
+                            if (
+                                is_array($tokens[$i]) &&
+                                $tokens[$i][0] == T_WHITESPACE
+                            ) {
+                                $next .= $tokens[$i++][1];
+                            }
+                            if ($tokens[$i] == "(") {
+                                $code .= "('$str')";
+                            } else if (
+                                is_array($tokens[$i]) &&
+                                $tokens[$i][0] == T_DOUBLE_COLON
+                            ) {
+                                $code .= in_array(strtolower($str), [
+                                    "self",
+                                    "static",
+                                    "parent",
+                                ])
+                                    ? $str
+                                    : "('$str')";
+                            } else {
+                                $code .= "('constant')('$str')";
+                            }
+                            --$i;
                         } else {
-                            $code .= "('constant')('$str')";
+                            $code .= $tokens[$i][1];
                         }
-                        --$i;
-                    } else $code .= $tokens[$i][1];
-                } else if ($tokens[$i][0] == T_VARIABLE) {
-                    $str = substr($tokens[$i][1], 1);
-                    $code .= $str == '$this' ? $str : "\${'$str'}";
-                } else if ($tokens[$i][0] == T_LNUMBER) {
-                    $str = self::memtwister_lnumber($tokens[$i][1]);
-                    $code .= "('_ALOM_memtwister{$fli}_h')('$str')";
-                } else if ($tokens[$i][0] == T_DNUMBER) {
-                    $str = $tokens[$i][1];
-                    $code .= "('_ALOM_memtwister{$fli}_g')('$str')";
-                } else $code .= $tokens[$i][1];
-            } else if ($tokens[$i] == '"') {
-                $code .= $tokens[$i++];
-                for (; isset($tokens[$i]) && $tokens[$i] != '"'; ++$i) $code .= is_array($tokens[$i]) ? $tokens[$i][1] : $tokens[$i];
-                $code .= $tokens[$i];
-            } else if ($tokens[$i] == '`') {
-                $code .= $tokens[$i++];
-                for (; isset($tokens[$i]) && $tokens[$i] != '`'; ++$i) $code .= is_array($tokens[$i]) ? $tokens[$i][1] : $tokens[$i];
-                $code .= $tokens[$i];
-            } else $code .= $tokens[$i];
+                    } else if ($tokens[$i][0] == T_VARIABLE) {
+                        $str = substr($tokens[$i][1], 1);
+                        $code .= $str == '$this' ? $str : "\${'$str'}";
+                    } else if ($tokens[$i][0] == T_LNUMBER) {
+                        $str = self::optwister_lnumber($tokens[$i][1]);
+                        $code .= "('_ALOM_optwister{$signflag}_h')('$str')";
+                    } else if ($tokens[$i][0] == T_DNUMBER) {
+                        $str = $tokens[$i][1];
+                        $code .= "('_ALOM_optwister{$signflag}_g')('$str')";
+                    } else {
+                        $code .= $tokens[$i][1];
+                    }
+                } else if ($tokens[$i] == '"') {
+                    $code .= $tokens[$i++];
+                    for (; isset($tokens[$i]) && $tokens[$i] != '"'; ++$i) {
+                        $code .= is_array($tokens[$i])
+                            ? $tokens[$i][1]
+                            : $tokens[$i];
+                    }
+                    $code .= $tokens[$i];
+                } else if ($tokens[$i] == "`") {
+                    $code .= $tokens[$i++];
+                    for (; isset($tokens[$i]) && $tokens[$i] != "`"; ++$i) {
+                        $code .= is_array($tokens[$i])
+                            ? $tokens[$i][1]
+                            : $tokens[$i];
+                    }
+                    $code .= $tokens[$i];
+                } else {
+                    $code .= $tokens[$i];
+                }
+            }
             return $code;
         }
 
-        private static function memtwister_obfs($code, $fli, $iv1, $iv2, $ivs, $pkyid, $token = NULL)
+        private static function optwister_obfs(
+            $code,
+            $signflag,
+            $iv1,
+            $iv2,
+            $ivs,
+            $pkyid,
+            $token = NULL
+        )
         {
-            if ($token === NULL) $token = token_get_all($code);
+            if ($token === NULL) {
+                $token = token_get_all($code);
+            }
             $i = 0;
-            $code = self::memtwister_stringify($token, $fli, $i);
+            $code = self::optwister_stringify($token, $signflag, $i);
             $tokens = token_get_all($code);
             $pkyid = base64_encode($pkyid);
-            $code = '';
-            for ($i = 0; isset($tokens[$i]); ++$i) if (is_array($tokens[$i]) && $tokens[$i][0] == T_CONSTANT_ENCAPSED_STRING) {
-                $str = self::memtwister_encapsed_string($tokens[$i][1]);
-                $code .= "\AlomDecoder$fli::memtwister_decode('" . base64_encode(self::memtwister_encode($str, $iv1, $iv2, $ivs)) . "','$pkyid')";
-            } else if (is_array($tokens[$i])) $code .= $tokens[$i][1];
-            else $code .= $tokens[$i];
+            $code = "";
+            for ($i = 0; isset($tokens[$i]); ++$i) {
+                if (
+                    is_array($tokens[$i]) &&
+                    $tokens[$i][0] == T_CONSTANT_ENCAPSED_STRING
+                ) {
+                    $str = self::optwister_encapsed_string($tokens[$i][1]);
+                    $code .=
+                        "\AlomDecoder$signflag::optwister_decode('" .
+                        base64_encode(
+                            self::optwister_encode($str, $iv1, $iv2, $ivs)
+                        ) .
+                        "','$pkyid')";
+                } else if (is_array($tokens[$i])) {
+                    $code .= $tokens[$i][1];
+                } else {
+                    $code .= $tokens[$i];
+                }
+            }
             return $code;
         }
 
-        public static function sug($code, $fli)
+        public static function sug($code, $signflag)
         {
             $tokens = token_get_all($code);
-            $sug = '';
-            $vars = [];
-            for ($i = 0; isset($tokens[$i]); ++$i) if (is_array($tokens[$i]) && $tokens[$i][0] == T_VARIABLE) {
-                if ($tokens[$i][1] == '$GLOBALS') {
-                    if (is_array($tokens[$i + 1]) && $tokens[$i + 1][0] == T_WHITESPACE) ++$i;
-                    if ($tokens[$i + 1] == '[') ++$i; else continue;
-                    if (is_array($tokens[$i + 1]) && $tokens[$i + 1][0] == T_WHITESPACE) ++$i;
-                    if (is_array($tokens[$i + 1]) && in_array($tokens[$i + 1][0], [T_CONSTANT_ENCAPSED_STRING, T_LNUMBER, T_DNUMBER])) {
-                        $str = $tokens[++$i][1];
-                    } else continue;
-                    if (is_array($tokens[$i + 1]) && $tokens[$i + 1][0] == T_WHITESPACE) ++$i;
-                    if ($tokens[$i + 1] == ']') ++$i; else continue;
-                    $vars[] = '${' . $str . '}';
-                } else $vars[] = $tokens[$i][1];
-            }
-            $vars = implode(',', array_unique($vars));
-            if ($vars !== '') $sug .= "if(\AlomDecoder$fli::\$vgb){global $vars;}";
-            $code = '';
+            $code = "";
             $i = 0;
             $code .= $tokens[$i++][1];
-            while (isset($tokens[$i]) && ((is_array($tokens[$i]) && in_array($tokens[$i][0], [
+            while (
+                isset($tokens[$i]) &&
+                ((is_array($tokens[$i]) &&
+                        in_array($tokens[$i][0], [
                             T_WHITESPACE,
                             T_COMMENT,
                             T_DOC_COMMENT,
-                        ])) || $tokens[$i] == ';')) $code .= is_array($tokens[$i]) ? $tokens[$i++][1] : $tokens[$i++];
-            if (isset($tokens[$i]) && is_array($tokens[$i]) && $tokens[$i][0] == T_NAMESPACE) {
+                        ])) ||
+                    $tokens[$i] == ";")
+            ) {
+                $code .= is_array($tokens[$i])
+                    ? $tokens[$i++][1]
+                    : $tokens[$i++];
+            }
+            if (
+                isset($tokens[$i]) &&
+                is_array($tokens[$i]) &&
+                $tokens[$i][0] == T_NAMESPACE
+            ) {
                 $code .= $tokens[$i++][1];
-                while (is_array($tokens[$i]) && in_array($tokens[$i][0], [T_WHITESPACE, T_STRING, T_NS_SEPARATOR])) $code .= $tokens[$i++][1];
-                if ($tokens[$i] == '{') {
+                while (
+                    is_array($tokens[$i]) &&
+                    in_array($tokens[$i][0], [
+                        T_WHITESPACE,
+                        T_STRING,
+                        T_NS_SEPARATOR,
+                    ])
+                ) {
+                    $code .= $tokens[$i++][1];
+                }
+                if ($tokens[$i] == "{") {
                     $code .= $tokens[$i++];
-                    $code .= "if(\$_ALOM_beforeeval){\$_ALOM_code='';unset(\$_ALOM_code,\$_ALOM_beforeeval);}else{file_put_contents(\$_ALOM_code,'');unlink(\$_ALOM_code);\$_ALOM_code='';unset(\$_ALOM_code,\$_ALOM_beforeeval);}";
-                    $code .= $sug;
-                    for (; isset($tokens[$i]); ++$i) $code .= is_array($tokens[$i]) ? $tokens[$i][1] : $tokens[$i];
+                    $code .=
+                        "if(\$_ALOM_beforeeval){\$_ALOM_code='';unset(\$_ALOM_code,\$_ALOM_beforeeval);}else{file_put_contents(\$_ALOM_code,'');unlink(\$_ALOM_code);\$_ALOM_code='';unset(\$_ALOM_code,\$_ALOM_beforeeval);}";
+                    for (; isset($tokens[$i]); ++$i) {
+                        $code .= is_array($tokens[$i])
+                            ? $tokens[$i][1]
+                            : $tokens[$i];
+                    }
                     return $code;
                 } else {
                     $code .= $tokens[$i++];
-                    while (isset($tokens[$i]) && ((is_array($tokens[$i]) && in_array($tokens[$i][0], [
+                    while (
+                        isset($tokens[$i]) &&
+                        ((is_array($tokens[$i]) &&
+                                in_array($tokens[$i][0], [
                                     T_WHITESPACE,
                                     T_COMMENT,
                                     T_DOC_COMMENT,
-                                ])) || $tokens[$i] == ';')) $code .= is_array($tokens[$i]) ? $tokens[$i++][1] : $tokens[$i++];
+                                ])) ||
+                            $tokens[$i] == ";")
+                    ) {
+                        $code .= is_array($tokens[$i])
+                            ? $tokens[$i++][1]
+                            : $tokens[$i++];
+                    }
                 }
             }
-            while (isset($tokens[$i]) && is_array($tokens[$i]) && $tokens[$i][0] == T_NAMESPACE) {
+            while (
+                isset($tokens[$i]) &&
+                is_array($tokens[$i]) &&
+                $tokens[$i][0] == T_NAMESPACE
+            ) {
                 $code .= $tokens[$i++][1];
-                while (is_array($tokens[$i]) && in_array($tokens[$i][0], [T_WHITESPACE, T_STRING, T_NS_SEPARATOR])) $code .= $tokens[$i++][1];
+                while (
+                    is_array($tokens[$i]) &&
+                    in_array($tokens[$i][0], [
+                        T_WHITESPACE,
+                        T_STRING,
+                        T_NS_SEPARATOR,
+                    ])
+                ) {
+                    $code .= $tokens[$i++][1];
+                }
                 $code .= $tokens[$i++];
-                while (isset($tokens[$i]) && ((is_array($tokens[$i]) && in_array($tokens[$i][0], [
+                while (
+                    isset($tokens[$i]) &&
+                    ((is_array($tokens[$i]) &&
+                            in_array($tokens[$i][0], [
                                 T_WHITESPACE,
                                 T_COMMENT,
                                 T_DOC_COMMENT,
-                            ])) || $tokens[$i] == ';')) $code .= $tokens[$i++][1];
+                            ])) ||
+                        $tokens[$i] == ";")
+                ) {
+                    $code .= $tokens[$i++][1];
+                }
             }
-            $code .= "if(\$_ALOM_beforeeval){\$_ALOM_code='';unset(\$_ALOM_code,\$_ALOM_beforeeval);}else{file_put_contents(\$_ALOM_code,'');unlink(\$_ALOM_code);\$_ALOM_code='';unset(\$_ALOM_code,\$_ALOM_beforeeval);}";
-            $code .= $sug;
-            for (; isset($tokens[$i]); ++$i) $code .= is_array($tokens[$i]) ? $tokens[$i][1] : $tokens[$i];
+            $code .=
+                "if(\$_ALOM_beforeeval){\$_ALOM_code='';unset(\$_ALOM_code,\$_ALOM_beforeeval);}else{file_put_contents(\$_ALOM_code,'');unlink(\$_ALOM_code);\$_ALOM_code='';unset(\$_ALOM_code,\$_ALOM_beforeeval);}";
+            for (; isset($tokens[$i]); ++$i) {
+                $code .= is_array($tokens[$i]) ? $tokens[$i][1] : $tokens[$i];
+            }
             return $code;
         }
 
-        private static function singlequote($string) { return str_replace(['\\', "'"], ['\\\\', "\\'"], $string); }
+        private static function singlequote($string)
+        {
+            return str_replace(["\\", "'"], ["\\\\", "\\'"], $string);
+        }
+
+        private static function commentquote($string)
+        {
+            return str_replace(["\n", "*/"], [" *   ", "*//*"], $string);
+        }
 
         private static function setikeys($code)
         {
             $tokens = token_get_all($code);
-            $code = '';
-            for ($i = 0; isset($tokens[$i]); ++$i) if (is_array($tokens[$i]) && $tokens[$i][0] == T_STRING) {
-                if (in_array($tokens[$i][1], [
-                    "ALOM_INVISIBLE_KEY2",
-                    "ALOM_INVISIBLE_KEY3",
-                    "ALOM_INVISIBLE_KEY4",
-                    "ALOM_INVISIBLE_KEY8",
-                    "ALOM_INVISIBLE_KEY12",
-                    "ALOM_INVISIBLE_KEY16",
-                    "ALOM_INVISIBLE_KEY24",
-                    "ALOM_INVISIBLE_KEY32",
-                    "ALOM_INVISIBLE_KEY64",
-                    "ALOM_INVISIBLE_KEY96",
-                    "ALOM_INVISIBLE_KEY128",
-                    "ALOM_INVISIBLE_KEY256",
-                    "ALOM_INVISIBLE_KEY384",
-                    "ALOM_INVISIBLE_KEY512",
-                    "ALOM_INVISIBLE_KEY1024",
-                    "ALOM_INVISIBLE_KEY2048",
-                    "ALOM_INVISIBLE_KEY4096",
-                    "ALOM_INVISIBLE_KEY8192",
-                ])) {
-                    $len = (int)substr($tokens[$i][1], 18);
-                    $ikey = bin2hex(self::getasciiikey($len));
-                    $code .= "hex2bin('$ikey')";
-                } else if ($tokens[$i][1] == "ALOM_INVISIBLE_CHAR") {
-                    $ikey = ord(self::getcharikey());
-                    $code .= "chr($ikey)";
-                } else if ($tokens[$i][1] == "ALOM_INVISIBLE_BIT") {
-                    $ikey = self::getbitikey();
-                    $code .= "($ikey)";
-                } else if ($tokens[$i][1] == "ALOM_INVISIBLE_INT") {
-                    $ikey = self::getintikey();
-                    $code .= "($ikey)";
-                } else if ($tokens[$i][1] == "ALOM_OBFUSCATORED_TIME") {
-                    $ikey = floor(self::$obfstime);
-                    $code .= "($ikey)";
-                } else if ($tokens[$i][1] == "ALOM_OBFUSCATORED_TIME_FLOAT") {
-                    $ikey = self::$obfstime;
-                    $code .= "($ikey)";
-                } else $code .= $tokens[$i][1];
-            } else if (is_array($tokens[$i])) $code .= $tokens[$i][1];
-            else $code .= $tokens[$i];
+            $code = "";
+            for ($i = 0; isset($tokens[$i]); ++$i) {
+                if (is_array($tokens[$i]) && $tokens[$i][0] == T_STRING) {
+                    if (
+                    in_array($tokens[$i][1], [
+                        "ALOM_INVISIBLE_KEY2",
+                        "ALOM_INVISIBLE_KEY3",
+                        "ALOM_INVISIBLE_KEY4",
+                        "ALOM_INVISIBLE_KEY8",
+                        "ALOM_INVISIBLE_KEY12",
+                        "ALOM_INVISIBLE_KEY16",
+                        "ALOM_INVISIBLE_KEY24",
+                        "ALOM_INVISIBLE_KEY32",
+                        "ALOM_INVISIBLE_KEY64",
+                        "ALOM_INVISIBLE_KEY96",
+                        "ALOM_INVISIBLE_KEY128",
+                        "ALOM_INVISIBLE_KEY256",
+                        "ALOM_INVISIBLE_KEY384",
+                        "ALOM_INVISIBLE_KEY512",
+                        "ALOM_INVISIBLE_KEY1024",
+                        "ALOM_INVISIBLE_KEY2048",
+                        "ALOM_INVISIBLE_KEY4096",
+                        "ALOM_INVISIBLE_KEY8192",
+                    ])
+                    ) {
+                        $len = (int)substr($tokens[$i][1], 18);
+                        $ikey = bin2hex(self::getasciiikey($len));
+                        $code .= "hex2bin('$ikey')";
+                    } else if ($tokens[$i][1] == "ALOM_INVISIBLE_CHAR") {
+                        $ikey = ord(self::getcharikey());
+                        $code .= "chr($ikey)";
+                    } else if ($tokens[$i][1] == "ALOM_INVISIBLE_BIT") {
+                        $ikey = self::getbitikey();
+                        $code .= "($ikey)";
+                    } else if ($tokens[$i][1] == "ALOM_INVISIBLE_INT") {
+                        $ikey = self::getintikey();
+                        $code .= "($ikey)";
+                    } else if ($tokens[$i][1] == "ALOM_OBFUSCATED_TIME") {
+                        $ikey = floor(self::$obfstime);
+                        $code .= "($ikey)";
+                    } else if ($tokens[$i][1] == "ALOM_OBFUSCATED_TIME_FLOAT") {
+                        $ikey = self::$obfstime;
+                        $code .= "($ikey)";
+                    } else {
+                        $code .= $tokens[$i][1];
+                    }
+                } else if (is_array($tokens[$i])) {
+                    $code .= $tokens[$i][1];
+                } else {
+                    $code .= $tokens[$i];
+                }
+            }
             return $code;
         }
 
         public static function partition_encode($string, $key, $iv1, $iv2, $ivs)
         {
             $string = gzdeflate($string, 9);
-            for ($i = 0; isset($string[$i]); ++$i) $string[$i] = $key[$i & 0xf] ^ $string[$i];
-            $string = self::memtwister_encode($string, $iv1, $iv2, $ivs);
-            for ($i = 0; isset($string[$i]); ++$i) $string[$i] = $key[$i & 0xf] ^ $string[$i];
+            for ($i = 0; isset($string[$i]); ++$i) {
+                $string[$i] = $key[$i & 0xf] ^ $string[$i];
+            }
+            $string = self::optwister_encode($string, $iv1, $iv2, $ivs);
+            for ($i = 0; isset($string[$i]); ++$i) {
+                $string[$i] = $key[$i & 0xf] ^ $string[$i];
+            }
             return $string;
         }
 
-        public static function nspartitioning(&$partition, $code, $memtwister, $fli, $iv1, $iv2, $ivs, $pkyid, $fast = FALSE, $ns = '', &$ua = [], $rnt = FALSE)
+        public static function nspartitioning(
+            &$partition,
+            $code,
+            $optwister,
+            $signflag,
+            $iv1,
+            $iv2,
+            $ivs,
+            $pkyid,
+            $fast = FALSE,
+            $ns = "",
+            &$ua = [],
+            $rnt = FALSE
+        )
         {
             $tokens = token_get_all("<?" . "php $code");
             array_shift($tokens);
-            $part = $code = '';
+            $part = $code = "";
             for ($i = 0; isset($tokens[$i]); ++$i) {
-                if (is_array($tokens[$i]) && in_array($tokens[$i][0], [T_CLASS, T_TRAIT, T_INTERFACE])) {
+                if (
+                    is_array($tokens[$i]) &&
+                    in_array($tokens[$i][0], [T_CLASS, T_TRAIT, T_INTERFACE])
+                ) {
                     $part .= $tokens[$i++][1];
-                    while (is_array($tokens[$i]) && in_array($tokens[$i][0], [T_WHITESPACE, T_STRING, T_NS_SEPARATOR, T_EXTENDS, T_IMPLEMENTS])) $part .= $tokens[$i++][1];
-                    if ($tokens[$i] != '{') {
+                    while (
+                        is_array($tokens[$i]) &&
+                        in_array($tokens[$i][0], [
+                            T_WHITESPACE,
+                            T_STRING,
+                            T_NS_SEPARATOR,
+                            T_EXTENDS,
+                            T_IMPLEMENTS,
+                        ])
+                    ) {
+                        $part .= $tokens[$i++][1];
+                    }
+                    if ($tokens[$i] != "{") {
                         --$i;
                         continue;
                     }
                     $part .= $tokens[$i++];
-                    for (; isset($tokens[$i]) && $tokens[$i] != '}'; ++$i) if (is_array($tokens[$i]) && $tokens[$i][0] == T_FUNCTION) {
-                        $part .= $tokens[$i++][1];
-                        for (; isset($tokens[$i]) && $tokens[$i] != '('; ++$i) if (is_array($tokens[$i])) $part .= $tokens[$i][1]; else $part .= $tokens[$i];
-                        $part .= self::readl($tokens, '(', ')', $i);
-                        ++$i;
-                        for (; isset($tokens[$i]) && $tokens[$i] != '{'; ++$i) if ($tokens[$i] == ';') break; else if (is_array($tokens[$i])) $part .= $tokens[$i][1];
-                        else $part .= $tokens[$i];
-                        if ($tokens[$i] == ';') {
+                    for (; isset($tokens[$i]) && $tokens[$i] != "}"; ++$i) {
+                        if (
+                            is_array($tokens[$i]) &&
+                            $tokens[$i][0] == T_FUNCTION
+                        ) {
+                            $part .= $tokens[$i++][1];
+                            for (
+                            ;
+                                isset($tokens[$i]) && $tokens[$i] != "(";
+                                ++$i
+                            ) {
+                                if (is_array($tokens[$i])) {
+                                    $part .= $tokens[$i][1];
+                                } else {
+                                    $part .= $tokens[$i];
+                                }
+                            }
+                            $part .= self::readl($tokens, "(", ")", $i);
+                            ++$i;
+                            for (
+                            ;
+                                isset($tokens[$i]) && $tokens[$i] != "{";
+                                ++$i
+                            ) {
+                                if ($tokens[$i] == ";") {
+                                    break;
+                                } else if (is_array($tokens[$i])) {
+                                    $part .= $tokens[$i][1];
+                                } else {
+                                    $part .= $tokens[$i];
+                                }
+                            }
+                            if ($tokens[$i] == ";") {
+                                $part .= $tokens[$i];
+                                continue;
+                            }
+                            $rl = self::readl($tokens, "{", "}", $i);
+                            $rl = self::nspartitioning(
+                                $partition,
+                                substr($rl, 1, -1),
+                                $optwister,
+                                $signflag,
+                                $iv1,
+                                $iv2,
+                                $ivs,
+                                $pkyid,
+                                $fast,
+                                $ns
+                            );
+                            $part .= "{" . $rl . "}";
+                        } else if (is_array($tokens[$i])) {
+                            $part .= $tokens[$i][1];
+                        } else if ($tokens[$i] == "{") {
+                            $part .= self::readl($tokens, "{", "}", $i);
+                        } else {
                             $part .= $tokens[$i];
-                            continue;
                         }
-                        $rl = self::readl($tokens, '{', '}', $i);
-                        $rl = self::nspartitioning($partition, substr($rl, 1, -1), $memtwister, $fli, $iv1, $iv2, $ivs, $pkyid, $fast, $ns);
-                        $part .= '{' . $rl . '}';
-                    } else if (is_array($tokens[$i])) $part .= $tokens[$i][1];
-                    else if ($tokens[$i] == '{') $part .= self::readl($tokens, '{', '}', $i);
-                    else $part .= $tokens[$i];
+                    }
                     $part = $ns . $part . $tokens[$i];
                     if (!isset($partition[$part])) {
                         $key = random_bytes(16);
-                        $partition[$part] = [count($partition), $key, self::partition_encode($part, $key, $iv1, $iv2, $ivs)];
+                        $partition[$part] = [
+                            count($partition),
+                            $key,
+                            self::partition_encode(
+                                $part,
+                                $key,
+                                $iv1,
+                                $iv2,
+                                $ivs
+                            ),
+                        ];
                     }
-                    $code .= "if((isset(\$_ALOM_continue)&&\$_ALOM_continue>0)||(isset(\$_ALOM_break)&&\$_ALOM_break>0))return;";
-                    $code .= "if(isset(\$_ALOM_return))return \$_ALOM_result;\$_ALOM_result=eval(\AlomDecoder$fli::partition_decode(\AlomDecoder$fli::\$partition[" . $partition[$part][0] . "],'" . base64_encode($partition[$part][1]) . "','$pkyid'));";
-                    $part = '';
+                    $code .=
+                        "if((isset(\$_ALOM_continue)&&\$_ALOM_continue>0)||(isset(\$_ALOM_break)&&\$_ALOM_break>0))return;";
+                    $code .=
+                        "if(isset(\$_ALOM_return))return \$_ALOM_result;\$_ALOM_result=eval(\AlomDecoder$signflag::partition_decode(\AlomDecoder$signflag::\$partition[" .
+                        $partition[$part][0] .
+                        "],'" .
+                        base64_encode($partition[$part][1]) .
+                        "','$pkyid'));";
+                    $part = "";
                 } else if ($tokens[$i][0] == T_FUNCTION) {
                     $part .= $tokens[$i++][1];
-                    if (is_array($tokens[$i]) && $tokens[$i][0] == T_WHITESPACE) $part .= $tokens[$i++][1];
+                    if (
+                        is_array($tokens[$i]) &&
+                        $tokens[$i][0] == T_WHITESPACE
+                    ) {
+                        $part .= $tokens[$i++][1];
+                    }
                     if (is_array($tokens[$i]) && $tokens[$i][0] == T_STRING) {
                         $part .= $tokens[$i++][1];
-                        if (is_array($tokens[$i]) && $tokens[$i][0] == T_WHITESPACE) $part .= $tokens[$i++][1];
-                        if ($tokens[$i] == '(') {
-                            $part .= '(' . self::readpe($tokens, $i) . ')';
-                            if (is_array($tokens[++$i]) && $tokens[$i][0] == T_WHITESPACE) $part .= $tokens[$i++][1];
-                            if ($tokens[$i] == '{') {
-                                $rl = self::readl($tokens, '{', '}', $i);
-                                $rl = self::nspartitioning($partition, substr($rl, 1, -1), $memtwister, $fli, $iv1, $iv2, $ivs, $pkyid, $fast, $ns);
-                                $part = $ns . $part . '{' . $rl . '}';
+                        if (
+                            is_array($tokens[$i]) &&
+                            $tokens[$i][0] == T_WHITESPACE
+                        ) {
+                            $part .= $tokens[$i++][1];
+                        }
+                        if ($tokens[$i] == "(") {
+                            $part .= "(" . self::readpe($tokens, $i) . ")";
+                            if (
+                                is_array($tokens[++$i]) &&
+                                $tokens[$i][0] == T_WHITESPACE
+                            ) {
+                                $part .= $tokens[$i++][1];
+                            }
+                            if ($tokens[$i] == "{") {
+                                $rl = self::readl($tokens, "{", "}", $i);
+                                $rl = self::nspartitioning(
+                                    $partition,
+                                    substr($rl, 1, -1),
+                                    $optwister,
+                                    $signflag,
+                                    $iv1,
+                                    $iv2,
+                                    $ivs,
+                                    $pkyid,
+                                    $fast,
+                                    $ns
+                                );
+                                $part = $ns . $part . "{" . $rl . "}";
                                 if (!isset($partition[$part])) {
                                     $key = random_bytes(16);
-                                    $partition[$part] = [count($partition), $key, self::partition_encode($part, $key, $iv1, $iv2, $ivs)];
+                                    $partition[$part] = [
+                                        count($partition),
+                                        $key,
+                                        self::partition_encode(
+                                            $part,
+                                            $key,
+                                            $iv1,
+                                            $iv2,
+                                            $ivs
+                                        ),
+                                    ];
                                 }
-                                $code .= "if((isset(\$_ALOM_continue)&&\$_ALOM_continue>0)||(isset(\$_ALOM_break)&&\$_ALOM_break>0))return;";
-                                $code .= "if(isset(\$_ALOM_return))return \$_ALOM_result;\$_ALOM_result=eval(\AlomDecoder$fli::partition_decode(\AlomDecoder$fli::\$partition[" . $partition[$part][0] . "],'" . base64_encode($partition[$part][1]) . "','$pkyid'));";
-                                $part = '';
-                            } else--$i;
-                        } else--$i;
+                                $code .=
+                                    "if((isset(\$_ALOM_continue)&&\$_ALOM_continue>0)||(isset(\$_ALOM_break)&&\$_ALOM_break>0))return;";
+                                $code .=
+                                    "if(isset(\$_ALOM_return))return \$_ALOM_result;\$_ALOM_result=eval(\AlomDecoder$signflag::partition_decode(\AlomDecoder$signflag::\$partition[" .
+                                    $partition[$part][0] .
+                                    "],'" .
+                                    base64_encode($partition[$part][1]) .
+                                    "','$pkyid'));";
+                                $part = "";
+                            } else {
+                                --$i;
+                            }
+                        } else {
+                            --$i;
+                        }
                     } else {
                         if (is_array($tokens[$i]) && $tokens[$i][0] == T_USE) {
                             $part .= $tokens[$i++][1];
-                            if (is_array($tokens[$i]) && $tokens[$i][0] == T_WHITESPACE) $part .= $tokens[$i++][1];
+                            if (
+                                is_array($tokens[$i]) &&
+                                $tokens[$i][0] == T_WHITESPACE
+                            ) {
+                                $part .= $tokens[$i++][1];
+                            }
                         }
-                        if ($tokens[$i] == '(') $part .= '(' . self::readpe($tokens, $i) . ')'; else--$i;
+                        if ($tokens[$i] == "(") {
+                            $part .= "(" . self::readpe($tokens, $i) . ")";
+                        } else {
+                            --$i;
+                        }
                     }
-                } else if ($tokens[$i][0] == T_FN || $tokens[$i][0] == T_DECLARE) {
+                } else if (
+                    $tokens[$i][0] == T_FN ||
+                    $tokens[$i][0] == T_DECLARE
+                ) {
                     $part .= $tokens[$i++][1];
-                    if (is_array($tokens[$i]) && $tokens[$i][0] == T_WHITESPACE) $part .= $tokens[$i++][1];
-                    if ($tokens[$i] == '(') $part .= '(' . self::readpe($tokens, $i) . ')'; else--$i;
-                } else if (in_array($tokens[$i][0], [T_STATIC, T_ECHO, T_GLOBAL])) {
+                    if (
+                        is_array($tokens[$i]) &&
+                        $tokens[$i][0] == T_WHITESPACE
+                    ) {
+                        $part .= $tokens[$i++][1];
+                    }
+                    if ($tokens[$i] == "(") {
+                        $part .= "(" . self::readpe($tokens, $i) . ")";
+                    } else {
+                        --$i;
+                    }
+                } else if (
+                in_array($tokens[$i][0], [T_STATIC, T_ECHO, T_GLOBAL])
+                ) {
                     $part .= $tokens[$i++][1];
-                    if (is_array($tokens[$i]) && $tokens[$i][0] == T_WHITESPACE) $part .= $tokens[$i++][1];
+                    if (
+                        is_array($tokens[$i]) &&
+                        $tokens[$i][0] == T_WHITESPACE
+                    ) {
+                        $part .= $tokens[$i++][1];
+                    }
                     $part .= self::readpe($tokens, $i, TRUE);
                 } else if ($tokens[$i][0] == T_RETURN) {
                     $part .= $tokens[$i++][1];
                     $part .= self::readpe($tokens, $i, TRUE);
-                    if ($tokens[$i + 1] == ';') $part .= $tokens[($i++) + 1];
+                    if ($tokens[$i + 1] == ";") {
+                        $part .= $tokens[$i++ + 1];
+                    }
                     $ua[] = count($partition);
                     if (!isset($partition[$part])) {
                         $key = random_bytes(16);
-                        $partition[$part] = [count($partition), $key, self::partition_encode($part, $key, $iv1, $iv2, $ivs)];
+                        $partition[$part] = [
+                            count($partition),
+                            $key,
+                            self::partition_encode(
+                                $part,
+                                $key,
+                                $iv1,
+                                $iv2,
+                                $ivs
+                            ),
+                        ];
                     }
-                    $code .= "if((isset(\$_ALOM_continue)&&\$_ALOM_continue>0)||(isset(\$_ALOM_break)&&\$_ALOM_break>0))return;";
-                    $code .= "\$_ALOM_return=true;return \$_ALOM_result=eval(\AlomDecoder$fli::partition_decode(\AlomDecoder$fli::\$partition[" . $partition[$part][0] . "],'" . base64_encode($partition[$part][1]) . "','$pkyid'));";
-                    $part = '';
+                    $code .=
+                        "if((isset(\$_ALOM_continue)&&\$_ALOM_continue>0)||(isset(\$_ALOM_break)&&\$_ALOM_break>0))return;";
+                    $code .=
+                        "\$_ALOM_return=true;return \$_ALOM_result=eval(\AlomDecoder$signflag::partition_decode(\AlomDecoder$signflag::\$partition[" .
+                        $partition[$part][0] .
+                        "],'" .
+                        base64_encode($partition[$part][1]) .
+                        "','$pkyid'));";
+                    $part = "";
                 } else if ($tokens[$i][0] == T_CONTINUE) {
                     ++$i;
                     $pe = max(1, (int)self::readpe($tokens, $i, TRUE));
-                    if ($tokens[$i + 1] == ';') ++$i;
+                    if ($tokens[$i + 1] == ";") {
+                        ++$i;
+                    }
                     $part .= "\$_ALOM_continue=$pe;";
                     $ua[] = count($partition);
                     if (!isset($partition[$part])) {
                         $key = random_bytes(16);
-                        $partition[$part] = [count($partition), $key, self::partition_encode($part, $key, $iv1, $iv2, $ivs)];
+                        $partition[$part] = [
+                            count($partition),
+                            $key,
+                            self::partition_encode(
+                                $part,
+                                $key,
+                                $iv1,
+                                $iv2,
+                                $ivs
+                            ),
+                        ];
                     }
-                    $code .= "if((isset(\$_ALOM_continue)&&\$_ALOM_continue>0)||(isset(\$_ALOM_break)&&\$_ALOM_break>0))return;";
-                    $code .= "if(isset(\$_ALOM_return))return \$_ALOM_result;\$_ALOM_result=eval(\AlomDecoder$fli::partition_decode(\AlomDecoder$fli::\$partition[" . $partition[$part][0] . "],'" . base64_encode($partition[$part][1]) . "','$pkyid'));";
-                    $part = '';
+                    $code .=
+                        "if((isset(\$_ALOM_continue)&&\$_ALOM_continue>0)||(isset(\$_ALOM_break)&&\$_ALOM_break>0))return;";
+                    $code .=
+                        "if(isset(\$_ALOM_return))return \$_ALOM_result;\$_ALOM_result=eval(\AlomDecoder$signflag::partition_decode(\AlomDecoder$signflag::\$partition[" .
+                        $partition[$part][0] .
+                        "],'" .
+                        base64_encode($partition[$part][1]) .
+                        "','$pkyid'));";
+                    $part = "";
                 } else if ($tokens[$i][0] == T_BREAK) {
                     ++$i;
                     $pe = max(1, (int)self::readpe($tokens, $i, TRUE));
-                    if ($tokens[$i + 1] == ';') ++$i;
+                    if ($tokens[$i + 1] == ";") {
+                        ++$i;
+                    }
                     $part .= "\$_ALOM_break=$pe;";
                     $ua[] = count($partition);
                     if (!isset($partition[$part])) {
                         $key = random_bytes(16);
-                        $partition[$part] = [count($partition), $key, self::partition_encode($part, $key, $iv1, $iv2, $ivs)];
+                        $partition[$part] = [
+                            count($partition),
+                            $key,
+                            self::partition_encode(
+                                $part,
+                                $key,
+                                $iv1,
+                                $iv2,
+                                $ivs
+                            ),
+                        ];
                     }
-                    $code .= "if((isset(\$_ALOM_continue)&&\$_ALOM_continue>0)||(isset(\$_ALOM_break)&&\$_ALOM_break>0))return;";
-                    $code .= "if(isset(\$_ALOM_return))return \$_ALOM_result;\$_ALOM_result=eval(\AlomDecoder$fli::partition_decode(\AlomDecoder$fli::\$partition[" . $partition[$part][0] . "],'" . base64_encode($partition[$part][1]) . "','$pkyid'));";
-                    $part = '';
+                    $code .=
+                        "if((isset(\$_ALOM_continue)&&\$_ALOM_continue>0)||(isset(\$_ALOM_break)&&\$_ALOM_break>0))return;";
+                    $code .=
+                        "if(isset(\$_ALOM_return))return \$_ALOM_result;\$_ALOM_result=eval(\AlomDecoder$signflag::partition_decode(\AlomDecoder$signflag::\$partition[" .
+                        $partition[$part][0] .
+                        "],'" .
+                        base64_encode($partition[$part][1]) .
+                        "','$pkyid'));";
+                    $part = "";
                 } else if ($tokens[$i][0] == T_NAMESPACE) {
                     $code .= $tokens[$i++][1];
-                    while (is_array($tokens[$i]) && in_array($tokens[$i][0], [T_WHITESPACE, T_STRING, T_NS_SEPARATOR])) $code .= $tokens[$i++][1];
-                    if ($tokens[$i] != '{') {
+                    while (
+                        is_array($tokens[$i]) &&
+                        in_array($tokens[$i][0], [
+                            T_WHITESPACE,
+                            T_STRING,
+                            T_NS_SEPARATOR,
+                        ])
+                    ) {
+                        $code .= $tokens[$i++][1];
+                    }
+                    if ($tokens[$i] != "{") {
                         --$i;
                         continue;
                     }
-                    $rl = self::readl($tokens, '{', '}', $i);
-                    $rl = self::nspartitioning($partition, substr($rl, 1, -1), $memtwister, $fli, $iv1, $iv2, $ivs, $pkyid, $fast, $ns, $ua);
-                    $part .= '{' . $rl . '}';
-                } else if ($tokens[$i] == ';') {
-                    $part = $ns . $part . ';';
+                    $rl = self::readl($tokens, "{", "}", $i);
+                    $rl = self::nspartitioning(
+                        $partition,
+                        substr($rl, 1, -1),
+                        $optwister,
+                        $signflag,
+                        $iv1,
+                        $iv2,
+                        $ivs,
+                        $pkyid,
+                        $fast,
+                        $ns,
+                        $ua
+                    );
+                    $part .= "{" . $rl . "}";
+                } else if ($tokens[$i] == ";") {
+                    $part = $ns . $part . ";";
                     $ua[] = count($partition);
                     if (!isset($partition[$part])) {
                         $key = random_bytes(16);
-                        $partition[$part] = [count($partition), $key, self::partition_encode($part, $key, $iv1, $iv2, $ivs)];
+                        $partition[$part] = [
+                            count($partition),
+                            $key,
+                            self::partition_encode(
+                                $part,
+                                $key,
+                                $iv1,
+                                $iv2,
+                                $ivs
+                            ),
+                        ];
                     }
-                    $code .= "if((isset(\$_ALOM_continue)&&\$_ALOM_continue>0)||(isset(\$_ALOM_break)&&\$_ALOM_break>0))return;";
-                    $code .= "if(isset(\$_ALOM_return))return \$_ALOM_result;\$_ALOM_result=eval(\AlomDecoder$fli::partition_decode(\AlomDecoder$fli::\$partition[" . $partition[$part][0] . "],'" . base64_encode($partition[$part][1]) . "','$pkyid'));";
-                    $part = '';
-                } else if ($tokens[$i] == ',') {
+                    $code .=
+                        "if((isset(\$_ALOM_continue)&&\$_ALOM_continue>0)||(isset(\$_ALOM_break)&&\$_ALOM_break>0))return;";
+                    $code .=
+                        "if(isset(\$_ALOM_return))return \$_ALOM_result;\$_ALOM_result=eval(\AlomDecoder$signflag::partition_decode(\AlomDecoder$signflag::\$partition[" .
+                        $partition[$part][0] .
+                        "],'" .
+                        base64_encode($partition[$part][1]) .
+                        "','$pkyid'));";
+                    $part = "";
+                } else if ($tokens[$i] == ",") {
                     $part = $ns . "return $part;";
                     $ua[] = count($partition);
                     if (!isset($partition[$part])) {
                         $key = random_bytes(16);
-                        $partition[$part] = [count($partition), $key, self::partition_encode($part, $key, $iv1, $iv2, $ivs)];
+                        $partition[$part] = [
+                            count($partition),
+                            $key,
+                            self::partition_encode(
+                                $part,
+                                $key,
+                                $iv1,
+                                $iv2,
+                                $ivs
+                            ),
+                        ];
                     }
-                    $code .= "eval(\AlomDecoder$fli::partition_decode(\AlomDecoder$fli::\$partition[" . $partition[$part][0] . "],'" . base64_encode($partition[$part][1]) . "','$pkyid')),";
-                    $part = '';
-                } else if (is_array($tokens[$i]) && $tokens[$i][0] == T_OBJECT_OPERATOR) {
+                    $code .=
+                        "eval(\AlomDecoder$signflag::partition_decode(\AlomDecoder$signflag::\$partition[" .
+                        $partition[$part][0] .
+                        "],'" .
+                        base64_encode($partition[$part][1]) .
+                        "','$pkyid')),";
+                    $part = "";
+                } else if (
+                    is_array($tokens[$i]) &&
+                    in_array($tokens[$i][0], [
+                        T_ISSET,
+                        T_UNSET,
+                        T_EMPTY,
+                        T_ARRAY,
+                        T_LIST,
+                    ])
+                ) {
                     $part .= $tokens[$i++][1];
-                    if (is_array($tokens[$i]) && $tokens[$i][0] == T_WHITESPACE) $part .= $tokens[$i++][1];
-                    $rl = self::readl($tokens, '{', '}', $i);
-                    $rl = self::nspartitioning($partition, 'return ' . substr($rl, 1, -1) . ';', $memtwister, $fli, $iv1, $iv2, $ivs, $pkyid, $fast, $ns, $ua);
-                    $part .= '{' . $rl . '}';
-                } else if (is_array($tokens[$i]) && in_array($tokens[$i][0], [T_ISSET, T_UNSET, T_EMPTY, T_ARRAY, T_LIST])) {
-                    $part .= $tokens[$i++][1];
-                    if (is_array($tokens[$i]) && $tokens[$i][0] == T_WHITESPACE) $part .= $tokens[$i++][1];
-                    if ($tokens[$i] == '(') {
-                        $rl = self::readl($tokens, '(', ')', $i);
-                        $part .= $rl;
-                    } else--$i;
-                } else if (is_array($tokens[$i]) && in_array($tokens[$i][0], [T_WHILE, T_FOR, T_IF, T_ELSEIF, T_ELSE, T_FOREACH, T_DECLARE])) {
-                    $code .= 'if(!isset($_ALOM_continue))$_ALOM_continue=0;if(!isset($_ALOM_break))$_ALOM_break=0;';
-                    for (; isset($tokens[$i]); ++$i) if (is_array($tokens[$i]) && in_array($tokens[$i][0], [T_WHILE, T_FOR, T_FOREACH, T_DECLARE])) {
-                        $lf = $tokens[$i][0] == T_FOR;
+                    if (
+                        is_array($tokens[$i]) &&
+                        $tokens[$i][0] == T_WHITESPACE
+                    ) {
                         $part .= $tokens[$i++][1];
-                        if (is_array($tokens[$i]) && $tokens[$i][0] == T_WHITESPACE) $part .= $tokens[$i++][1];
-                        if ($tokens[$i] == '(') {
-                            $rl = self::readl($tokens, '(', ')', $i);
-                            ++$i;
-                            if ($fast || $lf) {
-                                $part .= $rl;
-                            } else {
-                                $rl = self::nspartitioning($partition, substr($rl, 1, -1), $memtwister, $fli, $iv1, $iv2, $ivs, $pkyid, $fast, $ns, $ua, TRUE);
-                                $part .= '(' . $rl . ')';
+                    }
+                    if ($tokens[$i] == "(") {
+                        $rl = self::readl($tokens, "(", ")", $i);
+                        $part .= $rl;
+                    } else {
+                        --$i;
+                    }
+                } else if (
+                    is_array($tokens[$i]) &&
+                    in_array($tokens[$i][0], [
+                        T_WHILE,
+                        T_FOR,
+                        T_IF,
+                        T_ELSEIF,
+                        T_ELSE,
+                        T_FOREACH,
+                        T_DECLARE,
+                    ])
+                ) {
+                    $code .=
+                        'if(!isset($_ALOM_continue))$_ALOM_continue=0;if(!isset($_ALOM_break))$_ALOM_break=0;';
+                    for (; isset($tokens[$i]); ++$i) {
+                        if (
+                            is_array($tokens[$i]) &&
+                            in_array($tokens[$i][0], [
+                                T_WHILE,
+                                T_FOR,
+                                T_FOREACH,
+                                T_DECLARE,
+                            ])
+                        ) {
+                            $lf = $tokens[$i][0] == T_FOR;
+                            $part .= $tokens[$i++][1];
+                            if (
+                                is_array($tokens[$i]) &&
+                                $tokens[$i][0] == T_WHITESPACE
+                            ) {
+                                $part .= $tokens[$i++][1];
                             }
-                            if (is_array($tokens[$i]) && $tokens[$i][0] == T_WHITESPACE) $part .= $tokens[$i++][1];
-                            if ($tokens[$i] == '{') {
-                                $rl = self::readl($tokens, '{', '}', $i);
+                            if ($tokens[$i] == "(") {
+                                $rl = self::readl($tokens, "(", ")", $i);
                                 ++$i;
-                                $rl = self::nspartitioning($partition, substr($rl, 1, -1), $memtwister, $fli, $iv1, $iv2, $ivs, $pkyid, $fast, $ns, $ua);
-                                $rl = substr($rl, strpos($rl, ';') + 1);
-                                $part .= '{' . $rl . 'if($_ALOM_continue>0){--$_ALOM_continue;if($_ALOM_continue>0)break;}if($_ALOM_break>0){--$_ALOM_break;break;}}';
+                                if ($fast || $lf) {
+                                    $part .= $rl;
+                                } else {
+                                    $rl = self::nspartitioning(
+                                        $partition,
+                                        substr($rl, 1, -1),
+                                        $optwister,
+                                        $signflag,
+                                        $iv1,
+                                        $iv2,
+                                        $ivs,
+                                        $pkyid,
+                                        $fast,
+                                        $ns,
+                                        $ua,
+                                        TRUE
+                                    );
+                                    $part .= "(" . $rl . ")";
+                                }
+                                if (
+                                    is_array($tokens[$i]) &&
+                                    $tokens[$i][0] == T_WHITESPACE
+                                ) {
+                                    $part .= $tokens[$i++][1];
+                                }
+                                if ($tokens[$i] == "{") {
+                                    $rl = self::readl($tokens, "{", "}", $i);
+                                    ++$i;
+                                    $rl = self::nspartitioning(
+                                        $partition,
+                                        substr($rl, 1, -1),
+                                        $optwister,
+                                        $signflag,
+                                        $iv1,
+                                        $iv2,
+                                        $ivs,
+                                        $pkyid,
+                                        $fast,
+                                        $ns,
+                                        $ua
+                                    );
+                                    $part .=
+                                        "{" .
+                                        $rl .
+                                        'if($_ALOM_continue>0){--$_ALOM_continue;if($_ALOM_continue>0)break;}if($_ALOM_break>0){--$_ALOM_break;break;}}';
+                                    $ua[] = count($partition);
+                                    if (!isset($partition[$part])) {
+                                        $key = random_bytes(16);
+                                        $partition[$part] = [
+                                            count($partition),
+                                            $key,
+                                            self::partition_encode(
+                                                $part,
+                                                $key,
+                                                $iv1,
+                                                $iv2,
+                                                $ivs
+                                            ),
+                                        ];
+                                    }
+                                    $code .=
+                                        "if((isset(\$_ALOM_continue)&&\$_ALOM_continue>0)||(isset(\$_ALOM_break)&&\$_ALOM_break>0))return;";
+                                    $code .=
+                                        "if(isset(\$_ALOM_return))return \$_ALOM_result;\$_ALOM_result=eval(\AlomDecoder$signflag::partition_decode(\AlomDecoder$signflag::\$partition[" .
+                                        $partition[$part][0] .
+                                        "],'" .
+                                        base64_encode($partition[$part][1]) .
+                                        "','$pkyid'));";
+                                    $part = "";
+                                    break;
+                                }
+                                $rs = self::reads($tokens, $i);
+                                if (isset($tokens[$i]) && $tokens[$i] == ";") {
+                                    $rs .= $tokens[$i++];
+                                }
+                                $rs = self::nspartitioning(
+                                    $partition,
+                                    $rs,
+                                    $optwister,
+                                    $signflag,
+                                    $iv1,
+                                    $iv2,
+                                    $ivs,
+                                    $pkyid,
+                                    $fast,
+                                    $ns,
+                                    $ua
+                                );
+                                $part .=
+                                    "{" .
+                                    $rs .
+                                    'if($_ALOM_continue>0){--$_ALOM_continue;if($_ALOM_continue>0)break;}if($_ALOM_break>0){--$_ALOM_break;break;}}';
                                 $ua[] = count($partition);
                                 if (!isset($partition[$part])) {
                                     $key = random_bytes(16);
-                                    $partition[$part] = [count($partition), $key, self::partition_encode($part, $key, $iv1, $iv2, $ivs)];
+                                    $partition[$part] = [
+                                        count($partition),
+                                        $key,
+                                        self::partition_encode(
+                                            $part,
+                                            $key,
+                                            $iv1,
+                                            $iv2,
+                                            $ivs
+                                        ),
+                                    ];
                                 }
-                                $code .= "if((isset(\$_ALOM_continue)&&\$_ALOM_continue>0)||(isset(\$_ALOM_break)&&\$_ALOM_break>0))return;";
-                                $code .= "if(isset(\$_ALOM_return))return \$_ALOM_result;\$_ALOM_result=eval(\AlomDecoder$fli::partition_decode(\AlomDecoder$fli::\$partition[" . $partition[$part][0] . "],'" . base64_encode($partition[$part][1]) . "','$pkyid'));";
-                                $part = '';
+                                $code .=
+                                    "if((isset(\$_ALOM_continue)&&\$_ALOM_continue>0)||(isset(\$_ALOM_break)&&\$_ALOM_break>0))return;";
+                                $code .=
+                                    "if(isset(\$_ALOM_return))return \$_ALOM_result;\$_ALOM_result=eval(\AlomDecoder$signflag::partition_decode(\AlomDecoder$signflag::\$partition[" .
+                                    $partition[$part][0] .
+                                    "],'" .
+                                    base64_encode($partition[$part][1]) .
+                                    "','$pkyid'));";
+                                $part = "";
                                 break;
                             }
-                            $rs = self::reads($tokens, $i);
-                            if (isset($tokens[$i]) && $tokens[$i] == ';') $rs .= $tokens[$i++];
-                            $rs = self::nspartitioning($partition, $rs, $memtwister, $fli, $iv1, $iv2, $ivs, $pkyid, $fast, $ns, $ua);
-                            $part .= '{' . $rs . '}';
-                            $ua[] = count($partition);
-                            if (!isset($partition[$part])) {
-                                $key = random_bytes(16);
-                                $partition[$part] = [count($partition), $key, self::partition_encode($part, $key, $iv1, $iv2, $ivs)];
-                            }
-                            $code .= "if((isset(\$_ALOM_continue)&&\$_ALOM_continue>0)||(isset(\$_ALOM_break)&&\$_ALOM_break>0))return;";
-                            $code .= "if(isset(\$_ALOM_return))return \$_ALOM_result;\$_ALOM_result=eval(\AlomDecoder$fli::partition_decode(\AlomDecoder$fli::\$partition[" . $partition[$part][0] . "],'" . base64_encode($partition[$part][1]) . "','$pkyid'));";
-                            $part = '';
-                        }
-                        --$i;
-                    } else if (is_array($tokens[$i]) && $tokens[$i][0] == T_IF) {
-                        while (TRUE) {
-                            $part .= $tokens[$i++][1];
-                            if (is_array($tokens[$i]) && $tokens[$i][0] == T_WHITESPACE) $part .= $tokens[$i++][1];
-                            if ($tokens[$i] == '(') {
-                                $rl = self::readl($tokens, '(', ')', $i);
-                                ++$i;
-                                if ($fast) {
-                                    $part .= $rl;
-                                } else {
-                                    $rl = self::nspartitioning($partition, substr($rl, 1, -1), $memtwister, $fli, $iv1, $iv2, $ivs, $pkyid, $fast, $ns, $ua, TRUE);
-                                    $part .= '(' . $rl . ')';
-                                }
-                            }
-                            if (is_array($tokens[$i]) && $tokens[$i][0] == T_WHITESPACE) $part .= $tokens[$i++][1];
-                            if ($tokens[$i] == '{') {
-                                $rl = self::readl($tokens, '{', '}', $i);
-                                ++$i;
-                                $rl = self::nspartitioning($partition, substr($rl, 1, -1), $memtwister, $fli, $iv1, $iv2, $ivs, $pkyid, $fast, $ns, $ua);
-                                $part .= '{' . $rl . '}';
-                            } else {
-                                $rs = self::reads($tokens, $i);
-                                if (isset($tokens[$i]) && $tokens[$i] == ';') $rs .= $tokens[$i++];
-                                $rs = self::nspartitioning($partition, $rs, $memtwister, $fli, $iv1, $iv2, $ivs, $pkyid, $fast, $ns, $ua);
-                                $part .= '{' . $rs . '}';
-                            }
-                            if (isset($tokens[$i]) && is_array($tokens[$i]) && $tokens[$i][0] == T_WHITESPACE) $part .= $tokens[$i++][1];
-                            if (!isset($tokens[$i])) break;
-                            if (is_array($tokens[$i]) && $tokens[$i][0] == T_ELSEIF) continue; else if (is_array($tokens[$i]) && $tokens[$i][0] == T_ELSE) {
+                            --$i;
+                        } else if (
+                            is_array($tokens[$i]) &&
+                            $tokens[$i][0] == T_IF
+                        ) {
+                            while (TRUE) {
                                 $part .= $tokens[$i++][1];
-                                if (is_array($tokens[$i]) && $tokens[$i][0] == T_WHITESPACE) $part .= $tokens[$i++][1];
-                                if ($tokens[$i] == '{') {
-                                    $rl = self::readl($tokens, '{', '}', $i);
+                                if (
+                                    is_array($tokens[$i]) &&
+                                    $tokens[$i][0] == T_WHITESPACE
+                                ) {
+                                    $part .= $tokens[$i++][1];
+                                }
+                                if ($tokens[$i] == "(") {
+                                    $rl = self::readl($tokens, "(", ")", $i);
                                     ++$i;
-                                    $rl = self::nspartitioning($partition, substr($rl, 1, -1), $memtwister, $fli, $iv1, $iv2, $ivs, $pkyid, $fast, $ns, $ua);
-                                    $part .= '{' . $rl . '}';
+                                    if ($fast) {
+                                        $part .= $rl;
+                                    } else {
+                                        $rl = self::nspartitioning(
+                                            $partition,
+                                            substr($rl, 1, -1),
+                                            $optwister,
+                                            $signflag,
+                                            $iv1,
+                                            $iv2,
+                                            $ivs,
+                                            $pkyid,
+                                            $fast,
+                                            $ns,
+                                            $ua,
+                                            TRUE
+                                        );
+                                        $part .= "(" . $rl . ")";
+                                    }
+                                }
+                                if (
+                                    is_array($tokens[$i]) &&
+                                    $tokens[$i][0] == T_WHITESPACE
+                                ) {
+                                    $part .= $tokens[$i++][1];
+                                }
+                                if ($tokens[$i] == "{") {
+                                    $rl = self::readl($tokens, "{", "}", $i);
+                                    ++$i;
+                                    $rl = self::nspartitioning(
+                                        $partition,
+                                        substr($rl, 1, -1),
+                                        $optwister,
+                                        $signflag,
+                                        $iv1,
+                                        $iv2,
+                                        $ivs,
+                                        $pkyid,
+                                        $fast,
+                                        $ns,
+                                        $ua
+                                    );
+                                    $part .= "{" . $rl . "}";
                                 } else {
                                     $rs = self::reads($tokens, $i);
-                                    if (isset($tokens[$i]) && $tokens[$i] == ';') $rs .= $tokens[$i++];
-                                    $rs = self::nspartitioning($partition, $rs, $memtwister, $fli, $iv1, $iv2, $ivs, $pkyid, $fast, $ns, $ua);
-                                    $part .= '{' . $rs . '}';
+                                    if (
+                                        isset($tokens[$i]) &&
+                                        $tokens[$i] == ";"
+                                    ) {
+                                        $rs .= $tokens[$i++];
+                                    }
+                                    $rs = self::nspartitioning(
+                                        $partition,
+                                        $rs,
+                                        $optwister,
+                                        $signflag,
+                                        $iv1,
+                                        $iv2,
+                                        $ivs,
+                                        $pkyid,
+                                        $fast,
+                                        $ns,
+                                        $ua
+                                    );
+                                    $part .= "{" . $rs . "}";
                                 }
-                                break;
-                            } else break;
+                                if (
+                                    isset($tokens[$i]) &&
+                                    is_array($tokens[$i]) &&
+                                    $tokens[$i][0] == T_WHITESPACE
+                                ) {
+                                    $part .= $tokens[$i++][1];
+                                }
+                                if (!isset($tokens[$i])) {
+                                    break;
+                                }
+                                if (
+                                    is_array($tokens[$i]) &&
+                                    $tokens[$i][0] == T_ELSEIF
+                                ) {
+                                    continue;
+                                } else if (
+                                    is_array($tokens[$i]) &&
+                                    $tokens[$i][0] == T_ELSE
+                                ) {
+                                    $part .= $tokens[$i++][1];
+                                    if (
+                                        is_array($tokens[$i]) &&
+                                        $tokens[$i][0] == T_WHITESPACE
+                                    ) {
+                                        $part .= $tokens[$i++][1];
+                                    }
+                                    if ($tokens[$i] == "{") {
+                                        $rl = self::readl(
+                                            $tokens,
+                                            "{",
+                                            "}",
+                                            $i
+                                        );
+                                        ++$i;
+                                        $rl = self::nspartitioning(
+                                            $partition,
+                                            substr($rl, 1, -1),
+                                            $optwister,
+                                            $signflag,
+                                            $iv1,
+                                            $iv2,
+                                            $ivs,
+                                            $pkyid,
+                                            $fast,
+                                            $ns,
+                                            $ua
+                                        );
+                                        $part .= "{" . $rl . "}";
+                                    } else {
+                                        $rs = self::reads($tokens, $i);
+                                        if (
+                                            isset($tokens[$i]) &&
+                                            $tokens[$i] == ";"
+                                        ) {
+                                            $rs .= $tokens[$i++];
+                                        }
+                                        $rs = self::nspartitioning(
+                                            $partition,
+                                            $rs,
+                                            $optwister,
+                                            $signflag,
+                                            $iv1,
+                                            $iv2,
+                                            $ivs,
+                                            $pkyid,
+                                            $fast,
+                                            $ns,
+                                            $ua
+                                        );
+                                        $part .= "{" . $rs . "}";
+                                    }
+                                    break;
+                                } else {
+                                    break;
+                                }
+                            }
+                            break;
                         }
-                        break;
                     }
-                    if (isset($tokens[$i]) && $tokens[$i] == ';') $part .= $tokens[$i++];
+                    if (isset($tokens[$i]) && $tokens[$i] == ";") {
+                        $part .= $tokens[$i++];
+                    }
                     --$i;
                     $ua[] = count($partition);
                     if (!isset($partition[$part])) {
                         $key = random_bytes(16);
-                        $partition[$part] = [count($partition), $key, self::partition_encode($part, $key, $iv1, $iv2, $ivs)];
+                        $partition[$part] = [
+                            count($partition),
+                            $key,
+                            self::partition_encode(
+                                $part,
+                                $key,
+                                $iv1,
+                                $iv2,
+                                $ivs
+                            ),
+                        ];
                     }
-                    $code .= "if((isset(\$_ALOM_continue)&&\$_ALOM_continue>0)||(isset(\$_ALOM_break)&&\$_ALOM_break>0))return;";
-                    $code .= "if(isset(\$_ALOM_return))return \$_ALOM_result;\$_ALOM_result=eval(\AlomDecoder$fli::partition_decode(\AlomDecoder$fli::\$partition[" . $partition[$part][0] . "],'" . base64_encode($partition[$part][1]) . "','$pkyid'));";
-                    $part = '';
+                    $code .=
+                        "if((isset(\$_ALOM_continue)&&\$_ALOM_continue>0)||(isset(\$_ALOM_break)&&\$_ALOM_break>0))return;";
+                    $code .=
+                        "if(isset(\$_ALOM_return))return \$_ALOM_result;\$_ALOM_result=eval(\AlomDecoder$signflag::partition_decode(\AlomDecoder$signflag::\$partition[" .
+                        $partition[$part][0] .
+                        "],'" .
+                        base64_encode($partition[$part][1]) .
+                        "','$pkyid'));";
+                    $part = "";
+                } else if (
+                    is_array($tokens[$i]) &&
+                    $tokens[$i][0] == T_OBJECT_OPERATOR
+                ) {
+                    $part .= $tokens[$i++][1];
+                    if (
+                        is_array($tokens[$i]) &&
+                        $tokens[$i][0] == T_WHITESPACE
+                    ) {
+                        $part .= $tokens[$i++][1];
+                    }
+                    if ($tokens[$i] == "{") {
+                        $rl = self::readl($tokens, "{", "}", $i);
+                        if ($fast) {
+                            $part .= $rl;
+                        } else {
+                            $rl = self::nspartitioning(
+                                $partition,
+                                substr($rl, 1, -1),
+                                $optwister,
+                                $signflag,
+                                $iv1,
+                                $iv2,
+                                $ivs,
+                                $pkyid,
+                                $fast,
+                                $ns,
+                                $ua
+                            );
+                            $part .= "{" . $rl . "}";
+                        }
+                    } else {
+                        --$i;
+                    }
                 } else if ($tokens[$i] == '$') {
                     $part .= $tokens[$i++];
-                    if (is_array($tokens[$i]) && $tokens[$i][0] == T_WHITESPACE) $part .= $tokens[$i++][1];
-                    $rl = self::readl($tokens, '{', '}', $i);
-                    $rl = self::nspartitioning($partition, substr($rl, 1, -1), $memtwister, $fli, $iv1, $iv2, $ivs, $pkyid, $fast, $ns, $ua);
-                    $part .= '{' . $rl . '}';
-                } else if ($tokens[$i] == '{') {
-                    $rl = self::readl($tokens, '{', '}', $i);
-                    $rl = self::nspartitioning($partition, substr($rl, 1, -1), $memtwister, $fli, $iv1, $iv2, $ivs, $pkyid, $fast, $ns, $ua);
-                    $part .= '{' . $rl . '}';
-                } else if ($tokens[$i] == '(') {
-                    $rl = self::readl($tokens, '(', ')', $i);
+                    if (
+                        is_array($tokens[$i]) &&
+                        $tokens[$i][0] == T_WHITESPACE
+                    ) {
+                        $part .= $tokens[$i++][1];
+                    }
+                    if ($tokens[$i] == "{") {
+                        $rl = self::readl($tokens, "{", "}", $i);
+                        if ($fast) {
+                            $part .= $rl;
+                        } else {
+                            $rl = self::nspartitioning(
+                                $partition,
+                                substr($rl, 1, -1),
+                                $optwister,
+                                $signflag,
+                                $iv1,
+                                $iv2,
+                                $ivs,
+                                $pkyid,
+                                $fast,
+                                $ns,
+                                $ua
+                            );
+                            $part .= "{" . $rl . "}";
+                        }
+                    } else {
+                        --$i;
+                    }
+                } else if ($tokens[$i] == "{") {
+                    $rl = self::readl($tokens, "{", "}", $i);
+                    $rl = self::nspartitioning(
+                        $partition,
+                        substr($rl, 1, -1),
+                        $optwister,
+                        $signflag,
+                        $iv1,
+                        $iv2,
+                        $ivs,
+                        $pkyid,
+                        $fast,
+                        $ns,
+                        $ua
+                    );
+                    $part .= "{" . $rl . "}";
+                } else if ($tokens[$i] == "(") {
+                    $rl = self::readl($tokens, "(", ")", $i);
                     if ($fast) {
                         $part .= $rl;
                     } else {
-                        $rl = self::nspartitioning($partition, substr($rl, 1, -1), $memtwister, $fli, $iv1, $iv2, $ivs, $pkyid, $fast, $ns, $ua);
-                        $part .= '(' . $rl . ')';
+                        $rl = self::nspartitioning(
+                            $partition,
+                            substr($rl, 1, -1),
+                            $optwister,
+                            $signflag,
+                            $iv1,
+                            $iv2,
+                            $ivs,
+                            $pkyid,
+                            $fast,
+                            $ns,
+                            $ua
+                        );
+                        $part .= "(" . $rl . ")";
                     }
-                } else if (is_array($tokens[$i])) $part .= $tokens[$i][1];
-                else $part .= $tokens[$i];
+                } else if (is_array($tokens[$i])) {
+                    $part .= $tokens[$i][1];
+                } else {
+                    $part .= $tokens[$i];
+                }
             }
-            if (trim($part) !== '') {
+            if (trim($part) !== "") {
                 $part = $ns . "return $part;";
                 $ua[] = count($partition);
                 if (!isset($partition[$part])) {
                     $key = random_bytes(16);
-                    $partition[$part] = [count($partition), $key, self::partition_encode($part, $key, $iv1, $iv2, $ivs)];
+                    $partition[$part] = [
+                        count($partition),
+                        $key,
+                        self::partition_encode($part, $key, $iv1, $iv2, $ivs),
+                    ];
                 }
-                $code .= "eval(\AlomDecoder$fli::partition_decode(\AlomDecoder$fli::\$partition[" . $partition[$part][0] . "],'" . base64_encode($partition[$part][1]) . "','$pkyid'))";
-                $part = '';
+                $code .=
+                    "eval(\AlomDecoder$signflag::partition_decode(\AlomDecoder$signflag::\$partition[" .
+                    $partition[$part][0] .
+                    "],'" .
+                    base64_encode($partition[$part][1]) .
+                    "','$pkyid'))";
+                $part = "";
                 return $code;
             } else {
                 $code = $ns . $code;
                 $ua[] = count($partition);
                 if (!isset($partition[$code])) {
                     $key = random_bytes(16);
-                    $partition[$code] = [count($partition), $key, self::partition_encode($code, $key, $iv1, $iv2, $ivs)];
+                    $partition[$code] = [
+                        count($partition),
+                        $key,
+                        self::partition_encode($code, $key, $iv1, $iv2, $ivs),
+                    ];
                 }
-                $code = "if((isset(\$_ALOM_continue)&&\$_ALOM_continue>0)||(isset(\$_ALOM_break)&&\$_ALOM_break>0))return;" . "\$_ALOM_result=eval(\AlomDecoder$fli::partition_decode(\AlomDecoder$fli::\$partition[" . $partition[$code][0] . "],'" . base64_encode($partition[$code][1]) . "','$pkyid'));if(isset(\$_ALOM_return))return \$_ALOM_result;";
+                $code =
+                    "if((isset(\$_ALOM_continue)&&\$_ALOM_continue>0)||(isset(\$_ALOM_break)&&\$_ALOM_break>0))return;" .
+                    "\$_ALOM_result=eval(\AlomDecoder$signflag::partition_decode(\AlomDecoder$signflag::\$partition[" .
+                    $partition[$code][0] .
+                    "],'" .
+                    base64_encode($partition[$code][1]) .
+                    "','$pkyid'));if(isset(\$_ALOM_return))return \$_ALOM_result;";
             }
             return $code;
         }
 
-        public static function partitioning(&$ua, &$partition, $code, $memtwister, $fli, $iv1, $iv2, $ivs, $pkyid, $fast = FALSE)
+        public static function partitioning(
+            &$ua,
+            &$partition,
+            $code,
+            $optwister,
+            $signflag,
+            $iv1,
+            $iv2,
+            $ivs,
+            $pkyid,
+            $fast = FALSE
+        )
         {
             $tokens = token_get_all("<?" . "php $code");
             array_shift($tokens);
             $pkyid = base64_encode($pkyid);
-            $code = $ns = '';
+            $code = $ns = "";
             $i = 0;
-            while (isset($tokens[$i]) && ((is_array($tokens[$i]) && in_array($tokens[$i][0], [
+            while (
+                isset($tokens[$i]) &&
+                ((is_array($tokens[$i]) &&
+                        in_array($tokens[$i][0], [
                             T_WHITESPACE,
                             T_COMMENT,
                             T_DOC_COMMENT,
-                        ])) || $tokens[$i] == ';')) $code .= is_array($tokens[$i]) ? $tokens[$i++][1] : $tokens[$i++];
-            if (isset($tokens[$i]) && is_array($tokens[$i]) && $tokens[$i][0] == T_NAMESPACE) {
+                        ])) ||
+                    $tokens[$i] == ";")
+            ) {
+                $code .= is_array($tokens[$i])
+                    ? $tokens[$i++][1]
+                    : $tokens[$i++];
+            }
+            if (
+                isset($tokens[$i]) &&
+                is_array($tokens[$i]) &&
+                $tokens[$i][0] == T_NAMESPACE
+            ) {
                 $ns .= $tokens[$i++][1];
-                while (is_array($tokens[$i]) && in_array($tokens[$i][0], [T_WHITESPACE, T_STRING, T_NS_SEPARATOR])) $ns .= $tokens[$i++][1];
-                if ($tokens[$i] == '{') {
-                    $block = substr(self::readl($tokens, '{', '}', $i), 1, -1);
+                while (
+                    is_array($tokens[$i]) &&
+                    in_array($tokens[$i][0], [
+                        T_WHITESPACE,
+                        T_STRING,
+                        T_NS_SEPARATOR,
+                    ])
+                ) {
+                    $ns .= $tokens[$i++][1];
+                }
+                if ($tokens[$i] == "{") {
+                    $block = substr(self::readl($tokens, "{", "}", $i), 1, -1);
                     ++$i;
-                    while (isset($tokens[$i]) && ((is_array($tokens[$i]) && in_array($tokens[$i][0], [
+                    while (
+                        isset($tokens[$i]) &&
+                        ((is_array($tokens[$i]) &&
+                                in_array($tokens[$i][0], [
                                     T_WHITESPACE,
                                     T_COMMENT,
                                     T_DOC_COMMENT,
-                                ])) || $tokens[$i] == ';')) $ns .= is_array($tokens[$i]) ? $tokens[$i++][1] : $tokens[$i++];
-                    $block = self::nspartitioning($partition, $block, $memtwister, $fli, $iv1, $iv2, $ivs, $pkyid, $fast, $ns);
+                                ])) ||
+                            $tokens[$i] == ";")
+                    ) {
+                        $ns .= is_array($tokens[$i])
+                            ? $tokens[$i++][1]
+                            : $tokens[$i++];
+                    }
+                    $block = self::nspartitioning(
+                        $partition,
+                        $block,
+                        $optwister,
+                        $signflag,
+                        $iv1,
+                        $iv2,
+                        $ivs,
+                        $pkyid,
+                        $fast,
+                        $ns
+                    );
                     $code .= $block;
-                    $ns = '';
-                    while (isset($tokens[$i]) && is_array($tokens[$i]) && $tokens[$i][0] == T_NAMESPACE) {
+                    $ns = "";
+                    while (
+                        isset($tokens[$i]) &&
+                        is_array($tokens[$i]) &&
+                        $tokens[$i][0] == T_NAMESPACE
+                    ) {
                         $ns .= $tokens[$i++][1];
-                        while (isset($tokens[$i]) && $tokens[$i] != '{') $ns .= is_array($tokens[$i]) ? $tokens[$i++][1] : $tokens[$i++];
-                        $block = substr(self::readl($tokens, '{', '}', $i), 1, -1);
+                        while (isset($tokens[$i]) && $tokens[$i] != "{") {
+                            $ns .= is_array($tokens[$i])
+                                ? $tokens[$i++][1]
+                                : $tokens[$i++];
+                        }
+                        $block = substr(
+                            self::readl($tokens, "{", "}", $i),
+                            1,
+                            -1
+                        );
                         ++$i;
-                        while (isset($tokens[$i]) && ((is_array($tokens[$i]) && in_array($tokens[$i][0], [
+                        while (
+                            isset($tokens[$i]) &&
+                            ((is_array($tokens[$i]) &&
+                                    in_array($tokens[$i][0], [
                                         T_WHITESPACE,
                                         T_COMMENT,
                                         T_DOC_COMMENT,
-                                    ])) || $tokens[$i] == ';')) $ns .= is_array($tokens[$i]) ? $tokens[$i++][1] : $tokens[$i++];
-                        $block = self::nspartitioning($partition, $block, $memtwister, $fli, $iv1, $iv2, $ivs, $pkyid, $fast, $ns, $ua);
+                                    ])) ||
+                                $tokens[$i] == ";")
+                        ) {
+                            $ns .= is_array($tokens[$i])
+                                ? $tokens[$i++][1]
+                                : $tokens[$i++];
+                        }
+                        $block = self::nspartitioning(
+                            $partition,
+                            $block,
+                            $optwister,
+                            $signflag,
+                            $iv1,
+                            $iv2,
+                            $ivs,
+                            $pkyid,
+                            $fast,
+                            $ns,
+                            $ua
+                        );
                         $code .= $block;
-                        $ns = '';
+                        $ns = "";
                     }
                 } else {
                     $ns .= $tokens[$i++];
-                    while (isset($tokens[$i]) && ((is_array($tokens[$i]) && in_array($tokens[$i][0], [
+                    while (
+                        isset($tokens[$i]) &&
+                        ((is_array($tokens[$i]) &&
+                                in_array($tokens[$i][0], [
                                     T_WHITESPACE,
                                     T_COMMENT,
                                     T_DOC_COMMENT,
-                                ])) || $tokens[$i] == ';')) $ns .= is_array($tokens[$i]) ? $tokens[$i++][1] : $tokens[$i++];
-                    while (isset($tokens[$i]) && is_array($tokens[$i]) && $tokens[$i][0] == T_NAMESPACE) {
+                                ])) ||
+                            $tokens[$i] == ";")
+                    ) {
+                        $ns .= is_array($tokens[$i])
+                            ? $tokens[$i++][1]
+                            : $tokens[$i++];
+                    }
+                    while (
+                        isset($tokens[$i]) &&
+                        is_array($tokens[$i]) &&
+                        $tokens[$i][0] == T_NAMESPACE
+                    ) {
                         $ns .= $tokens[$i++][1];
-                        while (is_array($tokens[$i]) && in_array($tokens[$i][0], [
+                        while (
+                            is_array($tokens[$i]) &&
+                            in_array($tokens[$i][0], [
                                 T_WHITESPACE,
                                 T_STRING,
                                 T_NS_SEPARATOR,
-                            ])) $ns .= is_array($tokens[$i]) ? $tokens[$i++][1] : $tokens[$i++];
+                            ])
+                        ) {
+                            $ns .= is_array($tokens[$i])
+                                ? $tokens[$i++][1]
+                                : $tokens[$i++];
+                        }
                         $ns .= $tokens[$i++];
-                        while (isset($tokens[$i]) && ((is_array($tokens[$i]) && in_array($tokens[$i][0], [
+                        while (
+                            isset($tokens[$i]) &&
+                            ((is_array($tokens[$i]) &&
+                                    in_array($tokens[$i][0], [
                                         T_WHITESPACE,
                                         T_COMMENT,
                                         T_DOC_COMMENT,
-                                    ])) || $tokens[$i] == ';')) $ns .= is_array($tokens[$i]) ? $tokens[$i++][1] : $tokens[$i++];
+                                    ])) ||
+                                $tokens[$i] == ";")
+                        ) {
+                            $ns .= is_array($tokens[$i])
+                                ? $tokens[$i++][1]
+                                : $tokens[$i++];
+                        }
                     }
-                    $block = '';
-                    for (; isset($tokens[$i]); ++$i) $block .= is_array($tokens[$i]) ? $tokens[$i][1] : $tokens[$i];
-                    $block = self::nspartitioning($partition, $block, $memtwister, $fli, $iv1, $iv2, $ivs, $pkyid, $fast, $ns, $ua);
+                    $block = "";
+                    for (; isset($tokens[$i]); ++$i) {
+                        $block .= is_array($tokens[$i])
+                            ? $tokens[$i][1]
+                            : $tokens[$i];
+                    }
+                    $block = self::nspartitioning(
+                        $partition,
+                        $block,
+                        $optwister,
+                        $signflag,
+                        $iv1,
+                        $iv2,
+                        $ivs,
+                        $pkyid,
+                        $fast,
+                        $ns,
+                        $ua
+                    );
                     $code .= $block;
                 }
             } else {
-                $block = '';
-                for (; isset($tokens[$i]); ++$i) $block .= is_array($tokens[$i]) ? $tokens[$i][1] : $tokens[$i];
-                $block = self::nspartitioning($partition, $block, $memtwister, $fli, $iv1, $iv2, $ivs, $pkyid, $fast, $ns, $ua);
+                $block = "";
+                for (; isset($tokens[$i]); ++$i) {
+                    $block .= is_array($tokens[$i])
+                        ? $tokens[$i][1]
+                        : $tokens[$i];
+                }
+                $block = self::nspartitioning(
+                    $partition,
+                    $block,
+                    $optwister,
+                    $signflag,
+                    $iv1,
+                    $iv2,
+                    $ivs,
+                    $pkyid,
+                    $fast,
+                    $ns,
+                    $ua
+                );
                 $code .= $block;
             }
             $nspartition = $partition;
             $partition = [];
-            foreach ($nspartition as $part) $partition[$part[0]] = $part[2];
+            foreach ($nspartition as $part) {
+                $partition[$part[0]] = $part[2];
+            }
             return $code;
+        }
+
+        public static function getcallable($callable)
+        {
+            if (is_string($callable)) {
+                $callable = strtolower($callable);
+                if (in_array($callable, ["print", "echo"])) {
+                    return "";
+                }
+                if (in_array($callable, ["exit", "die"])) {
+                    return $callable . ";";
+                }
+            }
+            if (is_object($callable) || is_numeric($callable)) {
+                $reflection = new ReflectionFunction($callable);
+            } else if (is_string($callable)) {
+                $callable = explode("::", $callable, 2);
+                if (!isset($callable[1])) {
+                    $reflection = new ReflectionFunction($callable[0]);
+                } else {
+                    $reflection = new ReflectionMethod(
+                        $callable[0],
+                        $callable[1]
+                    );
+                }
+            } else if (is_array($callable)) {
+                if (!isset($callable[0])) {
+                    return "";
+                }
+                if (!isset($callable[1])) {
+                    $reflection = new ReflectionFunction($callable[0]);
+                } else {
+                    $reflection = new ReflectionMethod(
+                        $callable[0],
+                        $callable[1]
+                    );
+                }
+            } else {
+                return "";
+            }
+            $filename = $reflection->getFileName();
+            if (!$filename) {
+                return $callable . "();";
+            }
+            $start = $reflection->getStartLine() - 1;
+            $end = $reflection->getEndLine();
+            $source = file($filename);
+            $source = array_slice($source, $start, $end - $start);
+            $source = implode("", $source);
+            $name = strtolower($reflection->getName());
+            $tokens = token_get_all("<" . "?php $source");
+            for ($i = 0; isset($tokens[$i]); ++$i) {
+                if (
+                    is_array($tokens[$i]) &&
+                    ($tokens[$i][0] == T_FN || $tokens[$i][0] == T_FUNCTION)
+                ) {
+                    if (
+                        is_array($tokens[++$i]) &&
+                        $tokens[$i][0] == T_WHITESPACE
+                    ) {
+                        ++$i;
+                    }
+                    if ($name != "{closure}") {
+                        if (
+                            !is_array($tokens[$i]) ||
+                            $tokens[$i][0] != T_STRING ||
+                            strtolower($tokens[$i][1]) != $name
+                        ) {
+                            --$i;
+                            continue;
+                        }
+                        if (
+                            is_array($tokens[++$i]) &&
+                            $tokens[$i][0] == T_WHITESPACE
+                        ) {
+                            ++$i;
+                        }
+                    }
+                    if ($tokens[$i] != "(") {
+                        --$i;
+                        continue;
+                    }
+                    self::readl($tokens, "(", ")", $i);
+                    if (
+                        is_array($tokens[++$i]) &&
+                        $tokens[$i][0] == T_WHITESPACE
+                    ) {
+                        ++$i;
+                    }
+                    if (is_array($tokens[$i]) && $tokens[$i][0] == T_USE) {
+                        if (
+                            is_array($tokens[++$i]) &&
+                            $tokens[$i][0] == T_WHITESPACE
+                        ) {
+                            ++$i;
+                        }
+                        if ($tokens[$i] != "(") {
+                            --$i;
+                            continue;
+                        }
+                        self::readl($tokens, "(", ")", $i);
+                        if (
+                            is_array($tokens[++$i]) &&
+                            $tokens[$i][0] == T_WHITESPACE
+                        ) {
+                            ++$i;
+                        }
+                    }
+                    if ($tokens[$i] == ":") {
+                        if (
+                            is_array($tokens[++$i]) &&
+                            $tokens[$i][0] == T_WHITESPACE
+                        ) {
+                            ++$i;
+                        }
+                        while (
+                            is_array($tokens[$i]) &&
+                            ($tokens[$i][0] == T_STRING ||
+                                $tokens[$i][0] == T_NS_SEPARATOR ||
+                                $tokens[$i][0] == T_WHITESPACE)
+                        ) {
+                            ++$i;
+                        }
+                    }
+                    if (is_array($tokens[$i])) {
+                        if ($tokens[$i][0] != T_DOUBLE_ARROW) {
+                            --$i;
+                            continue;
+                        }
+                        if (
+                            is_array($tokens[++$i]) &&
+                            $tokens[$i][0] == T_WHITESPACE
+                        ) {
+                            ++$i;
+                        }
+                        $str = "return ";
+                        for (; isset($tokens[$i]); ++$i) {
+                            if (
+                            in_array($tokens[$i], [")", "]", "}", ",", ";"])
+                            ) {
+                                break;
+                            } else if (
+                                is_array($tokens[$i]) &&
+                                $tokens[$i][0] == T_CLOSE_TAG
+                            ) {
+                                break;
+                            } else if (is_array($tokens[$i])) {
+                                $str .= $tokens[$i][1];
+                            } else {
+                                $str .= $tokens[$i];
+                            }
+                        }
+                        $str .= ";";
+                        return $str;
+                    } else {
+                        if ($tokens[$i] != "{") {
+                            --$i;
+                            continue;
+                        }
+                        $str = self::readl($tokens, "{", "}", $i);
+                        $str = trim(substr($str, 1, -1));
+                        return $str;
+                    }
+                }
+            }
+            return "";
+        }
+
+        public static function sizeformat($size)
+        {
+            if ($size >= 1024 * 1024 * 1024 * 1024 * 1024 * 1024) {
+                return round(
+                        $size / 1024 / 1024 / 1024 / 1024 / 1024 / 1024,
+                        1
+                    ) . "zb";
+            }
+            if ($size >= 1024 * 1024 * 1024 * 1024 * 1024) {
+                return round($size / 1024 / 1024 / 1024 / 1024 / 1024, 1) .
+                    "eb";
+            }
+            if ($size >= 1024 * 1024 * 1024 * 1024) {
+                return round($size / 1024 / 1024 / 1024 / 1024, 1) . "tb";
+            }
+            if ($size >= 1024 * 1024 * 1024) {
+                return round($size / 1024 / 1024 / 1024, 1) . "gb";
+            }
+            if ($size >= 1024 * 1024) {
+                return round($size / 1024 / 1024, 1) . "mb";
+            }
+            if ($size >= 1024) {
+                return round($size / 1024, 1) . "kb";
+            }
+            return round($size) . "b";
+        }
+
+        public static function license_key_generate($init = NULL)
+        {
+            if ($init === NULL) {
+                $key = random_bytes(32);
+            } else {
+                $key = hash(
+                    "sha256",
+                    "Alom License N&.~>.ZYv;V5lN0h " . (string)$init . "%"
+                );
+            }
+            return bin2hex($key);
+        }
+
+        public static function license_find_code($license)
+        {
+            if (
+            !preg_match(
+                "/license code: (\[[0-9a-fA-F*-]+])/i",
+                $license,
+                $match
+            )
+            ) {
+                return FALSE;
+            }
+            return $match[1];
+        }
+
+        public static function license_insert_code(
+            $license,
+            $code = "[************************************************-********************************-****************]"
+        )
+        {
+            return preg_replace(
+                "/license code: (\[[0-9a-fA-F*-]+])/i",
+                "license code: " . $code,
+                $license
+            );
+        }
+
+        public static function license_null_systemhash_generate()
+        {
+            return "NULL SYSTEMHASH X</k/LMI3M7Et@\*\*";
+        }
+
+        public static function license_systemhash_generate(
+            $uname,
+            $username,
+            $ipaddr,
+            $hostname
+        )
+        {
+            $id = "SYSTEMHASH Xcpv{E^Bk9eq\*VIm";
+            $id .= "un:$uname\n";
+            $id .= "us:$username\n";
+            $id .= "ip:$ipaddr\n";
+            $id .= "hn:$hostname\n";
+            return md5($id, TRUE);
+        }
+
+        public static function license_code_encrypt(
+            $ready,
+            $expiration,
+            $systemhash,
+            $license_key
+        )
+        {
+            $sbox = self::$license_code_sbox;
+            $ubox = self::$license_code_ubox;
+            if (strlen($license_key) == 64) {
+                $license_key = hex2bin($license_key);
+            } else if (strlen($license_key) != 32) {
+                $license_key = hash("sha256", $license_key, TRUE);
+            }
+            if (strlen($systemhash) != 16) {
+                $systemhash = md5($systemhash, TRUE);
+            }
+            $ready = (int)$ready;
+            $expiration = (int)$expiration;
+            $limiter = "%zqYJ3}rX\xfeZ2hA.]Ss0(Xv1z";
+            $string =
+                $limiter .
+                $systemhash .
+                pack("N2", $ready ^ 0xf9a02eec, $expiration ^ 0x2904a19b);
+            $string = array_values(unpack("C*", $string));
+            $license_key = array_values(unpack("C*", $license_key));
+            for ($j = 0; $j < 52; ++$j) {
+                for ($i = 48 - 1; $i >= 0; --$i) {
+                    $a = (7 * $i + 1) % 48;
+                    $b = (3 * $i + $a + 7) % 48;
+                    $c = (11 * $i + $b + 5) % 48;
+                    if ($a == $i) {
+                        $a = (3 * $a + 5) % 48;
+                    }
+                    if ($b == $i) {
+                        $b = (7 * $b + 13) % 48;
+                    }
+                    if ($c == $i) {
+                        $c = (11 * $c + 3) % 48;
+                    }
+                    $x = $license_key[(3 * $c + 5 * $i + 7) % 32];
+                    $y = $license_key[(5 * $a + 7 * $i + 11) % 32];
+                    $z = $license_key[(7 * $b + 11 * $i + 3) % 32];
+                    for ($k = 0; $k < 2; ++$k) {
+                        $x = $license_key[(3 * $c + 5 * $z + 7 * $i + 11) % 32];
+                        $y = $license_key[(5 * $a + 7 * $x + 11 * $i + 3) % 32];
+                        $z = $license_key[(7 * $b + 11 * $y + 3 * $i + 5) % 32];
+                    }
+                    $x = (3 * $c + 5 * $z + 7 * $i + 11) % 32;
+                    $y = (5 * $a + 7 * $x + 11 * $i + 3) % 32;
+                    $z = (7 * $b + 11 * $y + 3 * $i + 5) % 32;
+                    $string[$i] =
+                        $ubox[$string[$i] ^ $a] ^
+                        $license_key[$z] ^
+                        $sbox[$string[$b] ^ $string[$c]];
+                    $string[$i] =
+                        $ubox[$string[$i] ^ $c] ^
+                        $license_key[$z] ^
+                        $sbox[$string[$a] & $string[$b]];
+                    $string[$i] =
+                        $ubox[$string[$i] ^ $z] ^
+                        $license_key[$y] ^
+                        $sbox[$string[$a] | $string[$c]];
+                    $string[$i] =
+                        $ubox[$string[$i] ^ $y] ^
+                        $license_key[$x] ^
+                        $sbox[$string[$b] & $string[$c]];
+                    $string[$i] =
+                        $ubox[$string[$i] ^ $x] ^
+                        $license_key[$x] ^
+                        $sbox[$string[$a] ^ $string[$b]];
+                }
+            }
+            array_unshift($string, "C*");
+            $string = bin2hex(call_user_func_array("pack", $string));
+            return "[" .
+                substr($string, 0, 48) .
+                "-" .
+                substr($string, 48, 32) .
+                "-" .
+                substr($string, 80, 16) .
+                "]";
+        }
+
+        public static function license_code_decrypt($string, $license_key)
+        {
+            $sbox = self::$license_code_sbox;
+            if (strlen($license_key) == 64) {
+                $license_key = hex2bin($license_key);
+            } else if (strlen($license_key) != 32) {
+                $license_key = hash("sha256", $license_key, TRUE);
+            }
+            $limiter = "%zqYJ3}rX\xfeZ2hA.]Ss0(Xv1z";
+            $string = hex2bin(
+                str_replace(
+                    [" ", "\n", "\r", "\t", "-", "[", "]", "*"],
+                    "",
+                    $string
+                )
+            );
+            $string = array_values(unpack("C*", $string));
+            $license_key = array_values(unpack("C*", $license_key));
+            for ($j = 0; $j < 52; ++$j) {
+                for ($i = 0; $i < 48; ++$i) {
+                    $a = (7 * $i + 1) % 48;
+                    $b = (3 * $i + $a + 7) % 48;
+                    $c = (11 * $i + $b + 5) % 48;
+                    if ($a == $i) {
+                        $a = (3 * $a + 5) % 48;
+                    }
+                    if ($b == $i) {
+                        $b = (7 * $b + 13) % 48;
+                    }
+                    if ($c == $i) {
+                        $c = (11 * $c + 3) % 48;
+                    }
+                    $x = $license_key[(3 * $c + 5 * $i + 7) % 32];
+                    $y = $license_key[(5 * $a + 7 * $i + 11) % 32];
+                    $z = $license_key[(7 * $b + 11 * $i + 3) % 32];
+                    for ($k = 0; $k < 2; ++$k) {
+                        $x = $license_key[(3 * $c + 5 * $z + 7 * $i + 11) % 32];
+                        $y = $license_key[(5 * $a + 7 * $x + 11 * $i + 3) % 32];
+                        $z = $license_key[(7 * $b + 11 * $y + 3 * $i + 5) % 32];
+                    }
+                    $x = (3 * $c + 5 * $z + 7 * $i + 11) % 32;
+                    $y = (5 * $a + 7 * $x + 11 * $i + 3) % 32;
+                    $z = (7 * $b + 11 * $y + 3 * $i + 5) % 32;
+                    $string[$i] =
+                        $sbox[$string[$i] ^
+                        $license_key[$x] ^
+                        $sbox[$string[$a] ^ $string[$b]]] ^ $x;
+                    $string[$i] =
+                        $sbox[$string[$i] ^
+                        $license_key[$x] ^
+                        $sbox[$string[$b] & $string[$c]]] ^ $y;
+                    $string[$i] =
+                        $sbox[$string[$i] ^
+                        $license_key[$y] ^
+                        $sbox[$string[$a] | $string[$c]]] ^ $z;
+                    $string[$i] =
+                        $sbox[$string[$i] ^
+                        $license_key[$z] ^
+                        $sbox[$string[$a] & $string[$b]]] ^ $c;
+                    $string[$i] =
+                        $sbox[$string[$i] ^
+                        $license_key[$z] ^
+                        $sbox[$string[$b] ^ $string[$c]]] ^ $a;
+                }
+            }
+            array_unshift($string, "C*");
+            $string = call_user_func_array("pack", $string);
+            if (substr($string, 0, 24) != $limiter) {
+                return FALSE;
+            }
+            $times = unpack("N2", substr($string, 40, 8));
+            return [
+                "systemhash" => substr($string, 24, 16),
+                "ready"      => $times[1] ^ 0xf9a02eec,
+                "expiration" => $times[2] ^ 0x2904a19b,
+            ];
+        }
+
+        public static function createLogMsg($msg, $type)
+        {
+            $msg = str_replace("\n", "\n  ", $msg);
+            $level = error_reporting();
+            switch ($type) {
+                case "success":
+                case "notice":
+                    if (!($level & E_USER_NOTICE) || !self::$logger) {
+                        return FALSE;
+                    }
+                    break;
+                case "warning":
+                    if (!($level & E_USER_WARNING)) {
+                        return FALSE;
+                    }
+            }
+            if (self::$iscli) {
+                switch ($type) {
+                    case "error":
+                        $msg = "\e[31mError:   \e[0m$msg\n";
+                        break;
+                    case "success":
+                        $msg = "\e[32mSuccess: \e[0m$msg\n";
+                        break;
+                    case "warning":
+                        $msg = "\e[33mWarning: \e[0m$msg\n";
+                        break;
+                    case "notice":
+                        $msg = "\e[36mNotice:  \e[0m$msg\n";
+                        break;
+                }
+            } else {
+                switch ($type) {
+                    case "error":
+                        $msg = "Error:   $msg\n";
+                        break;
+                    case "success":
+                        $msg = "Success: $msg\n";
+                        break;
+                    case "warning":
+                        $msg = "Warning: $msg\n";
+                        break;
+                    case "notice":
+                        $msg = "Notice:  $msg\n";
+                        break;
+                }
+            }
+            return $msg;
+        }
+
+        public static function log($msg, $type = "error")
+        {
+            if (self::$iscli) {
+                $msg = self::createLogMsg($msg, $type);
+                if ($msg) {
+                    print $msg;
+                }
+            } else {
+                if (!headers_sent()) {
+                    header("Content-type: text/plain");
+                }
+                $msg = self::createLogMsg($msg, $type);
+                if ($msg) {
+                    error_log($msg);
+                    print $msg;
+                }
+            }
+            if ($type == "error") {
+                die();
+                exit();
+                sleep(1e9);
+            }
+        }
+
+        public static function backlog()
+        {
+            if (self::$iscli) {
+                print "\e[1A\e[2K";
+            }
+        }
+
+        public static function removedLoader($loader)
+        {
+            self::log(
+                "The loader file '$loader' do not exists for complete obfuscatoring proccess!",
+                "error"
+            );
         }
 
         public static function findQBC($code, $delimiter, $hbc = 5)
         {
-            $zbc = str_repeat('f', $hbc);
-            for ($j = 0; ; ++$j) for ($i = 0; $i <= 0x7fffffff; ++$i) {
-                $hash = md5(str_replace($delimiter, "$i-$j", $code));
-                if (substr($hash, 0, $hbc) == $zbc) return str_replace($delimiter, "$i-$j", $code);
+            $zbc = str_repeat("f", $hbc);
+            for ($j = 0; ; ++$j) {
+                for ($i = 0; $i <= 0x7fffffff; ++$i) {
+                    $hash = md5(str_replace($delimiter, "$i-$j", $code));
+                    if (substr($hash, 0, $hbc) == $zbc) {
+                        return str_replace($delimiter, "$i-$j", $code);
+                    }
+                };
             }
         }
 
         public static function obfuscator($code, $settings = [])
         {
+            if (is_string($code) && file_exists($code)) {
+                $code = file_get_contents($code);
+            } else if (is_callable($code)) {
+                $code = "<" . "?php\n" . self::getcallable($code) . "\n?" . ">";
+            }
             self::$obfstime = microtime(TRUE);
-            $oui = md5(crc32($code) . rand() . self::$obfstime, TRUE);
-            $fli = substr(md5("alom:$oui"), 0, 12);
+            $sign = md5(crc32($code) . rand() . self::$obfstime, TRUE);
+            $signflag = substr(md5("alom:$sign"), 0, 12);
             self::$key[0] ^= rand();
             self::$key[1] ^= rand();
             self::$fky[0] = self::getasciiikey(16);
             self::$fky[1] = self::getasciiikey(16);
-            $depth = isset($settings['depth']) ? abs((float)$settings['depth']) : 1;
-            $extra = isset($settings['extra']) ? (string)$settings['extra'] : FALSE;
-            $antitamper_extra = isset($settings['antitamper_extra']) ? (string)$settings['antitamper_extra'] : FALSE;
-            $uniquname = isset($settings['uniquname']) ? $settings['uniquname'] : FALSE;
-            $uniquser = isset($settings['uniquser']) ? $settings['uniquser'] : FALSE;
-            $uniqaddr = isset($settings['uniqaddr']) ? $settings['uniqaddr'] : FALSE;
-            $uniqhost = isset($settings['uniqhost']) ? $settings['uniqhost'] : FALSE;
-            $depthtype = isset($settings['depth_type']) ? $settings['depth_type'] : 'logpower';
-            $rtw = isset($settings['rtw']) ? (int)$settings['rtw'] : 0;
-            $expiration = isset($settings['expiration']) ? (int)$settings['expiration'] : 0x7fffffff;
-            $forcename = isset($settings['force_name']) ? md5(basename((string)$settings['force_name']), TRUE) : FALSE;
-            $title = isset($settings['title']) ? (string)$settings['title'] : 'Obfuscatored by ALOM 2.1';
-            $author = isset($settings['author']) ? (string)$settings['author'] : FALSE;
-            $copyright = isset($settings['copyright']) ? (string)$settings['copyright'] : FALSE;
-            $description = isset($settings['description']) ? (string)$settings['description'] : FALSE;
-            $hide_comment = isset($settings['hide_comment']) ? (bool)$settings['hide_comment'] : FALSE;
-            $file_denied = isset($settings['file_denied']) ? (bool)$settings['file_denied'] : FALSE;
-            $force_filenames = isset($settings['force_files']) ? $settings['force_files'] : [];
-            $outer_decoder = isset($settings['outer_decoder']) ? (string)$settings['outer_decoder'] : FALSE;
-            $outer_memtwister = isset($settings['outer_memtwister']) ? (string)$settings['outer_memtwister'] : FALSE;
-            $memtwister = isset($settings['memtwister']) ? (bool)$settings['memtwister'] : FALSE;
-            $minify = isset($settings['minify']) ? (bool)$settings['minify'] : TRUE;
-            $error_hiding = isset($settings['error_hiding']) ? (bool)$settings['error_hiding'] : TRUE;
-            $ptk = isset($settings['partial_keeper']) ? (bool)$settings['partial_keeper'] : FALSE;
-            $enabled_eval = strpos(ini_get("disable_functions"), 'eval') === FALSE && eval("return 1;");
-            $fast_partitioning = isset($settings['fast_partitioning']) ? (bool)$settings['fast_partitioning'] : $enabled_eval;
-            $partitioning = $fast_partitioning || (isset($settings['partitioning']) ? (bool)$settings['partitioning'] : FALSE);
-            $qbc = isset($settings['qbc']) ? (string)$settings['qbc'] : FALSE;
-            $hbc = 5;
-            $raw = isset($settings['raw']) ? (bool)$settings['raw'] : FALSE;
-            if (!is_array($force_filenames)) $force_filenames = $force_filenames ? [(string)$force_filenames] : [];
-            if (!file_exists($outer_decoder)) $outer_decoder = FALSE; else $force_filenames[] = $outer_decoder;
-            $force_files = [];
-            $force_files_sum = '';
-            if (isset($force_filenames[0])) {
-                foreach ($force_filenames as $name) {
-                    $force_files[$name] = md5(basename($name) . "\n" . file_get_contents($name), TRUE);
-                    $force_files_sum .= $force_files[$name] . "\n";
+            self::log(
+                "Script initialized. (unixtime: " .
+                self::$obfstime .
+                ")\nsign:     " .
+                bin2hex($sign) .
+                "\nsignflag: $signflag",
+                "notice"
+            );
+            if (!isset($settings["rounds"])) {
+                $settings["rounds"] = [];
+            }
+            if (!isset($settings["rounds"]["main"])) {
+                $settings["rounds"]["main"] = [
+                    "depth_type" => "logpower",
+                    "depth"      => 1,
+                ];
+            } else {
+                if (!isset($settings["rounds"]["main"]["depth_type"])) {
+                    $settings["rounds"]["main"]["depth_type"] = "logpower";
+                } else {
+                    $settings["rounds"]["main"]["depth_type"] = strtolower(
+                        $settings["rounds"]["main"]["depth_type"]
+                    );
+                    if (
+                    !in_array($settings["rounds"]["main"]["depth_type"], [
+                        "constant",
+                        "logarithm",
+                        "logpower",
+                        "square",
+                        "linear",
+                    ])
+                    ) {
+                        $settings["rounds"]["main"]["depth_type"] = "logpower";
+                    }
                 }
-                $force_files_sum .= count($force_filenames);
-                $force_files_sum = md5($force_files_sum, TRUE) . "\n";
+                if (
+                    !isset($settings["rounds"]["main"]["depth"]) ||
+                    !is_numeric($settings["rounds"]["main"]["depth"])
+                ) {
+                    self::log(
+                        "The parameter rounds.main.depth is not initialized. Set to 1 by default.",
+                        "notice"
+                    );
+                    $settings["rounds"]["main"]["depth"] = 1;
+                } else {
+                    $settings["rounds"]["main"]["depth"] =
+                        (float)$settings["rounds"]["main"]["depth"];
+                }
+            }
+            if (!isset($settings["rounds"]["main"]["extrascript_round"])) {
+                $settings["rounds"]["main"]["extrascript_round"] = TRUE;
+            }
+            if (!isset($settings["rounds"]["main"]["base64rand_round"])) {
+                $settings["rounds"]["main"]["base64rand_round"] = FALSE;
+            }
+            if (!isset($settings["rounds"]["main"]["deflate_rounds"])) {
+                $settings["rounds"]["main"]["deflate_round"] = TRUE;
+            }
+            if (!isset($settings["rounds"]["minify"])) {
+                $settings["rounds"]["minify"] = ["enable" => TRUE];
+            } else {
+                if (!isset($settings["rounds"]["minify"]["enable"])) {
+                    $settings["rounds"]["minify"]["enable"] = TRUE;
+                }
+            }
+            if (!isset($settings["rounds"]["optwister"])) {
+                $settings["rounds"]["optwister"] = ["enable" => FALSE];
+            } else {
+                if (!isset($settings["rounds"]["optwister"]["enable"])) {
+                    $settings["rounds"]["optwister"]["enable"] = FALSE;
+                }
+            }
+            if (!isset($settings["rounds"]["partitioning"])) {
+                $settings["rounds"]["partitioning"] = [
+                    "enable" => FALSE,
+                    "fast"   => FALSE,
+                ];
+            } else {
+                if (!isset($settings["rounds"]["partitioning"]["enable"])) {
+                    $settings["rounds"]["partitioning"]["enable"] = FALSE;
+                }
+                if (!isset($settings["rounds"]["partitioning"]["fast"])) {
+                    $settings["rounds"]["partitioning"]["fast"] = FALSE;
+                }
+            }
+            if (!isset($settings["rounds"]["antidebugger"])) {
+                $settings["rounds"]["antidebugger"] = ["enable" => TRUE];
+            } else {
+                if (!isset($settings["rounds"]["antidebugger"]["enable"])) {
+                    $settings["rounds"]["antidebugger"]["enable"] = TRUE;
+                }
+            }
+            if (!isset($settings["rounds"]["qbc"])) {
+                $settings["rounds"]["qbc"] = FALSE;
+            }
+            if ($settings["rounds"]["minify"]["enable"]) {
+                $code = self::minify($code);
+            }
+            if (!isset($settings["style"])) {
+                $settings["style"] = [];
+            }
+            if (!isset($settings["style"]["separated_loader"])) {
+                $settings["style"]["separated_loader"] = [];
+            }
+            if (!isset($settings["style"]["halt_mode"])) {
+                $settings["style"]["halt_mode"] = FALSE;
+            }
+            if (!isset($settings["style"]["hide_errors"])) {
+                $settings["style"]["hide_errors"] = TRUE;
+            }
+            if (!isset($settings["style"]["raw"])) {
+                $settings["style"]["raw"] = FALSE;
+            }
+            if (!isset($settings["identify"])) {
+                $settings["identify"] = [];
+            }
+            if (!isset($settings["identify"]["files"])) {
+                $settings["identify"]["files"] = [];
+            }
+            if (
+            !isset($settings["style"]["separated_loader"]["decoder_file"])
+            ) {
+                $settings["style"]["separated_loader"]["decoder_file"] = FALSE;
+            } else {
+                $settings["style"]["separated_loader"]["decoder_file"] =
+                    (string)$settings["style"]["separated_loader"]["decoder_file"];
+                if (
+                file_exists(
+                    $settings["style"]["separated_loader"]["decoder_file"]
+                )
+                ) {
+                    $settings["indentify"]["files"][] =
+                        $settings["style"]["separated_loader"]["decoder_file"];
+                } else if (
+                @!file_get_contents(
+                    $settings["style"]["separated_loader"]["decoder_file"]
+                )
+                ) {
+                    $settings["style"]["separated_loader"]["decoder_file"] = FALSE;
+                }
+            }
+            if (
+                !$settings["rounds"]["optwister"]["enable"] ||
+                !isset($settings["style"]["separated_loader"]["optwister_file"])
+            ) {
+                $settings["style"]["separated_loader"]["optwister_file"] = FALSE;
+            } else {
+                $settings["style"]["separated_loader"]["optwister_file"] =
+                    (string)$settings["style"]["separated_loader"]["optwister_file"];
+                if (
+                file_exists(
+                    $settings["style"]["separated_loader"]["optwister_file"]
+                )
+                ) {
+                    $settings["indentify"]["files"][] =
+                        $settings["style"]["separated_loader"]["optwister_file"];
+                } else if (
+                @!file_get_contents(
+                    $settings["style"]["separated_loader"]["optwister_file"]
+                )
+                ) {
+                    $settings["style"]["separated_loader"]["optwister_file"] = FALSE;
+                }
+            }
+            if (!isset($settings["license"])) {
+                $settings["license"] = [];
+            }
+            if (!isset($settings["license"]["type"])) {
+                $license_type = "comment";
+            } else {
+                $license_type = strtolower($settings["license"]["type"]);
+                if (!in_array($license_type, ["comment", "file", "remove"])) {
+                    $license_type = "comment";
+                }
+                unset($settings["license"]["type"]);
+            }
+            if ($license_type == "remove") {
+                $settings["license"] = "";
+            } else {
+                $parameters = $settings["license"];
+                if (!isset($parameters["title"])) {
+                    $parameters["title"] = "Obfuscated by ALOM " . ALOM_VERSION;
+                }
+                if (
+                    isset($parameters["checksum"]) &&
+                    $parameters["checksum"] === TRUE
+                ) {
+                    $parameters["checksum"] = md5($code);
+                }
+                if (isset($parameters["license_key"])) {
+                    if ($parameters["license_key"] == 64) {
+                        $parameters["license_key"] = hex2bin(
+                            $parameters["license_key"]
+                        );
+                    } else if (strlen($parameters["license_key"]) != 32) {
+                        $parameters["license_key"] = hash(
+                            "sha256",
+                            $parameters["license_key"],
+                            TRUE
+                        );
+                    }
+                    $license_key = $parameters["license_key"];
+                    unset($parameters["license_key"]);
+                    $parameters["license_code"] =
+                        "[************************************************-********************************-****************]";
+                    if (isset($paramteres["license_verifier_api"])) {
+                        $license_verifier_api =
+                            $parameters["license_verifier_api"];
+                        unset($parameters["license_verifier_api"]);
+                    }
+                }
+                $license_text = "Do not change anything of segment antitamper";
+                if ($license_type == "comment") {
+                    $settings["license"] =
+                        "/** ALOM Obfuscator License\n * " .
+                        str_replace("\n", "\n * ", $license_text) .
+                        "\n *\n";
+                    foreach ($parameters as $key => $value) {
+                        $key = str_replace(["\n", "_"], " ", $key);
+                        $key = self::commentquote($key);
+                        $value = self::commentquote(
+                            str_replace("\n", "\n  ", $value)
+                        );
+                        $settings["license"] .= " * $key: $value\n";
+                    }
+                    $settings["license"] .= " */";
+                } else if ($license_type == "file") {
+                    if (isset($parameters["license_file"])) {
+                        $license_file = $parameters["license_file"];
+                        unset($parameters["license_file"]);
+                    } else {
+                        $license_file = "alomObfuscator.php.license";
+                    }
+                    $settings["identify"]["files"][] = $license_file;
+                    $settings["license"] =
+                        "* ALOM Obfuscator License\r\n" .
+                        str_replace("\n", "\r\n", $license_text) .
+                        "\r\n\r\n";
+                    foreach ($parameters as $key => $value) {
+                        $key = str_replace(["\n", "_"], " ", $key);
+                        $value = str_replace("\n", "\n  ", $value);
+                        $settings["license"] .= "$key: $value\r\n";
+                    }
+                    file_put_contents($license_file, $settings["license"]);
+                }
+            }
+            if (isset($license_key)) {
+                self::log(
+                    "License created. (type=$license_type, license_key=" .
+                    bin2hex($license_key) .
+                    ")",
+                    "notice"
+                );
+            } else {
+                self::log("License created. (type=$license_type)", "notice");
+            }
+            $hashes = [
+                "files"  => [],
+                "system" => ["ord" => 0xe3, "id" => $sign],
+                "id"     => "W]",
+            ];
+            foreach ($settings["identify"]["files"] as $file) {
+                if (!file_exists($file)) {
+                    continue;
+                }
+                $hashes["files"][$file] = md5(
+                    basename($file) . "\n" . file_get_contents($file),
+                    TRUE
+                );
+                $hashes["id"] .= $hashes["files"][$file] . "\n";
+            }
+            $hashes["id"] .= count($hashes["files"]) . "/+\xf1%R\r";
+            if (isset($settings["identify"]["uname"])) {
+                if (
+                    !isset($settings["identify"]["uname"]["hashed"]) ||
+                    !$settings["identify"]["uname"]["hashed"]
+                ) {
+                    $settings["identify"]["uname"]["value"] = md5(
+                        $settings["identify"]["uname"]["value"],
+                        TRUE
+                    );
+                }
+                $hashes["system"]["ord"] ^= 0x1;
+                $hashes["system"]["id"] .= "un:{$settings["identify"]["uname"]["value"]}\n";
+            }
+            if (isset($settings["identify"]["username"])) {
+                if (
+                    !isset($settings["identify"]["username"]["hashed"]) ||
+                    !$settings["identify"]["username"]["hashed"]
+                ) {
+                    $settings["identify"]["username"]["value"] = md5(
+                        $settings["identify"]["username"]["value"],
+                        TRUE
+                    );
+                }
+                $hashes["system"]["ord"] ^= 0x2;
+                $hashes["system"]["id"] .= "us:{$settings["identify"]["username"]["value"]}\n";
+            }
+            if (isset($settings["identify"]["filename"])) {
+                if (
+                    !isset($settings["identify"]["filename"]["hashed"]) ||
+                    !$settings["identify"]["filename"]["hashed"]
+                ) {
+                    $settings["identify"]["filename"]["value"] = md5(
+                        basename($settings["identify"]["filename"]["value"]),
+                        TRUE
+                    );
+                }
+                $hashes["system"]["ord"] ^= 0x4;
+                $hashes["system"]["id"] .= "fn:{$settings["identify"]["filename"]["value"]}\n";
+            }
+            if (isset($settings["identify"]["ipaddr"])) {
+                if (
+                    !isset($settings["identify"]["ipaddr"]["hashed"]) ||
+                    !$settings["identify"]["ipaddr"]["hashed"]
+                ) {
+                    $settings["identify"]["ipaddr"]["value"] = md5(
+                        $settings["identify"]["ipaddr"]["value"],
+                        TRUE
+                    );
+                }
+                $hashes["system"]["ord"] ^= 0x8;
+                $hashes["system"]["id"] .= "ip:{$settings["identify"]["ipaddr"]["value"]}\n";
+            }
+            if (isset($settings["identify"]["hostname"])) {
+                if (
+                    !isset($settings["identify"]["hostname"]["hashed"]) ||
+                    !$settings["identify"]["hostname"]["hashed"]
+                ) {
+                    $settings["identify"]["hostname"]["value"] = md5(
+                        $settings["identify"]["hostname"]["value"],
+                        TRUE
+                    );
+                }
+                $hashes["system"]["ord"] ^= 0x10;
+                $hashes["system"]["id"] .= "hn:{$settings["identify"]["hostname"]["value"]}\n";
+            }
+            $hashes["id"] .=
+                $hashes["system"]["id"] .
+                "..\xaf\0S!\r" .
+                $hashes["system"]["ord"];
+            $hashes["id"] = md5($hashes["id"], TRUE);
+            $hashes["system"]["id"] = md5(
+                $hashes["system"]["id"] . chr($hashes["system"]["ord"]),
+                TRUE
+            );
+            if (!isset($settings["date_domain"])) {
+                $settings["date_domain"] = [];
+            }
+            if (
+                !isset($settings["date_domain"]["expiration"]) ||
+                !is_numeric($settings["date_domain"]["expiration"])
+            ) {
+                $settings["date_domain"]["expiration"] = 0x7fffffff;
+            } else {
+                $settings["date_domain"]["expiration"] =
+                    (int)$settings["date_domain"]["expiration"];
+            }
+            if (
+                !isset($settings["date_domain"]["ready"]) ||
+                !is_numeric($settings["date_domain"]["ready"])
+            ) {
+                $settings["date_domain"]["ready"] = 0;
+            } else {
+                $settings["date_domain"]["ready"] =
+                    (int)$settings["date_domain"]["ready"];
+            }
+            if (!isset($settings["additional"])) {
+                $settings["additional"] = [];
+            }
+            if (!isset($settings["additional"]["antitamper"])) {
+                $settings["additional"]["antitamper"] = "";
+            } else if (is_callable($settings["additional"]["antitamper"])) {
+                $settings["additional"]["antitamper"] =
+                    self::getcallable($settings["additional"]["antitamper"]) .
+                    "\n";
+            } else {
+                $settings["additional"]["antitamper"] =
+                    trim((string)$settings["additional"]["antitamper"]) . "\n";
+            }
+            if (!isset($settings["additional"]["optional"])) {
+                $settings["additional"]["optional"] = "";
+            } else if (is_callable($settings["additional"]["optional"])) {
+                $settings["additional"]["optional"] =
+                    self::getcallable($settings["additional"]["optional"]) .
+                    "\n";
+            } else {
+                $settings["additional"]["optional"] =
+                    trim((string)$settings["additional"]["optional"]) . "\n";
             }
             $seed = rand();
-            if ($minify) $code = self::minify($code);
-            $checksum = md5($code);
             $tokens = token_get_all($code);
-            $code = '';
-            for ($i = 0; isset($tokens[$i]); ++$i) if (is_array($tokens[$i])) if ($tokens[$i][0] == T_FILE) $code .= "_uwC5JBWaTsMV4Vs$fli()"; else if ($tokens[$i][0] == T_DIR) $code .= "_fETt6AVcU6vr6m5$fli()";
-            else if ($i == 0 && $tokens[$i][0] == T_INLINE_HTML) {
-                $html = htmlentities($tokens[$i][1]);
-                $html = $html == $tokens[$i][1] ? 'print "' . $html . '"' : 'print html_entity_decode("' . $html . '")';
-                if (isset($tokens[$i + 1])) {
-                    if ($tokens[++$i][0] == T_OPEN_TAG_WITH_ECHO) $code .= "<" . "?php $html;echo "; else $code .= "<" . "?php $html;";
-                } else $code .= "<" . "?php $html; ?" . ">";
-            } else if ($tokens[$i][0] == T_CLOSE_TAG && isset($tokens[$i + 1])) {
-                if ($tokens[++$i][0] == T_OPEN_TAG_WITH_ECHO) $code .= ";echo "; else if ($tokens[$i][0] == T_OPEN_TAG) $code .= ';';
-                else if ($tokens[$i][0] == T_INLINE_HTML) {
-                    $html = htmlentities($tokens[$i][1]);
-                    $html = $html == $tokens[$i][1] ? 'print "' . $html . '"' : 'print html_entity_decode("' . $html . '")';
-                    if (isset($tokens[$i + 1])) {
-                        if ($tokens[++$i][0] == T_OPEN_TAG_WITH_ECHO) $code .= ";$html;echo "; else $code .= ";$html;";
-                    } else $code .= ";$html; ?" . ">";
+            $code = "";
+            for ($i = 0; isset($tokens[$i]); ++$i) {
+                if (is_array($tokens[$i])) {
+                    if ($tokens[$i][0] == T_FILE) {
+                        $code .= "_uwC5JBWaTsMV4Vs$signflag()";
+                    } else if ($tokens[$i][0] == T_DIR) {
+                        $code .= "_fETt6AVcU6vr6m5$signflag()";
+                    } else if ($i == 0 && $tokens[$i][0] == T_INLINE_HTML) {
+                        $html = htmlentities($tokens[$i][1]);
+                        $html =
+                            $html == $tokens[$i][1]
+                                ? 'print "' . $html . '"'
+                                : 'print html_entity_decode("' . $html . '")';
+                        if (isset($tokens[$i + 1])) {
+                            if ($tokens[++$i][0] == T_OPEN_TAG_WITH_ECHO) {
+                                $code .= "<" . "?php $html;echo ";
+                            } else {
+                                $code .= "<" . "?php $html;";
+                            }
+                        } else {
+                            $code .= "<" . "?php $html; ?" . ">";
+                        }
+                    } else if (
+                        $tokens[$i][0] == T_CLOSE_TAG &&
+                        isset($tokens[$i + 1])
+                    ) {
+                        if ($tokens[++$i][0] == T_OPEN_TAG_WITH_ECHO) {
+                            $code .= ";echo ";
+                        } else if ($tokens[$i][0] == T_OPEN_TAG) {
+                            $code .= ";";
+                        } else if ($tokens[$i][0] == T_INLINE_HTML) {
+                            $html = htmlentities($tokens[$i][1]);
+                            $html =
+                                $html == $tokens[$i][1]
+                                    ? 'print "' . $html . '"'
+                                    : 'print html_entity_decode("' .
+                                    $html .
+                                    '")';
+                            if (isset($tokens[$i + 1])) {
+                                if ($tokens[++$i][0] == T_OPEN_TAG_WITH_ECHO) {
+                                    $code .= ";$html;echo ";
+                                } else {
+                                    $code .= ";$html;";
+                                }
+                            } else {
+                                $code .= ";$html; ?" . ">";
+                            }
+                        }
+                    } else if ($tokens[$i][0] == T_OPEN_TAG_WITH_ECHO) {
+                        $code .= "<" . "?php echo ";
+                    } else {
+                        $code .= $tokens[$i][1];
+                    }
+                } else {
+                    $code .= $tokens[$i];
                 }
-            } else if ($tokens[$i][0] == T_OPEN_TAG_WITH_ECHO) $code .= "<" . "?php echo ";
-            else $code .= $tokens[$i][1]; else $code .= $tokens[$i];
-            if ($code === '') $code = '<' . '?php ?' . '>'; else if (substr($code, -2, 2) != '?' . '>') $code .= '?' . '>';
+            }
+            if ($code === "") {
+                $code = "<" . "?php ?" . ">";
+            } else if (substr($code, -2, 2) != "?" . ">") {
+                $code .= "?" . ">";
+            }
             unset($tokens);
-            $code = str_replace("?" . "><" . "?php", '', rtrim($code));
+            $code = str_replace("?" . "><" . "?php", "", rtrim($code));
             $code = self::setikeys($code);
-            $code = self::sug($code, $fli);
-            $pky = [crc32(self::$fky[0]) ^ self::$key[0], crc32(self::$fky[1]) ^ self::$key[1]];
-            $pky[2] = md5($pky[0] . $oui . $pky[1], TRUE);
-            $pkyid = substr(md5($pky[0] . $pky[2] . $oui . $pky[1], TRUE), 4);
-            if ($memtwister) {
-                $code = self::minify(self::memtwister_op2fn($code, $fli));
-                $code = self::memtwister_obfs($code, $fli, $pky[0], $pky[1], $pky[2], $pkyid);
+            $code = self::sug($code, $signflag);
+            $pky = [
+                crc32(self::$fky[0]) ^ self::$key[0],
+                crc32(self::$fky[1]) ^ self::$key[1],
+            ];
+            $pky[2] = md5($pky[0] . $sign . $pky[1], TRUE);
+            $pkyid = substr(md5($pky[0] . $pky[2] . $sign . $pky[1], TRUE), 4);
+            if ($settings["rounds"]["optwister"]["enable"]) {
+                self::log("optwister round is proccessing...", "notice");
+                $code = self::minify(self::optwister_op2fn($code, $signflag));
+                $code = self::optwister_obfs(
+                    $code,
+                    $signflag,
+                    $pky[0],
+                    $pky[1],
+                    $pky[2],
+                    $pkyid
+                );
+                self::backlog();
+                self::log("optwister round proccessed.", "notice");
             }
             $code = substr($code, 5);
-            $code = str_replace("?" . "><" . "?php", '', rtrim($code));
-            if (substr($code, -2, 2) == '?' . '>') $code = substr($code, 0, -2);
+            $code = str_replace("?" . "><" . "?php", "", rtrim($code));
+            if (substr($code, -2, 2) == "?" . ">") {
+                $code = substr($code, 0, -2);
+            }
             $code = trim($code);
             self::mt_prng_store($seed ^ 0x90c8);
             self::encodew(TRUE, 0, 0);
-            if ($partitioning) {
-                $pky2 = [crc32($pkyid . $pky[0]) ^ self::$key[1], crc32($pkyid . $pky[1]) ^ self::$key[0]];
+            if ($settings["rounds"]["partitioning"]["enable"]) {
+                self::log("partitioning round is proccessing...", "notice");
+                $pky2 = [
+                    crc32($pkyid . $pky[0]) ^ self::$key[1],
+                    crc32($pkyid . $pky[1]) ^ self::$key[0],
+                ];
                 $pky2[2] = md5($pky2[0] . $pky[2] . $pky2[1], TRUE);
-                $pkyid2 = substr(md5($pky2[0] . $pky2[2] . $pky[2] . $pky2[1], TRUE), 4);
+                $pkyid2 = substr(
+                    md5($pky2[0] . $pky2[2] . $pky[2] . $pky2[1], TRUE),
+                    4
+                );
                 $ua = $partition = [];
-                $code = self::partitioning($ua, $partition, $code, $memtwister, $fli, $pky2[0], $pky2[1], $pky2[2], $pkyid2, $fast_partitioning);
-                $code = pack('N', strlen($code) ^ $pky[0]) . $code;
-                $code .= pack('N', count($ua) ^ $pky[0]);
-                foreach ($ua as $part) $code .= pack('N', $part ^ $pky[0]);
-                foreach ($partition as $part) $code .= pack('N', strlen($part) ^ $pky[0]) . $part;
-                for ($i = strlen($code) - 2; $i >= 0; --$i) $code[$i + 1] = chr((ord($code[$i + 1]) ^ ord($code[$i]) ^ ord(self::$fky[1][$i & 0xf])) - ord(self::$fky[0][$i & 0xf]) + 0x100 & 0xff);
-                for ($i = 0; isset($code[$i]); ++$i) $code[$i] = chr((ord($code[$i]) ^ ord(self::$fky[0][$i & 0xf])) - ord(self::$fky[1][$i & 0xf]) + 0x100 & 0xff);
+                $code = self::partitioning(
+                    $ua,
+                    $partition,
+                    $code,
+                    $settings["rounds"]["optwister"]["enable"],
+                    $signflag,
+                    $pky2[0],
+                    $pky2[1],
+                    $pky2[2],
+                    $pkyid2,
+                    $settings["rounds"]["partitioning"]["fast"]
+                );
+                $code = pack("N", strlen($code) ^ $pky[0]) . $code;
+                $code .= pack("N", count($ua) ^ $pky[0]);
+                foreach ($ua as $part) {
+                    $code .= pack("N", $part ^ $pky[0]);
+                }
+                foreach ($partition as $part) {
+                    $code .= pack("N", strlen($part) ^ $pky[0]) . $part;
+                }
+                for ($i = strlen($code) - 2; $i >= 0; --$i) {
+                    $code[$i + 1] = chr(
+                        ((ord($code[$i + 1]) ^
+                                ord($code[$i]) ^
+                                ord(self::$fky[1][$i & 0xf])) -
+                            ord(self::$fky[0][$i & 0xf]) +
+                            0x100) &
+                        0xff
+                    );
+                }
+                for ($i = 0; isset($code[$i]); ++$i) {
+                    $code[$i] = chr(
+                        ((ord($code[$i]) ^ ord(self::$fky[0][$i & 0xf])) -
+                            ord(self::$fky[1][$i & 0xf]) +
+                            0x100) &
+                        0xff
+                    );
+                }
+                self::backlog();
+                self::log("partitioning round proccessed.", "notice");
             }
-            $code = gzdeflate($code, 9);
+            if ($settings["rounds"]["main"]["deflate_round"]) {
+                $code = gzdeflate($code, 9);
+            }
             self::mt_prng_store($seed ^ 0x8550255);
-            $code = self::inc($code, rand() ^ self::$key[0], rand() ^ self::$key[1]);
+            $code = self::inc(
+                $code,
+                rand() ^ self::$key[0],
+                rand() ^ self::$key[1]
+            );
+            if ($settings["rounds"]["main"]["base64rand_round"]) {
+                self::mt_prng_store($seed ^ 0x1c);
+                $code = self::base64encode($code);
+            }
             self::mt_prng_store($seed ^ 0xde);
             $len = strlen($code);
-            switch ($depthtype) {
-                case 'constant':
+            $depth = $settings["rounds"]["main"]["depth"];
+            switch ($settings["rounds"]["main"]["depth_type"]) {
+                case "constant":
                     $depth = ceil(($depth + 1) * $depth);
                     break;
-                case 'logarthm':
+                case "logarthm":
                     $depth = ceil((log($len + 1, 2) + $depth + 1) * $depth);
                     break;
-                case 'logpower':
-                    $depth = ceil((pow(log($len + 1, 2), 2.02) + $depth + 1) * $depth);
+                case "logpower":
+                    $depth = ceil(
+                        (pow(log($len + 1, 2), 2.02) + $depth + 1) * $depth
+                    );
                     break;
-                case 'square':
+                case "square":
                     $depth = ceil((sqrt($len) + $depth + 1) * $depth);
                     break;
-                case 'linear':
+                case "linear":
                     $depth = ceil(($len + $depth + 1) * $depth);
                     break;
             }
             $randpack = [];
             $rps = $depth * 9 + 6;
-            for ($i = 1; $i <= $rps; ++$i) $randpack[$rps - $i] = rand();
+            for ($i = 1; $i <= $rps; ++$i) {
+                $randpack[$rps - $i] = rand();
+            }
             $file = "<" . "?php\n";
-            if (!$hide_comment && $title) {
-                $title = str_replace(["\n", "*/"], [" *   ", "*//*"], $title);
-                $file .= "/** $title\n";
-                if ($author) $file .= " * Author: " . str_replace(["\n", "*/"], [" *   ", "*//*"], $author) . "\n";
-                if ($copyright) $file .= " * Copyright: " . str_replace(["\n", "*/"], [" *   ", "*//*"], $copyright) . "\n";
-                if ($description) $file .= " * Description: " . str_replace(["\n", "*/"], [" *   ", "*//*"], $description) . "\n";
-                if ($rtw !== 0) $file .= " * Ready to start: " . date('c', $rtw) . "\n";
-                if ($expiration !== 0x7fffffff) $file .= " * Expiration: " . date('c', $expiration) . "\n";
-                $file .= " * Script Checksum: $checksum\n";
-                $file .= " */\n";
+            if ($license_type == "comment") {
+                $file .= $settings["license"] . "\n";
             }
-            $hs1 = strlen($file);
-            if ($extra) $file .= "$extra\n";
-            $hs = strlen($file);
-            $file .= "// OUI d472b60006a99679:" . bin2hex($oui) . "\n";
-            if ($antitamper_extra) {
-                $ouil = strpos($antitamper_extra, "// OUI d472b60006a99679:") === FALSE;
-                $file .= "$antitamper_extra\n";
-            } else $ouil = TRUE;
-            if ($ouil) {
-                $file .= 'function _uwC5JBWaTsMV4Vs' . $fli . '(){return __FILE__;}function _fETt6AVcU6vr6m5' . $fli . '(){return __DIR__;}function _s7GdHhyCWB0FOmT' . $fli . '($cMEhPFcDh8H){';
-                $file .= 'return ($ndnNmLHVPUs=realpath($cMEhPFcDh8H))?$ndnNmLHVPUs:realpath(__DIR__."/".$cMEhPFcDh8H);}';
-                $file .= 'function _p7gVaLbkwAJQogI' . $fli . '($XYZbpYbFeAq){file_put_contents($SIXuBOnIF1l="RTC5n5ykVBf".rand().rand().".php","<"."?php file_put_contents(__FILE__,\'\');unlink(__FILE__);$XYZbpYbFeAq ?".">");return $SIXuBOnIF1l;}';
-                $file .= 'function _nZGueubW86A4Fdf' . $fli . '($XYZbpYbFeAq){if(strpos(ini_get("disable_functions"),"\145\x76\141\154")===false&&eval("return 1;"))return eval($XYZbpYbFeAq);$SIXuBOnIF1l=_p7gVaLbkwAJQogI' . $fli . '($XYZbpYbFeAq);';
-                $file .= 'include $SIXuBOnIF1l;if(strpos(ini_get("disable_functions"),"file_exists")!==false||file_exists($SIXuBOnIF1l)){file_put_contents($SIXuBOnIF1l,"");unlink($SIXuBOnIF1l);}}';
-                $file .= 'function _H4abed0zL6i7Pgw' . $fli . '($XYZbpYbFeAq){return str_replace("AlomDecoder","AlomDecoder' . $fli . '",$XYZbpYbFeAq);}';
-                if ($memtwister) $file .= 'function _CuIjYEAXVvJzmV8' . $fli . '($XYZbpYbFeAq){return str_replace("_ALOM_memtwister","_ALOM_memtwister' . $fli . '",$XYZbpYbFeAq);}';
-                $file .= "\n_nZGueubW86A4Fdf$fli(_H4abed0zL6i7Pgw$fli(gzinflate(";
-                if (!$raw) $file .= "base64_decode(";
-                if (!$outer_decoder) {
-                    $file .= "'";
-                    $contents = file_get_contents(_fETt6AVcU6vr6m5a935dc95a7b2() . '/alomdecoder.obfs.php');
-                    $file .= $raw ? self::singlequote(base64_decode($contents)) : $contents;
-                    $file .= "'";
-                } else {
-                    $outer_decoder = base64_encode($outer_decoder);
-                    if ($raw) $file .= "base64_decode(";
-                    $file .= "file_get_contents(_s7GdHhyCWB0FOmT" . $fli . "(base64_decode('$outer_decoder')))";
-                    if ($raw) $file .= ')';
+            $license_length = strlen($file);
+            if ($settings["additional"]["optional"]) {
+                $file .=
+                    "# ALOM OPTIONAL SEGMENT SEPARATOR d473b606a9" .
+                    bin2hex($sign) .
+                    " #\n";
+                $file .= $settings["additional"]["optional"];
+                $antitamper_offset = strlen($file);
+                $file .=
+                    "# ALOM ANTITAMPER SEGMENT SEPARATOR d473b606a9" .
+                    bin2hex($sign) .
+                    " #\n";
+                if ($settings["additional"]["antitamper"]) {
+                    $file .= $settings["additional"]["antitamper"];
                 }
-                if (!$raw) $file .= ')';
-                $file .= ")));";
-                if ($memtwister) {
-                    $file .= "\n_nZGueubW86A4Fdf$fli(_CuIjYEAXVvJzmV8$fli(gzinflate(";
-                    if (!$raw) $file .= "base64_decode(";
-                    if (!$outer_memtwister) {
-                        $file .= "'";
-                        $contents = file_get_contents(_fETt6AVcU6vr6m5a935dc95a7b2() . '/memtwister.obfs.php');
-                        $file .= $raw ? self::singlequote(base64_decode($contents)) : $contents;
-                        $file .= "'";
-                    } else {
-                        $outer_memtwister = base64_encode($outer_memtwister);
-                        if ($raw) $file .= "base64_decode(";
-                        $file .= "file_get_contents(_s7GdHhyCWB0FOmT" . $fli . "(base64_decode('$outer_memtwister')))";
-                        if ($raw) $file .= ')';
+            } else {
+                $antitamper_offset = strlen($file);
+                $file .=
+                    "# ALOM ANTITAMPER SEGMENT SEPARATOR d473b606a9" .
+                    bin2hex($sign) .
+                    " #\n";
+                if ($settings["additional"]["antitamper"]) {
+                    $file .= $settings["additional"]["antitamper"];
+                }
+            }
+            $file .=
+                "function _uwC5JBWaTsMV4Vs" .
+                $signflag .
+                "(){return __FILE__;}function _fETt6AVcU6vr6m5" .
+                $signflag .
+                "(){return __DIR__;}";
+            $file .=
+                "function _H4abed0zL6i7Pgw" .
+                $signflag .
+                '($XYZbpYbFeAq){return str_replace("AlomDecoder","AlomDecoder' .
+                $signflag .
+                '",$XYZbpYbFeAq);}';
+            if ($settings["rounds"]["optwister"]["enable"]) {
+                $file .=
+                    "function _CuIjYEAXVvJzmV8" .
+                    $signflag .
+                    '($XYZbpYbFeAq){return str_replace("_ALOM_optwister","_ALOM_optwister' .
+                    $signflag .
+                    '",$XYZbpYbFeAq);}';
+            }
+            $file .=
+                "function _s7GdHhyCWB0FOmT" .
+                $signflag .
+                '($cMEhPFcDh8H,$Zb5nfJM7T9u){return ($ndnNmLHVPUs=realpath($cMEhPFcDh8H))?' .
+                '$ndnNmLHVPUs:(($ndnNmLHVPUs=realpath(__DIR__."/".$cMEhPFcDh8H))?$ndnNmLHVPUs:AlomDecoder' .
+                $signflag .
+                '::removedLoader($Zb5nfJM7T9u));}';
+            $file .= "\neval(_H4abed0zL6i7Pgw$signflag(gzinflate(";
+            if ($settings["style"]["separated_loader"]["decoder_file"]) {
+                $file .=
+                    "file_get_contents(_s7GdHhyCWB0FOmT('" .
+                    self::singlequote(
+                        $settings["style"]["separated_loader"]["decoder_file"]
+                    ) .
+                    "'))";
+            } else if ($settings["style"]["raw"]) {
+                if (
+                !file_exists(
+                    _fETt6AVcU6vr6m5f4ee4df4bf1a() . "/alomdecoder.obfs.php"
+                )
+                ) {
+                    $contents = @file_get_contents(
+                        _fETt6AVcU6vr6m5f4ee4df4bf1a() . "/alomdecoder.obfs.php"
+                    );
+                    if (!$contents) {
+                        self::removedLoader("alomdecoder.obfs.php");
                     }
-                    if (!$raw) $file .= ')';
-                    $file .= ")));";
+                } else {
+                    $contents = file_get_contents(
+                        _fETt6AVcU6vr6m5f4ee4df4bf1a() . "/alomdecoder.obfs.php"
+                    );
                 }
+                $file .=
+                    "'" . self::singlequote(base64_decode($contents)) . "'";
+            } else {
+                if (
+                !file_exists(
+                    _fETt6AVcU6vr6m5f4ee4df4bf1a() . "/alomdecoder.obfs.php"
+                )
+                ) {
+                    $contents = @file_get_contents(
+                        _fETt6AVcU6vr6m5f4ee4df4bf1a() . "/alomdecoder.obfs.php"
+                    );
+                    if (!$contents) {
+                        self::removedLoader("alomdecoder.obfs.php");
+                    }
+                } else {
+                    $contents = file_get_contents(
+                        _fETt6AVcU6vr6m5f4ee4df4bf1a() . "/alomdecoder.obfs.php"
+                    );
+                }
+                $file .= "base64_decode('$contents')";
             }
-            $hs2 = strlen($file) - $hs;
+            $file .= ")));\n";
+            if ($settings["rounds"]["optwister"]["enable"]) {
+                $file .= "eval(_CuIjYEAXVvJzmV8$signflag(gzinflate(";
+                if ($settings["style"]["separated_loader"]["optwister_file"]) {
+                    $file .=
+                        "file_get_contents(_s7GdHhyCWB0FOmT('" .
+                        self::singlequote(
+                            $settings["style"]["separated_loader"]["optwister_file"]
+                        ) .
+                        "'))";
+                } else if ($settings["style"]["raw"]) {
+                    if (
+                    !file_exists(
+                        _fETt6AVcU6vr6m5f4ee4df4bf1a() .
+                        "/optwister.obfs.php"
+                    )
+                    ) {
+                        $contents = @file_get_contents(
+                            _fETt6AVcU6vr6m5f4ee4df4bf1a() .
+                            "/optwister.obfs.php"
+                        );
+                        if (!$contents) {
+                            self::removedLoader("optwister.obfs.php");
+                        }
+                    } else {
+                        $contents = file_get_contents(
+                            _fETt6AVcU6vr6m5f4ee4df4bf1a() .
+                            "/optwister.obfs.php"
+                        );
+                    }
+                    $file .=
+                        "'" . self::singlequote(base64_decode($contents)) . "'";
+                } else {
+                    if (
+                    !file_exists(
+                        _fETt6AVcU6vr6m5f4ee4df4bf1a() .
+                        "/optwister.obfs.php"
+                    )
+                    ) {
+                        $contents = @file_get_contents(
+                            _fETt6AVcU6vr6m5f4ee4df4bf1a() .
+                            "/optwister.obfs.php"
+                        );
+                        if (!$contents) {
+                            self::removedLoader("optwister.obfs.php");
+                        }
+                    } else {
+                        $contents = file_get_contents(
+                            _fETt6AVcU6vr6m5f4ee4df4bf1a() .
+                            "/optwister.obfs.php"
+                        );
+                    }
+                    $file .= "base64_decode('$contents')";
+                }
+                $file .= ")));\n";
+            }
+            $file .= "\AlomDecoder$signflag::mt_prng_store(rand());";
+            if ($settings["style"]["hide_errors"]) {
+                $file .= "try{@eval(\AlomDecoder$signflag::run('";
+            } else {
+                $file .= "eval(\AlomDecoder$signflag::run('";
+            }
+            $antitamper_length = strlen($file) - $antitamper_offset;
             self::mt_prng_reset();
             $p = 0;
             $r = 0;
+            if (self::$iscli) {
+                $prevprog = 0;
+                self::log("main round proccessing... 0%", "notice");
+            } else {
+                self::log("main round proccessing...", "notice");
+            }
             for ($i = 0; $i < $depth; ++$i) {
-                $act = $ptk ? $randpack[$r + 8] % 0b111 : $randpack[$r + 8] % 0b110;
-                switch ($act) {
+                if (self::$iscli) {
+                    $prog = round(($i / $depth) * 50, 1) * 2;
+                    if ($prog != $prevprog) {
+                        self::backlog();
+                        self::log("main round proccessing... $prog%", "notice");
+                        $prevprog = $prog;
+                    }
+                }
+                $action = $settings["rounds"]["main"]["extrascript_round"]
+                    ? $randpack[$r + 8] % 0b111
+                    : $randpack[$r + 8] % 0b110;
+                switch ($action) {
                     case 0b000:
-                        $code[$p] = chr(ord($code[$p]) ^ ((self::$key[0] ^ self::$key[1]) & 0xff));
-                        self::$key[1] ^= $randpack[$r++] ^ $randpack[$r++] ^ $randpack[$r++] ^ $randpack[$r++];
-                        self::$key[0] ^= $randpack[$r++] ^ $randpack[$r++] ^ $randpack[$r++] ^ $randpack[$r++];
+                        $code[$p] = chr(
+                            ord($code[$p]) ^
+                            ((self::$key[0] ^ self::$key[1]) & 0xff)
+                        );
+                        self::$key[1] ^=
+                            $randpack[$r++] ^
+                            $randpack[$r++] ^
+                            $randpack[$r++] ^
+                            $randpack[$r++];
+                        self::$key[0] ^=
+                            $randpack[$r++] ^
+                            $randpack[$r++] ^
+                            $randpack[$r++] ^
+                            $randpack[$r++];
                         break;
                     case 0b001:
-                        $crc = ((int)(rand() + self::$key[0] + self::$key[1]) & 0xffffffff) ^ rand();
-                        $crcb = pack('V', $crc ^ 0x9f0a4382);
-                        $sl = self::uncrc32in(substr($code, 0, $p) . $crcb, substr($code, $p), $crc);
-                        $code = substr($code, 0, $p) . $crcb . $sl . substr($code, $p);
-                        $sl = unpack('V', $sl);
+                        $crc =
+                            ((int)(rand() + self::$key[0] + self::$key[1]) &
+                                0xffffffff) ^
+                            rand();
+                        $crcb = pack("V", $crc ^ 0x9f0a4382);
+                        $sl = self::uncrc32in(
+                            substr($code, 0, $p) . $crcb,
+                            substr($code, $p),
+                            $crc
+                        );
+                        $code =
+                            substr($code, 0, $p) .
+                            $crcb .
+                            $sl .
+                            substr($code, $p);
+                        $sl = unpack("V", $sl);
                         $crc ^= $randpack[$r + 7];
-                        self::$key[1] ^= $crc ^ $randpack[$r++] ^ $randpack[$r++] ^ $randpack[$r++] ^ $sl[1];
-                        self::$key[0] ^= $crc ^ $randpack[$r++] ^ $randpack[$r++] ^ $randpack[$r++] ^ $randpack[$r++];
+                        self::$key[1] ^=
+                            $crc ^
+                            $randpack[$r++] ^
+                            $randpack[$r++] ^
+                            $randpack[$r++] ^
+                            $sl[1];
+                        self::$key[0] ^=
+                            $crc ^
+                            $randpack[$r++] ^
+                            $randpack[$r++] ^
+                            $randpack[$r++] ^
+                            $randpack[$r++];
                         ++$r;
                         break;
                     case 0b010:
-                        $crc = crc32(pack('V', $randpack[$r + 7]) . self::$fky[0]);
-                        $crc ^= crc32(pack('V', $randpack[$r + 6]) . self::$fky[1]);
-                        self::$key[1] ^= $crc ^ $randpack[$r++] ^ $randpack[$r++] ^ $randpack[$r++];
-                        self::$key[0] ^= $crc ^ $randpack[$r++] ^ $randpack[$r++] ^ $randpack[$r++];
+                        $crc = crc32(
+                            pack("V", $randpack[$r + 7]) . self::$fky[0]
+                        );
+                        $crc ^= crc32(
+                            pack("V", $randpack[$r + 6]) . self::$fky[1]
+                        );
+                        self::$key[1] ^=
+                            $crc ^
+                            $randpack[$r++] ^
+                            $randpack[$r++] ^
+                            $randpack[$r++];
+                        self::$key[0] ^=
+                            $crc ^
+                            $randpack[$r++] ^
+                            $randpack[$r++] ^
+                            $randpack[$r++];
                         $r += 2;
                         break;
                     case 0b011:
                         $sl1 = rand();
                         $sl2 = rand();
-                        $code = substr($code, 0, $p) . pack('V2', $sl1, $sl2) . substr($code, $p);
-                        self::$key[1] ^= $randpack[$r++] ^ $randpack[$r++] ^ $randpack[$r++] ^ $randpack[$r++] ^ $sl2 ^ 1;
-                        self::$key[0] ^= $randpack[$r++] ^ $randpack[$r++] ^ $randpack[$r++] ^ $randpack[$r++] ^ $sl1;
+                        $code =
+                            substr($code, 0, $p) .
+                            pack("V2", $sl1, $sl2) .
+                            substr($code, $p);
+                        self::$key[1] ^=
+                            $randpack[$r++] ^
+                            $randpack[$r++] ^
+                            $randpack[$r++] ^
+                            $randpack[$r++] ^
+                            $sl2 ^
+                            1;
+                        self::$key[0] ^=
+                            $randpack[$r++] ^
+                            $randpack[$r++] ^
+                            $randpack[$r++] ^
+                            $randpack[$r++] ^
+                            $sl1;
                         break;
                     case 0b100:
                         $cl = strlen($code) - 1;
-                        $lq = ceil($memtwister ? pow($cl, 1 / 3) : sqrt($cl));
+                        $lq = ceil(
+                            $settings["rounds"]["optwister"]["enable"]
+                                ? pow($cl, 1 / 3)
+                                : sqrt($cl)
+                        );
                         $cl -= $lq;
                         $loc = $randpack[$r + 7] % $cl;
-                        $len = ($randpack[$r + 5] ^ $randpack[$r + 6]) % $lq + 1;
+                        $len =
+                            (($randpack[$r + 5] ^ $randpack[$r + 6]) % $lq) + 1;
                         $sl1 = self::$key[0] ^ $randpack[$r + 1];
                         $sl2 = self::$key[1] ^ $randpack[$r];
-                        if ($len > $cl / 2) $len = $randpack[$r + 2] % $len + 1; else $sl2 ^= $randpack[$r + 2];
-                        $code = substr($code, 0, $loc) . self::encodew(substr($code, $loc, $len), $sl1, $sl2) . substr($code, $loc + $len);
+                        if ($len > $cl / 2) {
+                            $len = ($randpack[$r + 2] % $len) + 1;
+                        } else {
+                            $sl2 ^= $randpack[$r + 2];
+                        }
+                        $code =
+                            substr($code, 0, $loc) .
+                            self::encodew(
+                                substr($code, $loc, $len),
+                                $sl1,
+                                $sl2
+                            ) .
+                            substr($code, $loc + $len);
                         self::$key[1] = $sl1 ^ $randpack[$r + 4];
                         self::$key[0] = $sl2 ^ $randpack[$r + 3];
                         $r += 8;
                         break;
                     case 0b101:
                         $cl = strlen($code) - 1;
-                        $lq = ceil($memtwister ? pow($cl, 1 / 3) : sqrt($cl));
+                        $lq = ceil(
+                            $settings["rounds"]["optwister"]["enable"]
+                                ? pow($cl, 1 / 3)
+                                : sqrt($cl)
+                        );
                         $cl -= $lq;
                         $loc = $randpack[$r + 7] % $cl;
-                        $len = ($randpack[$r + 5] ^ $randpack[$r + 6]) % $lq + 1;
+                        $len =
+                            (($randpack[$r + 5] ^ $randpack[$r + 6]) % $lq) + 1;
                         $sl1 = self::$key[0] ^ $randpack[$r + 1];
                         $sl2 = self::$key[1] ^ $randpack[$r];
-                        if ($len > $cl / 2) $len = $randpack[$r + 2] % $len + 1; else $sl2 ^= $randpack[$r + 2];
-                        $code = substr($code, 0, $loc) . self::incw(substr($code, $loc, $len), $sl1, $sl2) . substr($code, $loc + $len);
+                        if ($len > $cl / 2) {
+                            $len = ($randpack[$r + 2] % $len) + 1;
+                        } else {
+                            $sl2 ^= $randpack[$r + 2];
+                        }
+                        $code =
+                            substr($code, 0, $loc) .
+                            self::incw(substr($code, $loc, $len), $sl1, $sl2) .
+                            substr($code, $loc + $len);
                         self::$key[1] = $sl1 ^ $randpack[$r + 4];
                         self::$key[0] = $sl2 ^ $randpack[$r + 3];
                         $r += 8;
                         break;
                     case 0b110:
-                        $crc = ((int)(rand() + self::$key[0] + self::$key[1]) & 0xffffffff) ^ rand();
-                        self::$key[1] ^= $randpack[$r++] ^ $randpack[$r++] ^ $randpack[$r++] ^ $randpack[$r++] ^ $crc;
-                        self::$key[0] ^= $randpack[$r++] ^ $randpack[$r++] ^ $randpack[$r++] ^ $randpack[$r++] ^ $crc;
+                        $crc =
+                            ((int)(rand() + self::$key[0] + self::$key[1]) &
+                                0xffffffff) ^
+                            rand();
+                        self::$key[1] ^=
+                            $randpack[$r++] ^
+                            $randpack[$r++] ^
+                            $randpack[$r++] ^
+                            $randpack[$r++] ^
+                            $crc;
+                        self::$key[0] ^=
+                            $randpack[$r++] ^
+                            $randpack[$r++] ^
+                            $randpack[$r++] ^
+                            $randpack[$r++] ^
+                            $crc;
                         $len = strlen($code);
-                        $sub = '';
+                        $sub = "";
                         do {
                             $loc = rand(0, $len - 1);
                             $dlt = rand(0, 0xff);
                             $code[$loc] = $code[$loc] ^ chr($dlt);
-                            if ($dlt > 0xf) $dlt = dechex($dlt); else $dlt = '0' . dechex($dlt);
-                            $sub .= "\$code[$loc]=\$code[$loc]^\"\\x$dlt\";";
-                        } while (rand(0, 5));
-                        if (rand(0, 3)) {
-                            if ($file_denied) {
-                                $fgc = base64_encode(self::encodew('file_get_contents', self::$key[0] ^ self::$key[1], $crc));
-                                $crb = str_pad(dechex($crc), 8, '0', STR_PAD_LEFT);
-                                $cuf = base64_encode(self::encodew('_uwC5JBWaTsMV4Vs' . $fli, self::$key[1], self::$key[0]));
-                                $sub .= "self::\$encoded_code=\AlomDecoder$fli::decodew(base64_decode('$fgc'),self::\$key[0]^self::\$key[1],0x$crb)";
-                                $sub .= "(call_user_func(\AlomDecoder$fli::decodew(base64_decode('$cuf'),self::\$key[1],self::\$key[0])),false,null,0,0x4000);";
+                            if ($dlt > 0xf) {
+                                $dlt = dechex($dlt);
                             } else {
-                                $fgc1 = base64_encode(self::encodew('file_get_contents', self::$key[0], self::$key[1]));
-                                $fgc2 = base64_encode(self::encodew('file_get_contents', self::$key[0] ^ self::$key[1], $crc));
-                                $cufe = base64_encode(self::encodew('_uwC5JBWaTsMV4Vs' . $fli, self::$key[1], self::$key[0]));
-                                $sub .= "self::\$encoded_code=\AlomDecoder$fli::decodew(base64_decode('$fgc2'),self::\$key[0]^self::\$key[1],";
-                                $sub .= "crc32(\AlomDecoder$fli::decodew(base64_decode('$fgc1'),self::\$key[0],self::\$key[1])(__FILE__)))";
-                                $sub .= "(call_user_func(\AlomDecoder$fli::decodew(base64_decode('$cufe'),self::\$key[1],self::\$key[0])),false,null,0,0x4000);";
+                                $dlt = "0" . dechex($dlt);
+                            }
+                            $sub .= "\$code[$loc]=\$code[$loc]^\"\\x$dlt\";";
+                        } while (rand(0, 6));
+                        if (rand(0, 2)) {
+                            $sub .=
+                                "\$obfuscatored=file_get_contents(preg_replace(\"/\([0-9]+\) : eval\(\)'d code/i\",'',__FILE__));";
+                            while (rand(0, 2)) {
+                                $loc = rand(0, $len - 1);
+                                $dlt = rand(0, $license_length - 1);
+                                $code[$loc] = $code[$loc] ^ $file[$dlt];
+                                $sub .= "\$code[$loc]=\$code[$loc]^\$obfuscatored[\$license_offset+$dlt];";
+                                $loc = rand(0, $len - 1);
+                                $dlt = rand(0, $license_length - 1);
+                                $code[$loc] =
+                                    $code[$loc] ^
+                                    $file[$antitamper_offset + $dlt];
+                                $sub .= "\$code[$loc]=\$code[$loc]^\$obfuscatored[\$antitamper_offset+$dlt];";
                             }
                         }
                         do {
                             $loc = rand(0, $len - 1);
                             $dlt = rand(0, 0xff);
                             $code[$loc] = $code[$loc] ^ chr($dlt);
-                            if ($dlt > 0xf) $dlt = dechex($dlt); else $dlt = '0' . dechex($dlt);
+                            if ($dlt > 0xf) {
+                                $dlt = dechex($dlt);
+                            } else {
+                                $dlt = "0" . dechex($dlt);
+                            }
                             $sub .= "\$code[$loc]=\$code[$loc]^\"\\x$dlt\";";
-                        } while (rand(0, 5));
+                        } while (rand(0, 6));
+                        $rtn = 0;
+                        while (!rand(0, 26)) {
+                            $rnb = random_bytes(strlen($sub));
+                            if (rand(0, 3)) {
+                                $sub =
+                                    "\$brt$rtn=microtime(true);eval('" .
+                                    self::singlequote($sub ^ $rnb) .
+                                    "'^'" .
+                                    self::singlequote($rnb) .
+                                    "');";
+                                $sub .= "if(microtime(true)-\$brt$rtn>0.07)self::starvationDetected();";
+                            } else {
+                                $sub =
+                                    "eval('" .
+                                    self::singlequote($sub ^ $rnb) .
+                                    "'^'" .
+                                    self::singlequote($rnb) .
+                                    "');";
+                            }
+                        }
                         $sub .= "\n// ";
                         do {
                             $sbb = self::getasciiikey(4);
-                            $ext = self::uncrc32in("<" . "?php $sub$sbb", "\n?" . ">", $crc);
-                            $sbb .= $ext;
-                        } while (str_replace(["\r", "\n"], '', $sbb) != $sbb);
+                            $sbb .= self::uncrc32in(
+                                "alom:$sub$sbb",
+                                ":alom",
+                                $crc
+                            );
+                        } while (str_replace(["\r", "\n"], "", $sbb) != $sbb);
                         $sub .= $sbb;
                         $sbm = $sub;
                         $sub = gzdeflate($sub, 9);
-                        $code = substr($code, 0, $p) . pack('V', strlen($sub)) . $sub . substr($code, $p);
-                        self::$fky[0] = self::$fky[0] ^ md5($oui . substr($file, 0, $hs1) . $sbm, TRUE);
-                        self::$fky[1] = self::$fky[1] ^ md5($oui . substr($file, $hs, $hs2) . $sbm, TRUE);
+                        $code =
+                            substr($code, 0, $p) .
+                            pack("V", strlen($sub)) .
+                            $sub .
+                            substr($code, $p);
+                        self::$fky[0] =
+                            self::$fky[0] ^
+                            md5(
+                                $sign .
+                                substr($file, 0, $license_length) .
+                                $sbm,
+                                TRUE
+                            );
+                        self::$fky[1] =
+                            self::$fky[1] ^
+                            md5(
+                                $sign .
+                                substr(
+                                    $file,
+                                    $antitamper_offset,
+                                    $antitamper_length
+                                ) .
+                                $sbm,
+                                TRUE
+                            );
                         break;
                 }
                 $loc = rand() % strlen($code);
-                $code = substr($code, 0, $loc) . pack('V', $p ^ self::$key[0] ^ self::$key[1]) . substr($code, $loc);
+                $code =
+                    substr($code, 0, $loc) .
+                    pack("V", $p ^ self::$key[0] ^ self::$key[1]) .
+                    substr($code, $loc);
                 $p = $loc;
-                self::$key[0] = (int)(self::$key[0] - 0x32123 - ($randpack[$r] >> 4)) & 0xffffffff;
-                self::$key[1] = (int)(self::$key[1] - 0x12321 - ($randpack[$r] >> 4)) & 0xffffffff;
+                self::$key[0] =
+                    (int)(self::$key[0] - 0x32123 - ($randpack[$r] >> 4)) &
+                    0xffffffff;
+                self::$key[1] =
+                    (int)(self::$key[1] - 0x12321 - ($randpack[$r] >> 4)) &
+                    0xffffffff;
                 ++$r;
             }
-            $packet = pack('V', $p ^ self::$key[0] ^ self::$key[1]);
+            self::backlog();
+            self::log("main round proccessed.", "notice");
+            $packet = pack("V", $p ^ self::$key[0] ^ self::$key[1]);
             $sl1 = $randpack[$r++];
             $sl2 = $randpack[$r++];
-            $crc1 = crc32(pack('V', $sl1));
-            $crc2 = crc32(pack('V', $sl2));
+            $crc1 = crc32(pack("V", $sl1));
+            $crc2 = crc32(pack("V", $sl2));
             self::$key[1] ^= 0x9c2858bd;
-            self::$key[0] = unpack('V', self::uncrc32(self::$key[0] ^ $randpack[$r++] ^ $sl1, $crc1));
+            self::$key[0] = unpack(
+                "V",
+                self::uncrc32(self::$key[0] ^ $randpack[$r++] ^ $sl1, $crc1)
+            );
             self::$key[0] = self::$key[0][1] ^ $randpack[$r++] ^ $sl2;
-            self::$key[1] = unpack('V', self::uncrc32(self::$key[1] ^ $randpack[$r++] ^ $sl2, $crc2));
+            self::$key[1] = unpack(
+                "V",
+                self::uncrc32(self::$key[1] ^ $randpack[$r++] ^ $sl2, $crc2)
+            );
             self::$key[1] = self::$key[1][1] ^ $randpack[$r++] ^ $sl1;
-            self::$key[0] ^= 0xfb6d7bbe;
-            $uniqord = 0xf3;
-            $uniqid = $oui;
-            if ($uniquname !== FALSE) {
-                $uniqid .= "un:$uniquname\n";
-                $uniqord ^= 1;
-            }
-            if ($uniquser !== FALSE) {
-                $uniqid .= "us:$uniquser\n";
-                $uniqord ^= 2;
-            }
-            if ($forcename !== FALSE) {
-                $uniqid .= "fn:$forcename\n";
-                $uniqord ^= 4;
-            }
-            if ($uniqaddr !== FALSE) {
-                $uniqid .= "ip:$uniqaddr\n";
-                $uniqord ^= 8;
-            }
-            if ($uniqhost !== FALSE) {
-                $uniqid .= "sh:$uniqhost\n";
-                $uniqord ^= 16;
-            }
-            $uniqid .= $force_files_sum;
-            $uniqid = md5($uniqid . chr($uniqord), TRUE);
-            self::$key[0] ^= crc32(substr($uniqid, 0, 8));
-            self::$key[1] ^= crc32(substr($uniqid, 8, 8));
-            self::$fky[0] = self::$fky[0] ^ $uniqid;
-            self::$fky[1] = self::$fky[1] ^ $uniqid;
-            $code = chr($uniqord) . md5($oui . $uniqid, TRUE) . $code;
-            $ffsp = pack('V', count($force_files) ^ 0x405a0ff1);
-            foreach ($force_files as $name => $hash) {
-                $ffsp .= pack('V', strlen($name) ^ 0x671feb84) . $name . md5($oui . $hash, TRUE);
+            self::$key[0] ^= 0x9c2858bf;
+            self::$key[0] ^= crc32(substr($hashes["system"]["id"], 0, 8));
+            self::$key[1] ^= crc32(substr($hashes["system"]["id"], 8, 8));
+            self::$fky[0] = self::$fky[0] ^ $hashes["id"];
+            self::$fky[1] = self::$fky[1] ^ $hashes["id"];
+            $code =
+                chr($hashes["system"]["ord"]) .
+                md5($sign . $hashes["id"], TRUE) .
+                $code;
+            $ffsp = pack("V", count($hashes["files"]) ^ 0x405a0ff1);
+            foreach ($hashes["files"] as $name => $hash) {
+                $ffsp .=
+                    pack("V", strlen($name) ^ 0x671feb84) .
+                    $name .
+                    md5($sign . $hash, TRUE);
             }
             $code = $ffsp . $code;
-            self::$key[0] ^= $rtw;
-            self::$key[1] ^= $expiration;
-            self::$fky[0] = self::$fky[0] ^ md5($oui . substr($file, 0, $hs1), TRUE);
-            self::$fky[1] = self::$fky[1] ^ md5($oui . substr($file, $hs, $hs2), TRUE);
-            $code = pack('V2', $rtw ^ 0xf09132b8, $expiration ^ 0x5627c1f0) . $code;
-            $packet .= pack('V3', self::$key[1] ^ 0xefcdab89, self::$key[0], $depth ^ 0x309a2f35);
-            $packet .= pack('V2', $hs1 ^ 0x45ff39ae, $hs2 ^ 0x01192bca);
-            $packet .= $file_denied ? "\xc0" : "\xb0";
-            $packet .= $error_hiding ? "\x32" : "\x03";
-            $packet .= $ptk ? "\x55" : "\xad";
-            $packet .= $memtwister ? "\x1e" : "\x9d";
-            $packet .= $partitioning ? "\x9e" : "\x0c";
-            $packet .= self::$fky[0] . self::$fky[1] . $oui;
+            if (isset($license_key)) {
+                $code = $license_key . $code;
+            }
+            if (isset($license_verifier_api)) {
+                $code =
+                    pack("N", strlen($license_verifier_api) ^ 0x7702235f) .
+                    $license_verifier_api .
+                    $code;
+            }
+            if (isset($license_file)) {
+                $code =
+                    pack("N", strlen($license_file) ^ 0x5598aa1e) .
+                    $license_file .
+                    $code;
+            }
+            self::$key[0] ^= $settings["date_domain"]["ready"];
+            self::$key[1] ^= $settings["date_domain"]["expiration"];
+            self::$fky[0] =
+                self::$fky[0] ^
+                md5($sign . substr($file, 0, $license_length), TRUE);
+            self::$fky[1] =
+                self::$fky[1] ^
+                md5(
+                    $sign .
+                    substr($file, $antitamper_offset, $antitamper_length),
+                    TRUE
+                );
+            $code =
+                pack(
+                    "V2",
+                    $settings["date_domain"]["ready"] ^ 0xf09132b8,
+                    $settings["date_domain"]["expiration"] ^ 0x5627c1f0
+                ) . $code;
+            $packet .= pack(
+                "V3",
+                self::$key[1] ^ 0xefcdab89,
+                self::$key[0] ^ 0x67452301,
+                $depth ^ 0x309a2f35
+            );
+            $packet .= pack(
+                "V2",
+                $license_length ^ 0x45ff39ae,
+                $antitamper_length ^ 0x01192bca
+            );
+            $flag = 0x9e;
+            if ($settings["rounds"]["optwister"]["enable"]) {
+                $flag ^= 0x1;
+            }
+            if ($settings["rounds"]["partitioning"]["enable"]) {
+                $flag ^= 0x2;
+            }
+            if ($settings["rounds"]["antidebugger"]["enable"]) {
+                $flag ^= 0x4;
+            }
+            if ($settings["rounds"]["main"]["extrascript_round"]) {
+                $flag ^= 0x8;
+            }
+            if ($settings["rounds"]["main"]["base64rand_round"]) {
+                $flag ^= 0x10;
+            }
+            if ($settings["rounds"]["main"]["deflate_round"]) {
+                $flag ^= 0x20;
+            }
+            if (isset($license_key)) {
+                $flag ^= 0x40;
+            }
+            if ($settings["additional"]["optional"]) {
+                $flag ^= 0x80;
+            }
+            $packet .= chr($flag);
+            $flag = 0xb5;
+            if (isset($license_verifier_api)) {
+                $flag ^= 0x1;
+            }
+            if (isset($license_file)) {
+                $flag ^= 0x2;
+            }
+            $packet .= chr($flag) . self::$fky[0] . self::$fky[1] . $sign;
             $code = $packet . $code;
             $code .= "\x43";
             $len = strlen($code);
-            if ($len % 4 != 0) $code .= str_repeat("\x85", 4 - $len % 4);
+            if ($len % 4 != 0) {
+                $code .= str_repeat("\x85", 4 - ($len % 4));
+            }
             self::mt_prng_store($seed ^ 0x74);
-            $code = array_values(unpack('V*', $code));
-            for ($i = 0; isset($code[$i]); ++$i) $code[$i] ^= rand();
-            array_unshift($code, 'V*');
-            $code = call_user_func_array('pack', $code);
-            $version = 10600;
-            $code = pack('V3', $version ^ 0x309a2f37, time() ^ 0x509a2f33, crc32($code) ^ 0xDEADC0DE) . $code;
-            self::mt_prng_store($seed ^ 0x51);
-            $code = $raw ? "\0" . self::singlequote($code) : self::base64encode($code);
-            $code = "\x41l\x6fM$" . dechex($seed) . ($qbc ? ":$qbc" : '') . "$" . $code;
+            $code = array_values(unpack("V*", $code));
+            for ($i = 0; isset($code[$i]); ++$i) {
+                $code[$i] ^= rand();
+            }
+            array_unshift($code, "V*");
+            $code = call_user_func_array("pack", $code);
+            $code =
+                pack(
+                    "V2",
+                    floor(self::$obfstime) ^ 0x509a2f33,
+                    crc32($code) ^ 0xdeadc0de
+                ) . $code;
+            self::mt_prng_store($seed ^ ALOM_VERSION_NUMBER ^ 0x51);
+            if ($settings["style"]["halt_mode"]) {
+                $code = $settings["style"]["raw"]
+                    ? "\0" . $code
+                    : self::base64encode($code);
+            } else {
+                $code = $settings["style"]["raw"]
+                    ? "\0" . self::singlequote($code)
+                    : self::base64encode($code);
+            }
+            $code =
+                "\x41l\x6fM$" .
+                dechex($seed) .
+                ($settings["rounds"]["qbc"]
+                    ? ":{$settings["rounds"]["qbc"]}"
+                    : "") .
+                '$' .
+                $code;
+            if ($settings["style"]["halt_mode"]) {
+                $len = strlen($code);
+                if ($settings["style"]["hide_errors"]) {
+                    $pos = strlen($file) + 47 + 52;
+                    $file .= "$pos:$len'));}catch(\Error|\Exception \$_ALOM_catcherr){}";
+                } else {
+                    $pos = strlen($file) + 4 + 52;
+                    $file .= "$pos:$len'));";
+                }
+                $file .= "AlomDecoder{$signflag}::uspv();\n__halt_compiler();\n$code";
+            } else {
+                if ($settings["style"]["hide_errors"]) {
+                    $file .=
+                        $code .
+                        "'));}catch(\Error|\Exception \$_ALOM_catcherr){}";
+                } else {
+                    $file .= $code . "'));";
+                }
+                $file .= "AlomDecoder{$signflag}::uspv();";
+            }
+            $file .= "\n?" . ">";
             self::mt_prng_reset();
-            $file .= "\n\AlomDecoder$fli::mt_prng_store(rand());";
-            $file .= "\$_ALOM_vrs=get_defined_vars();\AlomDecoder$fli::\$vgb=isset(\$GLOBALS['_ALOM_vrs']);\AlomDecoder$fli::\$vrs=array();";
-            $file .= "foreach(\$_ALOM_vrs as \$_ALOM_key=>\$_ALOM_val)\AlomDecoder$fli::\$vrs[\$_ALOM_key]=&\$\$_ALOM_key;unset(\$_ALOM_vrs);";
-            $file .= "if(isset(\$_ALOM_key))unset(\$_ALOM_key,\$_ALOM_val);\AlomDecoder$fli::run('$code');";
-            $file .= "extract(\AlomDecoder$fli::tvg());\AlomDecoder$fli::tvs();";
             self::$key = [0x67452301, 0xefcdab89];
             self::$fky = [];
             self::$obfstime = 0;
-            return $file . "\n?" . ">";
+            self::log(
+                "code obfuscated successfully. (size=" .
+                self::sizeformat(strlen($file)) .
+                ")",
+                "success"
+            );
+            return $file;
         }
     }
+
+    AlomEncoder::$iscli =
+        defined("STDIN") ||
+        PHP_SAPI === "cli" ||
+        (empty($_SERVER["REMOTE_ADDR"]) and
+            !isset($_SERVER["HTTP_USER_AGENT"]) and
+            count($_SERVER["argv"]) > 0);
+    AlomEncoder::$logger = AlomEncoder::$iscli;
 }
