@@ -88,7 +88,7 @@ function alom_protect($file, $settings = array()){
     if(!isset($settings['license']))
         $settings['license'] = [];
     if(!isset($settings['license']['title']))
-        $settings['license']['title'] = 'Obfuscated by ALOM 2.2 | Auto Protection';
+        $settings['license']['title'] = 'Obfuscated by ALOM 2.3 | Auto Protection';
 
     $source = AlomEncoder::obfuscator($source, $settings);
     return file_put_contents($file, $source) > 0;
