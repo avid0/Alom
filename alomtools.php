@@ -167,7 +167,7 @@ function alom_minify($code){
  * @return string obfuscated code
  */
 function alom_obfuscate($code, $settings = []){
-    return AlomEncoder::obfuscate($code, $settings);
+    return AlomEncoder::obfuscator($code, $settings);
 }
 
 /**
@@ -178,7 +178,8 @@ function alom_obfuscate($code, $settings = []){
  * @return bool
  */
 function alom_minify_into($code, $file){
-    return (bool)@file_put_contents($file, AlomEncoder::minify($code));
+    $code = AlomEncoder::minify($code);
+    return (bool)@file_put_contents($file, $code);
 }
 
 /**
@@ -190,7 +191,8 @@ function alom_minify_into($code, $file){
  * @return bool
  */
 function alom_obfuscate_into($code, $file, $settings = []){
-    return (bool)@file_put_contents($file, AlomEncoder::obfuscate($code, $settings));
+    $code = AlomEncoder::obfuscator($code, $settings);
+    return (bool)@file_put_contents($file, $code);
 }
 
 /**
