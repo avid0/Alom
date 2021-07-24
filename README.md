@@ -1,4 +1,4 @@
-# Alom Obfuscator / PHP Encoder version 2.2
+# Alom Obfuscator / PHP Encoder version 2.3
 
 This powerful php-base obfuscator can protect from your codes for making non-readable scripts.
 Of the capabilities of this mixer is setting access for specific system, antitamper, expiration of application, license, obfuscator output style (raw/base64), etc.
@@ -61,6 +61,7 @@ Index | Type | Description
 ----- | ---- | -----------
 __antitamper__ | string\|callable | A part of the script that is not obfuscated and visible and can not be manipulated and changed by the user.
 __optional__ | string\|callable | A part of the script that is not obfuscated and visible and can be manipulated and changed by the user.
+__shutdown__ | string\|callable | A part of the obfuscatored script for execution on shutdown.
 
 ### Identify settings
 Index | Type | Description
@@ -92,6 +93,7 @@ __minify__ | array | [Minify round settings](https://github.com/avid0/Alom#round
 __optwister__ | array | [Optwister round settings](https://github.com/avid0/Alom#rounds-property-settings) (slow running)
 __partitioning__ | array | [Partitioning round settings](https://github.com/avid0/Alom#partitioning-round-settings) (slow running)
 __antidebugger__ | array | [Antidebugger round settings](https://github.com/avid0/Alom#rounds-property-settings)
+__unmeaning__ | array | [Unmeaning round settings](https://github.com/avid0/Alom#unmeaning-round-settings)
 __qbc__ | array | [QBC round settings](https://github.com/avid0/Alom#rounds-property-settings)
 
 #### Main round settings
@@ -102,12 +104,20 @@ __depth__ | float | 1 | Complexity of obfuscator steps.
 __extrascript_round__ | boolean | true |
 __base64rand_round__ | boolean | false |
 __deflate_round__ | boolean | true |
+__iterate_base64__ | int | 0 |
 
 #### Partitioning round settings
 Index | Type | Default
 ----- | ---- | -------
 __enable__ | boolean | false
 __fast__ | boolean | false
+
+#### Unmeaning round settings
+Index | Type | Default
+----- | ---- | -------
+__variables__ | boolean | false
+__prefix__ | string | '\_'
+__size__ | int | 12
 
 #### Rounds property settings
 Index | Type | Default
@@ -120,6 +130,8 @@ Index | Type | Default | Description
 __separated_loader__ | array | null | [Separated loader settings](https://github.com/avid0/Alom#separated-loader-settings)
 __halt_mode__ | boolean | false | enable/disable halt mode.
 __hide_errors__ | boolean | true | enable/disable display errors.
+__hide_eval__ | boolean | true | enable/disable run main script in inner eval.
+__global_cache__ | boolean | true | enable/disable global caching for enabled hide_eval setting.
 __raw__ | boolean | false | raw/base64 display style.
 
 #### Separated loader settings
