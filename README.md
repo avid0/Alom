@@ -1,6 +1,13 @@
+
 # Alom
 #### Reversing of the protected "Protector" [alomencoder.obfs.php](https://github.com/avid0/Alom/blob/main/alomencoder.obfs.php).
 
+### 2.3 Exception Leaking
+- Setup your debugging environment as seen on [2.2](#21-bypass-anti-debug).
+- Put a breakpoint at the last line before `?>`.
+- Run the script and wait for the debugger to show the exception.
+ ![BP Vulnerability demo 2.3](demo/bp_vulnerability.demo-2.3.gif)
+ 
 ### 2.2 Bypass Anti Debug
 - Modify your XDebug configuration to my own.
 Note: The bypass is due to a bad anti debug setup and we can bypass it by changing `xdebug.remote_enable`, `xdebug.remote_autostart`, `xdebug.profiler_enable` and trick the anti debug into believing XDebug is not enabled.

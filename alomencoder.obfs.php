@@ -1,49 +1,49 @@
 <?php
 
 /**
- * Alom 2.2
+ * Alom 2.3
  * Unpacked by Tesla
  * https://github.com/0x11DFE
+ * 
+ * This version of Alom is obfuscated internally
+ * Look on older commits to manually deobfuscate it.
  */
 
-if ($_ALOM_beforeeval) {
-    $_ALOM_code = "";
-    unset($_ALOM_code, $_ALOM_beforeeval);
-} else {
-    file_put_contents($_ALOM_code, "");
+if (isset($_ALOM_code)) {
+    file_put_contents($_ALOM_code, '');
     unlink($_ALOM_code);
-    $_ALOM_code = "";
-    unset($_ALOM_code, $_ALOM_beforeeval);
+    $_ALOM_code = '';
+    unset($_ALOM_code);
 }
-if (!class_exists("AlomEncoder")) {
-    if (!defined("ALOM_VERSION")) {
-        define("ALOM_VERSION", "2.2");
+if (!class_exists('AlomEncoder')) {
+    if (!defined('ALOM_VERSION')) {
+        define('ALOM_VERSION', '2.3');
     }
-    if (!defined("ALOM_VERSION_NUMBER")) {
-        define("ALOM_VERSION_NUMBER", 20200);
+    if (!defined('ALOM_VERSION_NUMBER')) {
+        define('ALOM_VERSION_NUMBER', 20300);
     }
-    if (!defined("T_NULLSAFE_OBJECT_OPERATOR")) {
-        define("T_NULLSAFE_OBJECT_OPERATOR", NULL);
+    if (!defined('T_NULLSAFE_OBJECT_OPERATOR')) {
+        define('T_NULLSAFE_OBJECT_OPERATOR', NULL);
     }
-    if (!defined("T_FN")) {
-        define("T_FN", NULL);
+    if (!defined('T_FN')) {
+        define('T_FN', NULL);
     }
-    if (!defined("T_COALESCE")) {
-        define("T_COALESCE", NULL);
+    if (!defined('T_COALESCE')) {
+        define('T_COALESCE', NULL);
     }
-    if (!defined("T_COALESCE_EQUAL")) {
-        define("T_COALESCE_EQUAL", NULL);
+    if (!defined('T_COALESCE_EQUAL')) {
+        define('T_COALESCE_EQUAL', NULL);
     }
 
     class AlomEncoder
     {
-        private static $mt_prng_seed = 1;
-        private static $key = [0x67452301, 0xefcdab89];
-        private static $fky = [];
-        private static $obfstime = 0;
-        public static $iscli = TRUE;
-        public static $logger = TRUE;
-        private static $license_code_sbox = [
+        private static $_bd534020b8b7 = 1;
+        private static $_d186186a7d16 = [0x67452301, 0xefcdab89];
+        private static $_3227269fab81 = [];
+        private static $_68aa9304b10c = 0;
+        public static $_2b3c116ebf09 = TRUE;
+        public static $_bf509b6a6b3d = TRUE;
+        private static $_7520f8b4b421 = [
             0x7c,
             0x12,
             0x9a,
@@ -301,7 +301,7 @@ if (!class_exists("AlomEncoder")) {
             0x22,
             0x8a,
         ];
-        private static $license_code_ubox = [
+        private static $_468b0eed41c8 = [
             0x45,
             0x4a,
             0x92,
@@ -560,42 +560,29 @@ if (!class_exists("AlomEncoder")) {
             0xba,
         ];
 
-        public static function getmd5ikey($str)
+        public static function getmd5ikey($_23bf89ec40b6) { return md5($_23bf89ec40b6 . ':' . microtime() . ':' . lcg_value(), TRUE); }
+
+        public static function getasciiikey($_8d2d7939f6cb)
         {
-            return md5($str . ":" . microtime() . ":" . lcg_value(), TRUE);
+            if (function_exists('random_bytes')) return random_bytes($_8d2d7939f6cb);
+            $_23bf89ec40b6 = '';
+            for ($_44af9f79ea06 = 0; $_44af9f79ea06 * 16 < $_8d2d7939f6cb; ++$_44af9f79ea06) $_23bf89ec40b6 .= getmd5ikey($_23bf89ec40b6 . $_8d2d7939f6cb);
+            return substr($_23bf89ec40b6, 0, $_8d2d7939f6cb);
         }
 
-        public static function getasciiikey($len)
-        {
-            if (function_exists("random_bytes")) {
-                return random_bytes($len);
-            }
-            $str = "";
-            for ($i = 0; $i * 16 < $len; ++$i) {
-                $str .= getmd5ikey($str . $len);
-            }
-            return substr($str, 0, $len);
-        }
+        public static function getcharikey() { return self::getasciiikey(1); }
 
-        public static function getcharikey()
-        {
-            return self::getasciiikey(1);
-        }
-
-        public static function getbitikey()
-        {
-            return ord(self::getcharikey()) & 1;
-        }
+        public static function getbitikey() { return ord(self::getcharikey()) & 1; }
 
         public static function getintikey()
         {
-            $ikey = unpack("N", self::getasciiikey(4));
-            return $ikey[1];
+            $_e3883a47f8e2 = unpack('N', self::getasciiikey(4));
+            return $_e3883a47f8e2[1];
         }
 
-        public static function minify($src)
+        public static function minify($_c3ff9ca148fc)
         {
-            $IW = [
+            $_00c3c9be86c9 = [
                 T_CONCAT_EQUAL,
                 T_DOUBLE_ARROW,
                 T_BOOLEAN_AND,
@@ -625,416 +612,272 @@ if (!class_exists("AlomEncoder")) {
                 T_SL_EQUAL,
                 T_SR_EQUAL,
             ];
-            $tokens = token_get_all($src);
-            $new = "";
-            $c = sizeof($tokens);
-            $iw = FALSE;
-            $ih = FALSE;
-            $ls = "";
-            $ot = NULL;
-            for ($i = 0; $i < $c; ++$i) {
-                $token = $tokens[$i];
-                if (is_array($token)) {
-                    [$tn, $ts] = $token;
-                    $tname = token_name($tn);
-                    if ($tn == T_INLINE_HTML) {
-                        $new .= $ts;
-                        $iw = FALSE;
+            $_ce467557df24 = token_get_all($_c3ff9ca148fc);
+            $_7847d9353cff = "";
+            $_40d1e3c43b78 = sizeof($_ce467557df24);
+            $_f7220aea6cbf = FALSE;
+            $_7a6ee10567a9 = FALSE;
+            $_ef0328743c06 = "";
+            $_3a4dc0472b89 = NULL;
+            for ($_44af9f79ea06 = 0; $_44af9f79ea06 < $_40d1e3c43b78; ++$_44af9f79ea06) {
+                $_5572c1da585c = $_ce467557df24[$_44af9f79ea06];
+                if (is_array($_5572c1da585c)) {
+                    [$_69e78850f7b6, $_250a58058e85] = $_5572c1da585c;
+                    $_21f1c89c7f62 = token_name($_69e78850f7b6);
+                    if ($_69e78850f7b6 == T_INLINE_HTML) {
+                        $_7847d9353cff .= $_250a58058e85;
+                        $_f7220aea6cbf = FALSE;
                     } else {
-                        if ($tn == T_OPEN_TAG) {
-                            $ts = rtrim($ts);
-                            $ts .= " ";
-                            $new .= $ts;
-                            $ot = T_OPEN_TAG;
-                            $iw = TRUE;
-                        } else if ($tn == T_OPEN_TAG_WITH_ECHO) {
-                            $new .= $ts;
-                            $ot = T_OPEN_TAG_WITH_ECHO;
-                            $iw = TRUE;
-                        } else if ($tn == T_CLOSE_TAG) {
-                            if ($ot == T_OPEN_TAG_WITH_ECHO) {
-                                $new = rtrim($new, "; ");
-                            } else {
-                                $ts = " " . $ts;
-                            }
-                            $new .= $ts;
-                            $ot = NULL;
-                            $iw = FALSE;
-                        } else if (in_array($tn, $IW)) {
-                            $new .= $ts;
-                            $iw = TRUE;
-                        } else if (
-                            $tn == T_CONSTANT_ENCAPSED_STRING ||
-                            $tn == T_ENCAPSED_AND_WHITESPACE
-                        ) {
-                            if ($ts[0] == '"') {
-                                $ts = addcslashes($ts, "\n\t\r");
-                            }
-                            $new .= $ts;
-                            $iw = TRUE;
-                        } else if ($tn == T_WHITESPACE) {
-                            $nt = isset($tokens[$i + 1])
-                                ? $tokens[$i + 1]
-                                : NULL;
-                            if (
-                                !$iw &&
-                                (!is_string($nt) || $nt == '$') &&
-                                !in_array($nt[0], $IW)
-                            ) {
-                                $new .= " ";
-                            } else if (
-                                $nt !== NULL &&
-                                isset($tokens[$i - 1]) &&
-                                ($tokens[$i - 1] == "." ||
-                                    $tokens[$i + 1] == ".") &&
-                                ($tokens[$i - 1][0] == T_LNUMBER ||
-                                    $tokens[$i + 1][0] == T_LNUMBER)
-                            ) {
-                                $new .= " ";
-                            }
-                            $iw = FALSE;
-                        } else if ($tn == T_START_HEREDOC) {
-                            $new .= "<<<S\n";
-                            $iw = FALSE;
-                            $ih = TRUE;
-                        } else if ($tn == T_END_HEREDOC) {
-                            $new .= "S;";
-                            $iw = TRUE;
-                            $ih = FALSE;
-                            for ($j = $i + 1; $j < $c; ++$j) {
-                                if (
-                                    is_string($tokens[$j]) &&
-                                    $tokens[$j] == ";"
-                                ) {
-                                    $i = $j;
+                        if ($_69e78850f7b6 == T_OPEN_TAG) {
+                            $_250a58058e85 = rtrim($_250a58058e85);
+                            $_250a58058e85 .= " ";
+                            $_7847d9353cff .= $_250a58058e85;
+                            $_3a4dc0472b89 = T_OPEN_TAG;
+                            $_f7220aea6cbf = TRUE;
+                        } else if ($_69e78850f7b6 == T_OPEN_TAG_WITH_ECHO) {
+                            $_7847d9353cff .= $_250a58058e85;
+                            $_3a4dc0472b89 = T_OPEN_TAG_WITH_ECHO;
+                            $_f7220aea6cbf = TRUE;
+                        } else if ($_69e78850f7b6 == T_CLOSE_TAG) {
+                            if ($_3a4dc0472b89 == T_OPEN_TAG_WITH_ECHO) $_7847d9353cff = rtrim($_7847d9353cff, "; "); else $_250a58058e85 = " " . $_250a58058e85;
+                            $_7847d9353cff .= $_250a58058e85;
+                            $_3a4dc0472b89 = NULL;
+                            $_f7220aea6cbf = FALSE;
+                        } else if (in_array($_69e78850f7b6, $_00c3c9be86c9)) {
+                            $_7847d9353cff .= $_250a58058e85;
+                            $_f7220aea6cbf = TRUE;
+                        } else if ($_69e78850f7b6 == T_CONSTANT_ENCAPSED_STRING || $_69e78850f7b6 == T_ENCAPSED_AND_WHITESPACE) {
+                            if ($_250a58058e85[0] == '"') $_250a58058e85 = addcslashes($_250a58058e85, "\n\t\r");
+                            $_7847d9353cff .= $_250a58058e85;
+                            $_f7220aea6cbf = TRUE;
+                        } else if ($_69e78850f7b6 == T_WHITESPACE) {
+                            $_9b99e9c201bc = isset($_ce467557df24[$_44af9f79ea06 + 1]) ? $_ce467557df24[$_44af9f79ea06 + 1] : NULL;
+                            if (!$_f7220aea6cbf && (!is_string($_9b99e9c201bc) || $_9b99e9c201bc == '$') && !in_array($_9b99e9c201bc[0], $_00c3c9be86c9)) $_7847d9353cff .= " "; else if ($_9b99e9c201bc !== NULL && isset($_ce467557df24[$_44af9f79ea06 - 1]) && ($_ce467557df24[$_44af9f79ea06 - 1] == '.' || $_ce467557df24[$_44af9f79ea06 + 1] == '.') && ($_ce467557df24[$_44af9f79ea06 - 1][0] == T_LNUMBER || $_ce467557df24[$_44af9f79ea06 + 1][0] == T_LNUMBER)) $_7847d9353cff .= " ";
+                            $_f7220aea6cbf = FALSE;
+                        } else if ($_69e78850f7b6 == T_START_HEREDOC) {
+                            $_7847d9353cff .= "<<<S\n";
+                            $_f7220aea6cbf = FALSE;
+                            $_7a6ee10567a9 = TRUE;
+                        } else if ($_69e78850f7b6 == T_END_HEREDOC) {
+                            $_7847d9353cff .= "S;";
+                            $_f7220aea6cbf = TRUE;
+                            $_7a6ee10567a9 = FALSE;
+                            for ($_d87f4c1f5462 = $_44af9f79ea06 + 1; $_d87f4c1f5462 < $_40d1e3c43b78; ++$_d87f4c1f5462) {
+                                if (is_string($_ce467557df24[$_d87f4c1f5462]) && $_ce467557df24[$_d87f4c1f5462] == ";") {
+                                    $_44af9f79ea06 = $_d87f4c1f5462;
                                     break;
-                                } else if ($tokens[$j][0] == T_CLOSE_TAG) {
-                                    break;
-                                }
+                                } else if ($_ce467557df24[$_d87f4c1f5462][0] == T_CLOSE_TAG) break;
                             }
-                        } else if ($tn == T_COMMENT || $tn == T_DOC_COMMENT) {
-                            $iw = TRUE;
+                        } else if ($_69e78850f7b6 == T_COMMENT || $_69e78850f7b6 == T_DOC_COMMENT) {
+                            $_f7220aea6cbf = TRUE;
                         } else {
-                            $new .= $ts;
-                            $iw = FALSE;
+                            $_7847d9353cff .= $_250a58058e85;
+                            $_f7220aea6cbf = FALSE;
                         }
                     }
-                    $ls = "";
+                    $_ef0328743c06 = "";
                 } else {
-                    $new .= $token;
-                    $ls = $token;
-                    $iw = TRUE;
+                    $_7847d9353cff .= $_5572c1da585c;
+                    $_ef0328743c06 = $_5572c1da585c;
+                    $_f7220aea6cbf = TRUE;
                 }
             }
-            return $new;
+            return $_7847d9353cff;
         }
 
-        private static function strshuffle($st)
+        private static function strshuffle($_6e4b8fdcc8be)
         {
-            $len = strlen($st) - 1;
-            for ($i = 0; $i <= $len; ++$i) {
-                $r = rand(0, $len);
-                if ($r != $i) {
-                    $t = $st[$i];
-                    $st[$i] = $st[$r];
-                    $st[$r] = $t;
+            $_8d2d7939f6cb = strlen($_6e4b8fdcc8be) - 1;
+            for ($_44af9f79ea06 = 0; $_44af9f79ea06 <= $_8d2d7939f6cb; ++$_44af9f79ea06) {
+                $_203a4ef6ac3d = rand(0, $_8d2d7939f6cb);
+                if ($_203a4ef6ac3d != $_44af9f79ea06) {
+                    $_16d7e9582425 = $_6e4b8fdcc8be[$_44af9f79ea06];
+                    $_6e4b8fdcc8be[$_44af9f79ea06] = $_6e4b8fdcc8be[$_203a4ef6ac3d];
+                    $_6e4b8fdcc8be[$_203a4ef6ac3d] = $_16d7e9582425;
                 }
             }
-            return $st;
+            return $_6e4b8fdcc8be;
         }
 
-        private static function arrayshuffle(&$arr)
+        private static function arrayshuffle(&$_b8ba8f88521b)
         {
-            $len = count($arr) - 1;
-            for ($i = 0; $i <= $len; ++$i) {
-                $r = rand(0, $len);
-                if ($r != $i) {
-                    $t = $arr[$i];
-                    $arr[$i] = $arr[$r];
-                    $arr[$r] = $t;
+            $_8d2d7939f6cb = count($_b8ba8f88521b) - 1;
+            for ($_44af9f79ea06 = 0; $_44af9f79ea06 <= $_8d2d7939f6cb; ++$_44af9f79ea06) {
+                $_203a4ef6ac3d = rand(0, $_8d2d7939f6cb);
+                if ($_203a4ef6ac3d != $_44af9f79ea06) {
+                    $_16d7e9582425 = $_b8ba8f88521b[$_44af9f79ea06];
+                    $_b8ba8f88521b[$_44af9f79ea06] = $_b8ba8f88521b[$_203a4ef6ac3d];
+                    $_b8ba8f88521b[$_203a4ef6ac3d] = $_16d7e9582425;
                 }
             }
-            return $arr;
+            return $_b8ba8f88521b;
         }
 
-        private static function base64encode($st)
+        private static function base64encode($_6e4b8fdcc8be)
         {
-            $s = self::strshuffle(
-                "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPRSTUVWXYZ+/="
-            );
-            $res = "";
-            for ($i = 0; isset($st[$i]); $i += 3) {
-                $i1 = isset($st[$i + 1]);
-                $a1 = ord($st[$i]);
-                $a2 = $i1 ? ord($st[$i + 1]) : 0;
-                $res .= $s[$a1 >> 2];
-                $res .= $s[(($a1 & 3) << 4) | ($a2 >> 4)];
-                if ($i1) {
-                    $i2 = isset($st[$i + 2]);
-                    $a3 = $i2 ? ord($st[$i + 2]) : 0;
-                    $res .= $s[(($a2 & 15) << 2) | ($a3 >> 6)];
-                    if ($i2) {
-                        $res .= $s[$a3 & 63];
-                    } else {
-                        $res .= "Q";
-                    }
-                } else {
-                    $res .= "QQ";
-                }
+            $_12aaff6b3248 = self::strshuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPRSTUVWXYZ+/=");
+            $_db9743bd099b = '';
+            for ($_44af9f79ea06 = 0; isset($_6e4b8fdcc8be[$_44af9f79ea06]); $_44af9f79ea06 += 3) {
+                $_b5805c07f8f5 = isset($_6e4b8fdcc8be[$_44af9f79ea06 + 1]);
+                $_4b54fd0a6712 = ord($_6e4b8fdcc8be[$_44af9f79ea06]);
+                $_31cf078581ad = $_b5805c07f8f5 ? ord($_6e4b8fdcc8be[$_44af9f79ea06 + 1]) : 0;
+                $_db9743bd099b .= $_12aaff6b3248[$_4b54fd0a6712 >> 2];
+                $_db9743bd099b .= $_12aaff6b3248[(($_4b54fd0a6712 & 3) << 4) | ($_31cf078581ad >> 4)];
+                if ($_b5805c07f8f5) {
+                    $_5baf9fa0aef8 = isset($_6e4b8fdcc8be[$_44af9f79ea06 + 2]);
+                    $_c63663215036 = $_5baf9fa0aef8 ? ord($_6e4b8fdcc8be[$_44af9f79ea06 + 2]) : 0;
+                    $_db9743bd099b .= $_12aaff6b3248[(($_31cf078581ad & 15) << 2) | ($_c63663215036 >> 6)];
+                    if ($_5baf9fa0aef8) $_db9743bd099b .= $_12aaff6b3248[$_c63663215036 & 63]; else $_db9743bd099b .= 'Q';
+                } else $_db9743bd099b .= 'QQ';
             }
-            return $res;
+            return $_db9743bd099b;
         }
 
-        private static function encode($st, $sl1, $sl2, $fa = FALSE)
+        private static function encode($_6e4b8fdcc8be, $_d2ce9730d406, $_974584786d5a, $_d9d51056bc94 = FALSE)
         {
-            srand($sl1 ^ ($sl2 & 0x7fffffff));
-            $sl1 ^= rand();
-            $sl2 ^= rand();
-            if ($fa) {
-                if (strlen($st) < 2) {
-                    return $st;
-                }
-                $sl = $sl1 ^ $sl2 ^ rand();
-                $st = array_values(unpack("C*", $st));
-                $r = [
-                    rand(0, 0xff),
-                    rand(0, 0xff),
-                    rand(0, 0xff),
-                    rand(0, 0xff),
-                ];
-                $st[0] ^= $r[3];
-                $i = count($st) - 1;
-                $st[0] =
-                    (($st[0] - (($sl >> ($i & 63)) & 0xff) + 0x100) & 0xff) ^
-                    $st[$i];
-                for (--$i; $i >= 0; --$i) {
-                    $st[$i + 1] =
-                        (($st[$i + 1] - (($sl >> ($i & 63)) & 0xff) + 0x100) &
-                            0xff) ^
-                        $st[$i];
-                }
-                $st[0] ^= $r[2];
-                $i = count($st) - 1;
-                $st[0] =
-                    (($st[0] ^ (($sl2 >> ($i & 63)) & 0xff)) -
-                        $st[$i] +
-                        0x100) &
-                    0xff;
-                for (--$i; $i >= 0; --$i) {
-                    $st[$i + 1] =
-                        (($st[$i + 1] ^ (($sl2 >> ($i & 63)) & 0xff)) -
-                            $st[$i] +
-                            0x100) &
-                        0xff;
-                }
-                $st[0] ^= $r[1];
-                $i = count($st) - 1;
-                $st[0] =
-                    (($st[0] ^ (($sl1 >> ($i & 63)) & 0xff)) -
-                        $st[$i] +
-                        0x100) &
-                    0xff;
-                for (--$i; $i >= 0; --$i) {
-                    $st[$i + 1] =
-                        (($st[$i + 1] ^ (($sl1 >> ($i & 63)) & 0xff)) -
-                            $st[$i] +
-                            0x100) &
-                        0xff;
-                }
-                $st[0] ^= $r[0];
-                array_unshift($st, "C*");
-                return call_user_func_array("pack", $st);
+            srand($_d2ce9730d406 ^ $_974584786d5a & 0x7fffffff);
+            $_d2ce9730d406 ^= rand();
+            $_974584786d5a ^= rand();
+            if ($_d9d51056bc94) {
+                if (strlen($_6e4b8fdcc8be) < 2) return $_6e4b8fdcc8be;
+                $_a62b34eb6df6 = $_d2ce9730d406 ^ $_974584786d5a ^ rand();
+                $_6e4b8fdcc8be = array_values(unpack('C*', $_6e4b8fdcc8be));
+                $_203a4ef6ac3d = [rand(0, 0xff), rand(0, 0xff), rand(0, 0xff), rand(0, 0xff)];
+                $_6e4b8fdcc8be[0] ^= $_203a4ef6ac3d[3];
+                $_44af9f79ea06 = count($_6e4b8fdcc8be) - 1;
+                $_6e4b8fdcc8be[0] = ($_6e4b8fdcc8be[0] - (($_a62b34eb6df6 >> ($_44af9f79ea06 & 63)) & 0xff) + 0x100 & 0xff) ^ $_6e4b8fdcc8be[$_44af9f79ea06];
+                for (--$_44af9f79ea06; $_44af9f79ea06 >= 0; --$_44af9f79ea06) $_6e4b8fdcc8be[$_44af9f79ea06 + 1] = ($_6e4b8fdcc8be[$_44af9f79ea06 + 1] - (($_a62b34eb6df6 >> ($_44af9f79ea06 & 63)) & 0xff) + 0x100 & 0xff) ^ $_6e4b8fdcc8be[$_44af9f79ea06];
+                $_6e4b8fdcc8be[0] ^= $_203a4ef6ac3d[2];
+                $_44af9f79ea06 = count($_6e4b8fdcc8be) - 1;
+                $_6e4b8fdcc8be[0] = ($_6e4b8fdcc8be[0] ^ (($_974584786d5a >> ($_44af9f79ea06 & 63)) & 0xff)) - $_6e4b8fdcc8be[$_44af9f79ea06] + 0x100 & 0xff;
+                for (--$_44af9f79ea06; $_44af9f79ea06 >= 0; --$_44af9f79ea06) $_6e4b8fdcc8be[$_44af9f79ea06 + 1] = ($_6e4b8fdcc8be[$_44af9f79ea06 + 1] ^ (($_974584786d5a >> ($_44af9f79ea06 & 63)) & 0xff)) - $_6e4b8fdcc8be[$_44af9f79ea06] + 0x100 & 0xff;
+                $_6e4b8fdcc8be[0] ^= $_203a4ef6ac3d[1];
+                $_44af9f79ea06 = count($_6e4b8fdcc8be) - 1;
+                $_6e4b8fdcc8be[0] = ($_6e4b8fdcc8be[0] ^ (($_d2ce9730d406 >> ($_44af9f79ea06 & 63)) & 0xff)) - $_6e4b8fdcc8be[$_44af9f79ea06] + 0x100 & 0xff;
+                for (--$_44af9f79ea06; $_44af9f79ea06 >= 0; --$_44af9f79ea06) $_6e4b8fdcc8be[$_44af9f79ea06 + 1] = ($_6e4b8fdcc8be[$_44af9f79ea06 + 1] ^ (($_d2ce9730d406 >> ($_44af9f79ea06 & 63)) & 0xff)) - $_6e4b8fdcc8be[$_44af9f79ea06] + 0x100 & 0xff;
+                $_6e4b8fdcc8be[0] ^= $_203a4ef6ac3d[0];
+                array_unshift($_6e4b8fdcc8be, 'C*');
+                return call_user_func_array('pack', $_6e4b8fdcc8be);
             }
-            $t0 = range(0, 0xff);
-            $t1 = range(0, 0xff);
-            self::arrayshuffle($t0);
-            self::arrayshuffle($t1);
-            $u0 = array_combine($t0, array_keys($t0));
-            $u1 = array_combine($t1, array_keys($t1));
-            $len = strlen($st);
-            $sq = ceil(pow($len, 5 / 11));
-            $sl = (int)($sl1 + $sl2) & 0xffffffff;
-            $rounds =
-                ($fa
-                    ? -1
-                    : (($sl & 0x3) ^ (($sl >> 8) & 0x3) ^ ($sl2 & 0x3)) +
-                    0x1a) + floor(log($len + 2, 2) - 1);
-            $sl = ($sl & 0xff) ^ ($sl1 & 0xff) ^ (($sl >> 16) & 0xff) ^ 1;
-            if ($len == 0) {
-                return "";
-            }
-            if ($len == 1) {
-                return chr($u1[$u0[ord($st) ^ $sl] ^ $sl] ^ $sl);
-            }
-            $st = array_values(unpack("C*", $st));
-            $l4 = $sq * 4;
-            for ($round = $rounds - 1; $round >= 0; --$round) {
-                srand((($sl1 ^ $sl2) + $round * 12329) & 0x7fffffff);
-                $randpack = [];
-                for ($i = 1; $i <= $l4; $i += 4) {
-                    $randpack[$l4 - $i] = rand(0, $len - 1);
-                    $randpack[$l4 - $i - 1] = rand(0, $len - 2);
-                    $randpack[$l4 - $i - 2] = rand(0, $len - 2);
-                    $randpack[$l4 - $i - 3] = rand(0, $len - 2);
+            $_3ed83ea0f086 = range(0, 0xff);
+            $_d6658df05cd0 = range(0, 0xff);
+            self::arrayshuffle($_3ed83ea0f086);
+            self::arrayshuffle($_d6658df05cd0);
+            $_8637bcb1d969 = array_combine($_3ed83ea0f086, array_keys($_3ed83ea0f086));
+            $_80b29472d2ff = array_combine($_d6658df05cd0, array_keys($_d6658df05cd0));
+            $_8d2d7939f6cb = strlen($_6e4b8fdcc8be);
+            $_44d3954db149 = ceil(pow($_8d2d7939f6cb, 5 / 11));
+            $_a62b34eb6df6 = (int)($_d2ce9730d406 + $_974584786d5a) & 0xffffffff;
+            $_ca30218261a8 = ($_d9d51056bc94 ? -1 : (($_a62b34eb6df6 & 0x3) ^ (($_a62b34eb6df6 >> 8) & 0x3) ^ ($_974584786d5a & 0x3)) + 0x1a) + floor(log($_8d2d7939f6cb + 2, 2) - 1);
+            $_a62b34eb6df6 = ($_a62b34eb6df6 & 0xff) ^ ($_d2ce9730d406 & 0xff) ^ (($_a62b34eb6df6 >> 16) & 0xff) ^ 1;
+            if ($_8d2d7939f6cb == 0) return '';
+            if ($_8d2d7939f6cb == 1) return chr($_80b29472d2ff[$_8637bcb1d969[ord($_6e4b8fdcc8be) ^ $_a62b34eb6df6] ^ $_a62b34eb6df6] ^ $_a62b34eb6df6);
+            $_6e4b8fdcc8be = array_values(unpack('C*', $_6e4b8fdcc8be));
+            $_c2a49abf23ee = $_44d3954db149 * 4;
+            for ($_e4d131348e9b = $_ca30218261a8 - 1; $_e4d131348e9b >= 0; --$_e4d131348e9b) {
+                srand(($_d2ce9730d406 ^ $_974584786d5a) + ($_e4d131348e9b * 12329) & 0x7fffffff);
+                $_7755dc3006fd = [];
+                for ($_44af9f79ea06 = 1; $_44af9f79ea06 <= $_c2a49abf23ee; $_44af9f79ea06 += 4) {
+                    $_7755dc3006fd[$_c2a49abf23ee - $_44af9f79ea06] = rand(0, $_8d2d7939f6cb - 1);
+                    $_7755dc3006fd[$_c2a49abf23ee - $_44af9f79ea06 - 1] = rand(0, $_8d2d7939f6cb - 2);
+                    $_7755dc3006fd[$_c2a49abf23ee - $_44af9f79ea06 - 2] = rand(0, $_8d2d7939f6cb - 2);
+                    $_7755dc3006fd[$_c2a49abf23ee - $_44af9f79ea06 - 3] = rand(0, $_8d2d7939f6cb - 2);
                 }
-                for ($i = 0; $i < $sq; ++$i) {
-                    $p = $randpack[$i * 4 + 3];
-                    $p1 = $randpack[$i * 4 + 2];
-                    $p2 = $randpack[$i * 4 + 1];
-                    $p3 = $randpack[$i * 4 + 0];
-                    if ($p1 >= $p) {
-                        ++$p1;
-                    }
-                    if ($p2 >= $p) {
-                        ++$p2;
-                    }
-                    if ($p3 >= $p) {
-                        ++$p3;
-                    }
-                    $st[$p2] =
-                        $u0[($st[$p2] - $st[$p] + 0x100) & 0xff] ^
-                        $st[$p] ^
-                        $sl;
-                    $st[$p3] =
-                        $u1[($st[$p3] - $st[$p] + 0x100) & 0xff] ^
-                        $st[$p] ^
-                        $sl;
-                    $st[$p1] =
-                        $u0[($st[$p1] - $st[$p] + 0x100) & 0xff] ^
-                        $st[$p] ^
-                        $sl;
-                    $st[$p] =
-                        $u1[($u0[$st[$p] ^ $t1[$st[$p1]]] - $st[$p2] + 0x100) &
-                        0xff] ^ $st[$p3];
-                    $st[$p] =
-                        ($u1[($st[$p] - $st[$p1] + 0x100) & 0xff] -
-                            $st[$p1] +
-                            0x100) &
-                        0xff;
-                    $st[$p] =
-                        $u0[($st[$p] - $st[$p3] + 0x100) & 0xff] ^ $st[$p3];
-                    $st[$p] ^= $sl;
-                    $st[$p] =
-                        $u1[($st[$p] - $st[$p2] + 0x100) & 0xff] ^ $st[$p1];
-                    $st[$p] =
-                        ($u0[$st[$p] ^ $st[$p1]] - $st[$p3] + 0x100) & 0xff;
-                    $st[$p] =
-                        ($u1[$st[$p] ^ $st[$p3]] - $st[$p2] + 0x100) & 0xff;
+                for ($_44af9f79ea06 = 0; $_44af9f79ea06 < $_44d3954db149; ++$_44af9f79ea06) {
+                    $_f6090e078f91 = $_7755dc3006fd[$_44af9f79ea06 * 4 + 3];
+                    $_e70220c21bba = $_7755dc3006fd[$_44af9f79ea06 * 4 + 2];
+                    $_ea8658d23504 = $_7755dc3006fd[$_44af9f79ea06 * 4 + 1];
+                    $_8ad1291db0a7 = $_7755dc3006fd[$_44af9f79ea06 * 4 + 0];
+                    if ($_e70220c21bba >= $_f6090e078f91) ++$_e70220c21bba;
+                    if ($_ea8658d23504 >= $_f6090e078f91) ++$_ea8658d23504;
+                    if ($_8ad1291db0a7 >= $_f6090e078f91) ++$_8ad1291db0a7;
+                    $_6e4b8fdcc8be[$_ea8658d23504] = $_8637bcb1d969[$_6e4b8fdcc8be[$_ea8658d23504] - $_6e4b8fdcc8be[$_f6090e078f91] + 0x100 & 0xff] ^ $_6e4b8fdcc8be[$_f6090e078f91] ^ $_a62b34eb6df6;
+                    $_6e4b8fdcc8be[$_8ad1291db0a7] = $_80b29472d2ff[$_6e4b8fdcc8be[$_8ad1291db0a7] - $_6e4b8fdcc8be[$_f6090e078f91] + 0x100 & 0xff] ^ $_6e4b8fdcc8be[$_f6090e078f91] ^ $_a62b34eb6df6;
+                    $_6e4b8fdcc8be[$_e70220c21bba] = $_8637bcb1d969[$_6e4b8fdcc8be[$_e70220c21bba] - $_6e4b8fdcc8be[$_f6090e078f91] + 0x100 & 0xff] ^ $_6e4b8fdcc8be[$_f6090e078f91] ^ $_a62b34eb6df6;
+                    $_6e4b8fdcc8be[$_f6090e078f91] = $_80b29472d2ff[$_8637bcb1d969[$_6e4b8fdcc8be[$_f6090e078f91] ^ $_d6658df05cd0[$_6e4b8fdcc8be[$_e70220c21bba]]] - $_6e4b8fdcc8be[$_ea8658d23504] + 0x100 & 0xff] ^ $_6e4b8fdcc8be[$_8ad1291db0a7];
+                    $_6e4b8fdcc8be[$_f6090e078f91] = $_80b29472d2ff[$_6e4b8fdcc8be[$_f6090e078f91] - $_6e4b8fdcc8be[$_e70220c21bba] + 0x100 & 0xff] - $_6e4b8fdcc8be[$_e70220c21bba] + 0x100 & 0xff;
+                    $_6e4b8fdcc8be[$_f6090e078f91] = $_8637bcb1d969[$_6e4b8fdcc8be[$_f6090e078f91] - $_6e4b8fdcc8be[$_8ad1291db0a7] + 0x100 & 0xff] ^ $_6e4b8fdcc8be[$_8ad1291db0a7];
+                    $_6e4b8fdcc8be[$_f6090e078f91] ^= $_a62b34eb6df6;
+                    $_6e4b8fdcc8be[$_f6090e078f91] = $_80b29472d2ff[$_6e4b8fdcc8be[$_f6090e078f91] - $_6e4b8fdcc8be[$_ea8658d23504] + 0x100 & 0xff] ^ $_6e4b8fdcc8be[$_e70220c21bba];
+                    $_6e4b8fdcc8be[$_f6090e078f91] = $_8637bcb1d969[$_6e4b8fdcc8be[$_f6090e078f91] ^ $_6e4b8fdcc8be[$_e70220c21bba]] - $_6e4b8fdcc8be[$_8ad1291db0a7] + 0x100 & 0xff;
+                    $_6e4b8fdcc8be[$_f6090e078f91] = $_80b29472d2ff[$_6e4b8fdcc8be[$_f6090e078f91] ^ $_6e4b8fdcc8be[$_8ad1291db0a7]] - $_6e4b8fdcc8be[$_ea8658d23504] + 0x100 & 0xff;
                 }
             }
-            array_unshift($st, "C*");
-            return call_user_func_array("pack", $st);
+            array_unshift($_6e4b8fdcc8be, 'C*');
+            return call_user_func_array('pack', $_6e4b8fdcc8be);
         }
 
-        private static function inc($str, $sl1, $sl2, $fa = FALSE)
+        private static function inc($_23bf89ec40b6, $_d2ce9730d406, $_974584786d5a, $_d9d51056bc94 = FALSE)
         {
             AlomEncoder::mt_prng_reset();
-            AlomEncoder::mt_prng_store($sl1 ^ $sl2 ^ rand());
-            $str .= pack("V2", rand() ^ $sl1, rand() ^ $sl2);
-            srand($sl1 ^ ($sl2 & 0x7fffffff));
-            $str = self::encode($str, rand() ^ $sl2, rand() ^ $sl1, $fa);
-            return $str;
+            AlomEncoder::mt_prng_store($_d2ce9730d406 ^ $_974584786d5a ^ rand());
+            $_23bf89ec40b6 .= pack('V2', rand() ^ $_d2ce9730d406, rand() ^ $_974584786d5a);
+            srand($_d2ce9730d406 ^ $_974584786d5a & 0x7fffffff);
+            $_23bf89ec40b6 = self::encode($_23bf89ec40b6, rand() ^ $_974584786d5a, rand() ^ $_d2ce9730d406, $_d9d51056bc94);
+            return $_23bf89ec40b6;
         }
 
-        private static function encodew($st, $sl1, $sl2)
+        private static function encodew($_6e4b8fdcc8be, $_d2ce9730d406, $_974584786d5a)
         {
-            static $t0, $t1, $u0, $u1;
-            if ($st === TRUE) {
-                $t0 = range(0, 0xff);
-                self::arrayshuffle($t0);
-                $t1 = range(0, 0xff);
-                self::arrayshuffle($t1);
-                $u0 = array_combine($t0, array_keys($t0));
-                $u1 = array_combine($t1, array_keys($t1));
+            static $_3ed83ea0f086, $_d6658df05cd0, $_8637bcb1d969, $_80b29472d2ff;
+            if ($_6e4b8fdcc8be === TRUE) {
+                $_3ed83ea0f086 = range(0, 0xff);
+                self::arrayshuffle($_3ed83ea0f086);
+                $_d6658df05cd0 = range(0, 0xff);
+                self::arrayshuffle($_d6658df05cd0);
+                $_8637bcb1d969 = array_combine($_3ed83ea0f086, array_keys($_3ed83ea0f086));
+                $_80b29472d2ff = array_combine($_d6658df05cd0, array_keys($_d6658df05cd0));
                 return;
             }
-            $sl1 ^= 0x392cc908;
-            $sl2 ^= 0x33541515;
-            $sl1 ^= $t0[$sl1 & 0xff] ^ 0xafb655d5;
-            $sl2 ^= $t1[$sl2 & 0xff] ^ 0x9cd52c07;
-            $len = strlen($st);
-            $sl = (int)($sl1 + $sl2) & 0xffffffff;
-            $rounds =
-                (($sl & 0x5) ^ (($sl >> 8) & 0x5) ^ ($sl2 & 0x5)) +
-                0xa +
-                floor(log($len + 2, 2) - 1);
-            $sl = ($sl & 0xff) ^ ($sl1 & 0xff) ^ (($sl >> 16) & 0xff);
-            if ($len == 0) {
-                return "";
-            }
-            if ($len == 1) {
-                return chr($u1[$u0[ord($st) ^ $sl] ^ $sl] ^ $sl);
-            }
-            $l1 = $len - 1;
-            $st = array_values(unpack("C*", $st));
-            for ($round = $rounds - 1; $round >= 0; --$round) {
-                for ($i = $len - 1; $i >= 0; --$i) {
-                    $p = ((($i * 0xf) % $len) + 0x37d973 + $round) % $len;
-                    $p1 =
-                        ((($i * 0xb) % $l1) + (($p * 0x9) % $l1) + 0x2e1081) %
-                        $l1;
-                    $p2 =
-                        ((($i * 0x7) % $l1) + (($p1 * 0x9) % $l1) + 0x105977) %
-                        $l1;
-                    $p3 =
-                        ((($i * 0x3) % $l1) + (($p2 * 0x1) % $l1) + 0x17d10f) %
-                        $l1;
-                    if ($p1 >= $p) {
-                        ++$p1;
-                    }
-                    if ($p2 >= $p) {
-                        ++$p2;
-                    }
-                    if ($p3 >= $p) {
-                        ++$p3;
-                    }
-                    $st[$p2] =
-                        $u0[($st[$p2] - $st[$p] + 0x100) & 0xff] ^
-                        $st[$p] ^
-                        $sl;
-                    $st[$p3] =
-                        $u1[($st[$p3] - $st[$p] + 0x100) & 0xff] ^
-                        $st[$p] ^
-                        $sl;
-                    $st[$p1] =
-                        $u0[($st[$p1] - $st[$p] + 0x100) & 0xff] ^
-                        $st[$p] ^
-                        $sl;
-                    $st[$p] =
-                        $u1[($u0[$st[$p] ^ $t1[$st[$p1]]] - $st[$p2] + 0x100) &
-                        0xff] ^ $st[$p3];
-                    $st[$p] =
-                        ($u1[($st[$p] - $st[$p1] + 0x100) & 0xff] -
-                            $st[$p1] +
-                            0x100) &
-                        0xff;
-                    $st[$p] =
-                        $u0[($st[$p] - $st[$p3] + 0x100) & 0xff] ^ $st[$p3];
-                    $st[$p] ^= $sl;
-                    $st[$p] =
-                        $u1[($st[$p] - $st[$p2] + 0x100) & 0xff] ^ $st[$p1];
-                    $st[$p] =
-                        ($u0[$st[$p] ^ $st[$p1]] - $st[$p3] + 0x100) & 0xff;
-                    $st[$p] =
-                        ($u1[$st[$p] ^ $st[$p3]] - $st[$p2] + 0x100) & 0xff;
+            $_d2ce9730d406 ^= 0x392cc908;
+            $_974584786d5a ^= 0x33541515;
+            $_d2ce9730d406 ^= $_3ed83ea0f086[$_d2ce9730d406 & 0xff] ^ 0xafb655d5;
+            $_974584786d5a ^= $_d6658df05cd0[$_974584786d5a & 0xff] ^ 0x9cd52c07;
+            $_8d2d7939f6cb = strlen($_6e4b8fdcc8be);
+            $_a62b34eb6df6 = (int)($_d2ce9730d406 + $_974584786d5a) & 0xffffffff;
+            $_ca30218261a8 = (($_a62b34eb6df6 & 0x5) ^ (($_a62b34eb6df6 >> 8) & 0x5) ^ ($_974584786d5a & 0x5)) + 0xa + floor(log($_8d2d7939f6cb + 2, 2) - 1);
+            $_a62b34eb6df6 = ($_a62b34eb6df6 & 0xff) ^ ($_d2ce9730d406 & 0xff) ^ (($_a62b34eb6df6 >> 16) & 0xff);
+            if ($_8d2d7939f6cb == 0) return '';
+            if ($_8d2d7939f6cb == 1) return chr($_80b29472d2ff[$_8637bcb1d969[ord($_6e4b8fdcc8be) ^ $_a62b34eb6df6] ^ $_a62b34eb6df6] ^ $_a62b34eb6df6);
+            $_de52ea136b8b = $_8d2d7939f6cb - 1;
+            $_6e4b8fdcc8be = array_values(unpack('C*', $_6e4b8fdcc8be));
+            for ($_e4d131348e9b = $_ca30218261a8 - 1; $_e4d131348e9b >= 0; --$_e4d131348e9b) {
+                for ($_44af9f79ea06 = $_8d2d7939f6cb - 1; $_44af9f79ea06 >= 0; --$_44af9f79ea06) {
+                    $_f6090e078f91 = (($_44af9f79ea06 * 0xf) % $_8d2d7939f6cb + 0x37d973 + $_e4d131348e9b) % $_8d2d7939f6cb;
+                    $_e70220c21bba = (($_44af9f79ea06 * 0xb) % $_de52ea136b8b + ($_f6090e078f91 * 0x9) % $_de52ea136b8b + 0x2e1081) % $_de52ea136b8b;
+                    $_ea8658d23504 = (($_44af9f79ea06 * 0x7) % $_de52ea136b8b + ($_e70220c21bba * 0x9) % $_de52ea136b8b + 0x105977) % $_de52ea136b8b;
+                    $_8ad1291db0a7 = (($_44af9f79ea06 * 0x3) % $_de52ea136b8b + ($_ea8658d23504 * 0x1) % $_de52ea136b8b + 0x17d10f) % $_de52ea136b8b;
+                    if ($_e70220c21bba >= $_f6090e078f91) ++$_e70220c21bba;
+                    if ($_ea8658d23504 >= $_f6090e078f91) ++$_ea8658d23504;
+                    if ($_8ad1291db0a7 >= $_f6090e078f91) ++$_8ad1291db0a7;
+                    $_6e4b8fdcc8be[$_ea8658d23504] = $_8637bcb1d969[$_6e4b8fdcc8be[$_ea8658d23504] - $_6e4b8fdcc8be[$_f6090e078f91] + 0x100 & 0xff] ^ $_6e4b8fdcc8be[$_f6090e078f91] ^ $_a62b34eb6df6;
+                    $_6e4b8fdcc8be[$_8ad1291db0a7] = $_80b29472d2ff[$_6e4b8fdcc8be[$_8ad1291db0a7] - $_6e4b8fdcc8be[$_f6090e078f91] + 0x100 & 0xff] ^ $_6e4b8fdcc8be[$_f6090e078f91] ^ $_a62b34eb6df6;
+                    $_6e4b8fdcc8be[$_e70220c21bba] = $_8637bcb1d969[$_6e4b8fdcc8be[$_e70220c21bba] - $_6e4b8fdcc8be[$_f6090e078f91] + 0x100 & 0xff] ^ $_6e4b8fdcc8be[$_f6090e078f91] ^ $_a62b34eb6df6;
+                    $_6e4b8fdcc8be[$_f6090e078f91] = $_80b29472d2ff[$_8637bcb1d969[$_6e4b8fdcc8be[$_f6090e078f91] ^ $_d6658df05cd0[$_6e4b8fdcc8be[$_e70220c21bba]]] - $_6e4b8fdcc8be[$_ea8658d23504] + 0x100 & 0xff] ^ $_6e4b8fdcc8be[$_8ad1291db0a7];
+                    $_6e4b8fdcc8be[$_f6090e078f91] = $_80b29472d2ff[$_6e4b8fdcc8be[$_f6090e078f91] - $_6e4b8fdcc8be[$_e70220c21bba] + 0x100 & 0xff] - $_6e4b8fdcc8be[$_e70220c21bba] + 0x100 & 0xff;
+                    $_6e4b8fdcc8be[$_f6090e078f91] = $_8637bcb1d969[$_6e4b8fdcc8be[$_f6090e078f91] - $_6e4b8fdcc8be[$_8ad1291db0a7] + 0x100 & 0xff] ^ $_6e4b8fdcc8be[$_8ad1291db0a7];
+                    $_6e4b8fdcc8be[$_f6090e078f91] ^= $_a62b34eb6df6;
+                    $_6e4b8fdcc8be[$_f6090e078f91] = $_80b29472d2ff[$_6e4b8fdcc8be[$_f6090e078f91] - $_6e4b8fdcc8be[$_ea8658d23504] + 0x100 & 0xff] ^ $_6e4b8fdcc8be[$_e70220c21bba];
+                    $_6e4b8fdcc8be[$_f6090e078f91] = $_8637bcb1d969[$_6e4b8fdcc8be[$_f6090e078f91] ^ $_6e4b8fdcc8be[$_e70220c21bba]] - $_6e4b8fdcc8be[$_8ad1291db0a7] + 0x100 & 0xff;
+                    $_6e4b8fdcc8be[$_f6090e078f91] = $_80b29472d2ff[$_6e4b8fdcc8be[$_f6090e078f91] ^ $_6e4b8fdcc8be[$_8ad1291db0a7]] - $_6e4b8fdcc8be[$_ea8658d23504] + 0x100 & 0xff;
                 }
             }
-            array_unshift($st, "C*");
-            return call_user_func_array("pack", $st);
+            array_unshift($_6e4b8fdcc8be, 'C*');
+            return call_user_func_array('pack', $_6e4b8fdcc8be);
         }
 
-        private static function incw($str, $sl1, $sl2)
+        private static function incw($_23bf89ec40b6, $_d2ce9730d406, $_974584786d5a)
         {
-            $str .= pack("V", $sl1 ^ $sl2 ^ 0x72f70fec);
-            $str = self::encodew($str, $sl2 ^ 0x47b426f6, $sl1 ^ 0xaad9d133);
-            return $str;
+            $_23bf89ec40b6 .= pack('V', $_d2ce9730d406 ^ $_974584786d5a ^ 0x72f70fec);
+            $_23bf89ec40b6 = self::encodew($_23bf89ec40b6, $_974584786d5a ^ 0x47b426f6, $_d2ce9730d406 ^ 0xaad9d133);
+            return $_23bf89ec40b6;
         }
 
-        private static function crc32table(&$t, &$u, &$table = NULL)
+        private static function crc32table(&$_16d7e9582425, &$_f6cbc2e672d5, &$_220bad5a564a = NULL)
         {
-            static $tab, $t0, $t1, $t2, $t3, $u0, $u1, $u2, $u3;
-            if (!isset($tab)) {
-                $tab = [
+            static $_35d7dd6928e4, $_3ed83ea0f086, $_d6658df05cd0, $_d48f13488eff, $_89d9e65212a8, $_8637bcb1d969, $_80b29472d2ff, $_4774a8571a87, $_a8d88d9716c1;
+            if (!isset($_35d7dd6928e4)) {
+                $_35d7dd6928e4 = [
                     0x00000000,
                     0x77073096,
                     0xee0e612c,
@@ -1292,533 +1135,329 @@ if (!class_exists("AlomEncoder")) {
                     0x5a05df1b,
                     0x2d02ef8d,
                 ];
-                $t0 = $t1 = $t2 = $t3 = [];
-                foreach ($tab as $i => $x) {
-                    $t0[$i] = $x & 0xff;
-                    $t1[$i] = ($x >> 8) & 0xff;
-                    $t2[$i] = ($x >> 16) & 0xff;
-                    $t3[$i] = ($x >> 24) & 0xff;
+                $_3ed83ea0f086 = $_d6658df05cd0 = $_d48f13488eff = $_89d9e65212a8 = [];
+                foreach ($_35d7dd6928e4 as $_44af9f79ea06 => $_4d693db07b39) {
+                    $_3ed83ea0f086[$_44af9f79ea06] = $_4d693db07b39 & 0xff;
+                    $_d6658df05cd0[$_44af9f79ea06] = ($_4d693db07b39 >> 8) & 0xff;
+                    $_d48f13488eff[$_44af9f79ea06] = ($_4d693db07b39 >> 16) & 0xff;
+                    $_89d9e65212a8[$_44af9f79ea06] = ($_4d693db07b39 >> 24) & 0xff;
                 }
-                $u0 = array_combine($t0, array_keys($t0));
-                $u1 = array_combine($t1, array_keys($t1));
-                $u2 = array_combine($t2, array_keys($t2));
-                $u3 = array_combine($t3, array_keys($t3));
+                $_8637bcb1d969 = array_combine($_3ed83ea0f086, array_keys($_3ed83ea0f086));
+                $_80b29472d2ff = array_combine($_d6658df05cd0, array_keys($_d6658df05cd0));
+                $_4774a8571a87 = array_combine($_d48f13488eff, array_keys($_d48f13488eff));
+                $_a8d88d9716c1 = array_combine($_89d9e65212a8, array_keys($_89d9e65212a8));
             }
-            $table = $tab;
-            $t = [$t0, $t1, $t2, $t3];
-            $u = [$u0, $u1, $u2, $u3];
+            $_220bad5a564a = $_35d7dd6928e4;
+            $_16d7e9582425 = [$_3ed83ea0f086, $_d6658df05cd0, $_d48f13488eff, $_89d9e65212a8];
+            $_f6cbc2e672d5 = [$_8637bcb1d969, $_80b29472d2ff, $_4774a8571a87, $_a8d88d9716c1];
         }
 
-        private static function uncrc32($next, $prev = 0)
+        private static function uncrc32($_a3621bb833f4, $_90812c0999bc = 0)
         {
-            self::crc32table($t, $u);
-            [$t0, $t1, $t2, $t3] = $t;
-            [$u0, $u1, $u2, $u3] = $u;
-            unset($t, $u);
-            $crc32 = $next;
-            $prev ^= 0xffffffff;
-            $next ^= 0xffffffff;
-            $m0 = $prev & 0xff;
-            $m1 = ($prev >> 8) & 0xff;
-            $m2 = ($prev >> 16) & 0xff;
-            $m3 = ($prev >> 24) & 0xff;
-            $c0 = $next & 0xff;
-            $c1 = ($next >> 8) & 0xff;
-            $c2 = ($next >> 16) & 0xff;
-            $c3 = ($next >> 24) & 0xff;
-            $x3 = $u3[$c3];
-            $x2 = $u3[$c2 ^ $t2[$x3]];
-            $x1 = $u3[$c1 ^ $t1[$x3] ^ $t2[$x2]];
-            $x0 = $u3[$c0 ^ $t0[$x3] ^ $t1[$x2] ^ $t2[$x1]];
-            $s0 = $x0 ^ $m0;
-            $s1 = $x1 ^ $t0[$x0] ^ $m1;
-            $s2 = $x2 ^ $t0[$x1] ^ $t1[$x0] ^ $m2;
-            $s3 = $x3 ^ $t0[$x2] ^ $t1[$x1] ^ $t2[$x0] ^ $m3;
-            $r = pack("C4", $s0, $s1, $s2, $s3);
-            return $r;
+            self::crc32table($_16d7e9582425, $_f6cbc2e672d5);
+            [$_3ed83ea0f086, $_d6658df05cd0, $_d48f13488eff, $_89d9e65212a8] = $_16d7e9582425;
+            [$_8637bcb1d969, $_80b29472d2ff, $_4774a8571a87, $_a8d88d9716c1] = $_f6cbc2e672d5;
+            unset($_16d7e9582425, $_f6cbc2e672d5);
+            $_662deee426a3 = $_a3621bb833f4;
+            $_90812c0999bc ^= 0xffffffff;
+            $_a3621bb833f4 ^= 0xffffffff;
+            $_3299f044233b = $_90812c0999bc & 0xff;
+            $_da756242ac1d = ($_90812c0999bc >> 8) & 0xff;
+            $_303979fe02c5 = ($_90812c0999bc >> 16) & 0xff;
+            $_5bd7b44f9a27 = ($_90812c0999bc >> 24) & 0xff;
+            $_e33a57bc566c = $_a3621bb833f4 & 0xff;
+            $_718aa4bb3fdf = ($_a3621bb833f4 >> 8) & 0xff;
+            $_410758d34564 = ($_a3621bb833f4 >> 16) & 0xff;
+            $_670a6c88f55a = ($_a3621bb833f4 >> 24) & 0xff;
+            $_f828454cafba = $_a8d88d9716c1[$_670a6c88f55a];
+            $_797cb60f407f = $_a8d88d9716c1[$_410758d34564 ^ $_d48f13488eff[$_f828454cafba]];
+            $_ffc81c726284 = $_a8d88d9716c1[$_718aa4bb3fdf ^ $_d6658df05cd0[$_f828454cafba] ^ $_d48f13488eff[$_797cb60f407f]];
+            $_2501124487f4 = $_a8d88d9716c1[$_e33a57bc566c ^ $_3ed83ea0f086[$_f828454cafba] ^ $_d6658df05cd0[$_797cb60f407f] ^ $_d48f13488eff[$_ffc81c726284]];
+            $_0a385214c241 = $_2501124487f4 ^ $_3299f044233b;
+            $_94fb4ecd45ef = $_ffc81c726284 ^ $_3ed83ea0f086[$_2501124487f4] ^ $_da756242ac1d;
+            $_a114eadbc2b2 = $_797cb60f407f ^ $_3ed83ea0f086[$_ffc81c726284] ^ $_d6658df05cd0[$_2501124487f4] ^ $_303979fe02c5;
+            $_e93a6346645b = $_f828454cafba ^ $_3ed83ea0f086[$_797cb60f407f] ^ $_d6658df05cd0[$_ffc81c726284] ^ $_d48f13488eff[$_2501124487f4] ^ $_5bd7b44f9a27;
+            $_203a4ef6ac3d = pack('C4', $_0a385214c241, $_94fb4ecd45ef, $_a114eadbc2b2, $_e93a6346645b);
+            return $_203a4ef6ac3d;
         }
 
-        private static function uncrc32in($first, $last, $next, $prev = 0)
+        private static function uncrc32in($_09a7ca0f5754, $_88d3ea2f3365, $_a3621bb833f4, $_90812c0999bc = 0)
         {
-            self::crc32table($t, $u, $table);
-            $prev ^= 0xffffffff;
-            $next ^= 0xffffffff;
-            for ($i = 0; isset($first[$i]); ++$i) {
-                $tab = $table[($prev ^ ord($first[$i])) & 0xff];
-                $prev = $tab ^ (($prev >> 8) & 0x00ffffff);
+            self::crc32table($_16d7e9582425, $_f6cbc2e672d5, $_220bad5a564a);
+            $_90812c0999bc ^= 0xffffffff;
+            $_a3621bb833f4 ^= 0xffffffff;
+            for ($_44af9f79ea06 = 0; isset($_09a7ca0f5754[$_44af9f79ea06]); ++$_44af9f79ea06) {
+                $_35d7dd6928e4 = $_220bad5a564a[($_90812c0999bc ^ ord($_09a7ca0f5754[$_44af9f79ea06])) & 0xff];
+                $_90812c0999bc = ($_35d7dd6928e4 ^ (($_90812c0999bc >> 8) & 0x00ffffff));
             }
-            for ($i = strlen($last) - 1; $i >= 0; --$i) {
-                $lch = $u[3][($next >> 24) & 0xff];
-                $next = ($lch ^ ord($last[$i])) | (($next ^ $table[$lch]) << 8);
+            for ($_44af9f79ea06 = strlen($_88d3ea2f3365) - 1; $_44af9f79ea06 >= 0; --$_44af9f79ea06) {
+                $_ae74968aafde = $_f6cbc2e672d5[3][($_a3621bb833f4 >> 24) & 0xff];
+                $_a3621bb833f4 = (($_ae74968aafde ^ ord($_88d3ea2f3365[$_44af9f79ea06])) | (($_a3621bb833f4 ^ $_220bad5a564a[$_ae74968aafde]) << 8));
             }
-            return self::uncrc32($next ^ 0xffffffff, $prev ^ 0xffffffff);
+            return self::uncrc32($_a3621bb833f4 ^ 0xffffffff, $_90812c0999bc ^ 0xffffffff);
         }
 
         public static function mt_prng_reset()
         {
-            self::$mt_prng_seed ^= rand();
-            return srand(self::$mt_prng_seed);
+            self::$_bd534020b8b7 ^= rand();
+            return srand(self::$_bd534020b8b7);
         }
 
-        public static function mt_prng_store($seed)
+        public static function mt_prng_store($_fb3a29fe9bdf)
         {
-            self::$mt_prng_seed ^= rand() ^ $seed;
-            self::$mt_prng_seed =
-                (int)(self::$mt_prng_seed + 7012329) & 0xffffffff;
-            self::$mt_prng_seed ^= 0x23958cde;
-            return srand($seed);
+            self::$_bd534020b8b7 ^= rand() ^ $_fb3a29fe9bdf;
+            self::$_bd534020b8b7 = (int)(self::$_bd534020b8b7 + 7012329) & 0xffffffff;
+            self::$_bd534020b8b7 ^= 0x23958cde;
+            return srand($_fb3a29fe9bdf);
         }
 
-        private static function readl($tokens, $a, $b, &$i)
+        private static function readl($_ce467557df24, $_8bd220e50993, $_76ea69771708, &$_44af9f79ea06)
         {
-            $str = "";
-            $u = 0;
+            $_23bf89ec40b6 = '';
+            $_f6cbc2e672d5 = 0;
             do {
-                if (is_array($tokens[$i])) {
-                    $str .= $tokens[$i][1];
-                    if (
-                        ($tokens[$i][0] == T_CURLY_OPEN ||
-                            $tokens[$i][0] == T_DOLLAR_OPEN_CURLY_BRACES) &&
-                        $a == "{"
-                    ) {
-                        ++$u;
-                    }
+                if (is_array($_ce467557df24[$_44af9f79ea06])) {
+                    $_23bf89ec40b6 .= $_ce467557df24[$_44af9f79ea06][1];
+                    if (($_ce467557df24[$_44af9f79ea06][0] == T_CURLY_OPEN || $_ce467557df24[$_44af9f79ea06][0] == T_DOLLAR_OPEN_CURLY_BRACES) && $_8bd220e50993 == '{') ++$_f6cbc2e672d5;
                 } else {
-                    $str .= $tokens[$i];
-                    if ($tokens[$i] == $a) {
-                        ++$u;
-                    } else if ($tokens[$i] == $b) {
-                        --$u;
-                    }
+                    $_23bf89ec40b6 .= $_ce467557df24[$_44af9f79ea06];
+                    if ($_ce467557df24[$_44af9f79ea06] == $_8bd220e50993) ++$_f6cbc2e672d5; else if ($_ce467557df24[$_44af9f79ea06] == $_76ea69771708) --$_f6cbc2e672d5;
                 }
-            } while (isset($tokens[++$i]) && $u != 0);
-            --$i;
-            return $str;
+            } while (isset($_ce467557df24[++$_44af9f79ea06]) && $_f6cbc2e672d5 != 0);
+            --$_44af9f79ea06;
+            return $_23bf89ec40b6;
         }
 
-        private static function readr($tokens, $a, $b, $i, &$j, $nc = FALSE)
+        private static function readr($_ce467557df24, $_8bd220e50993, $_76ea69771708, $_44af9f79ea06, &$_d87f4c1f5462, $_12e5210f9506 = FALSE)
         {
-            $str = "";
-            $u = 0;
+            $_23bf89ec40b6 = '';
+            $_f6cbc2e672d5 = 0;
             do {
-                if (is_array($tokens[$i - $j])) {
-                    $str = $tokens[$i - $j][1] . $str;
-                    if (
-                        ($tokens[$i - $j][0] == T_CURLY_OPEN ||
-                            $tokens[$i - $j][0] ==
-                            T_DOLLAR_OPEN_CURLY_BRACES) &&
-                        $a == "{"
-                    ) {
-                        --$u;
-                    }
+                if (is_array($_ce467557df24[$_44af9f79ea06 - $_d87f4c1f5462])) {
+                    $_23bf89ec40b6 = $_ce467557df24[$_44af9f79ea06 - $_d87f4c1f5462][1] . $_23bf89ec40b6;
+                    if (($_ce467557df24[$_44af9f79ea06 - $_d87f4c1f5462][0] == T_CURLY_OPEN || $_ce467557df24[$_44af9f79ea06 - $_d87f4c1f5462][0] == T_DOLLAR_OPEN_CURLY_BRACES) && $_8bd220e50993 == '{') --$_f6cbc2e672d5;
                 } else {
-                    if ($nc && $tokens[$i - $j] == ";") {
-                        return FALSE;
-                    }
-                    $str = $tokens[$i - $j] . $str;
-                    if ($tokens[$i - $j] == $b) {
-                        ++$u;
-                    } else if ($tokens[$i - $j] == $a) {
-                        --$u;
-                    }
+                    if ($_12e5210f9506 && $_ce467557df24[$_44af9f79ea06 - $_d87f4c1f5462] == ';') return FALSE;
+                    $_23bf89ec40b6 = $_ce467557df24[$_44af9f79ea06 - $_d87f4c1f5462] . $_23bf89ec40b6;
+                    if ($_ce467557df24[$_44af9f79ea06 - $_d87f4c1f5462] == $_76ea69771708) ++$_f6cbc2e672d5; else if ($_ce467557df24[$_44af9f79ea06 - $_d87f4c1f5462] == $_8bd220e50993) --$_f6cbc2e672d5;
                 }
-                ++$j;
-            } while ($i >= $j && $u != 0);
-            --$j;
-            if ($nc && $str[0] != "{") {
-                return FALSE;
-            }
-            return $str;
+                ++$_d87f4c1f5462;
+            } while ($_44af9f79ea06 >= $_d87f4c1f5462 && $_f6cbc2e672d5 != 0);
+            --$_d87f4c1f5462;
+            if ($_12e5210f9506 && $_23bf89ec40b6[0] != '{') return FALSE;
+            return $_23bf89ec40b6;
         }
 
-        private static function reads($tokens, &$i)
+        private static function reads($_ce467557df24, &$_44af9f79ea06)
         {
-            $str = "";
-            for (; isset($tokens[$i]); ++$i) {
-                if (in_array($tokens[$i], [")", "]", "}", ",", ";"])) {
-                    break;
-                } else if (
-                    is_array($tokens[$i]) &&
-                    $tokens[$i][0] == T_CLOSE_TAG
-                ) {
-                    break;
-                } else if (
-                    is_array($tokens[$i]) &&
-                    $tokens[$i][0] == T_START_HEREDOC
-                ) {
-                    $str .= $tokens[$i++][1];
-                    for (
-                    ;
-                        isset($tokens[$i]) &&
-                        (!is_array($tokens[$i]) ||
-                            $tokens[$i][0] != T_END_HEREDOC);
-                        ++$i
-                    ) {
-                        $str .= is_array($tokens[$i])
-                            ? $tokens[$i][1]
-                            : $tokens[$i];
-                    }
-                    $str .= $tokens[$i][1];
-                } else if (
-                    is_array($tokens[$i]) &&
-                    in_array($tokens[$i][0], [
+            $_23bf89ec40b6 = '';
+            for (; isset($_ce467557df24[$_44af9f79ea06]); ++$_44af9f79ea06) if (in_array($_ce467557df24[$_44af9f79ea06], [
+                ')',
+                ']',
+                '}',
+                ',',
+                ';',
+            ])) break; else if (is_array($_ce467557df24[$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06][0] == T_CLOSE_TAG) break;
+            else if (is_array($_ce467557df24[$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06][0] == T_START_HEREDOC) {
+                $_23bf89ec40b6 .= $_ce467557df24[$_44af9f79ea06++][1];
+                for (; isset($_ce467557df24[$_44af9f79ea06]) && (!is_array($_ce467557df24[$_44af9f79ea06]) || $_ce467557df24[$_44af9f79ea06][0] != T_END_HEREDOC); ++$_44af9f79ea06) $_23bf89ec40b6 .= is_array($_ce467557df24[$_44af9f79ea06]) ? $_ce467557df24[$_44af9f79ea06][1] : $_ce467557df24[$_44af9f79ea06];
+                $_23bf89ec40b6 .= $_ce467557df24[$_44af9f79ea06][1];
+            } else if (is_array($_ce467557df24[$_44af9f79ea06]) && in_array($_ce467557df24[$_44af9f79ea06][0], [T_WHILE, T_FOR, T_IF, T_ELSEIF, T_ELSE, T_FOREACH, T_DECLARE])) {
+                for (; isset($_ce467557df24[$_44af9f79ea06]); ++$_44af9f79ea06) if (is_array($_ce467557df24[$_44af9f79ea06]) && in_array($_ce467557df24[$_44af9f79ea06][0], [
                         T_WHILE,
                         T_FOR,
-                        T_IF,
-                        T_ELSEIF,
-                        T_ELSE,
                         T_FOREACH,
                         T_DECLARE,
-                    ])
-                ) {
-                    for (; isset($tokens[$i]); ++$i) {
-                        if (
-                            is_array($tokens[$i]) &&
-                            in_array($tokens[$i][0], [
-                                T_WHILE,
-                                T_FOR,
-                                T_FOREACH,
-                                T_DECLARE,
-                            ])
-                        ) {
-                            $str .= $tokens[$i++][1];
-                            if (
-                                is_array($tokens[$i]) &&
-                                $tokens[$i][0] == T_WHITESPACE
-                            ) {
-                                $str .= $tokens[$i++][1];
-                            }
-                            if ($tokens[$i] == "(") {
-                                $str .= self::readl($tokens, "(", ")", $i);
-                                ++$i;
-                                if (
-                                    is_array($tokens[$i]) &&
-                                    $tokens[$i][0] == T_WHITESPACE
-                                ) {
-                                    $str .= $tokens[$i++][1];
-                                }
-                                if ($tokens[$i] == "{") {
-                                    $str .= self::readl($tokens, "{", "}", $i);
-                                    ++$i;
-                                    break;
-                                }
-                            }
-                            --$i;
-                        } else if (
-                            is_array($tokens[$i]) &&
-                            $tokens[$i][0] == T_IF
-                        ) {
-                            while (TRUE) {
-                                $str .= $tokens[$i++][1];
-                                if (
-                                    is_array($tokens[$i]) &&
-                                    $tokens[$i][0] == T_WHITESPACE
-                                ) {
-                                    $str .= $tokens[$i++][1];
-                                }
-                                if ($tokens[$i] == "(") {
-                                    $str .= self::readl($tokens, "(", ")", $i);
-                                    ++$i;
-                                }
-                                if (
-                                    is_array($tokens[$i]) &&
-                                    $tokens[$i][0] == T_WHITESPACE
-                                ) {
-                                    $str .= $tokens[$i++][1];
-                                }
-                                if ($tokens[$i] == "{") {
-                                    $str .= self::readl($tokens, "{", "}", $i);
-                                    ++$i;
-                                } else {
-                                    $str .= self::reads($tokens, $i);
-                                    if (
-                                        isset($tokens[$i]) &&
-                                        $tokens[$i] == ";"
-                                    ) {
-                                        $str .= $tokens[$i++];
-                                    }
-                                }
-                                if (
-                                    isset($tokens[$i]) &&
-                                    is_array($tokens[$i]) &&
-                                    $tokens[$i][0] == T_WHITESPACE
-                                ) {
-                                    $str .= $tokens[$i++][1];
-                                }
-                                if (!isset($tokens[$i])) {
-                                    break;
-                                }
-                                if (
-                                    is_array($tokens[$i]) &&
-                                    $tokens[$i][0] == T_ELSEIF
-                                ) {
-                                    continue;
-                                } else if (
-                                    is_array($tokens[$i]) &&
-                                    $tokens[$i][0] == T_ELSE
-                                ) {
-                                    $str .= $tokens[$i++][1];
-                                    if (
-                                        is_array($tokens[$i]) &&
-                                        $tokens[$i][0] == T_WHITESPACE
-                                    ) {
-                                        $str .= $tokens[$i++][1];
-                                    }
-                                    if ($tokens[$i] == "{") {
-                                        $str .= self::readl(
-                                            $tokens,
-                                            "{",
-                                            "}",
-                                            $i
-                                        );
-                                        ++$i;
-                                    } else {
-                                        $str .= self::reads($tokens, $i);
-                                        if (
-                                            isset($tokens[$i]) &&
-                                            $tokens[$i] == ";"
-                                        ) {
-                                            $str .= $tokens[$i++];
-                                        }
-                                    }
-                                    break;
-                                } else {
-                                    break;
-                                }
-                            }
+                    ])) {
+                    $_23bf89ec40b6 .= $_ce467557df24[$_44af9f79ea06++][1];
+                    if (is_array($_ce467557df24[$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06][0] == T_WHITESPACE) $_23bf89ec40b6 .= $_ce467557df24[$_44af9f79ea06++][1];
+                    if ($_ce467557df24[$_44af9f79ea06] == '(') {
+                        $_23bf89ec40b6 .= self::readl($_ce467557df24, '(', ')', $_44af9f79ea06);
+                        ++$_44af9f79ea06;
+                        if (is_array($_ce467557df24[$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06][0] == T_WHITESPACE) $_23bf89ec40b6 .= $_ce467557df24[$_44af9f79ea06++][1];
+                        if ($_ce467557df24[$_44af9f79ea06] == '{') {
+                            $_23bf89ec40b6 .= self::readl($_ce467557df24, '{', '}', $_44af9f79ea06);
+                            ++$_44af9f79ea06;
                             break;
                         }
                     }
-                    if (isset($tokens[$i]) && $tokens[$i] == ";") {
-                        $str .= $tokens[$i++];
+                    --$_44af9f79ea06;
+                } else if (is_array($_ce467557df24[$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06][0] == T_IF) {
+                    while (TRUE) {
+                        $_23bf89ec40b6 .= $_ce467557df24[$_44af9f79ea06++][1];
+                        if (is_array($_ce467557df24[$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06][0] == T_WHITESPACE) $_23bf89ec40b6 .= $_ce467557df24[$_44af9f79ea06++][1];
+                        if ($_ce467557df24[$_44af9f79ea06] == '(') {
+                            $_23bf89ec40b6 .= self::readl($_ce467557df24, '(', ')', $_44af9f79ea06);
+                            ++$_44af9f79ea06;
+                        }
+                        if (is_array($_ce467557df24[$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06][0] == T_WHITESPACE) $_23bf89ec40b6 .= $_ce467557df24[$_44af9f79ea06++][1];
+                        if ($_ce467557df24[$_44af9f79ea06] == '{') {
+                            $_23bf89ec40b6 .= self::readl($_ce467557df24, '{', '}', $_44af9f79ea06);
+                            ++$_44af9f79ea06;
+                        } else {
+                            $_23bf89ec40b6 .= self::reads($_ce467557df24, $_44af9f79ea06);
+                            if (isset($_ce467557df24[$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06] == ';') $_23bf89ec40b6 .= $_ce467557df24[$_44af9f79ea06++];
+                        }
+                        if (isset($_ce467557df24[$_44af9f79ea06]) && is_array($_ce467557df24[$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06][0] == T_WHITESPACE) $_23bf89ec40b6 .= $_ce467557df24[$_44af9f79ea06++][1];
+                        if (!isset($_ce467557df24[$_44af9f79ea06])) break;
+                        if (is_array($_ce467557df24[$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06][0] == T_ELSEIF) continue; else if (is_array($_ce467557df24[$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06][0] == T_ELSE) {
+                            $_23bf89ec40b6 .= $_ce467557df24[$_44af9f79ea06++][1];
+                            if (is_array($_ce467557df24[$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06][0] == T_WHITESPACE) $_23bf89ec40b6 .= $_ce467557df24[$_44af9f79ea06++][1];
+                            if ($_ce467557df24[$_44af9f79ea06] == '{') {
+                                $_23bf89ec40b6 .= self::readl($_ce467557df24, '{', '}', $_44af9f79ea06);
+                                ++$_44af9f79ea06;
+                            } else {
+                                $_23bf89ec40b6 .= self::reads($_ce467557df24, $_44af9f79ea06);
+                                if (isset($_ce467557df24[$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06] == ';') $_23bf89ec40b6 .= $_ce467557df24[$_44af9f79ea06++];
+                            }
+                            break;
+                        } else break;
                     }
                     break;
-                } else if (is_array($tokens[$i])) {
-                    $str .= $tokens[$i][1];
-                } else if ($tokens[$i] == "(") {
-                    $str .= self::readl($tokens, "(", ")", $i);
-                } else if ($tokens[$i] == "[") {
-                    $str .= self::readl($tokens, "[", "]", $i);
-                } else if ($tokens[$i] == "{") {
-                    $str .= self::readl($tokens, "{", "}", $i);
-                } else if ($tokens[$i] == '"') {
-                    $str .= $tokens[$i++];
-                    for (; isset($tokens[$i]) && $tokens[$i] != '"'; ++$i) {
-                        $str .= is_array($tokens[$i])
-                            ? $tokens[$i][1]
-                            : $tokens[$i];
-                    }
-                    $str .= $tokens[$i];
-                } else if ($tokens[$i] == "`") {
-                    $str .= $tokens[$i++];
-                    for (; isset($tokens[$i]) && $tokens[$i] != "`"; ++$i) {
-                        $str .= is_array($tokens[$i])
-                            ? $tokens[$i][1]
-                            : $tokens[$i];
-                    }
-                    $str .= $tokens[$i];
-                } else {
-                    $str .= $tokens[$i];
                 }
-            }
-            return $str;
+                if (isset($_ce467557df24[$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06] == ';') $_23bf89ec40b6 .= $_ce467557df24[$_44af9f79ea06++];
+                break;
+            } else if (is_array($_ce467557df24[$_44af9f79ea06])) $_23bf89ec40b6 .= $_ce467557df24[$_44af9f79ea06][1];
+            else if ($_ce467557df24[$_44af9f79ea06] == '(') $_23bf89ec40b6 .= self::readl($_ce467557df24, '(', ')', $_44af9f79ea06);
+            else if ($_ce467557df24[$_44af9f79ea06] == '[') $_23bf89ec40b6 .= self::readl($_ce467557df24, '[', ']', $_44af9f79ea06);
+            else if ($_ce467557df24[$_44af9f79ea06] == '{') $_23bf89ec40b6 .= self::readl($_ce467557df24, '{', '}', $_44af9f79ea06);
+            else if ($_ce467557df24[$_44af9f79ea06] == '"') {
+                $_23bf89ec40b6 .= $_ce467557df24[$_44af9f79ea06++];
+                for (; isset($_ce467557df24[$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06] != '"'; ++$_44af9f79ea06) $_23bf89ec40b6 .= is_array($_ce467557df24[$_44af9f79ea06]) ? $_ce467557df24[$_44af9f79ea06][1] : $_ce467557df24[$_44af9f79ea06];
+                $_23bf89ec40b6 .= $_ce467557df24[$_44af9f79ea06];
+            } else if ($_ce467557df24[$_44af9f79ea06] == '`') {
+                $_23bf89ec40b6 .= $_ce467557df24[$_44af9f79ea06++];
+                for (; isset($_ce467557df24[$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06] != '`'; ++$_44af9f79ea06) $_23bf89ec40b6 .= is_array($_ce467557df24[$_44af9f79ea06]) ? $_ce467557df24[$_44af9f79ea06][1] : $_ce467557df24[$_44af9f79ea06];
+                $_23bf89ec40b6 .= $_ce467557df24[$_44af9f79ea06];
+            } else $_23bf89ec40b6 .= $_ce467557df24[$_44af9f79ea06];
+            return $_23bf89ec40b6;
         }
 
-        private static function readsl($tokens, &$i, $cama = FALSE)
+        private static function readsl($_ce467557df24, &$_44af9f79ea06, $_8251ec0e732c = FALSE)
         {
-            $str = "";
-            $bra = $cama ? [")", "]", "}", ";"] : [")", "]", "}", ",", ";"];
-            for (++$i; isset($tokens[$i]); ++$i) {
-                if (in_array($tokens[$i], $bra)) {
-                    break;
-                } else if ($tokens[$i] == ",") {
-                    $str .= $tokens[$i++];
-                    if (
-                        is_array($tokens[$i]) &&
-                        $tokens[$i][0] == T_WHITESPACE
-                    ) {
-                        $str .= $tokens[$i++][1];
-                    }
-                    --$i;
-                } else if (
-                    is_array($tokens[$i]) &&
-                    $tokens[$i][0] == T_CLOSE_TAG
-                ) {
-                    break;
-                } else if (
-                    is_array($tokens[$i]) &&
-                    $tokens[$i][0] == T_START_HEREDOC
-                ) {
-                    $str .= $tokens[$i++][1];
-                    for (
-                    ;
-                        isset($tokens[$i]) &&
-                        (!is_array($tokens[$i]) ||
-                            $tokens[$i][0] != T_END_HEREDOC);
-                        ++$i
-                    ) {
-                        $str .= is_array($tokens[$i])
-                            ? $tokens[$i][1]
-                            : $tokens[$i];
-                    }
-                    $str .= $tokens[$i][1];
-                } else if (
-                    is_array($tokens[$i]) &&
-                    in_array($tokens[$i][0], [
-                        T_STRING,
-                        T_WHITESPACE,
-                        T_VARIABLE,
-                        T_CONSTANT_ENCAPSED_STRING,
-                        T_LNUMBER,
-                        T_DNUMBER,
-                        T_DIR,
-                        T_FILE,
-                        T_FUNC_C,
-                        T_LINE,
-                        T_METHOD_C,
-                        T_NS_C,
-                        T_TRAIT_C,
-                        T_CLASS_C,
-                        T_ARRAY_CAST,
-                        T_BOOL_CAST,
-                        T_DOUBLE_CAST,
-                        T_INT_CAST,
-                        T_OBJECT_CAST,
-                        T_STRING_CAST,
-                        T_UNSET_CAST,
-                        T_PRINT,
-                        T_ECHO,
-                        T_EXIT,
-                        T_ISSET,
-                        T_UNSET,
-                        T_ARRAY,
-                        T_EVAL,
-                        T_FN,
-                        T_INCLUDE,
-                        T_INCLUDE_ONCE,
-                        T_REQUIRE,
-                        T_REQUIRE_ONCE,
-                        T_DOUBLE_COLON,
-                        T_OBJECT_OPERATOR,
-                        T_NULLSAFE_OBJECT_OPERATOR,
-                        T_COALESCE,
-                        T_COALESCE_EQUAL,
-                        T_IS_GREATER_OR_EQUAL,
-                        T_IS_SMALLER_OR_EQUAL,
-                        T_IS_EQUAL,
-                        T_IS_IDENTICAL,
-                        T_IS_NOT_EQUAL,
-                        T_IS_NOT_IDENTICAL,
-                        T_LOGICAL_AND,
-                        T_LOGICAL_OR,
-                        T_LOGICAL_XOR,
-                        T_SL,
-                        T_SR,
-                        T_POW,
-                        T_NS_SEPARATOR,
-                        T_AND_EQUAL,
-                        T_OR_EQUAL,
-                        T_XOR_EQUAL,
-                        T_PLUS_EQUAL,
-                        T_MINUS_EQUAL,
-                        T_MUL_EQUAL,
-                        T_DIV_EQUAL,
-                        T_MOD_EQUAL,
-                        T_POW_EQUAL,
-                        T_SL_EQUAL,
-                        T_SR_EQUAL,
-                        T_CONCAT_EQUAL,
-                        T_DEC,
-                        T_INC,
-                        T_BOOLEAN_AND,
-                        T_BOOLEAN_OR,
-                    ])
-                ) {
-                    $str .= $tokens[$i][1];
-                } else if (is_array($tokens[$i])) {
-                    break;
-                } else if ($tokens[$i] == "(") {
-                    $str .= self::readl($tokens, "(", ")", $i);
-                } else if ($tokens[$i] == "[") {
-                    $str .= self::readl($tokens, "[", "]", $i);
-                } else if ($tokens[$i] == "{") {
-                    $str .= self::readl($tokens, "{", "}", $i);
-                } else if ($tokens[$i] == '"') {
-                    $str .= $tokens[$i++];
-                    for (; isset($tokens[$i]) && $tokens[$i] != '"'; ++$i) {
-                        $str .= is_array($tokens[$i])
-                            ? $tokens[$i][1]
-                            : $tokens[$i];
-                    }
-                    $str .= $tokens[$i];
-                } else if ($tokens[$i] == "`") {
-                    $str .= $tokens[$i++];
-                    for (; isset($tokens[$i]) && $tokens[$i] != "`"; ++$i) {
-                        $str .= is_array($tokens[$i])
-                            ? $tokens[$i][1]
-                            : $tokens[$i];
-                    }
-                    $str .= $tokens[$i];
-                } else if ($tokens[$i] == '$') {
-                    $str .= $tokens[$i];
-                } else if (
-                in_array($tokens[$i], [
-                    "~",
-                    "!",
-                    "<",
-                    ">",
-                    "+",
-                    "-",
-                    "*",
-                    "/",
-                    "%",
-                    ".",
-                ])
-                ) {
-                    $str .= $tokens[$i];
-                } else {
-                    break;
-                }
-            }
-            --$i;
-            return $str;
+            $_23bf89ec40b6 = '';
+            $_9de2c054a9f2 = $_8251ec0e732c ? [')', ']', '}', ';'] : [')', ']', '}', ',', ';'];
+            for (++$_44af9f79ea06; isset($_ce467557df24[$_44af9f79ea06]); ++$_44af9f79ea06) if (in_array($_ce467557df24[$_44af9f79ea06], $_9de2c054a9f2)) break; else if ($_ce467557df24[$_44af9f79ea06] == ',') {
+                $_23bf89ec40b6 .= $_ce467557df24[$_44af9f79ea06++];
+                if (is_array($_ce467557df24[$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06][0] == T_WHITESPACE) $_23bf89ec40b6 .= $_ce467557df24[$_44af9f79ea06++][1];
+                --$_44af9f79ea06;
+            } else if (is_array($_ce467557df24[$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06][0] == T_CLOSE_TAG) break;
+            else if (is_array($_ce467557df24[$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06][0] == T_START_HEREDOC) {
+                $_23bf89ec40b6 .= $_ce467557df24[$_44af9f79ea06++][1];
+                for (; isset($_ce467557df24[$_44af9f79ea06]) && (!is_array($_ce467557df24[$_44af9f79ea06]) || $_ce467557df24[$_44af9f79ea06][0] != T_END_HEREDOC); ++$_44af9f79ea06) $_23bf89ec40b6 .= is_array($_ce467557df24[$_44af9f79ea06]) ? $_ce467557df24[$_44af9f79ea06][1] : $_ce467557df24[$_44af9f79ea06];
+                $_23bf89ec40b6 .= $_ce467557df24[$_44af9f79ea06][1];
+            } else if (is_array($_ce467557df24[$_44af9f79ea06]) && in_array($_ce467557df24[$_44af9f79ea06][0], [
+                    T_STRING,
+                    T_WHITESPACE,
+                    T_VARIABLE,
+                    T_CONSTANT_ENCAPSED_STRING,
+                    T_LNUMBER,
+                    T_DNUMBER,
+                    T_DIR,
+                    T_FILE,
+                    T_FUNC_C,
+                    T_LINE,
+                    T_METHOD_C,
+                    T_NS_C,
+                    T_TRAIT_C,
+                    T_CLASS_C,
+                    T_ARRAY_CAST,
+                    T_BOOL_CAST,
+                    T_DOUBLE_CAST,
+                    T_INT_CAST,
+                    T_OBJECT_CAST,
+                    T_STRING_CAST,
+                    T_UNSET_CAST,
+                    T_PRINT,
+                    T_ECHO,
+                    T_EXIT,
+                    T_ISSET,
+                    T_UNSET,
+                    T_ARRAY,
+                    T_EVAL,
+                    T_FN,
+                    T_INCLUDE,
+                    T_INCLUDE_ONCE,
+                    T_REQUIRE,
+                    T_REQUIRE_ONCE,
+                    T_DOUBLE_COLON,
+                    T_OBJECT_OPERATOR,
+                    T_NULLSAFE_OBJECT_OPERATOR,
+                    T_COALESCE,
+                    T_COALESCE_EQUAL,
+                    T_IS_GREATER_OR_EQUAL,
+                    T_IS_SMALLER_OR_EQUAL,
+                    T_IS_EQUAL,
+                    T_IS_IDENTICAL,
+                    T_IS_NOT_EQUAL,
+                    T_IS_NOT_IDENTICAL,
+                    T_LOGICAL_AND,
+                    T_LOGICAL_OR,
+                    T_LOGICAL_XOR,
+                    T_SL,
+                    T_SR,
+                    T_POW,
+                    T_NS_SEPARATOR,
+                    T_AND_EQUAL,
+                    T_OR_EQUAL,
+                    T_XOR_EQUAL,
+                    T_PLUS_EQUAL,
+                    T_MINUS_EQUAL,
+                    T_MUL_EQUAL,
+                    T_DIV_EQUAL,
+                    T_MOD_EQUAL,
+                    T_POW_EQUAL,
+                    T_SL_EQUAL,
+                    T_SR_EQUAL,
+                    T_CONCAT_EQUAL,
+                    T_DEC,
+                    T_INC,
+                    T_BOOLEAN_AND,
+                    T_BOOLEAN_OR,
+                ])) {
+                $_23bf89ec40b6 .= $_ce467557df24[$_44af9f79ea06][1];
+            } else if (is_array($_ce467557df24[$_44af9f79ea06])) break;
+            else if ($_ce467557df24[$_44af9f79ea06] == '(') $_23bf89ec40b6 .= self::readl($_ce467557df24, '(', ')', $_44af9f79ea06);
+            else if ($_ce467557df24[$_44af9f79ea06] == '[') $_23bf89ec40b6 .= self::readl($_ce467557df24, '[', ']', $_44af9f79ea06);
+            else if ($_ce467557df24[$_44af9f79ea06] == '{') $_23bf89ec40b6 .= self::readl($_ce467557df24, '{', '}', $_44af9f79ea06);
+            else if ($_ce467557df24[$_44af9f79ea06] == '"') {
+                $_23bf89ec40b6 .= $_ce467557df24[$_44af9f79ea06++];
+                for (; isset($_ce467557df24[$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06] != '"'; ++$_44af9f79ea06) $_23bf89ec40b6 .= is_array($_ce467557df24[$_44af9f79ea06]) ? $_ce467557df24[$_44af9f79ea06][1] : $_ce467557df24[$_44af9f79ea06];
+                $_23bf89ec40b6 .= $_ce467557df24[$_44af9f79ea06];
+            } else if ($_ce467557df24[$_44af9f79ea06] == '`') {
+                $_23bf89ec40b6 .= $_ce467557df24[$_44af9f79ea06++];
+                for (; isset($_ce467557df24[$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06] != '`'; ++$_44af9f79ea06) $_23bf89ec40b6 .= is_array($_ce467557df24[$_44af9f79ea06]) ? $_ce467557df24[$_44af9f79ea06][1] : $_ce467557df24[$_44af9f79ea06];
+                $_23bf89ec40b6 .= $_ce467557df24[$_44af9f79ea06];
+            } else if ($_ce467557df24[$_44af9f79ea06] == '$') $_23bf89ec40b6 .= $_ce467557df24[$_44af9f79ea06];
+            else if (in_array($_ce467557df24[$_44af9f79ea06], ['?', ':', '!', '~', '<', '>', '+', '-', '*', '/', '%', '.'])) $_23bf89ec40b6 .= $_ce467557df24[$_44af9f79ea06];
+            else break;
+            --$_44af9f79ea06;
+            return $_23bf89ec40b6;
         }
 
-        private static function readsr($tokens, $i)
+        private static function readsr($_ce467557df24, $_44af9f79ea06)
         {
-            $str = "";
-            $j = 1;
-            if ($tokens[$i - $j][0] == T_WHITESPACE) {
-                $str = $tokens[$i - $j++][1] . $str;
-            }
-            for (; $i >= $j; ++$j) {
-                if (in_array($tokens[$i - $j], ["(", "[", "{", ",", ";"])) {
-                    break;
-                }
-                if (
-                    isset($tokens[$i - $j + 3]) &&
-                    is_array($tokens[$i - $j + 1]) &&
-                    $tokens[$i - $j + 1][0] == T_WHITESPACE
-                ) {
-                    if (
-                        is_array($tokens[$i - $j + 2]) &&
-                        in_array($tokens[$i - $j + 2][0], [
+            $_23bf89ec40b6 = '';
+            $_d87f4c1f5462 = 1;
+            if ($_ce467557df24[$_44af9f79ea06 - $_d87f4c1f5462][0] == T_WHITESPACE) $_23bf89ec40b6 = $_ce467557df24[$_44af9f79ea06 - ($_d87f4c1f5462++)][1] . $_23bf89ec40b6;
+            for (; $_44af9f79ea06 >= $_d87f4c1f5462; ++$_d87f4c1f5462) {
+                if (in_array($_ce467557df24[$_44af9f79ea06 - $_d87f4c1f5462], ['(', '[', '{', ',', ';'])) break;
+                if (isset($_ce467557df24[$_44af9f79ea06 - $_d87f4c1f5462 + 3]) && is_array($_ce467557df24[$_44af9f79ea06 - $_d87f4c1f5462 + 1]) && $_ce467557df24[$_44af9f79ea06 - $_d87f4c1f5462 + 1][0] == T_WHITESPACE) {
+                    if (is_array($_ce467557df24[$_44af9f79ea06 - $_d87f4c1f5462 + 2]) && in_array($_ce467557df24[$_44af9f79ea06 - $_d87f4c1f5462 + 2][0], [
                             T_STRING,
                             T_VARIABLE,
                             T_CONSTANT_ENCAPSED_STRING,
                             T_ARRAY,
-                        ])
-                    ) {
-                        --$j;
+                        ])) {
+                        --$_d87f4c1f5462;
                         break;
-                    } else if (in_array($tokens[$i - $j + 2], ['$', '"'])) {
-                        --$j;
+                    } else if (in_array($_ce467557df24[$_44af9f79ea06 - $_d87f4c1f5462 + 2], ['$', '"'])) {
+                        --$_d87f4c1f5462;
                         break;
                     }
                 }
-                if (is_array($tokens[$i - $j])) {
-                    if (
-                    in_array($tokens[$i - $j][0], [
+                if (is_array($_ce467557df24[$_44af9f79ea06 - $_d87f4c1f5462])) {
+                    if (in_array($_ce467557df24[$_44af9f79ea06 - $_d87f4c1f5462][0], [
                         T_STRING,
                         T_WHITESPACE,
                         T_VARIABLE,
@@ -1886,37 +1525,15 @@ if (!class_exists("AlomEncoder")) {
                         T_INC,
                         T_BOOLEAN_AND,
                         T_BOOLEAN_OR,
-                    ])
-                    ) {
-                        $str = $tokens[$i - $j][1] . $str;
-                    } else if (
-                        is_array($tokens[$i - $j]) &&
-                        $tokens[$i - $j][0] == T_END_HEREDOC
-                    ) {
-                        $str = $tokens[$i - $j++] . $str;
-                        for (
-                        ;
-                            $i >= $j &&
-                            (!is_array($tokens[$i - $j]) ||
-                                $tokens[$i - $j][0] != T_START_HEREDOC);
-                            ++$j
-                        ) {
-                            $str =
-                                (is_array($tokens[$i - $j])
-                                    ? $tokens[$i - $j][1]
-                                    : $tokens[$i - $j]) . $str;
-                        }
-                        $str = $tokens[$i - $j] . $str;
-                    } else {
-                        break;
-                    }
-                } else if ($tokens[$i - $j] == '$') {
-                    $str = $tokens[$i - $j] . $str;
-                } else if ($tokens[$i - $j] == ")") {
-                    $params = self::readr($tokens, "(", ")", $i, $j);
-                    if (
-                        is_array($tokens[$i - $j - 1]) &&
-                        in_array($tokens[$i - $j - 1][0], [
+                    ])) $_23bf89ec40b6 = $_ce467557df24[$_44af9f79ea06 - $_d87f4c1f5462][1] . $_23bf89ec40b6; else if (is_array($_ce467557df24[$_44af9f79ea06 - $_d87f4c1f5462]) && $_ce467557df24[$_44af9f79ea06 - $_d87f4c1f5462][0] == T_END_HEREDOC) {
+                        $_23bf89ec40b6 = $_ce467557df24[$_44af9f79ea06 - ($_d87f4c1f5462++)] . $_23bf89ec40b6;
+                        for (; $_44af9f79ea06 >= $_d87f4c1f5462 && (!is_array($_ce467557df24[$_44af9f79ea06 - $_d87f4c1f5462]) || $_ce467557df24[$_44af9f79ea06 - $_d87f4c1f5462][0] != T_START_HEREDOC); ++$_d87f4c1f5462) $_23bf89ec40b6 = (is_array($_ce467557df24[$_44af9f79ea06 - $_d87f4c1f5462]) ? $_ce467557df24[$_44af9f79ea06 - $_d87f4c1f5462][1] : $_ce467557df24[$_44af9f79ea06 - $_d87f4c1f5462]) . $_23bf89ec40b6;
+                        $_23bf89ec40b6 = $_ce467557df24[$_44af9f79ea06 - $_d87f4c1f5462] . $_23bf89ec40b6;
+                    } else break;
+                } else if ($_ce467557df24[$_44af9f79ea06 - $_d87f4c1f5462] == '$') $_23bf89ec40b6 = $_ce467557df24[$_44af9f79ea06 - $_d87f4c1f5462] . $_23bf89ec40b6;
+                else if ($_ce467557df24[$_44af9f79ea06 - $_d87f4c1f5462] == ')') {
+                    $_67cb949e5b90 = self::readr($_ce467557df24, '(', ')', $_44af9f79ea06, $_d87f4c1f5462);
+                    if (is_array($_ce467557df24[$_44af9f79ea06 - $_d87f4c1f5462 - 1]) && in_array($_ce467557df24[$_44af9f79ea06 - $_d87f4c1f5462 - 1][0], [
                             T_IF,
                             T_ELSEIF,
                             T_WHILE,
@@ -1924,2052 +1541,1059 @@ if (!class_exists("AlomEncoder")) {
                             T_DECLARE,
                             T_ARRAY,
                             T_FOREACH,
-                        ])
-                    ) {
-                        ++$j;
+                        ])) {
+                        ++$_d87f4c1f5462;
                         break;
                     }
-                    $str = $params . $str;
-                } else if ($tokens[$i - $j] == "]") {
-                    $str = self::readr($tokens, "[", "]", $i, $j) . $str;
-                } else if ($tokens[$i - $j] == "}") {
-                    $params = self::readr($tokens, "{", "}", $i, $j, TRUE);
-                    if (!$params) {
-                        ++$j;
+                    $_23bf89ec40b6 = $_67cb949e5b90 . $_23bf89ec40b6;
+                } else if ($_ce467557df24[$_44af9f79ea06 - $_d87f4c1f5462] == ']') $_23bf89ec40b6 = self::readr($_ce467557df24, '[', ']', $_44af9f79ea06, $_d87f4c1f5462) . $_23bf89ec40b6;
+                else if ($_ce467557df24[$_44af9f79ea06 - $_d87f4c1f5462] == '}') {
+                    $_67cb949e5b90 = self::readr($_ce467557df24, '{', '}', $_44af9f79ea06, $_d87f4c1f5462, TRUE);
+                    if (!$_67cb949e5b90) {
+                        ++$_d87f4c1f5462;
                         break;
                     }
-                    $str = $params . $str;
-                } else if ($tokens[$i - $j] == '"') {
-                    $str = $tokens[$i - $j++] . $str;
-                    for (; $i >= $j && $tokens[$i - $j] != '"'; ++$j) {
-                        $str =
-                            (is_array($tokens[$i - $j])
-                                ? $tokens[$i - $j][1]
-                                : $tokens[$i - $j]) . $str;
-                    }
-                    $str = $tokens[$i - $j] . $str;
-                } else if ($tokens[$i - $j] == "`") {
-                    $str = $tokens[$i - $j++] . $str;
-                    for (; $i >= $j && $tokens[$i - $j] != "`"; ++$j) {
-                        $str =
-                            (is_array($tokens[$i - $j])
-                                ? $tokens[$i - $j][1]
-                                : $tokens[$i - $j]) . $str;
-                    }
-                    $str = $tokens[$i - $j] . $str;
-                } else if (
-                in_array($tokens[$i - $j], [
-                    "!",
-                    "~",
-                    "<",
-                    ">",
-                    "+",
-                    "-",
-                    "*",
-                    "/",
-                    "%",
-                    ".",
-                ])
-                ) {
-                    $str = $tokens[$i - $j] . $str;
-                } else {
-                    break;
-                }
+                    $_23bf89ec40b6 = $_67cb949e5b90 . $_23bf89ec40b6;
+                } else if ($_ce467557df24[$_44af9f79ea06 - $_d87f4c1f5462] == '"') {
+                    $_23bf89ec40b6 = $_ce467557df24[$_44af9f79ea06 - ($_d87f4c1f5462++)] . $_23bf89ec40b6;
+                    for (; $_44af9f79ea06 >= $_d87f4c1f5462 && $_ce467557df24[$_44af9f79ea06 - $_d87f4c1f5462] != '"'; ++$_d87f4c1f5462) $_23bf89ec40b6 = (is_array($_ce467557df24[$_44af9f79ea06 - $_d87f4c1f5462]) ? $_ce467557df24[$_44af9f79ea06 - $_d87f4c1f5462][1] : $_ce467557df24[$_44af9f79ea06 - $_d87f4c1f5462]) . $_23bf89ec40b6;
+                    $_23bf89ec40b6 = $_ce467557df24[$_44af9f79ea06 - $_d87f4c1f5462] . $_23bf89ec40b6;
+                } else if ($_ce467557df24[$_44af9f79ea06 - $_d87f4c1f5462] == '`') {
+                    $_23bf89ec40b6 = $_ce467557df24[$_44af9f79ea06 - ($_d87f4c1f5462++)] . $_23bf89ec40b6;
+                    for (; $_44af9f79ea06 >= $_d87f4c1f5462 && $_ce467557df24[$_44af9f79ea06 - $_d87f4c1f5462] != '`'; ++$_d87f4c1f5462) $_23bf89ec40b6 = (is_array($_ce467557df24[$_44af9f79ea06 - $_d87f4c1f5462]) ? $_ce467557df24[$_44af9f79ea06 - $_d87f4c1f5462][1] : $_ce467557df24[$_44af9f79ea06 - $_d87f4c1f5462]) . $_23bf89ec40b6;
+                    $_23bf89ec40b6 = $_ce467557df24[$_44af9f79ea06 - $_d87f4c1f5462] . $_23bf89ec40b6;
+                } else if (in_array($_ce467557df24[$_44af9f79ea06 - $_d87f4c1f5462], [
+                    '?',
+                    ':',
+                    '!',
+                    '~',
+                    '<',
+                    '>',
+                    '+',
+                    '-',
+                    '*',
+                    '/',
+                    '%',
+                    '.',
+                ])) $_23bf89ec40b6 = $_ce467557df24[$_44af9f79ea06 - $_d87f4c1f5462] . $_23bf89ec40b6;
+                else break;
             }
-            return ltrim($str);
+            return ltrim($_23bf89ec40b6);
         }
 
-        private static function readpe($tokens, &$i, $cama = FALSE)
+        private static function readpe($_ce467557df24, &$_44af9f79ea06, $_8251ec0e732c = FALSE)
         {
-            $str = "";
-            if (is_array($tokens[$i]) && $tokens[$i][0] == T_WHITESPACE) {
-                $str .= $tokens[$i++][1];
+            $_23bf89ec40b6 = '';
+            if (is_array($_ce467557df24[$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06][0] == T_WHITESPACE) $_23bf89ec40b6 .= $_ce467557df24[$_44af9f79ea06++][1];
+            if ($_ce467557df24[$_44af9f79ea06] == ';') {
+                --$_44af9f79ea06;
+                return $_23bf89ec40b6;
             }
-            if ($tokens[$i] == ";") {
-                --$i;
-                return $str;
+            if (is_array($_ce467557df24[$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06][0] == T_CLOSE_TAG) {
+                --$_44af9f79ea06;
+                return $_23bf89ec40b6;
             }
-            if (is_array($tokens[$i]) && $tokens[$i][0] == T_CLOSE_TAG) {
-                --$i;
-                return $str;
+            if ($_ce467557df24[$_44af9f79ea06] == '(') $_23bf89ec40b6 .= substr(self::readl($_ce467557df24, '(', ')', $_44af9f79ea06), 1, -1); else {
+                --$_44af9f79ea06;
+                $_23bf89ec40b6 .= self::readsl($_ce467557df24, $_44af9f79ea06, $_8251ec0e732c);
             }
-            if ($tokens[$i] == "(") {
-                $str .= substr(self::readl($tokens, "(", ")", $i), 1, -1);
+            return $_23bf89ec40b6;
+        }
+
+        private static function reparse($_d5cbf76f6b55, &$_ce467557df24, &$_44af9f79ea06)
+        {
+            $_d87f4c1f5462 = $_44af9f79ea06;
+            $_90812c0999bc = count($_ce467557df24);
+            for (++$_44af9f79ea06; isset($_ce467557df24[$_44af9f79ea06]); ++$_44af9f79ea06) $_d5cbf76f6b55 .= is_array($_ce467557df24[$_44af9f79ea06]) ? $_ce467557df24[$_44af9f79ea06][1] : $_ce467557df24[$_44af9f79ea06];
+            $_ce467557df24 = token_get_all($_d5cbf76f6b55);
+            $_a3621bb833f4 = count($_ce467557df24);
+            $_44af9f79ea06 = $_d87f4c1f5462 + $_a3621bb833f4 - $_90812c0999bc;
+        }
+
+        private static function reparseExtra(&$_d5cbf76f6b55, &$_ce467557df24, &$_44af9f79ea06, $_67b3418874aa, $_d88d4c12fcc4, $_a2d13a6e48d8 = 0)
+        {
+            ++$_67b3418874aa;
+            ++$_44af9f79ea06;
+            if ($_a2d13a6e48d8 !== 0) {
+                $_62b3f98bf654 = array_slice(token_get_all("<?" . "php $_d88d4c12fcc4"), 1);
+                $_ae2ed626c558 = count(token_get_all("<?" . "php " . substr($_d5cbf76f6b55, -$_a2d13a6e48d8))) - 1;
+                $_236a6bd464ca = $_d5cbf76f6b55;
+                $_d5cbf76f6b55 = substr($_d5cbf76f6b55, 0, -$_a2d13a6e48d8) . $_d88d4c12fcc4;
+                $_ce467557df24 = array_merge(array_slice($_ce467557df24, 0, $_44af9f79ea06 - $_ae2ed626c558 - $_67b3418874aa), $_62b3f98bf654, array_slice($_ce467557df24, $_44af9f79ea06));
+                $_44af9f79ea06 += count($_62b3f98bf654) - $_ae2ed626c558 - $_67b3418874aa;
             } else {
-                --$i;
-                $str .= self::readsl($tokens, $i, $cama);
+                $_62b3f98bf654 = array_slice(token_get_all("<?" . "php $_d88d4c12fcc4"), 1);
+                $_d5cbf76f6b55 .= $_d88d4c12fcc4;
+                $_ce467557df24 = array_merge(array_slice($_ce467557df24, 0, $_44af9f79ea06 - $_67b3418874aa), $_62b3f98bf654, array_slice($_ce467557df24, $_44af9f79ea06));
+                $_44af9f79ea06 += count($_62b3f98bf654) - $_67b3418874aa;
             }
-            return $str;
+            --$_44af9f79ea06;
         }
 
-        private static function reparse($code, &$tokens, &$i)
+        private static function optwister_op2fn($_d5cbf76f6b55, $_5b3eb1c32c0d, &$_ce467557df24 = NULL)
         {
-            $j = $i;
-            $prev = count($tokens);
-            for (++$i; isset($tokens[$i]); ++$i) {
-                $code .= is_array($tokens[$i]) ? $tokens[$i][1] : $tokens[$i];
-            }
-            $tokens = token_get_all($code);
-            $next = count($tokens);
-            $i = $j + $next - $prev;
-        }
-
-        private static function reparseExtra(
-            &$code,
-            &$tokens,
-            &$i,
-            $readed,
-            $extra,
-            $backspace = 0
-        )
-        {
-            ++$readed;
-            ++$i;
-            if ($backspace !== 0) {
-                $extratokens = array_slice(
-                    token_get_all("<?" . "php $extra"),
-                    1
-                );
-                $backspacesize =
-                    count(
-                        token_get_all(
-                            "<?" . "php " . substr($code, -$backspace)
-                        )
-                    ) - 1;
-                $pc = $code;
-                $code = substr($code, 0, -$backspace) . $extra;
-                $tokens = array_merge(
-                    array_slice($tokens, 0, $i - $backspacesize - $readed),
-                    $extratokens,
-                    array_slice($tokens, $i)
-                );
-                $i += count($extratokens) - $backspacesize - $readed;
-            } else {
-                $extratokens = array_slice(
-                    token_get_all("<?" . "php $extra"),
-                    1
-                );
-                $code .= $extra;
-                $tokens = array_merge(
-                    array_slice($tokens, 0, $i - $readed),
-                    $extratokens,
-                    array_slice($tokens, $i)
-                );
-                $i += count($extratokens) - $readed;
-            }
-            --$i;
-        }
-
-        private static function optwister_op2fn(
-            $code,
-            $signflag,
-            &$tokens = NULL
-        )
-        {
-            if ($tokens === NULL) {
-                $tokens = token_get_all($code);
-            }
-            $code = "";
-            for ($i = 0; isset($tokens[$i]); ++$i) {
-                if (is_array($tokens[$i])) {
-                    $j = $i;
-                    if ($tokens[$i][0] == T_NEW) {
-                        ++$i;
-                        $str = $tokens[$i][1];
-                        if (
-                            is_array($tokens[$i]) &&
-                            $tokens[$i][0] == T_WHITESPACE
-                        ) {
-                            $str .= $tokens[$i++][1];
-                        }
-                        if (
-                            is_array($tokens[$i]) &&
-                            $tokens[$i][0] == T_STRING
-                        ) {
-                            $str .= $tokens[$i++][1];
-                            if (
-                                is_array($tokens[$i]) &&
-                                $tokens[$i][0] == T_WHITESPACE
-                            ) {
-                                $str .= $tokens[$i++][1];
-                            }
-                            if ($tokens[$i] == "(") {
-                                $prm = $tokens[$i++];
-                                if (
-                                    is_array($tokens[$i]) &&
-                                    $tokens[$i][0] == T_WHITESPACE
-                                ) {
-                                    $prm .= $tokens[$i++][1];
-                                }
-                                if ($tokens[$i] == ")") {
-                                    $prm .= $tokens[$i++];
-                                    $str = trim($str);
-                                    $extra = "_ALOM_optwister{$signflag}_v0('$str')";
-                                    --$i;
-                                    self::reparseExtra(
-                                        $code,
-                                        $tokens,
-                                        $i,
-                                        $i - $j,
-                                        $extra
-                                    );
-                                    $i = $j - 1;
-                                } else {
-                                    $code .= $str . $prm;
-                                    --$i;
-                                }
+            if ($_ce467557df24 === NULL) $_ce467557df24 = token_get_all($_d5cbf76f6b55);
+            $_d5cbf76f6b55 = '';
+            for ($_44af9f79ea06 = 0; isset($_ce467557df24[$_44af9f79ea06]); ++$_44af9f79ea06) if (is_array($_ce467557df24[$_44af9f79ea06])) {
+                $_d87f4c1f5462 = $_44af9f79ea06;
+                if ($_ce467557df24[$_44af9f79ea06][0] == T_NEW) {
+                    ++$_44af9f79ea06;
+                    $_23bf89ec40b6 = $_ce467557df24[$_44af9f79ea06][1];
+                    if (is_array($_ce467557df24[$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06][0] == T_WHITESPACE) $_23bf89ec40b6 .= $_ce467557df24[$_44af9f79ea06++][1];
+                    if (is_array($_ce467557df24[$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06][0] == T_STRING) {
+                        $_23bf89ec40b6 .= $_ce467557df24[$_44af9f79ea06++][1];
+                        if (is_array($_ce467557df24[$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06][0] == T_WHITESPACE) $_23bf89ec40b6 .= $_ce467557df24[$_44af9f79ea06++][1];
+                        if ($_ce467557df24[$_44af9f79ea06] == '(') {
+                            $_3c4dcc509033 = $_ce467557df24[$_44af9f79ea06++];
+                            if (is_array($_ce467557df24[$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06][0] == T_WHITESPACE) $_3c4dcc509033 .= $_ce467557df24[$_44af9f79ea06++][1];
+                            if ($_ce467557df24[$_44af9f79ea06] == ')') {
+                                $_3c4dcc509033 .= $_ce467557df24[$_44af9f79ea06++];
+                                $_23bf89ec40b6 = trim($_23bf89ec40b6);
+                                $_d88d4c12fcc4 = "_ALOM_optwister{$_5b3eb1c32c0d}_v0('$_23bf89ec40b6')";
+                                --$_44af9f79ea06;
+                                self::reparseExtra($_d5cbf76f6b55, $_ce467557df24, $_44af9f79ea06, $_44af9f79ea06 - $_d87f4c1f5462, $_d88d4c12fcc4);
+                                $_44af9f79ea06 = $_d87f4c1f5462 - 1;
                             } else {
-                                $str = trim($str);
-                                $extra = "_ALOM_optwister{$signflag}_v0('$str')";
-                                --$i;
-                                self::reparseExtra(
-                                    $code,
-                                    $tokens,
-                                    $i,
-                                    $i - $j,
-                                    $extra
-                                );
-                                $i = $j - 1;
+                                $_d5cbf76f6b55 .= $_23bf89ec40b6 . $_3c4dcc509033;
+                                --$_44af9f79ea06;
                             }
                         } else {
-                            $code .= $str;
-                            --$i;
-                        }
-                    } else if ($tokens[$i][0] == T_EXIT) {
-                        ++$i;
-                        $pe = self::readpe($tokens, $i);
-                        $extra = "_ALOM_optwister{$signflag}_a($pe)";
-                        self::reparseExtra($code, $tokens, $i, $i - $j, $extra);
-                        $i = $j - 1;
-                    } else if ($tokens[$i][0] == T_PRINT) {
-                        $sl = self::readsl($tokens, $i);
-                        $extra = "_ALOM_optwister{$signflag}_c($sl)";
-                        self::reparseExtra($code, $tokens, $i, $i - $j, $extra);
-                        $i = $j - 1;
-                    } else if ($tokens[$i][0] == T_ECHO) {
-                        ++$i;
-                        $pe = self::readpe($tokens, $i, TRUE);
-                        $extra = "_ALOM_optwister{$signflag}_d($pe)";
-                        self::reparseExtra($code, $tokens, $i, $i - $j, $extra);
-                        $i = $j - 1;
-                    } else if ($tokens[$i][0] == T_ARRAY_CAST) {
-                        $sl = self::readsl($tokens, $i);
-                        $extra = "_ALOM_optwister{$signflag}_e($sl)";
-                        self::reparseExtra($code, $tokens, $i, $i - $j, $extra);
-                        $i = $j - 1;
-                    } else if ($tokens[$i][0] == T_BOOL_CAST) {
-                        $sl = self::readsl($tokens, $i);
-                        $extra = "_ALOM_optwister{$signflag}_f($sl)";
-                        self::reparseExtra($code, $tokens, $i, $i - $j, $extra);
-                        $i = $j - 1;
-                    } else if ($tokens[$i][0] == T_DOUBLE_CAST) {
-                        $sl = self::readsl($tokens, $i);
-                        $extra = "_ALOM_optwister{$signflag}_g($sl)";
-                        self::reparseExtra($code, $tokens, $i, $i - $j, $extra);
-                        $i = $j - 1;
-                    } else if ($tokens[$i][0] == T_INT_CAST) {
-                        $sl = self::readsl($tokens, $i);
-                        $extra = "_ALOM_optwister{$signflag}_h($sl)";
-                        self::reparseExtra($code, $tokens, $i, $i - $j, $extra);
-                        $i = $j - 1;
-                    } else if ($tokens[$i][0] == T_OBJECT_CAST) {
-                        $sl = self::readsl($tokens, $i);
-                        $extra = "_ALOM_optwister{$signflag}_i($sl)";
-                        self::reparseExtra($code, $tokens, $i, $i - $j, $extra);
-                        $i = $j - 1;
-                    } else if ($tokens[$i][0] == T_STRING_CAST) {
-                        $sl = self::readsl($tokens, $i);
-                        $extra = "_ALOM_optwister{$signflag}_j($sl)";
-                        self::reparseExtra($code, $tokens, $i, $i - $j, $extra);
-                        $i = $j - 1;
-                    } else {
-                        $code .= $tokens[$i][1];
-                    }
-                } else {
-                    $j = $i;
-                    if ($tokens[$i] == "~") {
-                        $sl = self::readsl($tokens, $i);
-                        $extra = "_ALOM_optwister{$signflag}_t0($sl)";
-                        self::reparseExtra($code, $tokens, $i, $i - $j, $extra);
-                        $i = $j - 1;
-                    } else if ($tokens[$i] == "!") {
-                        $sl = self::readsl($tokens, $i);
-                        $extra = "_ALOM_optwister{$signflag}_u0($sl)";
-                        self::reparseExtra($code, $tokens, $i, $i - $j, $extra);
-                        $i = $j - 1;
-                    } else {
-                        $code .= $tokens[$i];
-                    }
-                }
-            }
-            $code = "";
-            for ($i = 0; isset($tokens[$i]); ++$i) {
-                if (is_array($tokens[$i])) {
-                    $j = $i;
-                    if ($tokens[$i][0] == T_POW) {
-                        $sr = self::readsr($tokens, $i);
-                        $sl = self::readsl($tokens, $i);
-                        $extra = "pow($sr,$sl)";
-                        self::reparseExtra(
-                            $code,
-                            $tokens,
-                            $i,
-                            $i - $j,
-                            $extra,
-                            strlen($sr)
-                        );
-                    } else if ($tokens[$i][0] == T_DEC) {
-                        $sr = trim(self::readsr($tokens, $i));
-                        $sl = trim(self::readsl($tokens, $i));
-                        if (trim($sl) === "") {
-                            $i = $j;
-                            $extra = "_ALOM_optwister{$signflag}_n0($sr)";
-                            self::reparseExtra(
-                                $code,
-                                $tokens,
-                                $i,
-                                $i - $j,
-                                $extra,
-                                strlen($sr)
-                            );
-                        } else {
-                            $extra = "_ALOM_optwister{$signflag}_p0($sl)";
-                            self::reparseExtra(
-                                $code,
-                                $tokens,
-                                $i,
-                                $i - $j,
-                                $extra
-                            );
-                        }
-                    } else if ($tokens[$i][0] == T_INC) {
-                        $sr = self::readsr($tokens, $i);
-                        $sl = self::readsl($tokens, $i);
-                        if (trim($sl) === "") {
-                            $i = $j;
-                            $extra = "_ALOM_optwister{$signflag}_o0($sr)";
-                            self::reparseExtra(
-                                $code,
-                                $tokens,
-                                $i,
-                                $i - $j,
-                                $extra,
-                                strlen($sr)
-                            );
-                        } else {
-                            $extra = "_ALOM_optwister{$signflag}_q0($sl)";
-                            self::reparseExtra(
-                                $code,
-                                $tokens,
-                                $i,
-                                $i - $j,
-                                $extra
-                            );
+                            $_23bf89ec40b6 = trim($_23bf89ec40b6);
+                            $_d88d4c12fcc4 = "_ALOM_optwister{$_5b3eb1c32c0d}_v0('$_23bf89ec40b6')";
+                            --$_44af9f79ea06;
+                            self::reparseExtra($_d5cbf76f6b55, $_ce467557df24, $_44af9f79ea06, $_44af9f79ea06 - $_d87f4c1f5462, $_d88d4c12fcc4);
+                            $_44af9f79ea06 = $_d87f4c1f5462 - 1;
                         }
                     } else {
-                        $code .= $tokens[$i][1];
+                        $_d5cbf76f6b55 .= $_23bf89ec40b6;
+                        --$_44af9f79ea06;
                     }
-                } else {
-                    $code .= $tokens[$i];
-                }
-            }
-            $code = "";
-            for ($i = 0; isset($tokens[$i]); ++$i) {
-                if (is_array($tokens[$i])) {
-                    $code .= $tokens[$i][1];
-                } else {
-                    $j = $i;
-                    if ($tokens[$i] == "*") {
-                        $sr = self::readsr($tokens, $i);
-                        $sl = self::readsl($tokens, $i);
-                        $extra = "_ALOM_optwister{$signflag}_1($sr,$sl)";
-                        self::reparseExtra(
-                            $code,
-                            $tokens,
-                            $i,
-                            $i - $j,
-                            $extra,
-                            strlen($sr)
-                        );
-                    } else if ($tokens[$i] == "/") {
-                        $sr = self::readsr($tokens, $i);
-                        $sl = self::readsl($tokens, $i);
-                        $extra = "_ALOM_optwister{$signflag}_2($sr,$sl)";
-                        self::reparseExtra(
-                            $code,
-                            $tokens,
-                            $i,
-                            $i - $j,
-                            $extra,
-                            strlen($sr)
-                        );
-                    } else if ($tokens[$i] == "%") {
-                        $sr = self::readsr($tokens, $i);
-                        $sl = self::readsl($tokens, $i);
-                        $extra = "_ALOM_optwister{$signflag}_3($sr,$sl)";
-                        self::reparseExtra(
-                            $code,
-                            $tokens,
-                            $i,
-                            $i - $j,
-                            $extra,
-                            strlen($sr)
-                        );
-                    } else {
-                        $code .= $tokens[$i];
-                    }
-                }
-            }
-            $code = "";
-            for ($i = 0; isset($tokens[$i]); ++$i) {
-                if (is_array($tokens[$i])) {
-                    $code .= $tokens[$i][1];
-                } else {
-                    $j = $i;
-                    if ($tokens[$i] == "+") {
-                        $sr = self::readsr($tokens, $i);
-                        if (trim($sr) === "") {
-                            $code .= $tokens[$i];
-                            continue;
-                        }
-                        $sl = self::readsl($tokens, $i);
-                        $extra = "_ALOM_optwister{$signflag}_z($sr,$sl)";
-                        self::reparseExtra(
-                            $code,
-                            $tokens,
-                            $i,
-                            $i - $j,
-                            $extra,
-                            strlen($sr)
-                        );
-                    } else if ($tokens[$i] == "-") {
-                        $sr = self::readsr($tokens, $i);
-                        if (trim($sr) === "") {
-                            $code .= $tokens[$i];
-                            continue;
-                        }
-                        $sl = self::readsl($tokens, $i);
-                        $extra = "_ALOM_optwister{$signflag}_0($sr,$sl)";
-                        self::reparseExtra(
-                            $code,
-                            $tokens,
-                            $i,
-                            $i - $j,
-                            $extra,
-                            strlen($sr)
-                        );
-                    } else {
-                        $code .= $tokens[$i];
-                    }
-                }
-            }
-            $code = "";
-            for ($i = 0; isset($tokens[$i]); ++$i) {
-                if (is_array($tokens[$i])) {
-                    $code .= $tokens[$i][1];
-                } else {
-                    if ($tokens[$i] == ".") {
-                        $j = $i;
-                        $sr = self::readsr($tokens, $i);
-                        $sl = self::readsl($tokens, $i);
-                        $extra = "_ALOM_optwister{$signflag}_4($sr,$sl)";
-                        self::reparseExtra(
-                            $code,
-                            $tokens,
-                            $i,
-                            $i - $j,
-                            $extra,
-                            strlen($sr)
-                        );
-                    } else {
-                        $code .= $tokens[$i];
-                    }
-                }
-            }
-            $code = "";
-            for ($i = 0; isset($tokens[$i]); ++$i) {
-                if (is_array($tokens[$i])) {
-                    $j = $i;
-                    if ($tokens[$i][0] == T_SL) {
-                        $sr = self::readsr($tokens, $i);
-                        $sl = self::readsl($tokens, $i);
-                        $extra = "_ALOM_optwister{$signflag}_x($sr,$sl)";
-                        self::reparseExtra(
-                            $code,
-                            $tokens,
-                            $i,
-                            $i - $j,
-                            $extra,
-                            strlen($sr)
-                        );
-                    } else if ($tokens[$i][0] == T_SR) {
-                        $sr = self::readsr($tokens, $i);
-                        $sl = self::readsl($tokens, $i);
-                        $extra = "_ALOM_optwister{$signflag}_y($sr,$sl)";
-                        self::reparseExtra(
-                            $code,
-                            $tokens,
-                            $i,
-                            $i - $j,
-                            $extra,
-                            strlen($sr)
-                        );
-                    } else {
-                        $code .= $tokens[$i][1];
-                    }
-                } else {
-                    $code .= $tokens[$i];
-                }
-            }
-            $code = "";
-            for ($i = 0; isset($tokens[$i]); ++$i) {
-                if (is_array($tokens[$i])) {
-                    $j = $i;
-                    if ($tokens[$i][0] == T_LOGICAL_AND) {
-                        $sr = self::readsr($tokens, $i);
-                        $sl = self::readsl($tokens, $i);
-                        $extra = "_ALOM_optwister{$signflag}_u($sr,$sl)";
-                        self::reparseExtra(
-                            $code,
-                            $tokens,
-                            $i,
-                            $i - $j,
-                            $extra,
-                            strlen($sr)
-                        );
-                    } else if ($tokens[$i][0] == T_LOGICAL_OR) {
-                        $sr = self::readsr($tokens, $i);
-                        $sl = self::readsl($tokens, $i);
-                        $extra = "_ALOM_optwister{$signflag}_v($sr,$sl)";
-                        self::reparseExtra(
-                            $code,
-                            $tokens,
-                            $i,
-                            $i - $j,
-                            $extra,
-                            strlen($sr)
-                        );
-                    } else if ($tokens[$i][0] == T_LOGICAL_XOR) {
-                        $sr = self::readsr($tokens, $i);
-                        $sl = self::readsl($tokens, $i);
-                        $extra = "_ALOM_optwister{$signflag}_w($sr,$sl)";
-                        self::reparseExtra(
-                            $code,
-                            $tokens,
-                            $i,
-                            $i - $j,
-                            $extra,
-                            strlen($sr)
-                        );
-                    } else {
-                        $code .= $tokens[$i][1];
-                    }
-                } else {
-                    $j = $i;
-                    if ($tokens[$i] == "&") {
-                        $sr = self::readsr($tokens, $i);
-                        if (trim($sr) === "") {
-                            $code .= $tokens[$i];
-                            continue;
-                        }
-                        $sl = self::readsl($tokens, $i);
-                        $extra = "_ALOM_optwister{$signflag}_u($sr,$sl)";
-                        self::reparseExtra(
-                            $code,
-                            $tokens,
-                            $i,
-                            $i - $j,
-                            $extra,
-                            strlen($sr)
-                        );
-                    } else if ($tokens[$i] == "|") {
-                        $sr = self::readsr($tokens, $i);
-                        $sl = self::readsl($tokens, $i);
-                        $extra = "_ALOM_optwister{$signflag}_v($sr,$sl)";
-                        self::reparseExtra(
-                            $code,
-                            $tokens,
-                            $i,
-                            $i - $j,
-                            $extra,
-                            strlen($sr)
-                        );
-                    } else if ($tokens[$i] == "^") {
-                        $sr = self::readsr($tokens, $i);
-                        $sl = self::readsl($tokens, $i);
-                        $extra = "_ALOM_optwister{$signflag}_w($sr,$sl)";
-                        self::reparseExtra(
-                            $code,
-                            $tokens,
-                            $i,
-                            $i - $j,
-                            $extra,
-                            strlen($sr)
-                        );
-                    } else {
-                        $code .= $tokens[$i];
-                    }
-                }
-            }
-            $code = "";
-            for ($i = 0; isset($tokens[$i]); ++$i) {
-                if (is_array($tokens[$i])) {
-                    $j = $i;
-                    if ($tokens[$i][0] == T_IS_GREATER_OR_EQUAL) {
-                        $sr = self::readsr($tokens, $i);
-                        $sl = self::readsl($tokens, $i);
-                        $extra = "_ALOM_optwister{$signflag}_l($sr,$sl)";
-                        self::reparseExtra(
-                            $code,
-                            $tokens,
-                            $i,
-                            $i - $j,
-                            $extra,
-                            strlen($sr)
-                        );
-                    } else if ($tokens[$i][0] == T_IS_SMALLER_OR_EQUAL) {
-                        $sr = self::readsr($tokens, $i);
-                        $sl = self::readsl($tokens, $i);
-                        $extra = "_ALOM_optwister{$signflag}_m($sr,$sl)";
-                        self::reparseExtra(
-                            $code,
-                            $tokens,
-                            $i,
-                            $i - $j,
-                            $extra,
-                            strlen($sr)
-                        );
-                    } else if ($tokens[$i][0] == T_IS_EQUAL) {
-                        $sr = self::readsr($tokens, $i);
-                        $sl = self::readsl($tokens, $i);
-                        $extra = "_ALOM_optwister{$signflag}_p($sr,$sl)";
-                        self::reparseExtra(
-                            $code,
-                            $tokens,
-                            $i,
-                            $i - $j,
-                            $extra,
-                            strlen($sr)
-                        );
-                    } else if ($tokens[$i][0] == T_IS_IDENTICAL) {
-                        $sr = self::readsr($tokens, $i);
-                        $sl = self::readsl($tokens, $i);
-                        $extra = "_ALOM_optwister{$signflag}_q($sr,$sl)";
-                    } else if ($tokens[$i][0] == T_IS_NOT_EQUAL) {
-                        $sr = self::readsr($tokens, $i);
-                        $sl = self::readsl($tokens, $i);
-                        $extra = "_ALOM_optwister{$signflag}_r($sr,$sl)";
-                        self::reparseExtra(
-                            $code,
-                            $tokens,
-                            $i,
-                            $i - $j,
-                            $extra,
-                            strlen($sr)
-                        );
-                    } else if ($tokens[$i][0] == T_IS_NOT_IDENTICAL) {
-                        $sr = self::readsr($tokens, $i);
-                        $sl = self::readsl($tokens, $i);
-                        $extra = "_ALOM_optwister{$signflag}_s($sr,$sl)";
-                        self::reparseExtra(
-                            $code,
-                            $tokens,
-                            $i,
-                            $i - $j,
-                            $extra,
-                            strlen($sr)
-                        );
-                    } else {
-                        $code .= $tokens[$i][1];
-                    }
-                } else {
-                    $j = $i;
-                    if ($tokens[$i] == ">") {
-                        $sr = self::readsr($tokens, $i);
-                        $sl = self::readsl($tokens, $i);
-                        $extra = "_ALOM_optwister{$signflag}_n($sr,$sl)";
-                        self::reparseExtra(
-                            $code,
-                            $tokens,
-                            $i,
-                            $i - $j,
-                            $extra,
-                            strlen($sr)
-                        );
-                    } else if ($tokens[$i] == "<") {
-                        $sr = self::readsr($tokens, $i);
-                        $sl = self::readsl($tokens, $i);
-                        $extra = "_ALOM_optwister{$signflag}_o($sr,$sl)";
-                        self::reparseExtra(
-                            $code,
-                            $tokens,
-                            $i,
-                            $i - $j,
-                            $extra,
-                            strlen($sr)
-                        );
-                    } else {
-                        $code .= $tokens[$i];
-                    }
-                }
-            }
-            $code = "";
-            for ($i = 0; isset($tokens[$i]); ++$i) {
-                if (is_array($tokens[$i])) {
-                    $j = $i;
-                    if ($tokens[$i][0] == T_BOOLEAN_AND) {
-                        $sr = self::readsr($tokens, $i);
-                        $sl = self::readsl($tokens, $i);
-                        $extra = "_ALOM_optwister{$signflag}_r0($sr,$sl)";
-                        self::reparseExtra(
-                            $code,
-                            $tokens,
-                            $i,
-                            $i - $j,
-                            $extra,
-                            strlen($sr)
-                        );
-                    } else if ($tokens[$i][0] == T_BOOLEAN_OR) {
-                        $sr = self::readsr($tokens, $i);
-                        $sl = self::readsl($tokens, $i);
-                        $extra = "_ALOM_optwister{$signflag}_s0($sr,$sl)";
-                        self::reparseExtra(
-                            $code,
-                            $tokens,
-                            $i,
-                            $i - $j,
-                            $extra,
-                            strlen($sr)
-                        );
-                    } else {
-                        $code .= $tokens[$i][1];
-                    }
-                } else {
-                    $code .= $tokens[$i];
-                }
-            }
-            $code = "";
-            for ($i = 0; isset($tokens[$i]); ++$i) {
-                if (is_array($tokens[$i])) {
-                    $j = $i;
-                    if ($tokens[$i][0] == T_AND_EQUAL) {
-                        $sr = self::readsr($tokens, $i);
-                        $sl = self::readsl($tokens, $i);
-                        $extra = "_ALOM_optwister{$signflag}_a0($sr,$sl)";
-                        self::reparseExtra(
-                            $code,
-                            $tokens,
-                            $i,
-                            $i - $j,
-                            $extra,
-                            strlen($sr)
-                        );
-                    } else if ($tokens[$i][0] == T_OR_EQUAL) {
-                        $sr = self::readsr($tokens, $i);
-                        $sl = self::readsl($tokens, $i);
-                        $extra = "_ALOM_optwister{$signflag}_b0($sr,$sl)";
-                        self::reparseExtra(
-                            $code,
-                            $tokens,
-                            $i,
-                            $i - $j,
-                            $extra,
-                            strlen($sr)
-                        );
-                    } else if ($tokens[$i][0] == T_XOR_EQUAL) {
-                        $sr = self::readsr($tokens, $i);
-                        $sl = self::readsl($tokens, $i);
-                        $extra = "_ALOM_optwister{$signflag}_c0($sr,$sl)";
-                        self::reparseExtra(
-                            $code,
-                            $tokens,
-                            $i,
-                            $i - $j,
-                            $extra,
-                            strlen($sr)
-                        );
-                    } else if ($tokens[$i][0] == T_PLUS_EQUAL) {
-                        $sr = self::readsr($tokens, $i);
-                        $sl = self::readsl($tokens, $i);
-                        $extra = "_ALOM_optwister{$signflag}_d0($sr,$sl)";
-                        self::reparseExtra(
-                            $code,
-                            $tokens,
-                            $i,
-                            $i - $j,
-                            $extra,
-                            strlen($sr)
-                        );
-                    } else if ($tokens[$i][0] == T_MINUS_EQUAL) {
-                        $sr = self::readsr($tokens, $i);
-                        $sl = self::readsl($tokens, $i);
-                        $extra = "_ALOM_optwister{$signflag}_e0($sr,$sl)";
-                        self::reparseExtra(
-                            $code,
-                            $tokens,
-                            $i,
-                            $i - $j,
-                            $extra,
-                            strlen($sr)
-                        );
-                    } else if ($tokens[$i][0] == T_MUL_EQUAL) {
-                        $sr = self::readsr($tokens, $i);
-                        $sl = self::readsl($tokens, $i);
-                        $extra = "_ALOM_optwister{$signflag}_f0($sr,$sl)";
-                        self::reparseExtra(
-                            $code,
-                            $tokens,
-                            $i,
-                            $i - $j,
-                            $extra,
-                            strlen($sr)
-                        );
-                    } else if ($tokens[$i][0] == T_DIV_EQUAL) {
-                        $sr = self::readsr($tokens, $i);
-                        $sl = self::readsl($tokens, $i);
-                        $extra = "_ALOM_optwister{$signflag}_g0($sr,$sl)";
-                        self::reparseExtra(
-                            $code,
-                            $tokens,
-                            $i,
-                            $i - $j,
-                            $extra,
-                            strlen($sr)
-                        );
-                    } else if ($tokens[$i][0] == T_MOD_EQUAL) {
-                        $sr = self::readsr($tokens, $i);
-                        $sl = self::readsl($tokens, $i);
-                        $extra = "_ALOM_optwister{$signflag}_h0($sr,$sl)";
-                        self::reparseExtra(
-                            $code,
-                            $tokens,
-                            $i,
-                            $i - $j,
-                            $extra,
-                            strlen($sr)
-                        );
-                    } else if ($tokens[$i][0] == T_POW_EQUAL) {
-                        $sr = self::readsr($tokens, $i);
-                        $sl = self::readsl($tokens, $i);
-                        $extra = "_ALOM_optwister{$signflag}_i0($sr,$sl)";
-                        self::reparseExtra(
-                            $code,
-                            $tokens,
-                            $i,
-                            $i - $j,
-                            $extra,
-                            strlen($sr)
-                        );
-                    } else if ($tokens[$i][0] == T_SL_EQUAL) {
-                        $sr = self::readsr($tokens, $i);
-                        $sl = self::readsl($tokens, $i);
-                        $extra = "_ALOM_optwister{$signflag}_j0($sr,$sl)";
-                        self::reparseExtra(
-                            $code,
-                            $tokens,
-                            $i,
-                            $i - $j,
-                            $extra,
-                            strlen($sr)
-                        );
-                    } else if ($tokens[$i][0] == T_SR_EQUAL) {
-                        $sr = self::readsr($tokens, $i);
-                        $sl = self::readsl($tokens, $i);
-                        $extra = "_ALOM_optwister{$signflag}_k0($sr,$sl)";
-                        self::reparseExtra(
-                            $code,
-                            $tokens,
-                            $i,
-                            $i - $j,
-                            $extra,
-                            strlen($sr)
-                        );
-                    } else if ($tokens[$i][0] == T_CONCAT_EQUAL) {
-                        $sr = self::readsr($tokens, $i);
-                        $sl = self::readsl($tokens, $i);
-                        $extra = "_ALOM_optwister{$signflag}_m0($sr,$sl)";
-                        self::reparseExtra(
-                            $code,
-                            $tokens,
-                            $i,
-                            $i - $j,
-                            $extra,
-                            strlen($sr)
-                        );
-                    } else {
-                        $code .= $tokens[$i][1];
-                    }
-                } else {
-                    $code .= $tokens[$i];
-                }
-            }
-            return $code;
-        }
-
-        private static function optwister_encode($string, $iv1, $iv2, $ivs)
-        {
-            $salt = self::getasciiikey(rand(1, 16));
-            $mod = (strlen($salt) + strlen($string)) % 3;
-            if ($mod > 0) {
-                $salt .= self::getasciiikey(3 - $mod);
-            }
-            $string = chr(strlen($salt)) . $salt . $string;
-            for ($i = 0; isset($string[$i]); ++$i) {
-                $string[$i] = $ivs[$i & 0xf] ^ $string[$i];
-            }
-            $string = self::inc($string, $iv1, $iv2, TRUE);
-            for ($i = 0; isset($string[$i]); ++$i) {
-                $string[$i] = $ivs[$i & 0xf] ^ $string[$i];
-            }
-            return $string;
-        }
-
-        private static function optwister_encapsed_string($string)
-        {
-            if ($string[0] == "'") {
-                $string = substr($string, 1, -1);
-                $string = preg_replace_callback(
-                    "/(?<!(?<!\\\\)\\\\)\\\\('|\\\\)/",
-                    function ($match) {
-                        return $match[1];
-                    },
-                    $string
-                );
-                return $string;
-            }
-            $string = substr($string, 1, -1);
-            $string = preg_replace_callback(
-                "/(?<!(?<!\\\\)\\\\)\\\\([0-7]{1,3}|x[0-9a-fA-F]{1,2}|[ertvnf]|\\\$|\"|\\\\)/",
-                function ($match) {
-                    switch ($match[1][0]) {
-                        case "e":
-                            return "\e";
-                        case "r":
-                            return "\r";
-                        case "t":
-                            return "\t";
-                        case "v":
-                            return "\v";
-                        case "n":
-                            return "\n";
-                        case "f":
-                            return "\f";
-                        case '"':
-                        case "\\":
-                        case '$':
-                            return $match[1];
-                        case "x":
-                            return chr(hexdec(substr($match[1], 1)));
-                        default:
-                            return chr(octdec($match[1]));
-                    }
-                },
-                $string
-            );
-            return $string;
-        }
-
-        private static function optwister_lnumber($string)
-        {
-            if ($string == 0) {
-                return "0";
-            }
-            if ($string[0] == "0") {
-                if ($string[1] == "x") {
-                    return (string)hexdec(substr($string, 2));
-                }
-                if ($string[1] == "b") {
-                    return (string)bindec(substr($string, 2));
-                }
-                return (string)octdec(substr($string, 1));
+                } else if ($_ce467557df24[$_44af9f79ea06][0] == T_EXIT) {
+                    ++$_44af9f79ea06;
+                    $_6bd7e3077fe8 = self::readpe($_ce467557df24, $_44af9f79ea06);
+                    $_d88d4c12fcc4 = "_ALOM_optwister{$_5b3eb1c32c0d}_a($_6bd7e3077fe8)";
+                    self::reparseExtra($_d5cbf76f6b55, $_ce467557df24, $_44af9f79ea06, $_44af9f79ea06 - $_d87f4c1f5462, $_d88d4c12fcc4);
+                    $_44af9f79ea06 = $_d87f4c1f5462 - 1;
+                } else if ($_ce467557df24[$_44af9f79ea06][0] == T_PRINT) {
+                    $_a62b34eb6df6 = self::readsl($_ce467557df24, $_44af9f79ea06);
+                    $_d88d4c12fcc4 = "_ALOM_optwister{$_5b3eb1c32c0d}_c($_a62b34eb6df6)";
+                    self::reparseExtra($_d5cbf76f6b55, $_ce467557df24, $_44af9f79ea06, $_44af9f79ea06 - $_d87f4c1f5462, $_d88d4c12fcc4);
+                    $_44af9f79ea06 = $_d87f4c1f5462 - 1;
+                } else if ($_ce467557df24[$_44af9f79ea06][0] == T_ECHO) {
+                    ++$_44af9f79ea06;
+                    $_6bd7e3077fe8 = self::readpe($_ce467557df24, $_44af9f79ea06, TRUE);
+                    $_d88d4c12fcc4 = "_ALOM_optwister{$_5b3eb1c32c0d}_d($_6bd7e3077fe8)";
+                    self::reparseExtra($_d5cbf76f6b55, $_ce467557df24, $_44af9f79ea06, $_44af9f79ea06 - $_d87f4c1f5462, $_d88d4c12fcc4);
+                    $_44af9f79ea06 = $_d87f4c1f5462 - 1;
+                } else if ($_ce467557df24[$_44af9f79ea06][0] == T_ARRAY_CAST) {
+                    $_a62b34eb6df6 = self::readsl($_ce467557df24, $_44af9f79ea06);
+                    $_d88d4c12fcc4 = "_ALOM_optwister{$_5b3eb1c32c0d}_e($_a62b34eb6df6)";
+                    self::reparseExtra($_d5cbf76f6b55, $_ce467557df24, $_44af9f79ea06, $_44af9f79ea06 - $_d87f4c1f5462, $_d88d4c12fcc4);
+                    $_44af9f79ea06 = $_d87f4c1f5462 - 1;
+                } else if ($_ce467557df24[$_44af9f79ea06][0] == T_BOOL_CAST) {
+                    $_a62b34eb6df6 = self::readsl($_ce467557df24, $_44af9f79ea06);
+                    $_d88d4c12fcc4 = "_ALOM_optwister{$_5b3eb1c32c0d}_f($_a62b34eb6df6)";
+                    self::reparseExtra($_d5cbf76f6b55, $_ce467557df24, $_44af9f79ea06, $_44af9f79ea06 - $_d87f4c1f5462, $_d88d4c12fcc4);
+                    $_44af9f79ea06 = $_d87f4c1f5462 - 1;
+                } else if ($_ce467557df24[$_44af9f79ea06][0] == T_DOUBLE_CAST) {
+                    $_a62b34eb6df6 = self::readsl($_ce467557df24, $_44af9f79ea06);
+                    $_d88d4c12fcc4 = "_ALOM_optwister{$_5b3eb1c32c0d}_g($_a62b34eb6df6)";
+                    self::reparseExtra($_d5cbf76f6b55, $_ce467557df24, $_44af9f79ea06, $_44af9f79ea06 - $_d87f4c1f5462, $_d88d4c12fcc4);
+                    $_44af9f79ea06 = $_d87f4c1f5462 - 1;
+                } else if ($_ce467557df24[$_44af9f79ea06][0] == T_INT_CAST) {
+                    $_a62b34eb6df6 = self::readsl($_ce467557df24, $_44af9f79ea06);
+                    $_d88d4c12fcc4 = "_ALOM_optwister{$_5b3eb1c32c0d}_h($_a62b34eb6df6)";
+                    self::reparseExtra($_d5cbf76f6b55, $_ce467557df24, $_44af9f79ea06, $_44af9f79ea06 - $_d87f4c1f5462, $_d88d4c12fcc4);
+                    $_44af9f79ea06 = $_d87f4c1f5462 - 1;
+                } else if ($_ce467557df24[$_44af9f79ea06][0] == T_OBJECT_CAST) {
+                    $_a62b34eb6df6 = self::readsl($_ce467557df24, $_44af9f79ea06);
+                    $_d88d4c12fcc4 = "_ALOM_optwister{$_5b3eb1c32c0d}_i($_a62b34eb6df6)";
+                    self::reparseExtra($_d5cbf76f6b55, $_ce467557df24, $_44af9f79ea06, $_44af9f79ea06 - $_d87f4c1f5462, $_d88d4c12fcc4);
+                    $_44af9f79ea06 = $_d87f4c1f5462 - 1;
+                } else if ($_ce467557df24[$_44af9f79ea06][0] == T_STRING_CAST) {
+                    $_a62b34eb6df6 = self::readsl($_ce467557df24, $_44af9f79ea06);
+                    $_d88d4c12fcc4 = "_ALOM_optwister{$_5b3eb1c32c0d}_j($_a62b34eb6df6)";
+                    self::reparseExtra($_d5cbf76f6b55, $_ce467557df24, $_44af9f79ea06, $_44af9f79ea06 - $_d87f4c1f5462, $_d88d4c12fcc4);
+                    $_44af9f79ea06 = $_d87f4c1f5462 - 1;
+                } else $_d5cbf76f6b55 .= $_ce467557df24[$_44af9f79ea06][1];
             } else {
-                return $string;
+                $_d87f4c1f5462 = $_44af9f79ea06;
+                if ($_ce467557df24[$_44af9f79ea06] == '~') {
+                    $_a62b34eb6df6 = self::readsl($_ce467557df24, $_44af9f79ea06);
+                    $_d88d4c12fcc4 = "_ALOM_optwister{$_5b3eb1c32c0d}_t0($_a62b34eb6df6)";
+                    self::reparseExtra($_d5cbf76f6b55, $_ce467557df24, $_44af9f79ea06, $_44af9f79ea06 - $_d87f4c1f5462, $_d88d4c12fcc4);
+                    $_44af9f79ea06 = $_d87f4c1f5462 - 1;
+                } else if ($_ce467557df24[$_44af9f79ea06] == '!') {
+                    $_a62b34eb6df6 = self::readsl($_ce467557df24, $_44af9f79ea06);
+                    $_d88d4c12fcc4 = "_ALOM_optwister{$_5b3eb1c32c0d}_u0($_a62b34eb6df6)";
+                    self::reparseExtra($_d5cbf76f6b55, $_ce467557df24, $_44af9f79ea06, $_44af9f79ea06 - $_d87f4c1f5462, $_d88d4c12fcc4);
+                    $_44af9f79ea06 = $_d87f4c1f5462 - 1;
+                } else $_d5cbf76f6b55 .= $_ce467557df24[$_44af9f79ea06];
             }
+            $_d5cbf76f6b55 = '';
+            for ($_44af9f79ea06 = 0; isset($_ce467557df24[$_44af9f79ea06]); ++$_44af9f79ea06) if (is_array($_ce467557df24[$_44af9f79ea06])) {
+                $_d87f4c1f5462 = $_44af9f79ea06;
+                if ($_ce467557df24[$_44af9f79ea06][0] == T_POW) {
+                    $_08db2b3c2769 = self::readsr($_ce467557df24, $_44af9f79ea06);
+                    $_a62b34eb6df6 = self::readsl($_ce467557df24, $_44af9f79ea06);
+                    $_d88d4c12fcc4 = "pow($_08db2b3c2769,$_a62b34eb6df6)";
+                    self::reparseExtra($_d5cbf76f6b55, $_ce467557df24, $_44af9f79ea06, $_44af9f79ea06 - $_d87f4c1f5462, $_d88d4c12fcc4, strlen($_08db2b3c2769));
+                } else if ($_ce467557df24[$_44af9f79ea06][0] == T_DEC) {
+                    $_08db2b3c2769 = trim(self::readsr($_ce467557df24, $_44af9f79ea06));
+                    $_a62b34eb6df6 = trim(self::readsl($_ce467557df24, $_44af9f79ea06));
+                    if (trim($_a62b34eb6df6) === '') {
+                        $_44af9f79ea06 = $_d87f4c1f5462;
+                        $_d88d4c12fcc4 = "_ALOM_optwister{$_5b3eb1c32c0d}_n0($_08db2b3c2769)";
+                        self::reparseExtra($_d5cbf76f6b55, $_ce467557df24, $_44af9f79ea06, $_44af9f79ea06 - $_d87f4c1f5462, $_d88d4c12fcc4, strlen($_08db2b3c2769));
+                    } else {
+                        $_d88d4c12fcc4 = "_ALOM_optwister{$_5b3eb1c32c0d}_p0($_a62b34eb6df6)";
+                        self::reparseExtra($_d5cbf76f6b55, $_ce467557df24, $_44af9f79ea06, $_44af9f79ea06 - $_d87f4c1f5462, $_d88d4c12fcc4);
+                    }
+                } else if ($_ce467557df24[$_44af9f79ea06][0] == T_INC) {
+                    $_08db2b3c2769 = self::readsr($_ce467557df24, $_44af9f79ea06);
+                    $_a62b34eb6df6 = self::readsl($_ce467557df24, $_44af9f79ea06);
+                    if (trim($_a62b34eb6df6) === '') {
+                        $_44af9f79ea06 = $_d87f4c1f5462;
+                        $_d88d4c12fcc4 = "_ALOM_optwister{$_5b3eb1c32c0d}_o0($_08db2b3c2769)";
+                        self::reparseExtra($_d5cbf76f6b55, $_ce467557df24, $_44af9f79ea06, $_44af9f79ea06 - $_d87f4c1f5462, $_d88d4c12fcc4, strlen($_08db2b3c2769));
+                    } else {
+                        $_d88d4c12fcc4 = "_ALOM_optwister{$_5b3eb1c32c0d}_q0($_a62b34eb6df6)";
+                        self::reparseExtra($_d5cbf76f6b55, $_ce467557df24, $_44af9f79ea06, $_44af9f79ea06 - $_d87f4c1f5462, $_d88d4c12fcc4);
+                    }
+                } else $_d5cbf76f6b55 .= $_ce467557df24[$_44af9f79ea06][1];
+            } else $_d5cbf76f6b55 .= $_ce467557df24[$_44af9f79ea06];
+            $_d5cbf76f6b55 = '';
+            for ($_44af9f79ea06 = 0; isset($_ce467557df24[$_44af9f79ea06]); ++$_44af9f79ea06) if (is_array($_ce467557df24[$_44af9f79ea06])) $_d5cbf76f6b55 .= $_ce467557df24[$_44af9f79ea06][1]; else {
+                $_d87f4c1f5462 = $_44af9f79ea06;
+                if ($_ce467557df24[$_44af9f79ea06] == '*') {
+                    $_08db2b3c2769 = self::readsr($_ce467557df24, $_44af9f79ea06);
+                    $_a62b34eb6df6 = self::readsl($_ce467557df24, $_44af9f79ea06);
+                    $_d88d4c12fcc4 = "_ALOM_optwister{$_5b3eb1c32c0d}_1($_08db2b3c2769,$_a62b34eb6df6)";
+                    self::reparseExtra($_d5cbf76f6b55, $_ce467557df24, $_44af9f79ea06, $_44af9f79ea06 - $_d87f4c1f5462, $_d88d4c12fcc4, strlen($_08db2b3c2769));
+                } else if ($_ce467557df24[$_44af9f79ea06] == '/') {
+                    $_08db2b3c2769 = self::readsr($_ce467557df24, $_44af9f79ea06);
+                    $_a62b34eb6df6 = self::readsl($_ce467557df24, $_44af9f79ea06);
+                    $_d88d4c12fcc4 = "_ALOM_optwister{$_5b3eb1c32c0d}_2($_08db2b3c2769,$_a62b34eb6df6)";
+                    self::reparseExtra($_d5cbf76f6b55, $_ce467557df24, $_44af9f79ea06, $_44af9f79ea06 - $_d87f4c1f5462, $_d88d4c12fcc4, strlen($_08db2b3c2769));
+                } else if ($_ce467557df24[$_44af9f79ea06] == '%') {
+                    $_08db2b3c2769 = self::readsr($_ce467557df24, $_44af9f79ea06);
+                    $_a62b34eb6df6 = self::readsl($_ce467557df24, $_44af9f79ea06);
+                    $_d88d4c12fcc4 = "_ALOM_optwister{$_5b3eb1c32c0d}_3($_08db2b3c2769,$_a62b34eb6df6)";
+                    self::reparseExtra($_d5cbf76f6b55, $_ce467557df24, $_44af9f79ea06, $_44af9f79ea06 - $_d87f4c1f5462, $_d88d4c12fcc4, strlen($_08db2b3c2769));
+                } else $_d5cbf76f6b55 .= $_ce467557df24[$_44af9f79ea06];
+            }
+            $_d5cbf76f6b55 = '';
+            for ($_44af9f79ea06 = 0; isset($_ce467557df24[$_44af9f79ea06]); ++$_44af9f79ea06) if (is_array($_ce467557df24[$_44af9f79ea06])) $_d5cbf76f6b55 .= $_ce467557df24[$_44af9f79ea06][1]; else {
+                $_d87f4c1f5462 = $_44af9f79ea06;
+                if ($_ce467557df24[$_44af9f79ea06] == '+') {
+                    $_08db2b3c2769 = self::readsr($_ce467557df24, $_44af9f79ea06);
+                    if (trim($_08db2b3c2769) === '') {
+                        $_d5cbf76f6b55 .= $_ce467557df24[$_44af9f79ea06];
+                        continue;
+                    }
+                    $_a62b34eb6df6 = self::readsl($_ce467557df24, $_44af9f79ea06);
+                    $_d88d4c12fcc4 = "_ALOM_optwister{$_5b3eb1c32c0d}_z($_08db2b3c2769,$_a62b34eb6df6)";
+                    self::reparseExtra($_d5cbf76f6b55, $_ce467557df24, $_44af9f79ea06, $_44af9f79ea06 - $_d87f4c1f5462, $_d88d4c12fcc4, strlen($_08db2b3c2769));
+                } else if ($_ce467557df24[$_44af9f79ea06] == '-') {
+                    $_08db2b3c2769 = self::readsr($_ce467557df24, $_44af9f79ea06);
+                    if (trim($_08db2b3c2769) === '') {
+                        $_d5cbf76f6b55 .= $_ce467557df24[$_44af9f79ea06];
+                        continue;
+                    }
+                    $_a62b34eb6df6 = self::readsl($_ce467557df24, $_44af9f79ea06);
+                    $_d88d4c12fcc4 = "_ALOM_optwister{$_5b3eb1c32c0d}_0($_08db2b3c2769,$_a62b34eb6df6)";
+                    self::reparseExtra($_d5cbf76f6b55, $_ce467557df24, $_44af9f79ea06, $_44af9f79ea06 - $_d87f4c1f5462, $_d88d4c12fcc4, strlen($_08db2b3c2769));
+                } else $_d5cbf76f6b55 .= $_ce467557df24[$_44af9f79ea06];
+            }
+            $_d5cbf76f6b55 = '';
+            for ($_44af9f79ea06 = 0; isset($_ce467557df24[$_44af9f79ea06]); ++$_44af9f79ea06) if (is_array($_ce467557df24[$_44af9f79ea06])) $_d5cbf76f6b55 .= $_ce467557df24[$_44af9f79ea06][1]; else {
+                if ($_ce467557df24[$_44af9f79ea06] == '.') {
+                    $_d87f4c1f5462 = $_44af9f79ea06;
+                    $_08db2b3c2769 = self::readsr($_ce467557df24, $_44af9f79ea06);
+                    $_a62b34eb6df6 = self::readsl($_ce467557df24, $_44af9f79ea06);
+                    $_d88d4c12fcc4 = "_ALOM_optwister{$_5b3eb1c32c0d}_4($_08db2b3c2769,$_a62b34eb6df6)";
+                    self::reparseExtra($_d5cbf76f6b55, $_ce467557df24, $_44af9f79ea06, $_44af9f79ea06 - $_d87f4c1f5462, $_d88d4c12fcc4, strlen($_08db2b3c2769));
+                } else $_d5cbf76f6b55 .= $_ce467557df24[$_44af9f79ea06];
+            }
+            $_d5cbf76f6b55 = '';
+            for ($_44af9f79ea06 = 0; isset($_ce467557df24[$_44af9f79ea06]); ++$_44af9f79ea06) if (is_array($_ce467557df24[$_44af9f79ea06])) {
+                $_d87f4c1f5462 = $_44af9f79ea06;
+                if ($_ce467557df24[$_44af9f79ea06][0] == T_SL) {
+                    $_08db2b3c2769 = self::readsr($_ce467557df24, $_44af9f79ea06);
+                    $_a62b34eb6df6 = self::readsl($_ce467557df24, $_44af9f79ea06);
+                    $_d88d4c12fcc4 = "_ALOM_optwister{$_5b3eb1c32c0d}_x($_08db2b3c2769,$_a62b34eb6df6)";
+                    self::reparseExtra($_d5cbf76f6b55, $_ce467557df24, $_44af9f79ea06, $_44af9f79ea06 - $_d87f4c1f5462, $_d88d4c12fcc4, strlen($_08db2b3c2769));
+                } else if ($_ce467557df24[$_44af9f79ea06][0] == T_SR) {
+                    $_08db2b3c2769 = self::readsr($_ce467557df24, $_44af9f79ea06);
+                    $_a62b34eb6df6 = self::readsl($_ce467557df24, $_44af9f79ea06);
+                    $_d88d4c12fcc4 = "_ALOM_optwister{$_5b3eb1c32c0d}_y($_08db2b3c2769,$_a62b34eb6df6)";
+                    self::reparseExtra($_d5cbf76f6b55, $_ce467557df24, $_44af9f79ea06, $_44af9f79ea06 - $_d87f4c1f5462, $_d88d4c12fcc4, strlen($_08db2b3c2769));
+                } else $_d5cbf76f6b55 .= $_ce467557df24[$_44af9f79ea06][1];
+            } else $_d5cbf76f6b55 .= $_ce467557df24[$_44af9f79ea06];
+            $_d5cbf76f6b55 = '';
+            for ($_44af9f79ea06 = 0; isset($_ce467557df24[$_44af9f79ea06]); ++$_44af9f79ea06) if (is_array($_ce467557df24[$_44af9f79ea06])) {
+                $_d87f4c1f5462 = $_44af9f79ea06;
+                if ($_ce467557df24[$_44af9f79ea06][0] == T_LOGICAL_AND) {
+                    $_08db2b3c2769 = self::readsr($_ce467557df24, $_44af9f79ea06);
+                    $_a62b34eb6df6 = self::readsl($_ce467557df24, $_44af9f79ea06);
+                    $_d88d4c12fcc4 = "_ALOM_optwister{$_5b3eb1c32c0d}_u($_08db2b3c2769,$_a62b34eb6df6)";
+                    self::reparseExtra($_d5cbf76f6b55, $_ce467557df24, $_44af9f79ea06, $_44af9f79ea06 - $_d87f4c1f5462, $_d88d4c12fcc4, strlen($_08db2b3c2769));
+                } else if ($_ce467557df24[$_44af9f79ea06][0] == T_LOGICAL_OR) {
+                    $_08db2b3c2769 = self::readsr($_ce467557df24, $_44af9f79ea06);
+                    $_a62b34eb6df6 = self::readsl($_ce467557df24, $_44af9f79ea06);
+                    $_d88d4c12fcc4 = "_ALOM_optwister{$_5b3eb1c32c0d}_v($_08db2b3c2769,$_a62b34eb6df6)";
+                    self::reparseExtra($_d5cbf76f6b55, $_ce467557df24, $_44af9f79ea06, $_44af9f79ea06 - $_d87f4c1f5462, $_d88d4c12fcc4, strlen($_08db2b3c2769));
+                } else if ($_ce467557df24[$_44af9f79ea06][0] == T_LOGICAL_XOR) {
+                    $_08db2b3c2769 = self::readsr($_ce467557df24, $_44af9f79ea06);
+                    $_a62b34eb6df6 = self::readsl($_ce467557df24, $_44af9f79ea06);
+                    $_d88d4c12fcc4 = "_ALOM_optwister{$_5b3eb1c32c0d}_w($_08db2b3c2769,$_a62b34eb6df6)";
+                    self::reparseExtra($_d5cbf76f6b55, $_ce467557df24, $_44af9f79ea06, $_44af9f79ea06 - $_d87f4c1f5462, $_d88d4c12fcc4, strlen($_08db2b3c2769));
+                } else $_d5cbf76f6b55 .= $_ce467557df24[$_44af9f79ea06][1];
+            } else {
+                $_d87f4c1f5462 = $_44af9f79ea06;
+                if ($_ce467557df24[$_44af9f79ea06] == '&') {
+                    $_08db2b3c2769 = self::readsr($_ce467557df24, $_44af9f79ea06);
+                    if (trim($_08db2b3c2769) === '') {
+                        $_d5cbf76f6b55 .= $_ce467557df24[$_44af9f79ea06];
+                        continue;
+                    }
+                    $_a62b34eb6df6 = self::readsl($_ce467557df24, $_44af9f79ea06);
+                    $_d88d4c12fcc4 = "_ALOM_optwister{$_5b3eb1c32c0d}_u($_08db2b3c2769,$_a62b34eb6df6)";
+                    self::reparseExtra($_d5cbf76f6b55, $_ce467557df24, $_44af9f79ea06, $_44af9f79ea06 - $_d87f4c1f5462, $_d88d4c12fcc4, strlen($_08db2b3c2769));
+                } else if ($_ce467557df24[$_44af9f79ea06] == '|') {
+                    $_08db2b3c2769 = self::readsr($_ce467557df24, $_44af9f79ea06);
+                    $_a62b34eb6df6 = self::readsl($_ce467557df24, $_44af9f79ea06);
+                    $_d88d4c12fcc4 = "_ALOM_optwister{$_5b3eb1c32c0d}_v($_08db2b3c2769,$_a62b34eb6df6)";
+                    self::reparseExtra($_d5cbf76f6b55, $_ce467557df24, $_44af9f79ea06, $_44af9f79ea06 - $_d87f4c1f5462, $_d88d4c12fcc4, strlen($_08db2b3c2769));
+                } else if ($_ce467557df24[$_44af9f79ea06] == '^') {
+                    $_08db2b3c2769 = self::readsr($_ce467557df24, $_44af9f79ea06);
+                    $_a62b34eb6df6 = self::readsl($_ce467557df24, $_44af9f79ea06);
+                    $_d88d4c12fcc4 = "_ALOM_optwister{$_5b3eb1c32c0d}_w($_08db2b3c2769,$_a62b34eb6df6)";
+                    self::reparseExtra($_d5cbf76f6b55, $_ce467557df24, $_44af9f79ea06, $_44af9f79ea06 - $_d87f4c1f5462, $_d88d4c12fcc4, strlen($_08db2b3c2769));
+                } else $_d5cbf76f6b55 .= $_ce467557df24[$_44af9f79ea06];
+            }
+            $_d5cbf76f6b55 = '';
+            for ($_44af9f79ea06 = 0; isset($_ce467557df24[$_44af9f79ea06]); ++$_44af9f79ea06) if (is_array($_ce467557df24[$_44af9f79ea06])) {
+                $_d87f4c1f5462 = $_44af9f79ea06;
+                if ($_ce467557df24[$_44af9f79ea06][0] == T_IS_GREATER_OR_EQUAL) {
+                    $_08db2b3c2769 = self::readsr($_ce467557df24, $_44af9f79ea06);
+                    $_a62b34eb6df6 = self::readsl($_ce467557df24, $_44af9f79ea06);
+                    $_d88d4c12fcc4 = "_ALOM_optwister{$_5b3eb1c32c0d}_l($_08db2b3c2769,$_a62b34eb6df6)";
+                    self::reparseExtra($_d5cbf76f6b55, $_ce467557df24, $_44af9f79ea06, $_44af9f79ea06 - $_d87f4c1f5462, $_d88d4c12fcc4, strlen($_08db2b3c2769));
+                } else if ($_ce467557df24[$_44af9f79ea06][0] == T_IS_SMALLER_OR_EQUAL) {
+                    $_08db2b3c2769 = self::readsr($_ce467557df24, $_44af9f79ea06);
+                    $_a62b34eb6df6 = self::readsl($_ce467557df24, $_44af9f79ea06);
+                    $_d88d4c12fcc4 = "_ALOM_optwister{$_5b3eb1c32c0d}_m($_08db2b3c2769,$_a62b34eb6df6)";
+                    self::reparseExtra($_d5cbf76f6b55, $_ce467557df24, $_44af9f79ea06, $_44af9f79ea06 - $_d87f4c1f5462, $_d88d4c12fcc4, strlen($_08db2b3c2769));
+                } else if ($_ce467557df24[$_44af9f79ea06][0] == T_IS_EQUAL) {
+                    $_08db2b3c2769 = self::readsr($_ce467557df24, $_44af9f79ea06);
+                    $_a62b34eb6df6 = self::readsl($_ce467557df24, $_44af9f79ea06);
+                    $_d88d4c12fcc4 = "_ALOM_optwister{$_5b3eb1c32c0d}_p($_08db2b3c2769,$_a62b34eb6df6)";
+                    self::reparseExtra($_d5cbf76f6b55, $_ce467557df24, $_44af9f79ea06, $_44af9f79ea06 - $_d87f4c1f5462, $_d88d4c12fcc4, strlen($_08db2b3c2769));
+                } else if ($_ce467557df24[$_44af9f79ea06][0] == T_IS_IDENTICAL) {
+                    $_08db2b3c2769 = self::readsr($_ce467557df24, $_44af9f79ea06);
+                    $_a62b34eb6df6 = self::readsl($_ce467557df24, $_44af9f79ea06);
+                    $_d88d4c12fcc4 = "_ALOM_optwister{$_5b3eb1c32c0d}_q($_08db2b3c2769,$_a62b34eb6df6)";
+                } else if ($_ce467557df24[$_44af9f79ea06][0] == T_IS_NOT_EQUAL) {
+                    $_08db2b3c2769 = self::readsr($_ce467557df24, $_44af9f79ea06);
+                    $_a62b34eb6df6 = self::readsl($_ce467557df24, $_44af9f79ea06);
+                    $_d88d4c12fcc4 = "_ALOM_optwister{$_5b3eb1c32c0d}_r($_08db2b3c2769,$_a62b34eb6df6)";
+                    self::reparseExtra($_d5cbf76f6b55, $_ce467557df24, $_44af9f79ea06, $_44af9f79ea06 - $_d87f4c1f5462, $_d88d4c12fcc4, strlen($_08db2b3c2769));
+                } else if ($_ce467557df24[$_44af9f79ea06][0] == T_IS_NOT_IDENTICAL) {
+                    $_08db2b3c2769 = self::readsr($_ce467557df24, $_44af9f79ea06);
+                    $_a62b34eb6df6 = self::readsl($_ce467557df24, $_44af9f79ea06);
+                    $_d88d4c12fcc4 = "_ALOM_optwister{$_5b3eb1c32c0d}_s($_08db2b3c2769,$_a62b34eb6df6)";
+                    self::reparseExtra($_d5cbf76f6b55, $_ce467557df24, $_44af9f79ea06, $_44af9f79ea06 - $_d87f4c1f5462, $_d88d4c12fcc4, strlen($_08db2b3c2769));
+                } else $_d5cbf76f6b55 .= $_ce467557df24[$_44af9f79ea06][1];
+            } else {
+                $_d87f4c1f5462 = $_44af9f79ea06;
+                if ($_ce467557df24[$_44af9f79ea06] == '>') {
+                    $_08db2b3c2769 = self::readsr($_ce467557df24, $_44af9f79ea06);
+                    $_a62b34eb6df6 = self::readsl($_ce467557df24, $_44af9f79ea06);
+                    $_d88d4c12fcc4 = "_ALOM_optwister{$_5b3eb1c32c0d}_n($_08db2b3c2769,$_a62b34eb6df6)";
+                    self::reparseExtra($_d5cbf76f6b55, $_ce467557df24, $_44af9f79ea06, $_44af9f79ea06 - $_d87f4c1f5462, $_d88d4c12fcc4, strlen($_08db2b3c2769));
+                } else if ($_ce467557df24[$_44af9f79ea06] == '<') {
+                    $_08db2b3c2769 = self::readsr($_ce467557df24, $_44af9f79ea06);
+                    $_a62b34eb6df6 = self::readsl($_ce467557df24, $_44af9f79ea06);
+                    $_d88d4c12fcc4 = "_ALOM_optwister{$_5b3eb1c32c0d}_o($_08db2b3c2769,$_a62b34eb6df6)";
+                    self::reparseExtra($_d5cbf76f6b55, $_ce467557df24, $_44af9f79ea06, $_44af9f79ea06 - $_d87f4c1f5462, $_d88d4c12fcc4, strlen($_08db2b3c2769));
+                } else $_d5cbf76f6b55 .= $_ce467557df24[$_44af9f79ea06];
+            }
+            $_d5cbf76f6b55 = '';
+            for ($_44af9f79ea06 = 0; isset($_ce467557df24[$_44af9f79ea06]); ++$_44af9f79ea06) if (is_array($_ce467557df24[$_44af9f79ea06])) {
+                $_d87f4c1f5462 = $_44af9f79ea06;
+                if ($_ce467557df24[$_44af9f79ea06][0] == T_BOOLEAN_AND) {
+                    $_08db2b3c2769 = self::readsr($_ce467557df24, $_44af9f79ea06);
+                    $_a62b34eb6df6 = self::readsl($_ce467557df24, $_44af9f79ea06);
+                    $_d88d4c12fcc4 = "_ALOM_optwister{$_5b3eb1c32c0d}_r0($_08db2b3c2769,$_a62b34eb6df6)";
+                    self::reparseExtra($_d5cbf76f6b55, $_ce467557df24, $_44af9f79ea06, $_44af9f79ea06 - $_d87f4c1f5462, $_d88d4c12fcc4, strlen($_08db2b3c2769));
+                } else if ($_ce467557df24[$_44af9f79ea06][0] == T_BOOLEAN_OR) {
+                    $_08db2b3c2769 = self::readsr($_ce467557df24, $_44af9f79ea06);
+                    $_a62b34eb6df6 = self::readsl($_ce467557df24, $_44af9f79ea06);
+                    $_d88d4c12fcc4 = "_ALOM_optwister{$_5b3eb1c32c0d}_s0($_08db2b3c2769,$_a62b34eb6df6)";
+                    self::reparseExtra($_d5cbf76f6b55, $_ce467557df24, $_44af9f79ea06, $_44af9f79ea06 - $_d87f4c1f5462, $_d88d4c12fcc4, strlen($_08db2b3c2769));
+                } else $_d5cbf76f6b55 .= $_ce467557df24[$_44af9f79ea06][1];
+            } else $_d5cbf76f6b55 .= $_ce467557df24[$_44af9f79ea06];
+            $_d5cbf76f6b55 = '';
+            for ($_44af9f79ea06 = 0; isset($_ce467557df24[$_44af9f79ea06]); ++$_44af9f79ea06) if (is_array($_ce467557df24[$_44af9f79ea06])) {
+                $_d87f4c1f5462 = $_44af9f79ea06;
+                if ($_ce467557df24[$_44af9f79ea06][0] == T_AND_EQUAL) {
+                    $_08db2b3c2769 = self::readsr($_ce467557df24, $_44af9f79ea06);
+                    $_a62b34eb6df6 = self::readsl($_ce467557df24, $_44af9f79ea06);
+                    $_d88d4c12fcc4 = "_ALOM_optwister{$_5b3eb1c32c0d}_a0($_08db2b3c2769,$_a62b34eb6df6)";
+                    self::reparseExtra($_d5cbf76f6b55, $_ce467557df24, $_44af9f79ea06, $_44af9f79ea06 - $_d87f4c1f5462, $_d88d4c12fcc4, strlen($_08db2b3c2769));
+                } else if ($_ce467557df24[$_44af9f79ea06][0] == T_OR_EQUAL) {
+                    $_08db2b3c2769 = self::readsr($_ce467557df24, $_44af9f79ea06);
+                    $_a62b34eb6df6 = self::readsl($_ce467557df24, $_44af9f79ea06);
+                    $_d88d4c12fcc4 = "_ALOM_optwister{$_5b3eb1c32c0d}_b0($_08db2b3c2769,$_a62b34eb6df6)";
+                    self::reparseExtra($_d5cbf76f6b55, $_ce467557df24, $_44af9f79ea06, $_44af9f79ea06 - $_d87f4c1f5462, $_d88d4c12fcc4, strlen($_08db2b3c2769));
+                } else if ($_ce467557df24[$_44af9f79ea06][0] == T_XOR_EQUAL) {
+                    $_08db2b3c2769 = self::readsr($_ce467557df24, $_44af9f79ea06);
+                    $_a62b34eb6df6 = self::readsl($_ce467557df24, $_44af9f79ea06);
+                    $_d88d4c12fcc4 = "_ALOM_optwister{$_5b3eb1c32c0d}_c0($_08db2b3c2769,$_a62b34eb6df6)";
+                    self::reparseExtra($_d5cbf76f6b55, $_ce467557df24, $_44af9f79ea06, $_44af9f79ea06 - $_d87f4c1f5462, $_d88d4c12fcc4, strlen($_08db2b3c2769));
+                } else if ($_ce467557df24[$_44af9f79ea06][0] == T_PLUS_EQUAL) {
+                    $_08db2b3c2769 = self::readsr($_ce467557df24, $_44af9f79ea06);
+                    $_a62b34eb6df6 = self::readsl($_ce467557df24, $_44af9f79ea06);
+                    $_d88d4c12fcc4 = "_ALOM_optwister{$_5b3eb1c32c0d}_d0($_08db2b3c2769,$_a62b34eb6df6)";
+                    self::reparseExtra($_d5cbf76f6b55, $_ce467557df24, $_44af9f79ea06, $_44af9f79ea06 - $_d87f4c1f5462, $_d88d4c12fcc4, strlen($_08db2b3c2769));
+                } else if ($_ce467557df24[$_44af9f79ea06][0] == T_MINUS_EQUAL) {
+                    $_08db2b3c2769 = self::readsr($_ce467557df24, $_44af9f79ea06);
+                    $_a62b34eb6df6 = self::readsl($_ce467557df24, $_44af9f79ea06);
+                    $_d88d4c12fcc4 = "_ALOM_optwister{$_5b3eb1c32c0d}_e0($_08db2b3c2769,$_a62b34eb6df6)";
+                    self::reparseExtra($_d5cbf76f6b55, $_ce467557df24, $_44af9f79ea06, $_44af9f79ea06 - $_d87f4c1f5462, $_d88d4c12fcc4, strlen($_08db2b3c2769));
+                } else if ($_ce467557df24[$_44af9f79ea06][0] == T_MUL_EQUAL) {
+                    $_08db2b3c2769 = self::readsr($_ce467557df24, $_44af9f79ea06);
+                    $_a62b34eb6df6 = self::readsl($_ce467557df24, $_44af9f79ea06);
+                    $_d88d4c12fcc4 = "_ALOM_optwister{$_5b3eb1c32c0d}_f0($_08db2b3c2769,$_a62b34eb6df6)";
+                    self::reparseExtra($_d5cbf76f6b55, $_ce467557df24, $_44af9f79ea06, $_44af9f79ea06 - $_d87f4c1f5462, $_d88d4c12fcc4, strlen($_08db2b3c2769));
+                } else if ($_ce467557df24[$_44af9f79ea06][0] == T_DIV_EQUAL) {
+                    $_08db2b3c2769 = self::readsr($_ce467557df24, $_44af9f79ea06);
+                    $_a62b34eb6df6 = self::readsl($_ce467557df24, $_44af9f79ea06);
+                    $_d88d4c12fcc4 = "_ALOM_optwister{$_5b3eb1c32c0d}_g0($_08db2b3c2769,$_a62b34eb6df6)";
+                    self::reparseExtra($_d5cbf76f6b55, $_ce467557df24, $_44af9f79ea06, $_44af9f79ea06 - $_d87f4c1f5462, $_d88d4c12fcc4, strlen($_08db2b3c2769));
+                } else if ($_ce467557df24[$_44af9f79ea06][0] == T_MOD_EQUAL) {
+                    $_08db2b3c2769 = self::readsr($_ce467557df24, $_44af9f79ea06);
+                    $_a62b34eb6df6 = self::readsl($_ce467557df24, $_44af9f79ea06);
+                    $_d88d4c12fcc4 = "_ALOM_optwister{$_5b3eb1c32c0d}_h0($_08db2b3c2769,$_a62b34eb6df6)";
+                    self::reparseExtra($_d5cbf76f6b55, $_ce467557df24, $_44af9f79ea06, $_44af9f79ea06 - $_d87f4c1f5462, $_d88d4c12fcc4, strlen($_08db2b3c2769));
+                } else if ($_ce467557df24[$_44af9f79ea06][0] == T_POW_EQUAL) {
+                    $_08db2b3c2769 = self::readsr($_ce467557df24, $_44af9f79ea06);
+                    $_a62b34eb6df6 = self::readsl($_ce467557df24, $_44af9f79ea06);
+                    $_d88d4c12fcc4 = "_ALOM_optwister{$_5b3eb1c32c0d}_i0($_08db2b3c2769,$_a62b34eb6df6)";
+                    self::reparseExtra($_d5cbf76f6b55, $_ce467557df24, $_44af9f79ea06, $_44af9f79ea06 - $_d87f4c1f5462, $_d88d4c12fcc4, strlen($_08db2b3c2769));
+                } else if ($_ce467557df24[$_44af9f79ea06][0] == T_SL_EQUAL) {
+                    $_08db2b3c2769 = self::readsr($_ce467557df24, $_44af9f79ea06);
+                    $_a62b34eb6df6 = self::readsl($_ce467557df24, $_44af9f79ea06);
+                    $_d88d4c12fcc4 = "_ALOM_optwister{$_5b3eb1c32c0d}_j0($_08db2b3c2769,$_a62b34eb6df6)";
+                    self::reparseExtra($_d5cbf76f6b55, $_ce467557df24, $_44af9f79ea06, $_44af9f79ea06 - $_d87f4c1f5462, $_d88d4c12fcc4, strlen($_08db2b3c2769));
+                } else if ($_ce467557df24[$_44af9f79ea06][0] == T_SR_EQUAL) {
+                    $_08db2b3c2769 = self::readsr($_ce467557df24, $_44af9f79ea06);
+                    $_a62b34eb6df6 = self::readsl($_ce467557df24, $_44af9f79ea06);
+                    $_d88d4c12fcc4 = "_ALOM_optwister{$_5b3eb1c32c0d}_k0($_08db2b3c2769,$_a62b34eb6df6)";
+                    self::reparseExtra($_d5cbf76f6b55, $_ce467557df24, $_44af9f79ea06, $_44af9f79ea06 - $_d87f4c1f5462, $_d88d4c12fcc4, strlen($_08db2b3c2769));
+                } else if ($_ce467557df24[$_44af9f79ea06][0] == T_CONCAT_EQUAL) {
+                    $_08db2b3c2769 = self::readsr($_ce467557df24, $_44af9f79ea06);
+                    $_a62b34eb6df6 = self::readsl($_ce467557df24, $_44af9f79ea06);
+                    $_d88d4c12fcc4 = "_ALOM_optwister{$_5b3eb1c32c0d}_m0($_08db2b3c2769,$_a62b34eb6df6)";
+                    self::reparseExtra($_d5cbf76f6b55, $_ce467557df24, $_44af9f79ea06, $_44af9f79ea06 - $_d87f4c1f5462, $_d88d4c12fcc4, strlen($_08db2b3c2769));
+                } else $_d5cbf76f6b55 .= $_ce467557df24[$_44af9f79ea06][1];
+            } else $_d5cbf76f6b55 .= $_ce467557df24[$_44af9f79ea06];
+            return $_d5cbf76f6b55;
         }
 
-        private static function optwister_stringify(&$tokens, $signflag, &$i)
+        private static function optwister_encode($_2f79040d85dc, $_e790ce3071f2, $_91dba975883a, $_9b3c20ca2a6c)
         {
-            $code = "";
-            $opc = 1;
-            for (; isset($tokens[$i]) && $opc != 0; ++$i) {
-                if (
-                    is_array($tokens[$i]) &&
-                    in_array($tokens[$i][0], [T_CLASS, T_TRAIT, T_INTERFACE])
-                ) {
-                    $code .= $tokens[$i++][1];
-                    while (
-                        is_array($tokens[$i]) &&
-                        in_array($tokens[$i][0], [
+            $_0187a8a1d97a = self::getasciiikey(rand(1, 16));
+            $_d098a58698c1 = (strlen($_0187a8a1d97a) + strlen($_2f79040d85dc)) % 3;
+            if ($_d098a58698c1 > 0) $_0187a8a1d97a .= self::getasciiikey(3 - $_d098a58698c1);
+            $_2f79040d85dc = chr(strlen($_0187a8a1d97a)) . $_0187a8a1d97a . $_2f79040d85dc;
+            for ($_44af9f79ea06 = 0; isset($_2f79040d85dc[$_44af9f79ea06]); ++$_44af9f79ea06) $_2f79040d85dc[$_44af9f79ea06] = $_9b3c20ca2a6c[$_44af9f79ea06 & 0xf] ^ $_2f79040d85dc[$_44af9f79ea06];
+            $_2f79040d85dc = self::inc($_2f79040d85dc, $_e790ce3071f2, $_91dba975883a, TRUE);
+            for ($_44af9f79ea06 = 0; isset($_2f79040d85dc[$_44af9f79ea06]); ++$_44af9f79ea06) $_2f79040d85dc[$_44af9f79ea06] = $_9b3c20ca2a6c[$_44af9f79ea06 & 0xf] ^ $_2f79040d85dc[$_44af9f79ea06];
+            return $_2f79040d85dc;
+        }
+
+        private static function optwister_encapsed_string($_2f79040d85dc)
+        {
+            if ($_2f79040d85dc[0] == "'") {
+                $_2f79040d85dc = substr($_2f79040d85dc, 1, -1);
+                $_2f79040d85dc = preg_replace_callback("/(?<!(?<!\\\\)\\\\)\\\\('|\\\\)/", function ($_358662e4fc83) { return $_358662e4fc83[1]; }, $_2f79040d85dc);
+                return $_2f79040d85dc;
+            }
+            $_2f79040d85dc = substr($_2f79040d85dc, 1, -1);
+            $_2f79040d85dc = preg_replace_callback("/(?<!(?<!\\\\)\\\\)\\\\([0-7]{1,3}|x[0-9a-fA-F]{1,2}|[ertvnf]|\\\$|\"|\\\\)/", function ($_358662e4fc83) {
+                switch ($_358662e4fc83[1][0]) {
+                    case 'e':
+                        return "\e";
+                    case 'r':
+                        return "\r";
+                    case 't':
+                        return "\t";
+                    case 'v':
+                        return "\v";
+                    case 'n':
+                        return "\n";
+                    case 'f':
+                        return "\f";
+                    case '"':
+                    case '\\':
+                    case '$':
+                        return $_358662e4fc83[1];
+                    case 'x':
+                        return chr(hexdec(substr($_358662e4fc83[1], 1)));
+                    default:
+                        return chr(octdec($_358662e4fc83[1]));
+                }
+            }, $_2f79040d85dc);
+            return $_2f79040d85dc;
+        }
+
+        private static function optwister_lnumber($_2f79040d85dc)
+        {
+            if ($_2f79040d85dc == 0) return '0';
+            if ($_2f79040d85dc[0] == '0') {
+                if ($_2f79040d85dc[1] == 'x') return (string)hexdec(substr($_2f79040d85dc, 2));
+                if ($_2f79040d85dc[1] == 'b') return (string)bindec(substr($_2f79040d85dc, 2));
+                return (string)octdec(substr($_2f79040d85dc, 1));
+            } else return $_2f79040d85dc;
+        }
+
+        private static function optwister_stringify(&$_ce467557df24, $_5b3eb1c32c0d, &$_44af9f79ea06)
+        {
+            $_d5cbf76f6b55 = '';
+            $_cfce0741e92e = 1;
+            for (; isset($_ce467557df24[$_44af9f79ea06]) && $_cfce0741e92e != 0; ++$_44af9f79ea06) if (is_array($_ce467557df24[$_44af9f79ea06]) && in_array($_ce467557df24[$_44af9f79ea06][0], [
+                    T_CLASS,
+                    T_TRAIT,
+                    T_INTERFACE,
+                ])) {
+                $_d5cbf76f6b55 .= $_ce467557df24[$_44af9f79ea06++][1];
+                while (is_array($_ce467557df24[$_44af9f79ea06]) && in_array($_ce467557df24[$_44af9f79ea06][0], [
+                        T_WHITESPACE,
+                        T_STRING,
+                        T_NS_SEPARATOR,
+                        T_EXTENDS,
+                        T_IMPLEMENTS,
+                    ])) $_d5cbf76f6b55 .= $_ce467557df24[$_44af9f79ea06++][1];
+                if ($_ce467557df24[$_44af9f79ea06] != '{') {
+                    --$_44af9f79ea06;
+                    continue;
+                }
+                $_d5cbf76f6b55 .= $_ce467557df24[$_44af9f79ea06++];
+                for (; isset($_ce467557df24[$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06] != '}'; ++$_44af9f79ea06) if (is_array($_ce467557df24[$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06][0] == T_FUNCTION) {
+                    $_d5cbf76f6b55 .= $_ce467557df24[$_44af9f79ea06++][1];
+                    for (; isset($_ce467557df24[$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06] != '('; ++$_44af9f79ea06) if (is_array($_ce467557df24[$_44af9f79ea06])) $_d5cbf76f6b55 .= $_ce467557df24[$_44af9f79ea06][1]; else $_d5cbf76f6b55 .= $_ce467557df24[$_44af9f79ea06];
+                    $_d5cbf76f6b55 .= self::readl($_ce467557df24, '(', ')', $_44af9f79ea06);
+                    ++$_44af9f79ea06;
+                    for (; isset($_ce467557df24[$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06] != '{'; ++$_44af9f79ea06) if ($_ce467557df24[$_44af9f79ea06] == ';') break; else if (is_array($_ce467557df24[$_44af9f79ea06])) $_d5cbf76f6b55 .= $_ce467557df24[$_44af9f79ea06][1];
+                    else $_d5cbf76f6b55 .= $_ce467557df24[$_44af9f79ea06];
+                    if ($_ce467557df24[$_44af9f79ea06] == ';') {
+                        $_d5cbf76f6b55 .= $_ce467557df24[$_44af9f79ea06];
+                        continue;
+                    }
+                    $_d5cbf76f6b55 .= $_ce467557df24[$_44af9f79ea06++];
+                    $_d5cbf76f6b55 .= self::optwister_stringify($_ce467557df24, $_5b3eb1c32c0d, $_44af9f79ea06);
+                    --$_44af9f79ea06;
+                } else if (is_array($_ce467557df24[$_44af9f79ea06])) $_d5cbf76f6b55 .= $_ce467557df24[$_44af9f79ea06][1];
+                else if ($_ce467557df24[$_44af9f79ea06] == '{') $_d5cbf76f6b55 .= self::readl($_ce467557df24, '{', '}', $_44af9f79ea06);
+                else $_d5cbf76f6b55 .= $_ce467557df24[$_44af9f79ea06];
+                $_d5cbf76f6b55 .= $_ce467557df24[$_44af9f79ea06];
+            } else if ($_ce467557df24[$_44af9f79ea06] == '{') {
+                ++$_cfce0741e92e;
+                $_d5cbf76f6b55 .= $_ce467557df24[$_44af9f79ea06];
+            } else if ($_ce467557df24[$_44af9f79ea06] == '}') {
+                --$_cfce0741e92e;
+                $_d5cbf76f6b55 .= $_ce467557df24[$_44af9f79ea06];
+            } else if (is_array($_ce467557df24[$_44af9f79ea06])) {
+                if ($_ce467557df24[$_44af9f79ea06][0] == T_FUNCTION) {
+                    $_d5cbf76f6b55 .= $_ce467557df24[$_44af9f79ea06++][1];
+                    if (is_array($_ce467557df24[$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06][0] == T_WHITESPACE) $_d5cbf76f6b55 .= $_ce467557df24[$_44af9f79ea06++][1];
+                    if (is_array($_ce467557df24[$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06][0] == T_STRING) {
+                        $_d5cbf76f6b55 .= $_ce467557df24[$_44af9f79ea06++][1];
+                        if (is_array($_ce467557df24[$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06][0] == T_WHITESPACE) $_d5cbf76f6b55 .= $_ce467557df24[$_44af9f79ea06++][1];
+                    }
+                    if ($_ce467557df24[$_44af9f79ea06] == '(') {
+                        $_d5cbf76f6b55 .= '(' . self::readpe($_ce467557df24, $_44af9f79ea06) . ')';
+                        ++$_44af9f79ea06;
+                    }
+                    if (is_array($_ce467557df24[$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06][0] == T_WHITESPACE) $_d5cbf76f6b55 .= $_ce467557df24[$_44af9f79ea06++][1];
+                    if (is_array($_ce467557df24[$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06][0] == T_USE) {
+                        $_d5cbf76f6b55 .= $_ce467557df24[$_44af9f79ea06++][1];
+                        if (is_array($_ce467557df24[$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06][0] == T_WHITESPACE) $_d5cbf76f6b55 .= $_ce467557df24[$_44af9f79ea06++][1];
+                    }
+                    if ($_ce467557df24[$_44af9f79ea06] == '(') $_d5cbf76f6b55 .= '(' . self::readpe($_ce467557df24, $_44af9f79ea06) . ')'; else--$_44af9f79ea06;
+                } else if ($_ce467557df24[$_44af9f79ea06][0] == T_FN || $_ce467557df24[$_44af9f79ea06][0] == T_DECLARE) {
+                    $_d5cbf76f6b55 .= $_ce467557df24[$_44af9f79ea06++][1];
+                    if (is_array($_ce467557df24[$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06][0] == T_WHITESPACE) $_d5cbf76f6b55 .= $_ce467557df24[$_44af9f79ea06++][1];
+                    if ($_ce467557df24[$_44af9f79ea06] == '(') $_d5cbf76f6b55 .= '(' . self::readpe($_ce467557df24, $_44af9f79ea06) . ')'; else--$_44af9f79ea06;
+                } else if ($_ce467557df24[$_44af9f79ea06][0] == T_STATIC) {
+                    $_d5cbf76f6b55 .= $_ce467557df24[$_44af9f79ea06++][1];
+                    if (is_array($_ce467557df24[$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06][0] == T_WHITESPACE) $_d5cbf76f6b55 .= $_ce467557df24[$_44af9f79ea06++][1];
+                    $_d5cbf76f6b55 .= self::readpe($_ce467557df24, $_44af9f79ea06, TRUE);
+                } else if ($_ce467557df24[$_44af9f79ea06][0] == T_NAMESPACE) {
+                    $_d5cbf76f6b55 .= $_ce467557df24[$_44af9f79ea06++][1];
+                    while (is_array($_ce467557df24[$_44af9f79ea06]) && in_array($_ce467557df24[$_44af9f79ea06][0], [
                             T_WHITESPACE,
                             T_STRING,
                             T_NS_SEPARATOR,
-                            T_EXTENDS,
-                            T_IMPLEMENTS,
-                        ])
-                    ) {
-                        $code .= $tokens[$i++][1];
-                    }
-                    if ($tokens[$i] != "{") {
-                        --$i;
+                        ])) $_d5cbf76f6b55 .= $_ce467557df24[$_44af9f79ea06++][1];
+                    if ($_ce467557df24[$_44af9f79ea06] != '{') {
+                        --$_44af9f79ea06;
                         continue;
                     }
-                    $code .= $tokens[$i++];
-                    for (; isset($tokens[$i]) && $tokens[$i] != "}"; ++$i) {
-                        if (
-                            is_array($tokens[$i]) &&
-                            $tokens[$i][0] == T_FUNCTION
-                        ) {
-                            $code .= $tokens[$i++][1];
-                            for (
-                            ;
-                                isset($tokens[$i]) && $tokens[$i] != "(";
-                                ++$i
-                            ) {
-                                if (is_array($tokens[$i])) {
-                                    $code .= $tokens[$i][1];
-                                } else {
-                                    $code .= $tokens[$i];
-                                }
-                            }
-                            $code .= self::readl($tokens, "(", ")", $i);
-                            ++$i;
-                            for (
-                            ;
-                                isset($tokens[$i]) && $tokens[$i] != "{";
-                                ++$i
-                            ) {
-                                if ($tokens[$i] == ";") {
-                                    break;
-                                } else if (is_array($tokens[$i])) {
-                                    $code .= $tokens[$i][1];
-                                } else {
-                                    $code .= $tokens[$i];
-                                }
-                            }
-                            if ($tokens[$i] == ";") {
-                                $code .= $tokens[$i];
-                                continue;
-                            }
-                            $code .= $tokens[$i++];
-                            $code .= self::optwister_stringify(
-                                $tokens,
-                                $signflag,
-                                $i
-                            );
-                            --$i;
-                        } else if (is_array($tokens[$i])) {
-                            $code .= $tokens[$i][1];
-                        } else if ($tokens[$i] == "{") {
-                            $code .= self::readl($tokens, "{", "}", $i);
+                    $_d5cbf76f6b55 .= $_ce467557df24[$_44af9f79ea06++];
+                    $_d5cbf76f6b55 .= self::optwister_stringify($_ce467557df24, $_5b3eb1c32c0d, $_44af9f79ea06);
+                    --$_44af9f79ea06;
+                } else if (is_array($_ce467557df24[$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06][0] == T_START_HEREDOC) {
+                    $_d5cbf76f6b55 .= $_ce467557df24[$_44af9f79ea06++][1];
+                    for (; isset($_ce467557df24[$_44af9f79ea06]) && (!is_array($_ce467557df24[$_44af9f79ea06]) || $_ce467557df24[$_44af9f79ea06][0] != T_END_HEREDOC); ++$_44af9f79ea06) $_d5cbf76f6b55 .= is_array($_ce467557df24[$_44af9f79ea06]) ? $_ce467557df24[$_44af9f79ea06][1] : $_ce467557df24[$_44af9f79ea06];
+                    $_d5cbf76f6b55 .= $_ce467557df24[$_44af9f79ea06][1];
+                } else if ($_ce467557df24[$_44af9f79ea06][0] == T_STRING) {
+                    $_23bf89ec40b6 = $_ce467557df24[$_44af9f79ea06][1];
+                    $_90812c0999bc = '';
+                    $_d87f4c1f5462 = 1;
+                    if (is_array($_ce467557df24[$_44af9f79ea06 - $_d87f4c1f5462]) && $_ce467557df24[$_44af9f79ea06 - $_d87f4c1f5462][0] == T_WHITESPACE) $_90812c0999bc .= $_ce467557df24[$_44af9f79ea06 - ($_d87f4c1f5462++)][1];
+                    if (is_array($_ce467557df24[$_44af9f79ea06 - $_d87f4c1f5462]) && in_array($_ce467557df24[$_44af9f79ea06 - $_d87f4c1f5462][0], [
+                            T_OBJECT_OPERATOR,
+                            T_NULLSAFE_OBJECT_OPERATOR,
+                        ])) {
+                        $_d5cbf76f6b55 .= "{'$_23bf89ec40b6'}";
+                    } else if (is_array($_ce467557df24[$_44af9f79ea06 - $_d87f4c1f5462]) && $_ce467557df24[$_44af9f79ea06 - $_d87f4c1f5462][0] == T_DOUBLE_COLON) {
+                        $_a3621bb833f4 = '';
+                        $_d87f4c1f5462 = 1;
+                        if (is_array($_ce467557df24[$_44af9f79ea06 + $_d87f4c1f5462]) && $_ce467557df24[$_44af9f79ea06 + $_d87f4c1f5462][0] == T_WHITESPACE) $_a3621bb833f4 .= $_ce467557df24[$_44af9f79ea06 + ($_d87f4c1f5462++)][1];
+                        if ($_ce467557df24[$_44af9f79ea06 + $_d87f4c1f5462] == '(') {
+                            $_d5cbf76f6b55 .= "{'$_23bf89ec40b6'}";
+                        } else $_d5cbf76f6b55 .= $_23bf89ec40b6;
+                    } else if (!is_array($_ce467557df24[$_44af9f79ea06 - $_d87f4c1f5462]) || !in_array($_ce467557df24[$_44af9f79ea06 - $_d87f4c1f5462][0], [
+                            T_FUNCTION,
+                            T_FN,
+                            T_NEW,
+                            T_CLASS,
+                            T_PUBLIC,
+                            T_PROTECTED,
+                            T_STATIC,
+                            T_PRIVATE,
+                            T_VAR,
+                            T_TRAIT,
+                            T_INTERFACE,
+                            T_EXTENDS,
+                            T_IMPLEMENTS,
+                        ])) {
+                        $_a3621bb833f4 = '';
+                        for ($_d87f4c1f5462 = 1; isset($_ce467557df24[$_44af9f79ea06 + $_d87f4c1f5462]) && is_array($_ce467557df24[$_44af9f79ea06 + $_d87f4c1f5462]) && in_array($_ce467557df24[$_44af9f79ea06 + $_d87f4c1f5462][0], [
+                            T_STRING,
+                            T_WHITESPACE,
+                            T_NS_SEPARATOR,
+                        ]); ++$_d87f4c1f5462) if ($_d87f4c1f5462 > 1 && $_ce467557df24[$_44af9f79ea06 + $_d87f4c1f5462 - 1][0] == T_WHITESPACE && $_ce467557df24[$_44af9f79ea06 + $_d87f4c1f5462 - 2][0] == $_ce467557df24[$_44af9f79ea06 + $_d87f4c1f5462][0]) break; else $_a3621bb833f4 .= $_ce467557df24[$_44af9f79ea06 + $_d87f4c1f5462][1];
+                        $_44af9f79ea06 += $_d87f4c1f5462;
+                        $_23bf89ec40b6 = str_replace([' ', "\n", "\r", "\t"], '', $_23bf89ec40b6 . $_a3621bb833f4);
+                        if (is_array($_ce467557df24[$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06][0] == T_WHITESPACE) $_a3621bb833f4 .= $_ce467557df24[$_44af9f79ea06++][1];
+                        if ($_ce467557df24[$_44af9f79ea06] == '(') {
+                            $_d5cbf76f6b55 .= "(function_exists(__NAMESPACE__.'\\$_23bf89ec40b6')?__NAMESPACE__.'\\$_23bf89ec40b6':(function_exists('$_23bf89ec40b6')?'$_23bf89ec40b6':__NAMESPACE__.'\\$_23bf89ec40b6'))";
+                        } else if (is_array($_ce467557df24[$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06][0] == T_DOUBLE_COLON) {
+                            $_d5cbf76f6b55 .= in_array(strtolower($_23bf89ec40b6), [
+                                'self',
+                                'static',
+                                'parent',
+                            ]) ? $_23bf89ec40b6 : "(class_exists(__NAMESPACE__.'\\$_23bf89ec40b6')?__NAMESPACE__.'\\$_23bf89ec40b6':" . "(class_exists('$_23bf89ec40b6')?'$_23bf89ec40b6':__NAMESPACE__.'\\$_23bf89ec40b6'))";
                         } else {
-                            $code .= $tokens[$i];
+                            $_d5cbf76f6b55 .= in_array(strtolower($_23bf89ec40b6), [
+                                'null',
+                                'true',
+                                'false',
+                            ]) ? "('constant')('$_23bf89ec40b6')" : "(defined(__NAMESPACE__.'$_23bf89ec40b6')?('constant')(__NAMESPACE__.'\\$_23bf89ec40b6'):" . "(defined('$_23bf89ec40b6')?('constant')('$_23bf89ec40b6'):'$_23bf89ec40b6'))";
                         }
-                    }
-                    $code .= $tokens[$i];
-                } else if ($tokens[$i] == "{") {
-                    ++$opc;
-                    $code .= $tokens[$i];
-                } else if ($tokens[$i] == "}") {
-                    --$opc;
-                    $code .= $tokens[$i];
-                } else if (is_array($tokens[$i])) {
-                    if ($tokens[$i][0] == T_FUNCTION) {
-                        $code .= $tokens[$i++][1];
-                        if (
-                            is_array($tokens[$i]) &&
-                            $tokens[$i][0] == T_WHITESPACE
-                        ) {
-                            $code .= $tokens[$i++][1];
-                        }
-                        if (
-                            is_array($tokens[$i]) &&
-                            $tokens[$i][0] == T_STRING
-                        ) {
-                            $code .= $tokens[$i++][1];
-                            if (
-                                is_array($tokens[$i]) &&
-                                $tokens[$i][0] == T_WHITESPACE
-                            ) {
-                                $code .= $tokens[$i++][1];
-                            }
-                        }
-                        if ($tokens[$i] == "(") {
-                            $code .= "(" . self::readpe($tokens, $i) . ")";
-                            ++$i;
-                        }
-                        if (
-                            is_array($tokens[$i]) &&
-                            $tokens[$i][0] == T_WHITESPACE
-                        ) {
-                            $code .= $tokens[$i++][1];
-                        }
-                        if (is_array($tokens[$i]) && $tokens[$i][0] == T_USE) {
-                            $code .= $tokens[$i++][1];
-                            if (
-                                is_array($tokens[$i]) &&
-                                $tokens[$i][0] == T_WHITESPACE
-                            ) {
-                                $code .= $tokens[$i++][1];
-                            }
-                        }
-                        if ($tokens[$i] == "(") {
-                            $code .= "(" . self::readpe($tokens, $i) . ")";
+                        --$_44af9f79ea06;
+                    } else $_d5cbf76f6b55 .= $_23bf89ec40b6;
+                } else if ($_ce467557df24[$_44af9f79ea06][0] == T_NS_SEPARATOR) {
+                    $_23bf89ec40b6 = $_ce467557df24[$_44af9f79ea06][1];
+                    $_d87f4c1f5462 = 1;
+                    if (is_array($_ce467557df24[$_44af9f79ea06 - $_d87f4c1f5462]) && $_ce467557df24[$_44af9f79ea06 - $_d87f4c1f5462][0] == T_WHITESPACE) ++$_d87f4c1f5462;
+                    if (!is_array($_ce467557df24[$_44af9f79ea06 - $_d87f4c1f5462]) || !in_array($_ce467557df24[$_44af9f79ea06 - $_d87f4c1f5462][0], [
+                            T_FUNCTION,
+                            T_FN,
+                            T_NEW,
+                            T_CLASS,
+                            T_PUBLIC,
+                            T_PROTECTED,
+                            T_STATIC,
+                            T_PRIVATE,
+                            T_VAR,
+                            T_TRAIT,
+                            T_INTERFACE,
+                            T_EXTENDS,
+                            T_IMPLEMENTS,
+                        ])) {
+                        $_a3621bb833f4 = '';
+                        for ($_d87f4c1f5462 = 1; isset($_ce467557df24[$_44af9f79ea06 + $_d87f4c1f5462]) && is_array($_ce467557df24[$_44af9f79ea06 + $_d87f4c1f5462]) && in_array($_ce467557df24[$_44af9f79ea06 + $_d87f4c1f5462][0], [
+                            T_STRING,
+                            T_WHITESPACE,
+                            T_NS_SEPARATOR,
+                        ]); ++$_d87f4c1f5462) if ($_d87f4c1f5462 > 1 && $_ce467557df24[$_44af9f79ea06 + $_d87f4c1f5462 - 1][0] == T_WHITESPACE && $_ce467557df24[$_44af9f79ea06 + $_d87f4c1f5462 - 2][0] == $_ce467557df24[$_44af9f79ea06 + $_d87f4c1f5462][0]) break; else $_a3621bb833f4 .= $_ce467557df24[$_44af9f79ea06 + $_d87f4c1f5462][1];
+                        $_44af9f79ea06 += $_d87f4c1f5462;
+                        $_23bf89ec40b6 = str_replace([' ', "\n", "\r", "\t"], '', $_23bf89ec40b6 . $_a3621bb833f4);
+                        if (is_array($_ce467557df24[$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06][0] == T_WHITESPACE) $_a3621bb833f4 .= $_ce467557df24[$_44af9f79ea06++][1];
+                        if ($_ce467557df24[$_44af9f79ea06] == '(') {
+                            $_d5cbf76f6b55 .= "('$_23bf89ec40b6')";
+                        } else if (is_array($_ce467557df24[$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06][0] == T_DOUBLE_COLON) {
+                            $_d5cbf76f6b55 .= in_array(strtolower($_23bf89ec40b6), ['self', 'static', 'parent']) ? $_23bf89ec40b6 : "('$_23bf89ec40b6')";
                         } else {
-                            --$i;
+                            $_d5cbf76f6b55 .= "('constant')('$_23bf89ec40b6')";
                         }
-                    } else if (
-                        $tokens[$i][0] == T_FN ||
-                        $tokens[$i][0] == T_DECLARE
-                    ) {
-                        $code .= $tokens[$i++][1];
-                        if (
-                            is_array($tokens[$i]) &&
-                            $tokens[$i][0] == T_WHITESPACE
-                        ) {
-                            $code .= $tokens[$i++][1];
-                        }
-                        if ($tokens[$i] == "(") {
-                            $code .= "(" . self::readpe($tokens, $i) . ")";
-                        } else {
-                            --$i;
-                        }
-                    } else if ($tokens[$i][0] == T_STATIC) {
-                        $code .= $tokens[$i++][1];
-                        if (
-                            is_array($tokens[$i]) &&
-                            $tokens[$i][0] == T_WHITESPACE
-                        ) {
-                            $code .= $tokens[$i++][1];
-                        }
-                        $code .= self::readpe($tokens, $i, TRUE);
-                    } else if ($tokens[$i][0] == T_NAMESPACE) {
-                        $code .= $tokens[$i++][1];
-                        while (
-                            is_array($tokens[$i]) &&
-                            in_array($tokens[$i][0], [
-                                T_WHITESPACE,
-                                T_STRING,
-                                T_NS_SEPARATOR,
-                            ])
-                        ) {
-                            $code .= $tokens[$i++][1];
-                        }
-                        if ($tokens[$i] != "{") {
-                            --$i;
-                            continue;
-                        }
-                        $code .= $tokens[$i++];
-                        $code .= self::optwister_stringify(
-                            $tokens,
-                            $signflag,
-                            $i
-                        );
-                        --$i;
-                    } else if (
-                        is_array($tokens[$i]) &&
-                        $tokens[$i][0] == T_START_HEREDOC
-                    ) {
-                        $code .= $tokens[$i++][1];
-                        for (
-                        ;
-                            isset($tokens[$i]) &&
-                            (!is_array($tokens[$i]) ||
-                                $tokens[$i][0] != T_END_HEREDOC);
-                            ++$i
-                        ) {
-                            $code .= is_array($tokens[$i])
-                                ? $tokens[$i][1]
-                                : $tokens[$i];
-                        }
-                        $code .= $tokens[$i][1];
-                    } else if ($tokens[$i][0] == T_STRING) {
-                        $str = $tokens[$i][1];
-                        $prev = "";
-                        $j = 1;
-                        if (
-                            is_array($tokens[$i - $j]) &&
-                            $tokens[$i - $j][0] == T_WHITESPACE
-                        ) {
-                            $prev .= $tokens[$i - $j++][1];
-                        }
-                        if (
-                            is_array($tokens[$i - $j]) &&
-                            in_array($tokens[$i - $j][0], [
-                                T_OBJECT_OPERATOR,
-                                T_NULLSAFE_OBJECT_OPERATOR,
-                            ])
-                        ) {
-                            $code .= "{'$str'}";
-                        } else if (
-                            is_array($tokens[$i - $j]) &&
-                            $tokens[$i - $j][0] == T_DOUBLE_COLON
-                        ) {
-                            $next = "";
-                            $j = 1;
-                            if (
-                                is_array($tokens[$i + $j]) &&
-                                $tokens[$i + $j][0] == T_WHITESPACE
-                            ) {
-                                $next .= $tokens[$i + $j++][1];
-                            }
-                            if ($tokens[$i + $j] == "(") {
-                                $code .= "{'$str'}";
-                            } else {
-                                $code .= $str;
-                            }
-                        } else if (
-                            !is_array($tokens[$i - $j]) ||
-                            !in_array($tokens[$i - $j][0], [
-                                T_FUNCTION,
-                                T_FN,
-                                T_NEW,
-                                T_CLASS,
-                                T_PUBLIC,
-                                T_PROTECTED,
-                                T_STATIC,
-                                T_PRIVATE,
-                                T_VAR,
-                                T_TRAIT,
-                                T_INTERFACE,
-                                T_EXTENDS,
-                                T_IMPLEMENTS,
-                            ])
-                        ) {
-                            $next = "";
-                            for (
-                                $j = 1;
-                                isset($tokens[$i + $j]) &&
-                                is_array($tokens[$i + $j]) &&
-                                in_array($tokens[$i + $j][0], [
-                                    T_STRING,
-                                    T_WHITESPACE,
-                                    T_NS_SEPARATOR,
-                                ]);
-                                ++$j
-                            ) {
-                                if (
-                                    $j > 1 &&
-                                    $tokens[$i + $j - 1][0] == T_WHITESPACE &&
-                                    $tokens[$i + $j - 2][0] ==
-                                    $tokens[$i + $j][0]
-                                ) {
-                                    break;
-                                } else {
-                                    $next .= $tokens[$i + $j][1];
-                                }
-                            }
-                            $i += $j;
-                            $str = str_replace(
-                                [" ", "\n", "\r", "\t"],
-                                "",
-                                $str . $next
-                            );
-                            if (
-                                is_array($tokens[$i]) &&
-                                $tokens[$i][0] == T_WHITESPACE
-                            ) {
-                                $next .= $tokens[$i++][1];
-                            }
-                            if ($tokens[$i] == "(") {
-                                $code .= "(function_exists(__NAMESPACE__.'\\$str')?__NAMESPACE__.'\\$str':(function_exists('$str')?'$str':__NAMESPACE__.'\\$str'))";
-                            } else if (
-                                is_array($tokens[$i]) &&
-                                $tokens[$i][0] == T_DOUBLE_COLON
-                            ) {
-                                $code .= in_array(strtolower($str), [
-                                    "self",
-                                    "static",
-                                    "parent",
-                                ])
-                                    ? $str
-                                    : "(class_exists(__NAMESPACE__.'\\$str')?__NAMESPACE__.'\\$str':" .
-                                    "(class_exists('$str')?'$str':__NAMESPACE__.'\\$str'))";
-                            } else {
-                                $code .= in_array(strtolower($str), [
-                                    "null",
-                                    "true",
-                                    "false",
-                                ])
-                                    ? "('constant')('$str')"
-                                    : "(defined(__NAMESPACE__.'$str')?('constant')(__NAMESPACE__.'\\$str'):" .
-                                    "(defined('$str')?('constant')('$str'):'$str'))";
-                            }
-                            --$i;
-                        } else {
-                            $code .= $str;
-                        }
-                    } else if ($tokens[$i][0] == T_NS_SEPARATOR) {
-                        $str = $tokens[$i][1];
-                        $j = 1;
-                        if (
-                            is_array($tokens[$i - $j]) &&
-                            $tokens[$i - $j][0] == T_WHITESPACE
-                        ) {
-                            ++$j;
-                        }
-                        if (
-                            !is_array($tokens[$i - $j]) ||
-                            !in_array($tokens[$i - $j][0], [
-                                T_FUNCTION,
-                                T_FN,
-                                T_NEW,
-                                T_CLASS,
-                                T_PUBLIC,
-                                T_PROTECTED,
-                                T_STATIC,
-                                T_PRIVATE,
-                                T_VAR,
-                                T_TRAIT,
-                                T_INTERFACE,
-                                T_EXTENDS,
-                                T_IMPLEMENTS,
-                            ])
-                        ) {
-                            $next = "";
-                            for (
-                                $j = 1;
-                                isset($tokens[$i + $j]) &&
-                                is_array($tokens[$i + $j]) &&
-                                in_array($tokens[$i + $j][0], [
-                                    T_STRING,
-                                    T_WHITESPACE,
-                                    T_NS_SEPARATOR,
-                                ]);
-                                ++$j
-                            ) {
-                                if (
-                                    $j > 1 &&
-                                    $tokens[$i + $j - 1][0] == T_WHITESPACE &&
-                                    $tokens[$i + $j - 2][0] ==
-                                    $tokens[$i + $j][0]
-                                ) {
-                                    break;
-                                } else {
-                                    $next .= $tokens[$i + $j][1];
-                                }
-                            }
-                            $i += $j;
-                            $str = str_replace(
-                                [" ", "\n", "\r", "\t"],
-                                "",
-                                $str . $next
-                            );
-                            if (
-                                is_array($tokens[$i]) &&
-                                $tokens[$i][0] == T_WHITESPACE
-                            ) {
-                                $next .= $tokens[$i++][1];
-                            }
-                            if ($tokens[$i] == "(") {
-                                $code .= "('$str')";
-                            } else if (
-                                is_array($tokens[$i]) &&
-                                $tokens[$i][0] == T_DOUBLE_COLON
-                            ) {
-                                $code .= in_array(strtolower($str), [
-                                    "self",
-                                    "static",
-                                    "parent",
-                                ])
-                                    ? $str
-                                    : "('$str')";
-                            } else {
-                                $code .= "('constant')('$str')";
-                            }
-                            --$i;
-                        } else {
-                            $code .= $tokens[$i][1];
-                        }
-                    } else if ($tokens[$i][0] == T_VARIABLE) {
-                        $str = substr($tokens[$i][1], 1);
-                        $code .= $str == '$this' ? $str : "\${'$str'}";
-                    } else if ($tokens[$i][0] == T_LNUMBER) {
-                        $str = self::optwister_lnumber($tokens[$i][1]);
-                        $code .= "('_ALOM_optwister{$signflag}_h')('$str')";
-                    } else if ($tokens[$i][0] == T_DNUMBER) {
-                        $str = $tokens[$i][1];
-                        $code .= "('_ALOM_optwister{$signflag}_g')('$str')";
-                    } else {
-                        $code .= $tokens[$i][1];
-                    }
-                } else if ($tokens[$i] == '"') {
-                    $code .= $tokens[$i++];
-                    for (; isset($tokens[$i]) && $tokens[$i] != '"'; ++$i) {
-                        $code .= is_array($tokens[$i])
-                            ? $tokens[$i][1]
-                            : $tokens[$i];
-                    }
-                    $code .= $tokens[$i];
-                } else if ($tokens[$i] == "`") {
-                    $code .= $tokens[$i++];
-                    for (; isset($tokens[$i]) && $tokens[$i] != "`"; ++$i) {
-                        $code .= is_array($tokens[$i])
-                            ? $tokens[$i][1]
-                            : $tokens[$i];
-                    }
-                    $code .= $tokens[$i];
-                } else {
-                    $code .= $tokens[$i];
-                }
-            }
-            return $code;
+                        --$_44af9f79ea06;
+                    } else $_d5cbf76f6b55 .= $_ce467557df24[$_44af9f79ea06][1];
+                } else if ($_ce467557df24[$_44af9f79ea06][0] == T_VARIABLE) {
+                    $_23bf89ec40b6 = substr($_ce467557df24[$_44af9f79ea06][1], 1);
+                    $_d5cbf76f6b55 .= $_23bf89ec40b6 == '$this' ? $_23bf89ec40b6 : "\${'$_23bf89ec40b6'}";
+                } else if ($_ce467557df24[$_44af9f79ea06][0] == T_LNUMBER) {
+                    $_23bf89ec40b6 = self::optwister_lnumber($_ce467557df24[$_44af9f79ea06][1]);
+                    $_d5cbf76f6b55 .= "('_ALOM_optwister{$_5b3eb1c32c0d}_h')('$_23bf89ec40b6')";
+                } else if ($_ce467557df24[$_44af9f79ea06][0] == T_DNUMBER) {
+                    $_23bf89ec40b6 = $_ce467557df24[$_44af9f79ea06][1];
+                    $_d5cbf76f6b55 .= "('_ALOM_optwister{$_5b3eb1c32c0d}_g')('$_23bf89ec40b6')";
+                } else $_d5cbf76f6b55 .= $_ce467557df24[$_44af9f79ea06][1];
+            } else if ($_ce467557df24[$_44af9f79ea06] == '"') {
+                $_d5cbf76f6b55 .= $_ce467557df24[$_44af9f79ea06++];
+                for (; isset($_ce467557df24[$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06] != '"'; ++$_44af9f79ea06) $_d5cbf76f6b55 .= is_array($_ce467557df24[$_44af9f79ea06]) ? $_ce467557df24[$_44af9f79ea06][1] : $_ce467557df24[$_44af9f79ea06];
+                $_d5cbf76f6b55 .= $_ce467557df24[$_44af9f79ea06];
+            } else if ($_ce467557df24[$_44af9f79ea06] == '`') {
+                $_d5cbf76f6b55 .= $_ce467557df24[$_44af9f79ea06++];
+                for (; isset($_ce467557df24[$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06] != '`'; ++$_44af9f79ea06) $_d5cbf76f6b55 .= is_array($_ce467557df24[$_44af9f79ea06]) ? $_ce467557df24[$_44af9f79ea06][1] : $_ce467557df24[$_44af9f79ea06];
+                $_d5cbf76f6b55 .= $_ce467557df24[$_44af9f79ea06];
+            } else $_d5cbf76f6b55 .= $_ce467557df24[$_44af9f79ea06];
+            return $_d5cbf76f6b55;
         }
 
-        private static function optwister_obfs(
-            $code,
-            $signflag,
-            $iv1,
-            $iv2,
-            $ivs,
-            $pkyid,
-            $token = NULL
-        )
+        private static function optwister_obfs($_d5cbf76f6b55, $_5b3eb1c32c0d, $_e790ce3071f2, $_91dba975883a, $_9b3c20ca2a6c, $_231acd6afa62, $_5572c1da585c = NULL)
         {
-            if ($token === NULL) {
-                $token = token_get_all($code);
-            }
-            $i = 0;
-            $code = self::optwister_stringify($token, $signflag, $i);
-            $tokens = token_get_all($code);
-            $pkyid = base64_encode($pkyid);
-            $code = "";
-            for ($i = 0; isset($tokens[$i]); ++$i) {
-                if (
-                    is_array($tokens[$i]) &&
-                    $tokens[$i][0] == T_CONSTANT_ENCAPSED_STRING
-                ) {
-                    $str = self::optwister_encapsed_string($tokens[$i][1]);
-                    $code .=
-                        "\AlomDecoder$signflag::optwister_decode('" .
-                        base64_encode(
-                            self::optwister_encode($str, $iv1, $iv2, $ivs)
-                        ) .
-                        "','$pkyid')";
-                } else if (is_array($tokens[$i])) {
-                    $code .= $tokens[$i][1];
-                } else {
-                    $code .= $tokens[$i];
-                }
-            }
-            return $code;
+            if ($_5572c1da585c === NULL) $_5572c1da585c = token_get_all($_d5cbf76f6b55);
+            $_44af9f79ea06 = 0;
+            $_d5cbf76f6b55 = self::optwister_stringify($_5572c1da585c, $_5b3eb1c32c0d, $_44af9f79ea06);
+            $_ce467557df24 = token_get_all($_d5cbf76f6b55);
+            $_231acd6afa62 = base64_encode($_231acd6afa62);
+            $_d5cbf76f6b55 = '';
+            for ($_44af9f79ea06 = 0; isset($_ce467557df24[$_44af9f79ea06]); ++$_44af9f79ea06) if (is_array($_ce467557df24[$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06][0] == T_CONSTANT_ENCAPSED_STRING) {
+                $_23bf89ec40b6 = self::optwister_encapsed_string($_ce467557df24[$_44af9f79ea06][1]);
+                $_d5cbf76f6b55 .= "\AlomDecoder$_5b3eb1c32c0d::optwister_decode('" . base64_encode(self::optwister_encode($_23bf89ec40b6, $_e790ce3071f2, $_91dba975883a, $_9b3c20ca2a6c)) . "','$_231acd6afa62')";
+            } else if (is_array($_ce467557df24[$_44af9f79ea06])) $_d5cbf76f6b55 .= $_ce467557df24[$_44af9f79ea06][1];
+            else $_d5cbf76f6b55 .= $_ce467557df24[$_44af9f79ea06];
+            return $_d5cbf76f6b55;
         }
 
-        public static function sug($code, $signflag)
+        public static function sug($_d5cbf76f6b55, $_5b3eb1c32c0d)
         {
-            $tokens = token_get_all($code);
-            $code = "";
-            $i = 0;
-            $code .= $tokens[$i++][1];
-            while (
-                isset($tokens[$i]) &&
-                ((is_array($tokens[$i]) &&
-                        in_array($tokens[$i][0], [
+            $_ce467557df24 = token_get_all($_d5cbf76f6b55);
+            $_d5cbf76f6b55 = '';
+            $_44af9f79ea06 = 0;
+            $_d5cbf76f6b55 .= $_ce467557df24[$_44af9f79ea06++][1];
+            while (isset($_ce467557df24[$_44af9f79ea06]) && ((is_array($_ce467557df24[$_44af9f79ea06]) && in_array($_ce467557df24[$_44af9f79ea06][0], [
                             T_WHITESPACE,
                             T_COMMENT,
                             T_DOC_COMMENT,
-                        ])) ||
-                    $tokens[$i] == ";")
-            ) {
-                $code .= is_array($tokens[$i])
-                    ? $tokens[$i++][1]
-                    : $tokens[$i++];
-            }
-            if (
-                isset($tokens[$i]) &&
-                is_array($tokens[$i]) &&
-                $tokens[$i][0] == T_NAMESPACE
-            ) {
-                $code .= $tokens[$i++][1];
-                while (
-                    is_array($tokens[$i]) &&
-                    in_array($tokens[$i][0], [
+                        ])) || $_ce467557df24[$_44af9f79ea06] == ';')) $_d5cbf76f6b55 .= is_array($_ce467557df24[$_44af9f79ea06]) ? $_ce467557df24[$_44af9f79ea06++][1] : $_ce467557df24[$_44af9f79ea06++];
+            if (isset($_ce467557df24[$_44af9f79ea06]) && is_array($_ce467557df24[$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06][0] == T_NAMESPACE) {
+                $_d5cbf76f6b55 .= $_ce467557df24[$_44af9f79ea06++][1];
+                while (is_array($_ce467557df24[$_44af9f79ea06]) && in_array($_ce467557df24[$_44af9f79ea06][0], [
                         T_WHITESPACE,
                         T_STRING,
                         T_NS_SEPARATOR,
-                    ])
-                ) {
-                    $code .= $tokens[$i++][1];
-                }
-                if ($tokens[$i] == "{") {
-                    $code .= $tokens[$i++];
-                    $code .=
-                        "if(\$_ALOM_beforeeval){\$_ALOM_code='';unset(\$_ALOM_code,\$_ALOM_beforeeval);}else{file_put_contents(\$_ALOM_code,'');unlink(\$_ALOM_code);\$_ALOM_code='';unset(\$_ALOM_code,\$_ALOM_beforeeval);}";
-                    for (; isset($tokens[$i]); ++$i) {
-                        $code .= is_array($tokens[$i])
-                            ? $tokens[$i][1]
-                            : $tokens[$i];
-                    }
-                    return $code;
+                    ])) $_d5cbf76f6b55 .= $_ce467557df24[$_44af9f79ea06++][1];
+                if ($_ce467557df24[$_44af9f79ea06] == '{') {
+                    $_d5cbf76f6b55 .= $_ce467557df24[$_44af9f79ea06++];
+                    $_d5cbf76f6b55 .= "if(isset(\$_ALOM_code)){file_put_contents(\$_ALOM_code,'');unlink(\$_ALOM_code);\$_ALOM_code='';unset(\$_ALOM_code);}";
+                    for (; isset($_ce467557df24[$_44af9f79ea06]); ++$_44af9f79ea06) $_d5cbf76f6b55 .= is_array($_ce467557df24[$_44af9f79ea06]) ? $_ce467557df24[$_44af9f79ea06][1] : $_ce467557df24[$_44af9f79ea06];
+                    return $_d5cbf76f6b55;
                 } else {
-                    $code .= $tokens[$i++];
-                    while (
-                        isset($tokens[$i]) &&
-                        ((is_array($tokens[$i]) &&
-                                in_array($tokens[$i][0], [
+                    $_d5cbf76f6b55 .= $_ce467557df24[$_44af9f79ea06++];
+                    while (isset($_ce467557df24[$_44af9f79ea06]) && ((is_array($_ce467557df24[$_44af9f79ea06]) && in_array($_ce467557df24[$_44af9f79ea06][0], [
                                     T_WHITESPACE,
                                     T_COMMENT,
                                     T_DOC_COMMENT,
-                                ])) ||
-                            $tokens[$i] == ";")
-                    ) {
-                        $code .= is_array($tokens[$i])
-                            ? $tokens[$i++][1]
-                            : $tokens[$i++];
-                    }
+                                ])) || $_ce467557df24[$_44af9f79ea06] == ';')) $_d5cbf76f6b55 .= is_array($_ce467557df24[$_44af9f79ea06]) ? $_ce467557df24[$_44af9f79ea06++][1] : $_ce467557df24[$_44af9f79ea06++];
                 }
             }
-            while (
-                isset($tokens[$i]) &&
-                is_array($tokens[$i]) &&
-                $tokens[$i][0] == T_NAMESPACE
-            ) {
-                $code .= $tokens[$i++][1];
-                while (
-                    is_array($tokens[$i]) &&
-                    in_array($tokens[$i][0], [
+            while (isset($_ce467557df24[$_44af9f79ea06]) && is_array($_ce467557df24[$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06][0] == T_NAMESPACE) {
+                $_d5cbf76f6b55 .= $_ce467557df24[$_44af9f79ea06++][1];
+                while (is_array($_ce467557df24[$_44af9f79ea06]) && in_array($_ce467557df24[$_44af9f79ea06][0], [
                         T_WHITESPACE,
                         T_STRING,
                         T_NS_SEPARATOR,
-                    ])
-                ) {
-                    $code .= $tokens[$i++][1];
-                }
-                $code .= $tokens[$i++];
-                while (
-                    isset($tokens[$i]) &&
-                    ((is_array($tokens[$i]) &&
-                            in_array($tokens[$i][0], [
+                    ])) $_d5cbf76f6b55 .= $_ce467557df24[$_44af9f79ea06++][1];
+                $_d5cbf76f6b55 .= $_ce467557df24[$_44af9f79ea06++];
+                while (isset($_ce467557df24[$_44af9f79ea06]) && ((is_array($_ce467557df24[$_44af9f79ea06]) && in_array($_ce467557df24[$_44af9f79ea06][0], [
                                 T_WHITESPACE,
                                 T_COMMENT,
                                 T_DOC_COMMENT,
-                            ])) ||
-                        $tokens[$i] == ";")
-                ) {
-                    $code .= $tokens[$i++][1];
-                }
+                            ])) || $_ce467557df24[$_44af9f79ea06] == ';')) $_d5cbf76f6b55 .= $_ce467557df24[$_44af9f79ea06++][1];
             }
-            $code .=
-                "if(\$_ALOM_beforeeval){\$_ALOM_code='';unset(\$_ALOM_code,\$_ALOM_beforeeval);}else{file_put_contents(\$_ALOM_code,'');unlink(\$_ALOM_code);\$_ALOM_code='';unset(\$_ALOM_code,\$_ALOM_beforeeval);}";
-            for (; isset($tokens[$i]); ++$i) {
-                $code .= is_array($tokens[$i]) ? $tokens[$i][1] : $tokens[$i];
-            }
-            return $code;
+            $_d5cbf76f6b55 .= "if(isset(\$_ALOM_code)){file_put_contents(\$_ALOM_code,'');unlink(\$_ALOM_code);\$_ALOM_code='';unset(\$_ALOM_code);}";
+            for (; isset($_ce467557df24[$_44af9f79ea06]); ++$_44af9f79ea06) $_d5cbf76f6b55 .= is_array($_ce467557df24[$_44af9f79ea06]) ? $_ce467557df24[$_44af9f79ea06][1] : $_ce467557df24[$_44af9f79ea06];
+            return $_d5cbf76f6b55;
         }
 
-        private static function singlequote($string)
+        private static function singlequote($_2f79040d85dc) { return str_replace(['\\', "'"], ['\\\\', "\\'"], $_2f79040d85dc); }
+
+        private static function commentquote($_2f79040d85dc) { return str_replace(["\n", "*/"], [" *   ", "*//*"], $_2f79040d85dc); }
+
+        private static function setikeys($_d5cbf76f6b55)
         {
-            return str_replace(["\\", "'"], ["\\\\", "\\'"], $string);
+            $_ce467557df24 = token_get_all($_d5cbf76f6b55);
+            $_d5cbf76f6b55 = '';
+            for ($_44af9f79ea06 = 0; isset($_ce467557df24[$_44af9f79ea06]); ++$_44af9f79ea06) if (is_array($_ce467557df24[$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06][0] == T_STRING) {
+                if (in_array($_ce467557df24[$_44af9f79ea06][1], [
+                    "ALOM_INVISIBLE_KEY2",
+                    "ALOM_INVISIBLE_KEY3",
+                    "ALOM_INVISIBLE_KEY4",
+                    "ALOM_INVISIBLE_KEY8",
+                    "ALOM_INVISIBLE_KEY12",
+                    "ALOM_INVISIBLE_KEY16",
+                    "ALOM_INVISIBLE_KEY24",
+                    "ALOM_INVISIBLE_KEY32",
+                    "ALOM_INVISIBLE_KEY64",
+                    "ALOM_INVISIBLE_KEY96",
+                    "ALOM_INVISIBLE_KEY128",
+                    "ALOM_INVISIBLE_KEY256",
+                    "ALOM_INVISIBLE_KEY384",
+                    "ALOM_INVISIBLE_KEY512",
+                    "ALOM_INVISIBLE_KEY1024",
+                    "ALOM_INVISIBLE_KEY2048",
+                    "ALOM_INVISIBLE_KEY4096",
+                    "ALOM_INVISIBLE_KEY8192",
+                ])) {
+                    $_8d2d7939f6cb = (int)substr($_ce467557df24[$_44af9f79ea06][1], 18);
+                    $_e3883a47f8e2 = bin2hex(self::getasciiikey($_8d2d7939f6cb));
+                    $_d5cbf76f6b55 .= "hex2bin('$_e3883a47f8e2')";
+                } else if ($_ce467557df24[$_44af9f79ea06][1] == "ALOM_INVISIBLE_CHAR") {
+                    $_e3883a47f8e2 = ord(self::getcharikey());
+                    $_d5cbf76f6b55 .= "chr($_e3883a47f8e2)";
+                } else if ($_ce467557df24[$_44af9f79ea06][1] == "ALOM_INVISIBLE_BIT") {
+                    $_e3883a47f8e2 = self::getbitikey();
+                    $_d5cbf76f6b55 .= "($_e3883a47f8e2)";
+                } else if ($_ce467557df24[$_44af9f79ea06][1] == "ALOM_INVISIBLE_INT") {
+                    $_e3883a47f8e2 = self::getintikey();
+                    $_d5cbf76f6b55 .= "($_e3883a47f8e2)";
+                } else if ($_ce467557df24[$_44af9f79ea06][1] == "ALOM_OBFUSCATED_TIME") {
+                    $_e3883a47f8e2 = floor(self::$_68aa9304b10c);
+                    $_d5cbf76f6b55 .= "($_e3883a47f8e2)";
+                } else if ($_ce467557df24[$_44af9f79ea06][1] == "ALOM_OBFUSCATED_TIME_FLOAT") {
+                    $_e3883a47f8e2 = self::$_68aa9304b10c;
+                    $_d5cbf76f6b55 .= "($_e3883a47f8e2)";
+                } else $_d5cbf76f6b55 .= $_ce467557df24[$_44af9f79ea06][1];
+            } else if (is_array($_ce467557df24[$_44af9f79ea06])) $_d5cbf76f6b55 .= $_ce467557df24[$_44af9f79ea06][1];
+            else $_d5cbf76f6b55 .= $_ce467557df24[$_44af9f79ea06];
+            return $_d5cbf76f6b55;
         }
 
-        private static function commentquote($string)
+        public static function partition_encode($_2f79040d85dc, $_d186186a7d16, $_e790ce3071f2, $_91dba975883a, $_9b3c20ca2a6c)
         {
-            return str_replace(["\n", "*/"], [" *   ", "*//*"], $string);
+            $_2f79040d85dc = gzdeflate($_2f79040d85dc, 9);
+            for ($_44af9f79ea06 = 0; isset($_2f79040d85dc[$_44af9f79ea06]); ++$_44af9f79ea06) $_2f79040d85dc[$_44af9f79ea06] = $_d186186a7d16[$_44af9f79ea06 & 0xf] ^ $_2f79040d85dc[$_44af9f79ea06];
+            $_2f79040d85dc = self::optwister_encode($_2f79040d85dc, $_e790ce3071f2, $_91dba975883a, $_9b3c20ca2a6c);
+            for ($_44af9f79ea06 = 0; isset($_2f79040d85dc[$_44af9f79ea06]); ++$_44af9f79ea06) $_2f79040d85dc[$_44af9f79ea06] = $_d186186a7d16[$_44af9f79ea06 & 0xf] ^ $_2f79040d85dc[$_44af9f79ea06];
+            return $_2f79040d85dc;
         }
 
-        private static function setikeys($code)
+        public static function nspartitioning(&$_5a71f81a43eb, $_d5cbf76f6b55, $_61152f9ba785, $_5b3eb1c32c0d, $_e790ce3071f2, $_91dba975883a, $_9b3c20ca2a6c, $_231acd6afa62, $_498b56a16a87 = FALSE, $_2d1cac7779b8 = '', &$_a56962748828 = [], $_f012aae02306 = FALSE)
         {
-            $tokens = token_get_all($code);
-            $code = "";
-            for ($i = 0; isset($tokens[$i]); ++$i) {
-                if (is_array($tokens[$i]) && $tokens[$i][0] == T_STRING) {
-                    if (
-                    in_array($tokens[$i][1], [
-                        "ALOM_INVISIBLE_KEY2",
-                        "ALOM_INVISIBLE_KEY3",
-                        "ALOM_INVISIBLE_KEY4",
-                        "ALOM_INVISIBLE_KEY8",
-                        "ALOM_INVISIBLE_KEY12",
-                        "ALOM_INVISIBLE_KEY16",
-                        "ALOM_INVISIBLE_KEY24",
-                        "ALOM_INVISIBLE_KEY32",
-                        "ALOM_INVISIBLE_KEY64",
-                        "ALOM_INVISIBLE_KEY96",
-                        "ALOM_INVISIBLE_KEY128",
-                        "ALOM_INVISIBLE_KEY256",
-                        "ALOM_INVISIBLE_KEY384",
-                        "ALOM_INVISIBLE_KEY512",
-                        "ALOM_INVISIBLE_KEY1024",
-                        "ALOM_INVISIBLE_KEY2048",
-                        "ALOM_INVISIBLE_KEY4096",
-                        "ALOM_INVISIBLE_KEY8192",
-                    ])
-                    ) {
-                        $len = (int)substr($tokens[$i][1], 18);
-                        $ikey = bin2hex(self::getasciiikey($len));
-                        $code .= "hex2bin('$ikey')";
-                    } else if ($tokens[$i][1] == "ALOM_INVISIBLE_CHAR") {
-                        $ikey = ord(self::getcharikey());
-                        $code .= "chr($ikey)";
-                    } else if ($tokens[$i][1] == "ALOM_INVISIBLE_BIT") {
-                        $ikey = self::getbitikey();
-                        $code .= "($ikey)";
-                    } else if ($tokens[$i][1] == "ALOM_INVISIBLE_INT") {
-                        $ikey = self::getintikey();
-                        $code .= "($ikey)";
-                    } else if ($tokens[$i][1] == "ALOM_OBFUSCATED_TIME") {
-                        $ikey = floor(self::$obfstime);
-                        $code .= "($ikey)";
-                    } else if ($tokens[$i][1] == "ALOM_OBFUSCATED_TIME_FLOAT") {
-                        $ikey = self::$obfstime;
-                        $code .= "($ikey)";
-                    } else {
-                        $code .= $tokens[$i][1];
-                    }
-                } else if (is_array($tokens[$i])) {
-                    $code .= $tokens[$i][1];
-                } else {
-                    $code .= $tokens[$i];
-                }
-            }
-            return $code;
-        }
-
-        public static function partition_encode($string, $key, $iv1, $iv2, $ivs)
-        {
-            $string = gzdeflate($string, 9);
-            for ($i = 0; isset($string[$i]); ++$i) {
-                $string[$i] = $key[$i & 0xf] ^ $string[$i];
-            }
-            $string = self::optwister_encode($string, $iv1, $iv2, $ivs);
-            for ($i = 0; isset($string[$i]); ++$i) {
-                $string[$i] = $key[$i & 0xf] ^ $string[$i];
-            }
-            return $string;
-        }
-
-        public static function nspartitioning(
-            &$partition,
-            $code,
-            $optwister,
-            $signflag,
-            $iv1,
-            $iv2,
-            $ivs,
-            $pkyid,
-            $fast = FALSE,
-            $ns = "",
-            &$ua = [],
-            $rnt = FALSE
-        )
-        {
-            $tokens = token_get_all("<?" . "php $code");
-            array_shift($tokens);
-            $part = $code = "";
-            for ($i = 0; isset($tokens[$i]); ++$i) {
-                if (
-                    is_array($tokens[$i]) &&
-                    in_array($tokens[$i][0], [T_CLASS, T_TRAIT, T_INTERFACE])
-                ) {
-                    $part .= $tokens[$i++][1];
-                    while (
-                        is_array($tokens[$i]) &&
-                        in_array($tokens[$i][0], [
+            $_ce467557df24 = token_get_all("<?" . "php $_d5cbf76f6b55");
+            array_shift($_ce467557df24);
+            $_f60e006196fb = $_d5cbf76f6b55 = '';
+            for ($_44af9f79ea06 = 0; isset($_ce467557df24[$_44af9f79ea06]); ++$_44af9f79ea06) {
+                if (is_array($_ce467557df24[$_44af9f79ea06]) && in_array($_ce467557df24[$_44af9f79ea06][0], [T_CLASS, T_TRAIT, T_INTERFACE])) {
+                    $_f60e006196fb .= $_ce467557df24[$_44af9f79ea06++][1];
+                    while (is_array($_ce467557df24[$_44af9f79ea06]) && in_array($_ce467557df24[$_44af9f79ea06][0], [
                             T_WHITESPACE,
                             T_STRING,
                             T_NS_SEPARATOR,
                             T_EXTENDS,
                             T_IMPLEMENTS,
-                        ])
-                    ) {
-                        $part .= $tokens[$i++][1];
-                    }
-                    if ($tokens[$i] != "{") {
-                        --$i;
+                        ])) $_f60e006196fb .= $_ce467557df24[$_44af9f79ea06++][1];
+                    if ($_ce467557df24[$_44af9f79ea06] != '{') {
+                        --$_44af9f79ea06;
                         continue;
                     }
-                    $part .= $tokens[$i++];
-                    for (; isset($tokens[$i]) && $tokens[$i] != "}"; ++$i) {
-                        if (
-                            is_array($tokens[$i]) &&
-                            $tokens[$i][0] == T_FUNCTION
-                        ) {
-                            $part .= $tokens[$i++][1];
-                            for (
-                            ;
-                                isset($tokens[$i]) && $tokens[$i] != "(";
-                                ++$i
-                            ) {
-                                if (is_array($tokens[$i])) {
-                                    $part .= $tokens[$i][1];
-                                } else {
-                                    $part .= $tokens[$i];
-                                }
-                            }
-                            $part .= self::readl($tokens, "(", ")", $i);
-                            ++$i;
-                            for (
-                            ;
-                                isset($tokens[$i]) && $tokens[$i] != "{";
-                                ++$i
-                            ) {
-                                if ($tokens[$i] == ";") {
-                                    break;
-                                } else if (is_array($tokens[$i])) {
-                                    $part .= $tokens[$i][1];
-                                } else {
-                                    $part .= $tokens[$i];
-                                }
-                            }
-                            if ($tokens[$i] == ";") {
-                                $part .= $tokens[$i];
-                                continue;
-                            }
-                            $rl = self::readl($tokens, "{", "}", $i);
-                            $rl = self::nspartitioning(
-                                $partition,
-                                substr($rl, 1, -1),
-                                $optwister,
-                                $signflag,
-                                $iv1,
-                                $iv2,
-                                $ivs,
-                                $pkyid,
-                                $fast,
-                                $ns
-                            );
-                            $part .= "{" . $rl . "}";
-                        } else if (is_array($tokens[$i])) {
-                            $part .= $tokens[$i][1];
-                        } else if ($tokens[$i] == "{") {
-                            $part .= self::readl($tokens, "{", "}", $i);
-                        } else {
-                            $part .= $tokens[$i];
+                    $_f60e006196fb .= $_ce467557df24[$_44af9f79ea06++];
+                    for (; isset($_ce467557df24[$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06] != '}'; ++$_44af9f79ea06) if (is_array($_ce467557df24[$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06][0] == T_FUNCTION) {
+                        $_f60e006196fb .= $_ce467557df24[$_44af9f79ea06++][1];
+                        for (; isset($_ce467557df24[$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06] != '('; ++$_44af9f79ea06) if (is_array($_ce467557df24[$_44af9f79ea06])) $_f60e006196fb .= $_ce467557df24[$_44af9f79ea06][1]; else $_f60e006196fb .= $_ce467557df24[$_44af9f79ea06];
+                        $_f60e006196fb .= self::readl($_ce467557df24, '(', ')', $_44af9f79ea06);
+                        ++$_44af9f79ea06;
+                        for (; isset($_ce467557df24[$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06] != '{'; ++$_44af9f79ea06) if ($_ce467557df24[$_44af9f79ea06] == ';') break; else if (is_array($_ce467557df24[$_44af9f79ea06])) $_f60e006196fb .= $_ce467557df24[$_44af9f79ea06][1];
+                        else $_f60e006196fb .= $_ce467557df24[$_44af9f79ea06];
+                        if ($_ce467557df24[$_44af9f79ea06] == ';') {
+                            $_f60e006196fb .= $_ce467557df24[$_44af9f79ea06];
+                            continue;
                         }
-                    }
-                    $part = $ns . $part . $tokens[$i];
-                    if (!isset($partition[$part])) {
-                        $key = random_bytes(16);
-                        $partition[$part] = [
-                            count($partition),
-                            $key,
-                            self::partition_encode(
-                                $part,
-                                $key,
-                                $iv1,
-                                $iv2,
-                                $ivs
-                            ),
+                        $_6c1e753a12d0 = self::readl($_ce467557df24, '{', '}', $_44af9f79ea06);
+                        $_6c1e753a12d0 = self::nspartitioning($_5a71f81a43eb, substr($_6c1e753a12d0, 1, -1), $_61152f9ba785, $_5b3eb1c32c0d, $_e790ce3071f2, $_91dba975883a, $_9b3c20ca2a6c, $_231acd6afa62, $_498b56a16a87, $_2d1cac7779b8);
+                        $_f60e006196fb .= '{' . $_6c1e753a12d0 . '}';
+                    } else if (is_array($_ce467557df24[$_44af9f79ea06])) $_f60e006196fb .= $_ce467557df24[$_44af9f79ea06][1];
+                    else if ($_ce467557df24[$_44af9f79ea06] == '{') $_f60e006196fb .= self::readl($_ce467557df24, '{', '}', $_44af9f79ea06);
+                    else $_f60e006196fb .= $_ce467557df24[$_44af9f79ea06];
+                    $_f60e006196fb = $_2d1cac7779b8 . $_f60e006196fb . $_ce467557df24[$_44af9f79ea06];
+                    if (!isset($_5a71f81a43eb[$_f60e006196fb])) {
+                        $_d186186a7d16 = random_bytes(16);
+                        $_5a71f81a43eb[$_f60e006196fb] = [
+                            count($_5a71f81a43eb),
+                            $_d186186a7d16,
+                            self::partition_encode($_f60e006196fb, $_d186186a7d16, $_e790ce3071f2, $_91dba975883a, $_9b3c20ca2a6c),
                         ];
                     }
-                    $code .=
-                        "if((isset(\$_ALOM_continue)&&\$_ALOM_continue>0)||(isset(\$_ALOM_break)&&\$_ALOM_break>0))return;";
-                    $code .=
-                        "if(isset(\$_ALOM_return))return \$_ALOM_result;\$_ALOM_result=eval(\AlomDecoder$signflag::partition_decode(\AlomDecoder$signflag::\$partition[" .
-                        $partition[$part][0] .
-                        "],'" .
-                        base64_encode($partition[$part][1]) .
-                        "','$pkyid'));";
-                    $part = "";
-                } else if ($tokens[$i][0] == T_FUNCTION) {
-                    $part .= $tokens[$i++][1];
-                    if (
-                        is_array($tokens[$i]) &&
-                        $tokens[$i][0] == T_WHITESPACE
-                    ) {
-                        $part .= $tokens[$i++][1];
-                    }
-                    if (is_array($tokens[$i]) && $tokens[$i][0] == T_STRING) {
-                        $part .= $tokens[$i++][1];
-                        if (
-                            is_array($tokens[$i]) &&
-                            $tokens[$i][0] == T_WHITESPACE
-                        ) {
-                            $part .= $tokens[$i++][1];
-                        }
-                        if ($tokens[$i] == "(") {
-                            $part .= "(" . self::readpe($tokens, $i) . ")";
-                            if (
-                                is_array($tokens[++$i]) &&
-                                $tokens[$i][0] == T_WHITESPACE
-                            ) {
-                                $part .= $tokens[$i++][1];
-                            }
-                            if ($tokens[$i] == "{") {
-                                $rl = self::readl($tokens, "{", "}", $i);
-                                $rl = self::nspartitioning(
-                                    $partition,
-                                    substr($rl, 1, -1),
-                                    $optwister,
-                                    $signflag,
-                                    $iv1,
-                                    $iv2,
-                                    $ivs,
-                                    $pkyid,
-                                    $fast,
-                                    $ns
-                                );
-                                $part = $ns . $part . "{" . $rl . "}";
-                                if (!isset($partition[$part])) {
-                                    $key = random_bytes(16);
-                                    $partition[$part] = [
-                                        count($partition),
-                                        $key,
-                                        self::partition_encode(
-                                            $part,
-                                            $key,
-                                            $iv1,
-                                            $iv2,
-                                            $ivs
-                                        ),
+                    $_d5cbf76f6b55 .= "if((isset(\$_ALOM_continue)&&\$_ALOM_continue>0)||(isset(\$_ALOM_break)&&\$_ALOM_break>0))return;";
+                    $_d5cbf76f6b55 .= "if(isset(\$_ALOM_return))return \$_ALOM_result;\$_ALOM_result=eval(\AlomDecoder$_5b3eb1c32c0d::partition_decode(\AlomDecoder$_5b3eb1c32c0d::\$partition[" . $_5a71f81a43eb[$_f60e006196fb][0] . "],'" . base64_encode($_5a71f81a43eb[$_f60e006196fb][1]) . "','$_231acd6afa62'));";
+                    $_f60e006196fb = '';
+                } else if ($_ce467557df24[$_44af9f79ea06][0] == T_FUNCTION) {
+                    $_f60e006196fb .= $_ce467557df24[$_44af9f79ea06++][1];
+                    if (is_array($_ce467557df24[$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06][0] == T_WHITESPACE) $_f60e006196fb .= $_ce467557df24[$_44af9f79ea06++][1];
+                    if (is_array($_ce467557df24[$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06][0] == T_STRING) {
+                        $_f60e006196fb .= $_ce467557df24[$_44af9f79ea06++][1];
+                        if (is_array($_ce467557df24[$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06][0] == T_WHITESPACE) $_f60e006196fb .= $_ce467557df24[$_44af9f79ea06++][1];
+                        if ($_ce467557df24[$_44af9f79ea06] == '(') {
+                            $_f60e006196fb .= '(' . self::readpe($_ce467557df24, $_44af9f79ea06) . ')';
+                            if (is_array($_ce467557df24[++$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06][0] == T_WHITESPACE) $_f60e006196fb .= $_ce467557df24[$_44af9f79ea06++][1];
+                            if ($_ce467557df24[$_44af9f79ea06] == '{') {
+                                $_6c1e753a12d0 = self::readl($_ce467557df24, '{', '}', $_44af9f79ea06);
+                                $_6c1e753a12d0 = self::nspartitioning($_5a71f81a43eb, substr($_6c1e753a12d0, 1, -1), $_61152f9ba785, $_5b3eb1c32c0d, $_e790ce3071f2, $_91dba975883a, $_9b3c20ca2a6c, $_231acd6afa62, $_498b56a16a87, $_2d1cac7779b8);
+                                $_f60e006196fb = $_2d1cac7779b8 . $_f60e006196fb . '{' . $_6c1e753a12d0 . '}';
+                                if (!isset($_5a71f81a43eb[$_f60e006196fb])) {
+                                    $_d186186a7d16 = random_bytes(16);
+                                    $_5a71f81a43eb[$_f60e006196fb] = [
+                                        count($_5a71f81a43eb),
+                                        $_d186186a7d16,
+                                        self::partition_encode($_f60e006196fb, $_d186186a7d16, $_e790ce3071f2, $_91dba975883a, $_9b3c20ca2a6c),
                                     ];
                                 }
-                                $code .=
-                                    "if((isset(\$_ALOM_continue)&&\$_ALOM_continue>0)||(isset(\$_ALOM_break)&&\$_ALOM_break>0))return;";
-                                $code .=
-                                    "if(isset(\$_ALOM_return))return \$_ALOM_result;\$_ALOM_result=eval(\AlomDecoder$signflag::partition_decode(\AlomDecoder$signflag::\$partition[" .
-                                    $partition[$part][0] .
-                                    "],'" .
-                                    base64_encode($partition[$part][1]) .
-                                    "','$pkyid'));";
-                                $part = "";
-                            } else {
-                                --$i;
-                            }
-                        } else {
-                            --$i;
-                        }
+                                $_d5cbf76f6b55 .= "if((isset(\$_ALOM_continue)&&\$_ALOM_continue>0)||(isset(\$_ALOM_break)&&\$_ALOM_break>0))return;";
+                                $_d5cbf76f6b55 .= "if(isset(\$_ALOM_return))return \$_ALOM_result;\$_ALOM_result=eval(\AlomDecoder$_5b3eb1c32c0d::partition_decode(\AlomDecoder$_5b3eb1c32c0d::\$partition[" . $_5a71f81a43eb[$_f60e006196fb][0] . "],'" . base64_encode($_5a71f81a43eb[$_f60e006196fb][1]) . "','$_231acd6afa62'));";
+                                $_f60e006196fb = '';
+                            } else--$_44af9f79ea06;
+                        } else--$_44af9f79ea06;
                     } else {
-                        if (is_array($tokens[$i]) && $tokens[$i][0] == T_USE) {
-                            $part .= $tokens[$i++][1];
-                            if (
-                                is_array($tokens[$i]) &&
-                                $tokens[$i][0] == T_WHITESPACE
-                            ) {
-                                $part .= $tokens[$i++][1];
-                            }
+                        if (is_array($_ce467557df24[$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06][0] == T_USE) {
+                            $_f60e006196fb .= $_ce467557df24[$_44af9f79ea06++][1];
+                            if (is_array($_ce467557df24[$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06][0] == T_WHITESPACE) $_f60e006196fb .= $_ce467557df24[$_44af9f79ea06++][1];
                         }
-                        if ($tokens[$i] == "(") {
-                            $part .= "(" . self::readpe($tokens, $i) . ")";
-                        } else {
-                            --$i;
-                        }
+                        if ($_ce467557df24[$_44af9f79ea06] == '(') $_f60e006196fb .= '(' . self::readpe($_ce467557df24, $_44af9f79ea06) . ')'; else--$_44af9f79ea06;
                     }
-                } else if (
-                    $tokens[$i][0] == T_FN ||
-                    $tokens[$i][0] == T_DECLARE
-                ) {
-                    $part .= $tokens[$i++][1];
-                    if (
-                        is_array($tokens[$i]) &&
-                        $tokens[$i][0] == T_WHITESPACE
-                    ) {
-                        $part .= $tokens[$i++][1];
+                } else if ($_ce467557df24[$_44af9f79ea06][0] == T_FN || $_ce467557df24[$_44af9f79ea06][0] == T_DECLARE) {
+                    $_f60e006196fb .= $_ce467557df24[$_44af9f79ea06++][1];
+                    if (is_array($_ce467557df24[$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06][0] == T_WHITESPACE) $_f60e006196fb .= $_ce467557df24[$_44af9f79ea06++][1];
+                    if ($_ce467557df24[$_44af9f79ea06] == '(') $_f60e006196fb .= '(' . self::readpe($_ce467557df24, $_44af9f79ea06) . ')'; else--$_44af9f79ea06;
+                } else if (in_array($_ce467557df24[$_44af9f79ea06][0], [T_STATIC, T_ECHO, T_GLOBAL])) {
+                    $_f60e006196fb .= $_ce467557df24[$_44af9f79ea06++][1];
+                    if (is_array($_ce467557df24[$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06][0] == T_WHITESPACE) $_f60e006196fb .= $_ce467557df24[$_44af9f79ea06++][1];
+                    $_f60e006196fb .= self::readpe($_ce467557df24, $_44af9f79ea06, TRUE);
+                } else if ($_ce467557df24[$_44af9f79ea06][0] == T_RETURN) {
+                    $_f60e006196fb .= $_ce467557df24[$_44af9f79ea06++][1] . ' ';
+                    if (is_array($_ce467557df24[$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06][0] == T_WHITESPACE) ++$_44af9f79ea06;
+                    while ($_ce467557df24[$_44af9f79ea06] == '(') {
+                        $_f60e006196fb .= '(' . self::readpe($_ce467557df24, $_44af9f79ea06, TRUE) . ')';
+                        ++$_44af9f79ea06;
                     }
-                    if ($tokens[$i] == "(") {
-                        $part .= "(" . self::readpe($tokens, $i) . ")";
+                    if ($_ce467557df24[$_44af9f79ea06] == ';') {
+                        $_f60e006196fb .= $_ce467557df24[$_44af9f79ea06];
                     } else {
-                        --$i;
+                        $_f60e006196fb .= self::readpe($_ce467557df24, $_44af9f79ea06, TRUE);
+                        if (is_array($_ce467557df24[$_44af9f79ea06 + 1]) && $_ce467557df24[$_44af9f79ea06 + 1][0] == T_WHITESPACE) $_f60e006196fb .= $_ce467557df24[($_44af9f79ea06++) + 1][1];
+                        if ($_ce467557df24[$_44af9f79ea06 + 1] == ';') $_f60e006196fb .= $_ce467557df24[($_44af9f79ea06++) + 1];
                     }
-                } else if (
-                in_array($tokens[$i][0], [T_STATIC, T_ECHO, T_GLOBAL])
-                ) {
-                    $part .= $tokens[$i++][1];
-                    if (
-                        is_array($tokens[$i]) &&
-                        $tokens[$i][0] == T_WHITESPACE
-                    ) {
-                        $part .= $tokens[$i++][1];
-                    }
-                    $part .= self::readpe($tokens, $i, TRUE);
-                } else if ($tokens[$i][0] == T_RETURN) {
-                    $part .= $tokens[$i++][1];
-                    $part .= self::readpe($tokens, $i, TRUE);
-                    if ($tokens[$i + 1] == ";") {
-                        $part .= $tokens[$i++ + 1];
-                    }
-                    $ua[] = count($partition);
-                    if (!isset($partition[$part])) {
-                        $key = random_bytes(16);
-                        $partition[$part] = [
-                            count($partition),
-                            $key,
-                            self::partition_encode(
-                                $part,
-                                $key,
-                                $iv1,
-                                $iv2,
-                                $ivs
-                            ),
+                    $_a56962748828[] = count($_5a71f81a43eb);
+                    if (!isset($_5a71f81a43eb[$_f60e006196fb])) {
+                        $_d186186a7d16 = random_bytes(16);
+                        $_5a71f81a43eb[$_f60e006196fb] = [
+                            count($_5a71f81a43eb),
+                            $_d186186a7d16,
+                            self::partition_encode($_f60e006196fb, $_d186186a7d16, $_e790ce3071f2, $_91dba975883a, $_9b3c20ca2a6c),
                         ];
                     }
-                    $code .=
-                        "if((isset(\$_ALOM_continue)&&\$_ALOM_continue>0)||(isset(\$_ALOM_break)&&\$_ALOM_break>0))return;";
-                    $code .=
-                        "\$_ALOM_return=true;return \$_ALOM_result=eval(\AlomDecoder$signflag::partition_decode(\AlomDecoder$signflag::\$partition[" .
-                        $partition[$part][0] .
-                        "],'" .
-                        base64_encode($partition[$part][1]) .
-                        "','$pkyid'));";
-                    $part = "";
-                } else if ($tokens[$i][0] == T_CONTINUE) {
-                    ++$i;
-                    $pe = max(1, (int)self::readpe($tokens, $i, TRUE));
-                    if ($tokens[$i + 1] == ";") {
-                        ++$i;
-                    }
-                    $part .= "\$_ALOM_continue=$pe;";
-                    $ua[] = count($partition);
-                    if (!isset($partition[$part])) {
-                        $key = random_bytes(16);
-                        $partition[$part] = [
-                            count($partition),
-                            $key,
-                            self::partition_encode(
-                                $part,
-                                $key,
-                                $iv1,
-                                $iv2,
-                                $ivs
-                            ),
+                    $_d5cbf76f6b55 = "if((isset(\$_ALOM_continue)&&\$_ALOM_continue>0)||(isset(\$_ALOM_break)&&\$_ALOM_break>0))return;";
+                    $_d5cbf76f6b55 .= "\$_ALOM_return=true;return \$_ALOM_result=eval(\AlomDecoder$_5b3eb1c32c0d::partition_decode(\AlomDecoder$_5b3eb1c32c0d::\$partition[" . $_5a71f81a43eb[$_f60e006196fb][0] . "],'" . base64_encode($_5a71f81a43eb[$_f60e006196fb][1]) . "','$_231acd6afa62'));";
+                    $_f60e006196fb = '';
+                } else if ($_ce467557df24[$_44af9f79ea06][0] == T_CONTINUE) {
+                    ++$_44af9f79ea06;
+                    $_6bd7e3077fe8 = max(1, (int)self::readpe($_ce467557df24, $_44af9f79ea06, TRUE));
+                    if ($_ce467557df24[$_44af9f79ea06 + 1] == ';') ++$_44af9f79ea06;
+                    $_f60e006196fb .= "\$_ALOM_continue=$_6bd7e3077fe8;";
+                    $_a56962748828[] = count($_5a71f81a43eb);
+                    if (!isset($_5a71f81a43eb[$_f60e006196fb])) {
+                        $_d186186a7d16 = random_bytes(16);
+                        $_5a71f81a43eb[$_f60e006196fb] = [
+                            count($_5a71f81a43eb),
+                            $_d186186a7d16,
+                            self::partition_encode($_f60e006196fb, $_d186186a7d16, $_e790ce3071f2, $_91dba975883a, $_9b3c20ca2a6c),
                         ];
                     }
-                    $code .=
-                        "if((isset(\$_ALOM_continue)&&\$_ALOM_continue>0)||(isset(\$_ALOM_break)&&\$_ALOM_break>0))return;";
-                    $code .=
-                        "if(isset(\$_ALOM_return))return \$_ALOM_result;\$_ALOM_result=eval(\AlomDecoder$signflag::partition_decode(\AlomDecoder$signflag::\$partition[" .
-                        $partition[$part][0] .
-                        "],'" .
-                        base64_encode($partition[$part][1]) .
-                        "','$pkyid'));";
-                    $part = "";
-                } else if ($tokens[$i][0] == T_BREAK) {
-                    ++$i;
-                    $pe = max(1, (int)self::readpe($tokens, $i, TRUE));
-                    if ($tokens[$i + 1] == ";") {
-                        ++$i;
-                    }
-                    $part .= "\$_ALOM_break=$pe;";
-                    $ua[] = count($partition);
-                    if (!isset($partition[$part])) {
-                        $key = random_bytes(16);
-                        $partition[$part] = [
-                            count($partition),
-                            $key,
-                            self::partition_encode(
-                                $part,
-                                $key,
-                                $iv1,
-                                $iv2,
-                                $ivs
-                            ),
+                    $_d5cbf76f6b55 .= "if((isset(\$_ALOM_continue)&&\$_ALOM_continue>0)||(isset(\$_ALOM_break)&&\$_ALOM_break>0))return;";
+                    $_d5cbf76f6b55 .= "if(isset(\$_ALOM_return))return \$_ALOM_result;\$_ALOM_result=eval(\AlomDecoder$_5b3eb1c32c0d::partition_decode(\AlomDecoder$_5b3eb1c32c0d::\$partition[" . $_5a71f81a43eb[$_f60e006196fb][0] . "],'" . base64_encode($_5a71f81a43eb[$_f60e006196fb][1]) . "','$_231acd6afa62'));";
+                    $_f60e006196fb = '';
+                } else if ($_ce467557df24[$_44af9f79ea06][0] == T_BREAK) {
+                    ++$_44af9f79ea06;
+                    $_6bd7e3077fe8 = max(1, (int)self::readpe($_ce467557df24, $_44af9f79ea06, TRUE));
+                    if ($_ce467557df24[$_44af9f79ea06 + 1] == ';') ++$_44af9f79ea06;
+                    $_f60e006196fb .= "\$_ALOM_break=$_6bd7e3077fe8;";
+                    $_a56962748828[] = count($_5a71f81a43eb);
+                    if (!isset($_5a71f81a43eb[$_f60e006196fb])) {
+                        $_d186186a7d16 = random_bytes(16);
+                        $_5a71f81a43eb[$_f60e006196fb] = [
+                            count($_5a71f81a43eb),
+                            $_d186186a7d16,
+                            self::partition_encode($_f60e006196fb, $_d186186a7d16, $_e790ce3071f2, $_91dba975883a, $_9b3c20ca2a6c),
                         ];
                     }
-                    $code .=
-                        "if((isset(\$_ALOM_continue)&&\$_ALOM_continue>0)||(isset(\$_ALOM_break)&&\$_ALOM_break>0))return;";
-                    $code .=
-                        "if(isset(\$_ALOM_return))return \$_ALOM_result;\$_ALOM_result=eval(\AlomDecoder$signflag::partition_decode(\AlomDecoder$signflag::\$partition[" .
-                        $partition[$part][0] .
-                        "],'" .
-                        base64_encode($partition[$part][1]) .
-                        "','$pkyid'));";
-                    $part = "";
-                } else if ($tokens[$i][0] == T_NAMESPACE) {
-                    $code .= $tokens[$i++][1];
-                    while (
-                        is_array($tokens[$i]) &&
-                        in_array($tokens[$i][0], [
+                    $_d5cbf76f6b55 .= "if((isset(\$_ALOM_continue)&&\$_ALOM_continue>0)||(isset(\$_ALOM_break)&&\$_ALOM_break>0))return;";
+                    $_d5cbf76f6b55 .= "if(isset(\$_ALOM_return))return \$_ALOM_result;\$_ALOM_result=eval(\AlomDecoder$_5b3eb1c32c0d::partition_decode(\AlomDecoder$_5b3eb1c32c0d::\$partition[" . $_5a71f81a43eb[$_f60e006196fb][0] . "],'" . base64_encode($_5a71f81a43eb[$_f60e006196fb][1]) . "','$_231acd6afa62'));";
+                    $_f60e006196fb = '';
+                } else if ($_ce467557df24[$_44af9f79ea06][0] == T_NAMESPACE) {
+                    $_d5cbf76f6b55 .= $_ce467557df24[$_44af9f79ea06++][1];
+                    while (is_array($_ce467557df24[$_44af9f79ea06]) && in_array($_ce467557df24[$_44af9f79ea06][0], [
                             T_WHITESPACE,
                             T_STRING,
                             T_NS_SEPARATOR,
-                        ])
-                    ) {
-                        $code .= $tokens[$i++][1];
-                    }
-                    if ($tokens[$i] != "{") {
-                        --$i;
+                        ])) $_d5cbf76f6b55 .= $_ce467557df24[$_44af9f79ea06++][1];
+                    if ($_ce467557df24[$_44af9f79ea06] != '{') {
+                        --$_44af9f79ea06;
                         continue;
                     }
-                    $rl = self::readl($tokens, "{", "}", $i);
-                    $rl = self::nspartitioning(
-                        $partition,
-                        substr($rl, 1, -1),
-                        $optwister,
-                        $signflag,
-                        $iv1,
-                        $iv2,
-                        $ivs,
-                        $pkyid,
-                        $fast,
-                        $ns,
-                        $ua
-                    );
-                    $part .= "{" . $rl . "}";
-                } else if ($tokens[$i] == ";") {
-                    $part = $ns . $part . ";";
-                    $ua[] = count($partition);
-                    if (!isset($partition[$part])) {
-                        $key = random_bytes(16);
-                        $partition[$part] = [
-                            count($partition),
-                            $key,
-                            self::partition_encode(
-                                $part,
-                                $key,
-                                $iv1,
-                                $iv2,
-                                $ivs
-                            ),
+                    $_6c1e753a12d0 = self::readl($_ce467557df24, '{', '}', $_44af9f79ea06);
+                    $_6c1e753a12d0 = self::nspartitioning($_5a71f81a43eb, substr($_6c1e753a12d0, 1, -1), $_61152f9ba785, $_5b3eb1c32c0d, $_e790ce3071f2, $_91dba975883a, $_9b3c20ca2a6c, $_231acd6afa62, $_498b56a16a87, $_2d1cac7779b8, $_a56962748828);
+                    $_f60e006196fb .= '{' . $_6c1e753a12d0 . '}';
+                } else if ($_ce467557df24[$_44af9f79ea06] == ';') {
+                    $_f60e006196fb = $_2d1cac7779b8 . $_f60e006196fb . ';';
+                    $_a56962748828[] = count($_5a71f81a43eb);
+                    if (!isset($_5a71f81a43eb[$_f60e006196fb])) {
+                        $_d186186a7d16 = random_bytes(16);
+                        $_5a71f81a43eb[$_f60e006196fb] = [
+                            count($_5a71f81a43eb),
+                            $_d186186a7d16,
+                            self::partition_encode($_f60e006196fb, $_d186186a7d16, $_e790ce3071f2, $_91dba975883a, $_9b3c20ca2a6c),
                         ];
                     }
-                    $code .=
-                        "if((isset(\$_ALOM_continue)&&\$_ALOM_continue>0)||(isset(\$_ALOM_break)&&\$_ALOM_break>0))return;";
-                    $code .=
-                        "if(isset(\$_ALOM_return))return \$_ALOM_result;\$_ALOM_result=eval(\AlomDecoder$signflag::partition_decode(\AlomDecoder$signflag::\$partition[" .
-                        $partition[$part][0] .
-                        "],'" .
-                        base64_encode($partition[$part][1]) .
-                        "','$pkyid'));";
-                    $part = "";
-                } else if ($tokens[$i] == ",") {
-                    $part = $ns . "return $part;";
-                    $ua[] = count($partition);
-                    if (!isset($partition[$part])) {
-                        $key = random_bytes(16);
-                        $partition[$part] = [
-                            count($partition),
-                            $key,
-                            self::partition_encode(
-                                $part,
-                                $key,
-                                $iv1,
-                                $iv2,
-                                $ivs
-                            ),
+                    $_d5cbf76f6b55 .= "if((isset(\$_ALOM_continue)&&\$_ALOM_continue>0)||(isset(\$_ALOM_break)&&\$_ALOM_break>0))return;";
+                    $_d5cbf76f6b55 .= "if(isset(\$_ALOM_return))return \$_ALOM_result;\$_ALOM_result=eval(\AlomDecoder$_5b3eb1c32c0d::partition_decode(\AlomDecoder$_5b3eb1c32c0d::\$partition[" . $_5a71f81a43eb[$_f60e006196fb][0] . "],'" . base64_encode($_5a71f81a43eb[$_f60e006196fb][1]) . "','$_231acd6afa62'));";
+                    $_f60e006196fb = '';
+                } else if ($_ce467557df24[$_44af9f79ea06] == ',') {
+                    $_f60e006196fb = $_2d1cac7779b8 . "return $_f60e006196fb;";
+                    $_a56962748828[] = count($_5a71f81a43eb);
+                    if (!isset($_5a71f81a43eb[$_f60e006196fb])) {
+                        $_d186186a7d16 = random_bytes(16);
+                        $_5a71f81a43eb[$_f60e006196fb] = [
+                            count($_5a71f81a43eb),
+                            $_d186186a7d16,
+                            self::partition_encode($_f60e006196fb, $_d186186a7d16, $_e790ce3071f2, $_91dba975883a, $_9b3c20ca2a6c),
                         ];
                     }
-                    $code .=
-                        "eval(\AlomDecoder$signflag::partition_decode(\AlomDecoder$signflag::\$partition[" .
-                        $partition[$part][0] .
-                        "],'" .
-                        base64_encode($partition[$part][1]) .
-                        "','$pkyid')),";
-                    $part = "";
-                } else if (
-                    is_array($tokens[$i]) &&
-                    in_array($tokens[$i][0], [
-                        T_ISSET,
-                        T_UNSET,
-                        T_EMPTY,
-                        T_ARRAY,
-                        T_LIST,
-                    ])
-                ) {
-                    $part .= $tokens[$i++][1];
-                    if (
-                        is_array($tokens[$i]) &&
-                        $tokens[$i][0] == T_WHITESPACE
-                    ) {
-                        $part .= $tokens[$i++][1];
-                    }
-                    if ($tokens[$i] == "(") {
-                        $rl = self::readl($tokens, "(", ")", $i);
-                        $part .= $rl;
-                    } else {
-                        --$i;
-                    }
-                } else if (
-                    is_array($tokens[$i]) &&
-                    in_array($tokens[$i][0], [
+                    $_d5cbf76f6b55 .= "eval(\AlomDecoder$_5b3eb1c32c0d::partition_decode(\AlomDecoder$_5b3eb1c32c0d::\$partition[" . $_5a71f81a43eb[$_f60e006196fb][0] . "],'" . base64_encode($_5a71f81a43eb[$_f60e006196fb][1]) . "','$_231acd6afa62')),";
+                    $_f60e006196fb = '';
+                } else if (is_array($_ce467557df24[$_44af9f79ea06]) && in_array($_ce467557df24[$_44af9f79ea06][0], [T_ISSET, T_UNSET, T_EMPTY, T_ARRAY, T_LIST])) {
+                    $_f60e006196fb .= $_ce467557df24[$_44af9f79ea06++][1];
+                    if (is_array($_ce467557df24[$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06][0] == T_WHITESPACE) $_f60e006196fb .= $_ce467557df24[$_44af9f79ea06++][1];
+                    if ($_ce467557df24[$_44af9f79ea06] == '(') {
+                        $_6c1e753a12d0 = self::readl($_ce467557df24, '(', ')', $_44af9f79ea06);
+                        $_f60e006196fb .= $_6c1e753a12d0;
+                    } else--$_44af9f79ea06;
+                } else if (is_array($_ce467557df24[$_44af9f79ea06]) && in_array($_ce467557df24[$_44af9f79ea06][0], [
                         T_WHILE,
                         T_FOR,
                         T_IF,
@@ -3977,2473 +2601,1431 @@ if (!class_exists("AlomEncoder")) {
                         T_ELSE,
                         T_FOREACH,
                         T_DECLARE,
-                    ])
-                ) {
-                    $code .=
-                        'if(!isset($_ALOM_continue))$_ALOM_continue=0;if(!isset($_ALOM_break))$_ALOM_break=0;';
-                    for (; isset($tokens[$i]); ++$i) {
-                        if (
-                            is_array($tokens[$i]) &&
-                            in_array($tokens[$i][0], [
-                                T_WHILE,
-                                T_FOR,
-                                T_FOREACH,
-                                T_DECLARE,
-                            ])
-                        ) {
-                            $lf = $tokens[$i][0] == T_FOR;
-                            $part .= $tokens[$i++][1];
-                            if (
-                                is_array($tokens[$i]) &&
-                                $tokens[$i][0] == T_WHITESPACE
-                            ) {
-                                $part .= $tokens[$i++][1];
+                    ])) {
+                    $_d5cbf76f6b55 .= 'if(!isset($_ALOM_continue))$_ALOM_continue=0;if(!isset($_ALOM_break))$_ALOM_break=0;';
+                    for (; isset($_ce467557df24[$_44af9f79ea06]); ++$_44af9f79ea06) if (is_array($_ce467557df24[$_44af9f79ea06]) && in_array($_ce467557df24[$_44af9f79ea06][0], [
+                            T_WHILE,
+                            T_FOR,
+                            T_FOREACH,
+                            T_DECLARE,
+                        ])) {
+                        $_5a8577b364df = $_ce467557df24[$_44af9f79ea06][0] == T_FOR;
+                        $_f60e006196fb .= $_ce467557df24[$_44af9f79ea06++][1];
+                        if (is_array($_ce467557df24[$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06][0] == T_WHITESPACE) $_f60e006196fb .= $_ce467557df24[$_44af9f79ea06++][1];
+                        if ($_ce467557df24[$_44af9f79ea06] == '(') {
+                            $_6c1e753a12d0 = self::readl($_ce467557df24, '(', ')', $_44af9f79ea06);
+                            ++$_44af9f79ea06;
+                            if ($_498b56a16a87 || $_5a8577b364df) {
+                                $_f60e006196fb .= $_6c1e753a12d0;
+                            } else {
+                                $_6c1e753a12d0 = self::nspartitioning($_5a71f81a43eb, substr($_6c1e753a12d0, 1, -1), $_61152f9ba785, $_5b3eb1c32c0d, $_e790ce3071f2, $_91dba975883a, $_9b3c20ca2a6c, $_231acd6afa62, $_498b56a16a87, $_2d1cac7779b8, $_a56962748828, TRUE);
+                                $_f60e006196fb .= '(' . $_6c1e753a12d0 . ')';
                             }
-                            if ($tokens[$i] == "(") {
-                                $rl = self::readl($tokens, "(", ")", $i);
-                                ++$i;
-                                if ($fast || $lf) {
-                                    $part .= $rl;
-                                } else {
-                                    $rl = self::nspartitioning(
-                                        $partition,
-                                        substr($rl, 1, -1),
-                                        $optwister,
-                                        $signflag,
-                                        $iv1,
-                                        $iv2,
-                                        $ivs,
-                                        $pkyid,
-                                        $fast,
-                                        $ns,
-                                        $ua,
-                                        TRUE
-                                    );
-                                    $part .= "(" . $rl . ")";
-                                }
-                                if (
-                                    is_array($tokens[$i]) &&
-                                    $tokens[$i][0] == T_WHITESPACE
-                                ) {
-                                    $part .= $tokens[$i++][1];
-                                }
-                                if ($tokens[$i] == "{") {
-                                    $rl = self::readl($tokens, "{", "}", $i);
-                                    ++$i;
-                                    $rl = self::nspartitioning(
-                                        $partition,
-                                        substr($rl, 1, -1),
-                                        $optwister,
-                                        $signflag,
-                                        $iv1,
-                                        $iv2,
-                                        $ivs,
-                                        $pkyid,
-                                        $fast,
-                                        $ns,
-                                        $ua
-                                    );
-                                    $part .=
-                                        "{" .
-                                        $rl .
-                                        'if($_ALOM_continue>0){--$_ALOM_continue;if($_ALOM_continue>0)break;}if($_ALOM_break>0){--$_ALOM_break;break;}}';
-                                    $ua[] = count($partition);
-                                    if (!isset($partition[$part])) {
-                                        $key = random_bytes(16);
-                                        $partition[$part] = [
-                                            count($partition),
-                                            $key,
-                                            self::partition_encode(
-                                                $part,
-                                                $key,
-                                                $iv1,
-                                                $iv2,
-                                                $ivs
-                                            ),
-                                        ];
-                                    }
-                                    $code .=
-                                        "if((isset(\$_ALOM_continue)&&\$_ALOM_continue>0)||(isset(\$_ALOM_break)&&\$_ALOM_break>0))return;";
-                                    $code .=
-                                        "if(isset(\$_ALOM_return))return \$_ALOM_result;\$_ALOM_result=eval(\AlomDecoder$signflag::partition_decode(\AlomDecoder$signflag::\$partition[" .
-                                        $partition[$part][0] .
-                                        "],'" .
-                                        base64_encode($partition[$part][1]) .
-                                        "','$pkyid'));";
-                                    $part = "";
-                                    break;
-                                }
-                                $rs = self::reads($tokens, $i);
-                                if (isset($tokens[$i]) && $tokens[$i] == ";") {
-                                    $rs .= $tokens[$i++];
-                                }
-                                $rs = self::nspartitioning(
-                                    $partition,
-                                    $rs,
-                                    $optwister,
-                                    $signflag,
-                                    $iv1,
-                                    $iv2,
-                                    $ivs,
-                                    $pkyid,
-                                    $fast,
-                                    $ns,
-                                    $ua
-                                );
-                                $part .=
-                                    "{" .
-                                    $rs .
-                                    'if($_ALOM_continue>0){--$_ALOM_continue;if($_ALOM_continue>0)break;}if($_ALOM_break>0){--$_ALOM_break;break;}}';
-                                $ua[] = count($partition);
-                                if (!isset($partition[$part])) {
-                                    $key = random_bytes(16);
-                                    $partition[$part] = [
-                                        count($partition),
-                                        $key,
-                                        self::partition_encode(
-                                            $part,
-                                            $key,
-                                            $iv1,
-                                            $iv2,
-                                            $ivs
-                                        ),
+                            if (is_array($_ce467557df24[$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06][0] == T_WHITESPACE) $_f60e006196fb .= $_ce467557df24[$_44af9f79ea06++][1];
+                            if ($_ce467557df24[$_44af9f79ea06] == '{') {
+                                $_6c1e753a12d0 = self::readl($_ce467557df24, '{', '}', $_44af9f79ea06);
+                                ++$_44af9f79ea06;
+                                $_6c1e753a12d0 = self::nspartitioning($_5a71f81a43eb, substr($_6c1e753a12d0, 1, -1), $_61152f9ba785, $_5b3eb1c32c0d, $_e790ce3071f2, $_91dba975883a, $_9b3c20ca2a6c, $_231acd6afa62, $_498b56a16a87, $_2d1cac7779b8, $_a56962748828);
+                                $_f60e006196fb .= '{' . $_6c1e753a12d0 . 'if($_ALOM_continue>0){--$_ALOM_continue;if($_ALOM_continue>0)break;}if($_ALOM_break>0){--$_ALOM_break;break;}}';
+                                $_a56962748828[] = count($_5a71f81a43eb);
+                                if (!isset($_5a71f81a43eb[$_f60e006196fb])) {
+                                    $_d186186a7d16 = random_bytes(16);
+                                    $_5a71f81a43eb[$_f60e006196fb] = [
+                                        count($_5a71f81a43eb),
+                                        $_d186186a7d16,
+                                        self::partition_encode($_f60e006196fb, $_d186186a7d16, $_e790ce3071f2, $_91dba975883a, $_9b3c20ca2a6c),
                                     ];
                                 }
-                                $code .=
-                                    "if((isset(\$_ALOM_continue)&&\$_ALOM_continue>0)||(isset(\$_ALOM_break)&&\$_ALOM_break>0))return;";
-                                $code .=
-                                    "if(isset(\$_ALOM_return))return \$_ALOM_result;\$_ALOM_result=eval(\AlomDecoder$signflag::partition_decode(\AlomDecoder$signflag::\$partition[" .
-                                    $partition[$part][0] .
-                                    "],'" .
-                                    base64_encode($partition[$part][1]) .
-                                    "','$pkyid'));";
-                                $part = "";
+                                $_d5cbf76f6b55 .= "if((isset(\$_ALOM_continue)&&\$_ALOM_continue>0)||(isset(\$_ALOM_break)&&\$_ALOM_break>0))return;";
+                                $_d5cbf76f6b55 .= "if(isset(\$_ALOM_return))return \$_ALOM_result;\$_ALOM_result=eval(\AlomDecoder$_5b3eb1c32c0d::partition_decode(\AlomDecoder$_5b3eb1c32c0d::\$partition[" . $_5a71f81a43eb[$_f60e006196fb][0] . "],'" . base64_encode($_5a71f81a43eb[$_f60e006196fb][1]) . "','$_231acd6afa62'));";
+                                $_f60e006196fb = '';
                                 break;
                             }
-                            --$i;
-                        } else if (
-                            is_array($tokens[$i]) &&
-                            $tokens[$i][0] == T_IF
-                        ) {
-                            while (TRUE) {
-                                $part .= $tokens[$i++][1];
-                                if (
-                                    is_array($tokens[$i]) &&
-                                    $tokens[$i][0] == T_WHITESPACE
-                                ) {
-                                    $part .= $tokens[$i++][1];
-                                }
-                                if ($tokens[$i] == "(") {
-                                    $rl = self::readl($tokens, "(", ")", $i);
-                                    ++$i;
-                                    if ($fast) {
-                                        $part .= $rl;
-                                    } else {
-                                        $rl = self::nspartitioning(
-                                            $partition,
-                                            substr($rl, 1, -1),
-                                            $optwister,
-                                            $signflag,
-                                            $iv1,
-                                            $iv2,
-                                            $ivs,
-                                            $pkyid,
-                                            $fast,
-                                            $ns,
-                                            $ua,
-                                            TRUE
-                                        );
-                                        $part .= "(" . $rl . ")";
-                                    }
-                                }
-                                if (
-                                    is_array($tokens[$i]) &&
-                                    $tokens[$i][0] == T_WHITESPACE
-                                ) {
-                                    $part .= $tokens[$i++][1];
-                                }
-                                if ($tokens[$i] == "{") {
-                                    $rl = self::readl($tokens, "{", "}", $i);
-                                    ++$i;
-                                    $rl = self::nspartitioning(
-                                        $partition,
-                                        substr($rl, 1, -1),
-                                        $optwister,
-                                        $signflag,
-                                        $iv1,
-                                        $iv2,
-                                        $ivs,
-                                        $pkyid,
-                                        $fast,
-                                        $ns,
-                                        $ua
-                                    );
-                                    $part .= "{" . $rl . "}";
-                                } else {
-                                    $rs = self::reads($tokens, $i);
-                                    if (
-                                        isset($tokens[$i]) &&
-                                        $tokens[$i] == ";"
-                                    ) {
-                                        $rs .= $tokens[$i++];
-                                    }
-                                    $rs = self::nspartitioning(
-                                        $partition,
-                                        $rs,
-                                        $optwister,
-                                        $signflag,
-                                        $iv1,
-                                        $iv2,
-                                        $ivs,
-                                        $pkyid,
-                                        $fast,
-                                        $ns,
-                                        $ua
-                                    );
-                                    $part .= "{" . $rs . "}";
-                                }
-                                if (
-                                    isset($tokens[$i]) &&
-                                    is_array($tokens[$i]) &&
-                                    $tokens[$i][0] == T_WHITESPACE
-                                ) {
-                                    $part .= $tokens[$i++][1];
-                                }
-                                if (!isset($tokens[$i])) {
-                                    break;
-                                }
-                                if (
-                                    is_array($tokens[$i]) &&
-                                    $tokens[$i][0] == T_ELSEIF
-                                ) {
-                                    continue;
-                                } else if (
-                                    is_array($tokens[$i]) &&
-                                    $tokens[$i][0] == T_ELSE
-                                ) {
-                                    $part .= $tokens[$i++][1];
-                                    if (
-                                        is_array($tokens[$i]) &&
-                                        $tokens[$i][0] == T_WHITESPACE
-                                    ) {
-                                        $part .= $tokens[$i++][1];
-                                    }
-                                    if ($tokens[$i] == "{") {
-                                        $rl = self::readl(
-                                            $tokens,
-                                            "{",
-                                            "}",
-                                            $i
-                                        );
-                                        ++$i;
-                                        $rl = self::nspartitioning(
-                                            $partition,
-                                            substr($rl, 1, -1),
-                                            $optwister,
-                                            $signflag,
-                                            $iv1,
-                                            $iv2,
-                                            $ivs,
-                                            $pkyid,
-                                            $fast,
-                                            $ns,
-                                            $ua
-                                        );
-                                        $part .= "{" . $rl . "}";
-                                    } else {
-                                        $rs = self::reads($tokens, $i);
-                                        if (
-                                            isset($tokens[$i]) &&
-                                            $tokens[$i] == ";"
-                                        ) {
-                                            $rs .= $tokens[$i++];
-                                        }
-                                        $rs = self::nspartitioning(
-                                            $partition,
-                                            $rs,
-                                            $optwister,
-                                            $signflag,
-                                            $iv1,
-                                            $iv2,
-                                            $ivs,
-                                            $pkyid,
-                                            $fast,
-                                            $ns,
-                                            $ua
-                                        );
-                                        $part .= "{" . $rs . "}";
-                                    }
-                                    break;
-                                } else {
-                                    break;
-                                }
+                            $_d04e40edfd8e = self::reads($_ce467557df24, $_44af9f79ea06);
+                            if (isset($_ce467557df24[$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06] == ';') $_d04e40edfd8e .= $_ce467557df24[$_44af9f79ea06++];
+                            $_d04e40edfd8e = self::nspartitioning($_5a71f81a43eb, $_d04e40edfd8e, $_61152f9ba785, $_5b3eb1c32c0d, $_e790ce3071f2, $_91dba975883a, $_9b3c20ca2a6c, $_231acd6afa62, $_498b56a16a87, $_2d1cac7779b8, $_a56962748828);
+                            $_f60e006196fb .= '{' . $_d04e40edfd8e . 'if($_ALOM_continue>0){--$_ALOM_continue;if($_ALOM_continue>0)break;}if($_ALOM_break>0){--$_ALOM_break;break;}}';
+                            $_a56962748828[] = count($_5a71f81a43eb);
+                            if (!isset($_5a71f81a43eb[$_f60e006196fb])) {
+                                $_d186186a7d16 = random_bytes(16);
+                                $_5a71f81a43eb[$_f60e006196fb] = [
+                                    count($_5a71f81a43eb),
+                                    $_d186186a7d16,
+                                    self::partition_encode($_f60e006196fb, $_d186186a7d16, $_e790ce3071f2, $_91dba975883a, $_9b3c20ca2a6c),
+                                ];
                             }
+                            $_d5cbf76f6b55 .= "if((isset(\$_ALOM_continue)&&\$_ALOM_continue>0)||(isset(\$_ALOM_break)&&\$_ALOM_break>0))return;";
+                            $_d5cbf76f6b55 .= "if(isset(\$_ALOM_return))return \$_ALOM_result;\$_ALOM_result=eval(\AlomDecoder$_5b3eb1c32c0d::partition_decode(\AlomDecoder$_5b3eb1c32c0d::\$partition[" . $_5a71f81a43eb[$_f60e006196fb][0] . "],'" . base64_encode($_5a71f81a43eb[$_f60e006196fb][1]) . "','$_231acd6afa62'));";
+                            $_f60e006196fb = '';
                             break;
                         }
+                        --$_44af9f79ea06;
+                    } else if (is_array($_ce467557df24[$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06][0] == T_IF) {
+                        while (TRUE) {
+                            $_f60e006196fb .= $_ce467557df24[$_44af9f79ea06++][1];
+                            if (is_array($_ce467557df24[$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06][0] == T_WHITESPACE) $_f60e006196fb .= $_ce467557df24[$_44af9f79ea06++][1];
+                            if ($_ce467557df24[$_44af9f79ea06] == '(') {
+                                $_6c1e753a12d0 = self::readl($_ce467557df24, '(', ')', $_44af9f79ea06);
+                                ++$_44af9f79ea06;
+                                if ($_498b56a16a87) {
+                                    $_f60e006196fb .= $_6c1e753a12d0;
+                                } else {
+                                    $_6c1e753a12d0 = self::nspartitioning($_5a71f81a43eb, substr($_6c1e753a12d0, 1, -1), $_61152f9ba785, $_5b3eb1c32c0d, $_e790ce3071f2, $_91dba975883a, $_9b3c20ca2a6c, $_231acd6afa62, $_498b56a16a87, $_2d1cac7779b8, $_a56962748828, TRUE);
+                                    $_f60e006196fb .= '(' . $_6c1e753a12d0 . ')';
+                                }
+                            }
+                            if (is_array($_ce467557df24[$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06][0] == T_WHITESPACE) $_f60e006196fb .= $_ce467557df24[$_44af9f79ea06++][1];
+                            if ($_ce467557df24[$_44af9f79ea06] == '{') {
+                                $_6c1e753a12d0 = self::readl($_ce467557df24, '{', '}', $_44af9f79ea06);
+                                ++$_44af9f79ea06;
+                                $_6c1e753a12d0 = self::nspartitioning($_5a71f81a43eb, substr($_6c1e753a12d0, 1, -1), $_61152f9ba785, $_5b3eb1c32c0d, $_e790ce3071f2, $_91dba975883a, $_9b3c20ca2a6c, $_231acd6afa62, $_498b56a16a87, $_2d1cac7779b8, $_a56962748828);
+                                $_f60e006196fb .= '{' . $_6c1e753a12d0 . '}';
+                            } else {
+                                $_d04e40edfd8e = self::reads($_ce467557df24, $_44af9f79ea06);
+                                if (isset($_ce467557df24[$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06] == ';') $_d04e40edfd8e .= $_ce467557df24[$_44af9f79ea06++];
+                                $_d04e40edfd8e = self::nspartitioning($_5a71f81a43eb, $_d04e40edfd8e, $_61152f9ba785, $_5b3eb1c32c0d, $_e790ce3071f2, $_91dba975883a, $_9b3c20ca2a6c, $_231acd6afa62, $_498b56a16a87, $_2d1cac7779b8, $_a56962748828);
+                                $_f60e006196fb .= '{' . $_d04e40edfd8e . '}';
+                            }
+                            if (isset($_ce467557df24[$_44af9f79ea06]) && is_array($_ce467557df24[$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06][0] == T_WHITESPACE) $_f60e006196fb .= $_ce467557df24[$_44af9f79ea06++][1];
+                            if (!isset($_ce467557df24[$_44af9f79ea06])) break;
+                            if (is_array($_ce467557df24[$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06][0] == T_ELSEIF) continue; else if (is_array($_ce467557df24[$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06][0] == T_ELSE) {
+                                $_f60e006196fb .= $_ce467557df24[$_44af9f79ea06++][1];
+                                if (is_array($_ce467557df24[$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06][0] == T_WHITESPACE) $_f60e006196fb .= $_ce467557df24[$_44af9f79ea06++][1];
+                                if ($_ce467557df24[$_44af9f79ea06] == '{') {
+                                    $_6c1e753a12d0 = self::readl($_ce467557df24, '{', '}', $_44af9f79ea06);
+                                    ++$_44af9f79ea06;
+                                    $_6c1e753a12d0 = self::nspartitioning($_5a71f81a43eb, substr($_6c1e753a12d0, 1, -1), $_61152f9ba785, $_5b3eb1c32c0d, $_e790ce3071f2, $_91dba975883a, $_9b3c20ca2a6c, $_231acd6afa62, $_498b56a16a87, $_2d1cac7779b8, $_a56962748828);
+                                    $_f60e006196fb .= '{' . $_6c1e753a12d0 . '}';
+                                } else {
+                                    $_d04e40edfd8e = self::reads($_ce467557df24, $_44af9f79ea06);
+                                    if (isset($_ce467557df24[$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06] == ';') $_d04e40edfd8e .= $_ce467557df24[$_44af9f79ea06++];
+                                    $_d04e40edfd8e = self::nspartitioning($_5a71f81a43eb, $_d04e40edfd8e, $_61152f9ba785, $_5b3eb1c32c0d, $_e790ce3071f2, $_91dba975883a, $_9b3c20ca2a6c, $_231acd6afa62, $_498b56a16a87, $_2d1cac7779b8, $_a56962748828);
+                                    $_f60e006196fb .= '{' . $_d04e40edfd8e . '}';
+                                }
+                                break;
+                            } else break;
+                        }
+                        break;
                     }
-                    if (isset($tokens[$i]) && $tokens[$i] == ";") {
-                        $part .= $tokens[$i++];
-                    }
-                    --$i;
-                    $ua[] = count($partition);
-                    if (!isset($partition[$part])) {
-                        $key = random_bytes(16);
-                        $partition[$part] = [
-                            count($partition),
-                            $key,
-                            self::partition_encode(
-                                $part,
-                                $key,
-                                $iv1,
-                                $iv2,
-                                $ivs
-                            ),
+                    if (isset($_ce467557df24[$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06] == ';') $_f60e006196fb .= $_ce467557df24[$_44af9f79ea06++];
+                    --$_44af9f79ea06;
+                    $_a56962748828[] = count($_5a71f81a43eb);
+                    if (!isset($_5a71f81a43eb[$_f60e006196fb])) {
+                        $_d186186a7d16 = random_bytes(16);
+                        $_5a71f81a43eb[$_f60e006196fb] = [
+                            count($_5a71f81a43eb),
+                            $_d186186a7d16,
+                            self::partition_encode($_f60e006196fb, $_d186186a7d16, $_e790ce3071f2, $_91dba975883a, $_9b3c20ca2a6c),
                         ];
                     }
-                    $code .=
-                        "if((isset(\$_ALOM_continue)&&\$_ALOM_continue>0)||(isset(\$_ALOM_break)&&\$_ALOM_break>0))return;";
-                    $code .=
-                        "if(isset(\$_ALOM_return))return \$_ALOM_result;\$_ALOM_result=eval(\AlomDecoder$signflag::partition_decode(\AlomDecoder$signflag::\$partition[" .
-                        $partition[$part][0] .
-                        "],'" .
-                        base64_encode($partition[$part][1]) .
-                        "','$pkyid'));";
-                    $part = "";
-                } else if (
-                    is_array($tokens[$i]) &&
-                    $tokens[$i][0] == T_OBJECT_OPERATOR
-                ) {
-                    $part .= $tokens[$i++][1];
-                    if (
-                        is_array($tokens[$i]) &&
-                        $tokens[$i][0] == T_WHITESPACE
-                    ) {
-                        $part .= $tokens[$i++][1];
-                    }
-                    if ($tokens[$i] == "{") {
-                        $rl = self::readl($tokens, "{", "}", $i);
-                        if ($fast) {
-                            $part .= $rl;
+                    $_d5cbf76f6b55 .= "if((isset(\$_ALOM_continue)&&\$_ALOM_continue>0)||(isset(\$_ALOM_break)&&\$_ALOM_break>0))return;";
+                    $_d5cbf76f6b55 .= "if(isset(\$_ALOM_return))return \$_ALOM_result;\$_ALOM_result=eval(\AlomDecoder$_5b3eb1c32c0d::partition_decode(\AlomDecoder$_5b3eb1c32c0d::\$partition[" . $_5a71f81a43eb[$_f60e006196fb][0] . "],'" . base64_encode($_5a71f81a43eb[$_f60e006196fb][1]) . "','$_231acd6afa62'));";
+                    $_f60e006196fb = '';
+                } else if (is_array($_ce467557df24[$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06][0] == T_OBJECT_OPERATOR) {
+                    $_f60e006196fb .= $_ce467557df24[$_44af9f79ea06++][1];
+                    if (is_array($_ce467557df24[$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06][0] == T_WHITESPACE) $_f60e006196fb .= $_ce467557df24[$_44af9f79ea06++][1];
+                    if ($_ce467557df24[$_44af9f79ea06] == '{') {
+                        $_6c1e753a12d0 = self::readl($_ce467557df24, '{', '}', $_44af9f79ea06);
+                        if ($_498b56a16a87) {
+                            $_f60e006196fb .= $_6c1e753a12d0;
                         } else {
-                            $rl = self::nspartitioning(
-                                $partition,
-                                substr($rl, 1, -1),
-                                $optwister,
-                                $signflag,
-                                $iv1,
-                                $iv2,
-                                $ivs,
-                                $pkyid,
-                                $fast,
-                                $ns,
-                                $ua
-                            );
-                            $part .= "{" . $rl . "}";
+                            $_6c1e753a12d0 = self::nspartitioning($_5a71f81a43eb, substr($_6c1e753a12d0, 1, -1), $_61152f9ba785, $_5b3eb1c32c0d, $_e790ce3071f2, $_91dba975883a, $_9b3c20ca2a6c, $_231acd6afa62, $_498b56a16a87, $_2d1cac7779b8, $_a56962748828);
+                            $_f60e006196fb .= '{' . $_6c1e753a12d0 . '}';
                         }
-                    } else {
-                        --$i;
-                    }
-                } else if ($tokens[$i] == '$') {
-                    $part .= $tokens[$i++];
-                    if (
-                        is_array($tokens[$i]) &&
-                        $tokens[$i][0] == T_WHITESPACE
-                    ) {
-                        $part .= $tokens[$i++][1];
-                    }
-                    if ($tokens[$i] == "{") {
-                        $rl = self::readl($tokens, "{", "}", $i);
-                        if ($fast) {
-                            $part .= $rl;
+                    } else--$_44af9f79ea06;
+                } else if ($_ce467557df24[$_44af9f79ea06] == '$') {
+                    $_f60e006196fb .= $_ce467557df24[$_44af9f79ea06++];
+                    if (is_array($_ce467557df24[$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06][0] == T_WHITESPACE) $_f60e006196fb .= $_ce467557df24[$_44af9f79ea06++][1];
+                    if ($_ce467557df24[$_44af9f79ea06] == '{') {
+                        $_6c1e753a12d0 = self::readl($_ce467557df24, '{', '}', $_44af9f79ea06);
+                        if ($_498b56a16a87) {
+                            $_f60e006196fb .= $_6c1e753a12d0;
                         } else {
-                            $rl = self::nspartitioning(
-                                $partition,
-                                substr($rl, 1, -1),
-                                $optwister,
-                                $signflag,
-                                $iv1,
-                                $iv2,
-                                $ivs,
-                                $pkyid,
-                                $fast,
-                                $ns,
-                                $ua
-                            );
-                            $part .= "{" . $rl . "}";
+                            $_6c1e753a12d0 = self::nspartitioning($_5a71f81a43eb, substr($_6c1e753a12d0, 1, -1), $_61152f9ba785, $_5b3eb1c32c0d, $_e790ce3071f2, $_91dba975883a, $_9b3c20ca2a6c, $_231acd6afa62, $_498b56a16a87, $_2d1cac7779b8, $_a56962748828);
+                            $_f60e006196fb .= '{' . $_6c1e753a12d0 . '}';
                         }
+                    } else--$_44af9f79ea06;
+                } else if ($_ce467557df24[$_44af9f79ea06] == '{') {
+                    $_6c1e753a12d0 = self::readl($_ce467557df24, '{', '}', $_44af9f79ea06);
+                    $_6c1e753a12d0 = self::nspartitioning($_5a71f81a43eb, substr($_6c1e753a12d0, 1, -1), $_61152f9ba785, $_5b3eb1c32c0d, $_e790ce3071f2, $_91dba975883a, $_9b3c20ca2a6c, $_231acd6afa62, $_498b56a16a87, $_2d1cac7779b8, $_a56962748828);
+                    $_f60e006196fb .= '{' . $_6c1e753a12d0 . '}';
+                } else if ($_ce467557df24[$_44af9f79ea06] == '(') {
+                    $_6c1e753a12d0 = self::readl($_ce467557df24, '(', ')', $_44af9f79ea06);
+                    if ($_498b56a16a87) {
+                        $_f60e006196fb .= $_6c1e753a12d0;
                     } else {
-                        --$i;
+                        $_6c1e753a12d0 = self::nspartitioning($_5a71f81a43eb, substr($_6c1e753a12d0, 1, -1), $_61152f9ba785, $_5b3eb1c32c0d, $_e790ce3071f2, $_91dba975883a, $_9b3c20ca2a6c, $_231acd6afa62, $_498b56a16a87, $_2d1cac7779b8, $_a56962748828);
+                        $_f60e006196fb .= '(' . $_6c1e753a12d0 . ')';
                     }
-                } else if ($tokens[$i] == "{") {
-                    $rl = self::readl($tokens, "{", "}", $i);
-                    $rl = self::nspartitioning(
-                        $partition,
-                        substr($rl, 1, -1),
-                        $optwister,
-                        $signflag,
-                        $iv1,
-                        $iv2,
-                        $ivs,
-                        $pkyid,
-                        $fast,
-                        $ns,
-                        $ua
-                    );
-                    $part .= "{" . $rl . "}";
-                } else if ($tokens[$i] == "(") {
-                    $rl = self::readl($tokens, "(", ")", $i);
-                    if ($fast) {
-                        $part .= $rl;
-                    } else {
-                        $rl = self::nspartitioning(
-                            $partition,
-                            substr($rl, 1, -1),
-                            $optwister,
-                            $signflag,
-                            $iv1,
-                            $iv2,
-                            $ivs,
-                            $pkyid,
-                            $fast,
-                            $ns,
-                            $ua
-                        );
-                        $part .= "(" . $rl . ")";
-                    }
-                } else if (is_array($tokens[$i])) {
-                    $part .= $tokens[$i][1];
-                } else {
-                    $part .= $tokens[$i];
-                }
+                } else if (is_array($_ce467557df24[$_44af9f79ea06])) $_f60e006196fb .= $_ce467557df24[$_44af9f79ea06][1];
+                else $_f60e006196fb .= $_ce467557df24[$_44af9f79ea06];
             }
-            if (trim($part) !== "") {
-                $part = $ns . "return $part;";
-                $ua[] = count($partition);
-                if (!isset($partition[$part])) {
-                    $key = random_bytes(16);
-                    $partition[$part] = [
-                        count($partition),
-                        $key,
-                        self::partition_encode($part, $key, $iv1, $iv2, $ivs),
+            if (trim($_f60e006196fb) !== '') {
+                $_f60e006196fb = $_2d1cac7779b8 . "return $_f60e006196fb;";
+                $_a56962748828[] = count($_5a71f81a43eb);
+                if (!isset($_5a71f81a43eb[$_f60e006196fb])) {
+                    $_d186186a7d16 = random_bytes(16);
+                    $_5a71f81a43eb[$_f60e006196fb] = [
+                        count($_5a71f81a43eb),
+                        $_d186186a7d16,
+                        self::partition_encode($_f60e006196fb, $_d186186a7d16, $_e790ce3071f2, $_91dba975883a, $_9b3c20ca2a6c),
                     ];
                 }
-                $code .=
-                    "eval(\AlomDecoder$signflag::partition_decode(\AlomDecoder$signflag::\$partition[" .
-                    $partition[$part][0] .
-                    "],'" .
-                    base64_encode($partition[$part][1]) .
-                    "','$pkyid'))";
-                $part = "";
-                return $code;
+                $_d5cbf76f6b55 .= "eval(\AlomDecoder$_5b3eb1c32c0d::partition_decode(\AlomDecoder$_5b3eb1c32c0d::\$partition[" . $_5a71f81a43eb[$_f60e006196fb][0] . "],'" . base64_encode($_5a71f81a43eb[$_f60e006196fb][1]) . "','$_231acd6afa62'))";
+                $_f60e006196fb = '';
+                return $_d5cbf76f6b55;
             } else {
-                $code = $ns . $code;
-                $ua[] = count($partition);
-                if (!isset($partition[$code])) {
-                    $key = random_bytes(16);
-                    $partition[$code] = [
-                        count($partition),
-                        $key,
-                        self::partition_encode($code, $key, $iv1, $iv2, $ivs),
+                $_d5cbf76f6b55 = $_2d1cac7779b8 . $_d5cbf76f6b55;
+                $_a56962748828[] = count($_5a71f81a43eb);
+                if (!isset($_5a71f81a43eb[$_d5cbf76f6b55])) {
+                    $_d186186a7d16 = random_bytes(16);
+                    $_5a71f81a43eb[$_d5cbf76f6b55] = [
+                        count($_5a71f81a43eb),
+                        $_d186186a7d16,
+                        self::partition_encode($_d5cbf76f6b55, $_d186186a7d16, $_e790ce3071f2, $_91dba975883a, $_9b3c20ca2a6c),
                     ];
                 }
-                $code =
-                    "if((isset(\$_ALOM_continue)&&\$_ALOM_continue>0)||(isset(\$_ALOM_break)&&\$_ALOM_break>0))return;" .
-                    "\$_ALOM_result=eval(\AlomDecoder$signflag::partition_decode(\AlomDecoder$signflag::\$partition[" .
-                    $partition[$code][0] .
-                    "],'" .
-                    base64_encode($partition[$code][1]) .
-                    "','$pkyid'));if(isset(\$_ALOM_return))return \$_ALOM_result;";
+                $_d5cbf76f6b55 = "if((isset(\$_ALOM_continue)&&\$_ALOM_continue>0)||(isset(\$_ALOM_break)&&\$_ALOM_break>0))return;" . "\$_ALOM_result=eval(\AlomDecoder$_5b3eb1c32c0d::partition_decode(\AlomDecoder$_5b3eb1c32c0d::\$partition[" . $_5a71f81a43eb[$_d5cbf76f6b55][0] . "],'" . base64_encode($_5a71f81a43eb[$_d5cbf76f6b55][1]) . "','$_231acd6afa62'));if(isset(\$_ALOM_return))return \$_ALOM_result;";
             }
-            return $code;
+            return $_d5cbf76f6b55;
         }
 
-        public static function partitioning(
-            &$ua,
-            &$partition,
-            $code,
-            $optwister,
-            $signflag,
-            $iv1,
-            $iv2,
-            $ivs,
-            $pkyid,
-            $fast = FALSE
-        )
+        public static function partitioning(&$_a56962748828, &$_5a71f81a43eb, $_d5cbf76f6b55, $_61152f9ba785, $_5b3eb1c32c0d, $_e790ce3071f2, $_91dba975883a, $_9b3c20ca2a6c, $_231acd6afa62, $_498b56a16a87 = FALSE)
         {
-            $tokens = token_get_all("<?" . "php $code");
-            array_shift($tokens);
-            $pkyid = base64_encode($pkyid);
-            $code = $ns = "";
-            $i = 0;
-            while (
-                isset($tokens[$i]) &&
-                ((is_array($tokens[$i]) &&
-                        in_array($tokens[$i][0], [
+            $_ce467557df24 = token_get_all("<?" . "php $_d5cbf76f6b55");
+            array_shift($_ce467557df24);
+            $_231acd6afa62 = base64_encode($_231acd6afa62);
+            $_d5cbf76f6b55 = $_2d1cac7779b8 = '';
+            $_44af9f79ea06 = 0;
+            while (isset($_ce467557df24[$_44af9f79ea06]) && ((is_array($_ce467557df24[$_44af9f79ea06]) && in_array($_ce467557df24[$_44af9f79ea06][0], [
                             T_WHITESPACE,
                             T_COMMENT,
                             T_DOC_COMMENT,
-                        ])) ||
-                    $tokens[$i] == ";")
-            ) {
-                $code .= is_array($tokens[$i])
-                    ? $tokens[$i++][1]
-                    : $tokens[$i++];
-            }
-            if (
-                isset($tokens[$i]) &&
-                is_array($tokens[$i]) &&
-                $tokens[$i][0] == T_NAMESPACE
-            ) {
-                $ns .= $tokens[$i++][1];
-                while (
-                    is_array($tokens[$i]) &&
-                    in_array($tokens[$i][0], [
+                        ])) || $_ce467557df24[$_44af9f79ea06] == ';')) $_d5cbf76f6b55 .= is_array($_ce467557df24[$_44af9f79ea06]) ? $_ce467557df24[$_44af9f79ea06++][1] : $_ce467557df24[$_44af9f79ea06++];
+            if (isset($_ce467557df24[$_44af9f79ea06]) && is_array($_ce467557df24[$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06][0] == T_NAMESPACE) {
+                $_2d1cac7779b8 .= $_ce467557df24[$_44af9f79ea06++][1];
+                while (is_array($_ce467557df24[$_44af9f79ea06]) && in_array($_ce467557df24[$_44af9f79ea06][0], [
                         T_WHITESPACE,
                         T_STRING,
                         T_NS_SEPARATOR,
-                    ])
-                ) {
-                    $ns .= $tokens[$i++][1];
-                }
-                if ($tokens[$i] == "{") {
-                    $block = substr(self::readl($tokens, "{", "}", $i), 1, -1);
-                    ++$i;
-                    while (
-                        isset($tokens[$i]) &&
-                        ((is_array($tokens[$i]) &&
-                                in_array($tokens[$i][0], [
+                    ])) $_2d1cac7779b8 .= $_ce467557df24[$_44af9f79ea06++][1];
+                if ($_ce467557df24[$_44af9f79ea06] == '{') {
+                    $_22a0069e993a = substr(self::readl($_ce467557df24, '{', '}', $_44af9f79ea06), 1, -1);
+                    ++$_44af9f79ea06;
+                    while (isset($_ce467557df24[$_44af9f79ea06]) && ((is_array($_ce467557df24[$_44af9f79ea06]) && in_array($_ce467557df24[$_44af9f79ea06][0], [
                                     T_WHITESPACE,
                                     T_COMMENT,
                                     T_DOC_COMMENT,
-                                ])) ||
-                            $tokens[$i] == ";")
-                    ) {
-                        $ns .= is_array($tokens[$i])
-                            ? $tokens[$i++][1]
-                            : $tokens[$i++];
-                    }
-                    $block = self::nspartitioning(
-                        $partition,
-                        $block,
-                        $optwister,
-                        $signflag,
-                        $iv1,
-                        $iv2,
-                        $ivs,
-                        $pkyid,
-                        $fast,
-                        $ns
-                    );
-                    $code .= $block;
-                    $ns = "";
-                    while (
-                        isset($tokens[$i]) &&
-                        is_array($tokens[$i]) &&
-                        $tokens[$i][0] == T_NAMESPACE
-                    ) {
-                        $ns .= $tokens[$i++][1];
-                        while (isset($tokens[$i]) && $tokens[$i] != "{") {
-                            $ns .= is_array($tokens[$i])
-                                ? $tokens[$i++][1]
-                                : $tokens[$i++];
-                        }
-                        $block = substr(
-                            self::readl($tokens, "{", "}", $i),
-                            1,
-                            -1
-                        );
-                        ++$i;
-                        while (
-                            isset($tokens[$i]) &&
-                            ((is_array($tokens[$i]) &&
-                                    in_array($tokens[$i][0], [
+                                ])) || $_ce467557df24[$_44af9f79ea06] == ';')) $_2d1cac7779b8 .= is_array($_ce467557df24[$_44af9f79ea06]) ? $_ce467557df24[$_44af9f79ea06++][1] : $_ce467557df24[$_44af9f79ea06++];
+                    $_22a0069e993a = self::nspartitioning($_5a71f81a43eb, $_22a0069e993a, $_61152f9ba785, $_5b3eb1c32c0d, $_e790ce3071f2, $_91dba975883a, $_9b3c20ca2a6c, $_231acd6afa62, $_498b56a16a87, $_2d1cac7779b8);
+                    $_d5cbf76f6b55 .= $_22a0069e993a;
+                    $_2d1cac7779b8 = '';
+                    while (isset($_ce467557df24[$_44af9f79ea06]) && is_array($_ce467557df24[$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06][0] == T_NAMESPACE) {
+                        $_2d1cac7779b8 .= $_ce467557df24[$_44af9f79ea06++][1];
+                        while (isset($_ce467557df24[$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06] != '{') $_2d1cac7779b8 .= is_array($_ce467557df24[$_44af9f79ea06]) ? $_ce467557df24[$_44af9f79ea06++][1] : $_ce467557df24[$_44af9f79ea06++];
+                        $_22a0069e993a = substr(self::readl($_ce467557df24, '{', '}', $_44af9f79ea06), 1, -1);
+                        ++$_44af9f79ea06;
+                        while (isset($_ce467557df24[$_44af9f79ea06]) && ((is_array($_ce467557df24[$_44af9f79ea06]) && in_array($_ce467557df24[$_44af9f79ea06][0], [
                                         T_WHITESPACE,
                                         T_COMMENT,
                                         T_DOC_COMMENT,
-                                    ])) ||
-                                $tokens[$i] == ";")
-                        ) {
-                            $ns .= is_array($tokens[$i])
-                                ? $tokens[$i++][1]
-                                : $tokens[$i++];
-                        }
-                        $block = self::nspartitioning(
-                            $partition,
-                            $block,
-                            $optwister,
-                            $signflag,
-                            $iv1,
-                            $iv2,
-                            $ivs,
-                            $pkyid,
-                            $fast,
-                            $ns,
-                            $ua
-                        );
-                        $code .= $block;
-                        $ns = "";
+                                    ])) || $_ce467557df24[$_44af9f79ea06] == ';')) $_2d1cac7779b8 .= is_array($_ce467557df24[$_44af9f79ea06]) ? $_ce467557df24[$_44af9f79ea06++][1] : $_ce467557df24[$_44af9f79ea06++];
+                        $_22a0069e993a = self::nspartitioning($_5a71f81a43eb, $_22a0069e993a, $_61152f9ba785, $_5b3eb1c32c0d, $_e790ce3071f2, $_91dba975883a, $_9b3c20ca2a6c, $_231acd6afa62, $_498b56a16a87, $_2d1cac7779b8, $_a56962748828);
+                        $_d5cbf76f6b55 .= $_22a0069e993a;
+                        $_2d1cac7779b8 = '';
                     }
                 } else {
-                    $ns .= $tokens[$i++];
-                    while (
-                        isset($tokens[$i]) &&
-                        ((is_array($tokens[$i]) &&
-                                in_array($tokens[$i][0], [
+                    $_2d1cac7779b8 .= $_ce467557df24[$_44af9f79ea06++];
+                    while (isset($_ce467557df24[$_44af9f79ea06]) && ((is_array($_ce467557df24[$_44af9f79ea06]) && in_array($_ce467557df24[$_44af9f79ea06][0], [
                                     T_WHITESPACE,
                                     T_COMMENT,
                                     T_DOC_COMMENT,
-                                ])) ||
-                            $tokens[$i] == ";")
-                    ) {
-                        $ns .= is_array($tokens[$i])
-                            ? $tokens[$i++][1]
-                            : $tokens[$i++];
-                    }
-                    while (
-                        isset($tokens[$i]) &&
-                        is_array($tokens[$i]) &&
-                        $tokens[$i][0] == T_NAMESPACE
-                    ) {
-                        $ns .= $tokens[$i++][1];
-                        while (
-                            is_array($tokens[$i]) &&
-                            in_array($tokens[$i][0], [
+                                ])) || $_ce467557df24[$_44af9f79ea06] == ';')) $_2d1cac7779b8 .= is_array($_ce467557df24[$_44af9f79ea06]) ? $_ce467557df24[$_44af9f79ea06++][1] : $_ce467557df24[$_44af9f79ea06++];
+                    while (isset($_ce467557df24[$_44af9f79ea06]) && is_array($_ce467557df24[$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06][0] == T_NAMESPACE) {
+                        $_2d1cac7779b8 .= $_ce467557df24[$_44af9f79ea06++][1];
+                        while (is_array($_ce467557df24[$_44af9f79ea06]) && in_array($_ce467557df24[$_44af9f79ea06][0], [
                                 T_WHITESPACE,
                                 T_STRING,
                                 T_NS_SEPARATOR,
-                            ])
-                        ) {
-                            $ns .= is_array($tokens[$i])
-                                ? $tokens[$i++][1]
-                                : $tokens[$i++];
-                        }
-                        $ns .= $tokens[$i++];
-                        while (
-                            isset($tokens[$i]) &&
-                            ((is_array($tokens[$i]) &&
-                                    in_array($tokens[$i][0], [
+                            ])) $_2d1cac7779b8 .= is_array($_ce467557df24[$_44af9f79ea06]) ? $_ce467557df24[$_44af9f79ea06++][1] : $_ce467557df24[$_44af9f79ea06++];
+                        $_2d1cac7779b8 .= $_ce467557df24[$_44af9f79ea06++];
+                        while (isset($_ce467557df24[$_44af9f79ea06]) && ((is_array($_ce467557df24[$_44af9f79ea06]) && in_array($_ce467557df24[$_44af9f79ea06][0], [
                                         T_WHITESPACE,
                                         T_COMMENT,
                                         T_DOC_COMMENT,
-                                    ])) ||
-                                $tokens[$i] == ";")
-                        ) {
-                            $ns .= is_array($tokens[$i])
-                                ? $tokens[$i++][1]
-                                : $tokens[$i++];
-                        }
+                                    ])) || $_ce467557df24[$_44af9f79ea06] == ';')) $_2d1cac7779b8 .= is_array($_ce467557df24[$_44af9f79ea06]) ? $_ce467557df24[$_44af9f79ea06++][1] : $_ce467557df24[$_44af9f79ea06++];
                     }
-                    $block = "";
-                    for (; isset($tokens[$i]); ++$i) {
-                        $block .= is_array($tokens[$i])
-                            ? $tokens[$i][1]
-                            : $tokens[$i];
-                    }
-                    $block = self::nspartitioning(
-                        $partition,
-                        $block,
-                        $optwister,
-                        $signflag,
-                        $iv1,
-                        $iv2,
-                        $ivs,
-                        $pkyid,
-                        $fast,
-                        $ns,
-                        $ua
-                    );
-                    $code .= $block;
+                    $_22a0069e993a = '';
+                    for (; isset($_ce467557df24[$_44af9f79ea06]); ++$_44af9f79ea06) $_22a0069e993a .= is_array($_ce467557df24[$_44af9f79ea06]) ? $_ce467557df24[$_44af9f79ea06][1] : $_ce467557df24[$_44af9f79ea06];
+                    $_22a0069e993a = self::nspartitioning($_5a71f81a43eb, $_22a0069e993a, $_61152f9ba785, $_5b3eb1c32c0d, $_e790ce3071f2, $_91dba975883a, $_9b3c20ca2a6c, $_231acd6afa62, $_498b56a16a87, $_2d1cac7779b8, $_a56962748828);
+                    $_d5cbf76f6b55 .= $_22a0069e993a;
                 }
             } else {
-                $block = "";
-                for (; isset($tokens[$i]); ++$i) {
-                    $block .= is_array($tokens[$i])
-                        ? $tokens[$i][1]
-                        : $tokens[$i];
-                }
-                $block = self::nspartitioning(
-                    $partition,
-                    $block,
-                    $optwister,
-                    $signflag,
-                    $iv1,
-                    $iv2,
-                    $ivs,
-                    $pkyid,
-                    $fast,
-                    $ns,
-                    $ua
-                );
-                $code .= $block;
+                $_22a0069e993a = '';
+                for (; isset($_ce467557df24[$_44af9f79ea06]); ++$_44af9f79ea06) $_22a0069e993a .= is_array($_ce467557df24[$_44af9f79ea06]) ? $_ce467557df24[$_44af9f79ea06][1] : $_ce467557df24[$_44af9f79ea06];
+                $_22a0069e993a = self::nspartitioning($_5a71f81a43eb, $_22a0069e993a, $_61152f9ba785, $_5b3eb1c32c0d, $_e790ce3071f2, $_91dba975883a, $_9b3c20ca2a6c, $_231acd6afa62, $_498b56a16a87, $_2d1cac7779b8, $_a56962748828);
+                $_d5cbf76f6b55 .= $_22a0069e993a;
             }
-            $nspartition = $partition;
-            $partition = [];
-            foreach ($nspartition as $part) {
-                $partition[$part[0]] = $part[2];
-            }
-            return $code;
+            $_09fe86acdf26 = $_5a71f81a43eb;
+            $_5a71f81a43eb = [];
+            foreach ($_09fe86acdf26 as $_f60e006196fb) $_5a71f81a43eb[$_f60e006196fb[0]] = $_f60e006196fb[2];
+            return $_d5cbf76f6b55;
         }
 
-        public static function getcallable($callable)
+        public static function getcallable($_a2315524abb8)
         {
-            if (is_string($callable)) {
-                $callable = strtolower($callable);
-                if (in_array($callable, ["print", "echo"])) {
-                    return "";
-                }
-                if (in_array($callable, ["exit", "die"])) {
-                    return $callable . ";";
-                }
+            if (is_string($_a2315524abb8)) {
+                $_a2315524abb8 = strtolower($_a2315524abb8);
+                if (in_array($_a2315524abb8, ["print", "echo"])) return '';
+                if (in_array($_a2315524abb8, ["exit", "die"])) return $_a2315524abb8 . ';';
             }
-            if (is_object($callable) || is_numeric($callable)) {
-                $reflection = new ReflectionFunction($callable);
-            } else if (is_string($callable)) {
-                $callable = explode("::", $callable, 2);
-                if (!isset($callable[1])) {
-                    $reflection = new ReflectionFunction($callable[0]);
+            if (is_object($_a2315524abb8) || is_numeric($_a2315524abb8)) $_52209a9cc716 = new ReflectionFunction($_a2315524abb8); else if (is_string($_a2315524abb8)) {
+                $_a2315524abb8 = explode('::', $_a2315524abb8, 2);
+                if (!isset($_a2315524abb8[1])) {
+                    $_52209a9cc716 = new ReflectionFunction($_a2315524abb8[0]);
                 } else {
-                    $reflection = new ReflectionMethod(
-                        $callable[0],
-                        $callable[1]
-                    );
+                    $_52209a9cc716 = new ReflectionMethod($_a2315524abb8[0], $_a2315524abb8[1]);
                 }
-            } else if (is_array($callable)) {
-                if (!isset($callable[0])) {
-                    return "";
-                }
-                if (!isset($callable[1])) {
-                    $reflection = new ReflectionFunction($callable[0]);
+            } else if (is_array($_a2315524abb8)) {
+                if (!isset($_a2315524abb8[0])) return '';
+                if (!isset($_a2315524abb8[1])) {
+                    $_52209a9cc716 = new ReflectionFunction($_a2315524abb8[0]);
                 } else {
-                    $reflection = new ReflectionMethod(
-                        $callable[0],
-                        $callable[1]
-                    );
+                    $_52209a9cc716 = new ReflectionMethod($_a2315524abb8[0], $_a2315524abb8[1]);
                 }
-            } else {
-                return "";
-            }
-            $filename = $reflection->getFileName();
-            if (!$filename) {
-                return $callable . "();";
-            }
-            $start = $reflection->getStartLine() - 1;
-            $end = $reflection->getEndLine();
-            $source = file($filename);
-            $source = array_slice($source, $start, $end - $start);
-            $source = implode("", $source);
-            $name = strtolower($reflection->getName());
-            $tokens = token_get_all("<" . "?php $source");
-            for ($i = 0; isset($tokens[$i]); ++$i) {
-                if (
-                    is_array($tokens[$i]) &&
-                    ($tokens[$i][0] == T_FN || $tokens[$i][0] == T_FUNCTION)
-                ) {
-                    if (
-                        is_array($tokens[++$i]) &&
-                        $tokens[$i][0] == T_WHITESPACE
-                    ) {
-                        ++$i;
-                    }
-                    if ($name != "{closure}") {
-                        if (
-                            !is_array($tokens[$i]) ||
-                            $tokens[$i][0] != T_STRING ||
-                            strtolower($tokens[$i][1]) != $name
-                        ) {
-                            --$i;
-                            continue;
-                        }
-                        if (
-                            is_array($tokens[++$i]) &&
-                            $tokens[$i][0] == T_WHITESPACE
-                        ) {
-                            ++$i;
-                        }
-                    }
-                    if ($tokens[$i] != "(") {
-                        --$i;
+            } else return '';
+            $_4fc9ab696503 = $_52209a9cc716->getFileName();
+            if (!$_4fc9ab696503) return $_a2315524abb8 . '();';
+            $_83aa7a8f66c7 = $_52209a9cc716->getStartLine() - 1;
+            $_8a1ef48bd59b = $_52209a9cc716->getEndLine();
+            $_43e6ec2ea9c2 = file($_4fc9ab696503);
+            $_43e6ec2ea9c2 = array_slice($_43e6ec2ea9c2, $_83aa7a8f66c7, $_8a1ef48bd59b - $_83aa7a8f66c7);
+            $_43e6ec2ea9c2 = implode('', $_43e6ec2ea9c2);
+            $_fed760c6c858 = strtolower($_52209a9cc716->getName());
+            $_ce467557df24 = token_get_all("<" . "?php $_43e6ec2ea9c2");
+            for ($_44af9f79ea06 = 0; isset($_ce467557df24[$_44af9f79ea06]); ++$_44af9f79ea06) if (is_array($_ce467557df24[$_44af9f79ea06]) && ($_ce467557df24[$_44af9f79ea06][0] == T_FN || $_ce467557df24[$_44af9f79ea06][0] == T_FUNCTION)) {
+                if (is_array($_ce467557df24[++$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06][0] == T_WHITESPACE) ++$_44af9f79ea06;
+                if ($_fed760c6c858 != '{closure}') {
+                    if (!is_array($_ce467557df24[$_44af9f79ea06]) || $_ce467557df24[$_44af9f79ea06][0] != T_STRING || strtolower($_ce467557df24[$_44af9f79ea06][1]) != $_fed760c6c858) {
+                        --$_44af9f79ea06;
                         continue;
                     }
-                    self::readl($tokens, "(", ")", $i);
-                    if (
-                        is_array($tokens[++$i]) &&
-                        $tokens[$i][0] == T_WHITESPACE
-                    ) {
-                        ++$i;
+                    if (is_array($_ce467557df24[++$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06][0] == T_WHITESPACE) ++$_44af9f79ea06;
+                }
+                if ($_ce467557df24[$_44af9f79ea06] != '(') {
+                    --$_44af9f79ea06;
+                    continue;
+                }
+                self::readl($_ce467557df24, '(', ')', $_44af9f79ea06);
+                if (is_array($_ce467557df24[++$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06][0] == T_WHITESPACE) ++$_44af9f79ea06;
+                if (is_array($_ce467557df24[$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06][0] == T_USE) {
+                    if (is_array($_ce467557df24[++$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06][0] == T_WHITESPACE) ++$_44af9f79ea06;
+                    if ($_ce467557df24[$_44af9f79ea06] != '(') {
+                        --$_44af9f79ea06;
+                        continue;
                     }
-                    if (is_array($tokens[$i]) && $tokens[$i][0] == T_USE) {
-                        if (
-                            is_array($tokens[++$i]) &&
-                            $tokens[$i][0] == T_WHITESPACE
-                        ) {
-                            ++$i;
-                        }
-                        if ($tokens[$i] != "(") {
-                            --$i;
-                            continue;
-                        }
-                        self::readl($tokens, "(", ")", $i);
-                        if (
-                            is_array($tokens[++$i]) &&
-                            $tokens[$i][0] == T_WHITESPACE
-                        ) {
-                            ++$i;
-                        }
+                    self::readl($_ce467557df24, '(', ')', $_44af9f79ea06);
+                    if (is_array($_ce467557df24[++$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06][0] == T_WHITESPACE) ++$_44af9f79ea06;
+                }
+                if ($_ce467557df24[$_44af9f79ea06] == ':') {
+                    if (is_array($_ce467557df24[++$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06][0] == T_WHITESPACE) ++$_44af9f79ea06;
+                    while (is_array($_ce467557df24[$_44af9f79ea06]) && ($_ce467557df24[$_44af9f79ea06][0] == T_STRING || $_ce467557df24[$_44af9f79ea06][0] == T_NS_SEPARATOR || $_ce467557df24[$_44af9f79ea06][0] == T_WHITESPACE)) ++$_44af9f79ea06;
+                }
+                if (is_array($_ce467557df24[$_44af9f79ea06])) {
+                    if ($_ce467557df24[$_44af9f79ea06][0] != T_DOUBLE_ARROW) {
+                        --$_44af9f79ea06;
+                        continue;
                     }
-                    if ($tokens[$i] == ":") {
-                        if (
-                            is_array($tokens[++$i]) &&
-                            $tokens[$i][0] == T_WHITESPACE
-                        ) {
-                            ++$i;
-                        }
-                        while (
-                            is_array($tokens[$i]) &&
-                            ($tokens[$i][0] == T_STRING ||
-                                $tokens[$i][0] == T_NS_SEPARATOR ||
-                                $tokens[$i][0] == T_WHITESPACE)
-                        ) {
-                            ++$i;
-                        }
+                    if (is_array($_ce467557df24[++$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06][0] == T_WHITESPACE) ++$_44af9f79ea06;
+                    $_23bf89ec40b6 = 'return ';
+                    for (; isset($_ce467557df24[$_44af9f79ea06]); ++$_44af9f79ea06) if (in_array($_ce467557df24[$_44af9f79ea06], [
+                        ')',
+                        ']',
+                        '}',
+                        ',',
+                        ';',
+                    ])) break; else if (is_array($_ce467557df24[$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06][0] == T_CLOSE_TAG) break;
+                    else if (is_array($_ce467557df24[$_44af9f79ea06])) $_23bf89ec40b6 .= $_ce467557df24[$_44af9f79ea06][1];
+                    else $_23bf89ec40b6 .= $_ce467557df24[$_44af9f79ea06];
+                    $_23bf89ec40b6 .= ';';
+                    return $_23bf89ec40b6;
+                } else {
+                    if ($_ce467557df24[$_44af9f79ea06] != '{') {
+                        --$_44af9f79ea06;
+                        continue;
                     }
-                    if (is_array($tokens[$i])) {
-                        if ($tokens[$i][0] != T_DOUBLE_ARROW) {
-                            --$i;
-                            continue;
+                    $_23bf89ec40b6 = self::readl($_ce467557df24, '{', '}', $_44af9f79ea06);
+                    $_23bf89ec40b6 = trim(substr($_23bf89ec40b6, 1, -1));
+                    return $_23bf89ec40b6;
+                }
+            }
+            return '';
+        }
+
+        public static function sizeformat($_9f3b56b90a07)
+        {
+            if ($_9f3b56b90a07 >= 1024 * 1024 * 1024 * 1024 * 1024 * 1024) return round($_9f3b56b90a07 / 1024 / 1024 / 1024 / 1024 / 1024 / 1024, 1) . "zb";
+            if ($_9f3b56b90a07 >= 1024 * 1024 * 1024 * 1024 * 1024) return round($_9f3b56b90a07 / 1024 / 1024 / 1024 / 1024 / 1024, 1) . "eb";
+            if ($_9f3b56b90a07 >= 1024 * 1024 * 1024 * 1024) return round($_9f3b56b90a07 / 1024 / 1024 / 1024 / 1024, 1) . "tb";
+            if ($_9f3b56b90a07 >= 1024 * 1024 * 1024) return round($_9f3b56b90a07 / 1024 / 1024 / 1024, 1) . "gb";
+            if ($_9f3b56b90a07 >= 1024 * 1024) return round($_9f3b56b90a07 / 1024 / 1024, 1) . "mb";
+            if ($_9f3b56b90a07 >= 1024) return round($_9f3b56b90a07 / 1024, 1) . "kb";
+            return round($_9f3b56b90a07) . "b";
+        }
+
+        public static function license_key_generate($_243570ef6ff2 = NULL)
+        {
+            if ($_243570ef6ff2 === NULL) $_d186186a7d16 = random_bytes(32); else $_d186186a7d16 = hash('sha256', "Alom License N&.~>.ZYv;V5lN0h " . (string)$_243570ef6ff2 . '%');
+            return bin2hex($_d186186a7d16);
+        }
+
+        public static function license_find_code($_5d1ad1d86b62)
+        {
+            if (!preg_match("/license code: (\[[0-9a-fA-F*-]+])/i", $_5d1ad1d86b62, $_358662e4fc83)) return FALSE;
+            return $_358662e4fc83[1];
+        }
+
+        public static function license_insert_code($_5d1ad1d86b62, $_d5cbf76f6b55 = '[************************************************-********************************-****************]') { return preg_replace("/license code: (\[[0-9a-fA-F*-]+])/i", 'license code: ' . $_d5cbf76f6b55, $_5d1ad1d86b62); }
+
+        public static function license_null_systemhash_generate() { return "NULL SYSTEMHASH X</k/LMI3M7Et@\*\*"; }
+
+        public static function license_systemhash_generate($_cc7b9ef7c49d, $_71ee7a2be8bc, $_70e3f7fbcdd8, $_a58d25e9a4f2)
+        {
+            $_62e8a0d7de46 = "SYSTEMHASH Xcpv{E^Bk9eq\*VIm";
+            $_62e8a0d7de46 .= "un:$_cc7b9ef7c49d\n";
+            $_62e8a0d7de46 .= "us:$_71ee7a2be8bc\n";
+            $_62e8a0d7de46 .= "ip:$_70e3f7fbcdd8\n";
+            $_62e8a0d7de46 .= "hn:$_a58d25e9a4f2\n";
+            return md5($_62e8a0d7de46, TRUE);
+        }
+
+        public static function license_code_encrypt($_03b34b704926, $_cc45d601472a, $_07308be74dc0, $_85e9b296e2f6)
+        {
+            $_7520f8b4b421 = self::$_7520f8b4b421;
+            $_468b0eed41c8 = self::$_468b0eed41c8;
+            if (strlen($_85e9b296e2f6) == 64) $_85e9b296e2f6 = hex2bin($_85e9b296e2f6); else if (strlen($_85e9b296e2f6) != 32) $_85e9b296e2f6 = hash('sha256', $_85e9b296e2f6, TRUE);
+            if (strlen($_07308be74dc0) != 16) $_07308be74dc0 = md5($_07308be74dc0, TRUE);
+            $_03b34b704926 = (int)$_03b34b704926;
+            $_cc45d601472a = (int)$_cc45d601472a;
+            $_01f86327f477 = "%zqYJ3}rX\xfeZ2hA.]Ss0(Xv1z";
+            $_2f79040d85dc = $_01f86327f477 . $_07308be74dc0 . pack("N2", $_03b34b704926 ^ 0xf9a02eec, $_cc45d601472a ^ 0x2904a19b);
+            $_2f79040d85dc = array_values(unpack('C*', $_2f79040d85dc));
+            $_85e9b296e2f6 = array_values(unpack('C*', $_85e9b296e2f6));
+            for ($_d87f4c1f5462 = 0; $_d87f4c1f5462 < 52; ++$_d87f4c1f5462) {
+                for ($_44af9f79ea06 = 48 - 1; $_44af9f79ea06 >= 0; --$_44af9f79ea06) {
+                    $_8bd220e50993 = (7 * $_44af9f79ea06 + 1) % 48;
+                    $_76ea69771708 = (3 * $_44af9f79ea06 + $_8bd220e50993 + 7) % 48;
+                    $_40d1e3c43b78 = (11 * $_44af9f79ea06 + $_76ea69771708 + 5) % 48;
+                    if ($_8bd220e50993 == $_44af9f79ea06) $_8bd220e50993 = (3 * $_8bd220e50993 + 5) % 48;
+                    if ($_76ea69771708 == $_44af9f79ea06) $_76ea69771708 = (7 * $_76ea69771708 + 13) % 48;
+                    if ($_40d1e3c43b78 == $_44af9f79ea06) $_40d1e3c43b78 = (11 * $_40d1e3c43b78 + 3) % 48;
+                    $_4d693db07b39 = $_85e9b296e2f6[(3 * $_40d1e3c43b78 + 5 * $_44af9f79ea06 + 7) % 32];
+                    $_6dcc89ef5930 = $_85e9b296e2f6[(5 * $_8bd220e50993 + 7 * $_44af9f79ea06 + 11) % 32];
+                    $_b87938c399a1 = $_85e9b296e2f6[(7 * $_76ea69771708 + 11 * $_44af9f79ea06 + 3) % 32];
+                    for ($_9e721865cfe7 = 0; $_9e721865cfe7 < 2; ++$_9e721865cfe7) {
+                        $_4d693db07b39 = $_85e9b296e2f6[(3 * $_40d1e3c43b78 + 5 * $_b87938c399a1 + 7 * $_44af9f79ea06 + 11) % 32];
+                        $_6dcc89ef5930 = $_85e9b296e2f6[(5 * $_8bd220e50993 + 7 * $_4d693db07b39 + 11 * $_44af9f79ea06 + 3) % 32];
+                        $_b87938c399a1 = $_85e9b296e2f6[(7 * $_76ea69771708 + 11 * $_6dcc89ef5930 + 3 * $_44af9f79ea06 + 5) % 32];
+                    }
+                    $_4d693db07b39 = (3 * $_40d1e3c43b78 + 5 * $_b87938c399a1 + 7 * $_44af9f79ea06 + 11) % 32;
+                    $_6dcc89ef5930 = (5 * $_8bd220e50993 + 7 * $_4d693db07b39 + 11 * $_44af9f79ea06 + 3) % 32;
+                    $_b87938c399a1 = (7 * $_76ea69771708 + 11 * $_6dcc89ef5930 + 3 * $_44af9f79ea06 + 5) % 32;
+                    $_2f79040d85dc[$_44af9f79ea06] = $_468b0eed41c8[$_2f79040d85dc[$_44af9f79ea06] ^ $_8bd220e50993] ^ $_85e9b296e2f6[$_b87938c399a1] ^ $_7520f8b4b421[$_2f79040d85dc[$_76ea69771708] ^ $_2f79040d85dc[$_40d1e3c43b78]];
+                    $_2f79040d85dc[$_44af9f79ea06] = $_468b0eed41c8[$_2f79040d85dc[$_44af9f79ea06] ^ $_40d1e3c43b78] ^ $_85e9b296e2f6[$_b87938c399a1] ^ $_7520f8b4b421[$_2f79040d85dc[$_8bd220e50993] & $_2f79040d85dc[$_76ea69771708]];
+                    $_2f79040d85dc[$_44af9f79ea06] = $_468b0eed41c8[$_2f79040d85dc[$_44af9f79ea06] ^ $_b87938c399a1] ^ $_85e9b296e2f6[$_6dcc89ef5930] ^ $_7520f8b4b421[$_2f79040d85dc[$_8bd220e50993] | $_2f79040d85dc[$_40d1e3c43b78]];
+                    $_2f79040d85dc[$_44af9f79ea06] = $_468b0eed41c8[$_2f79040d85dc[$_44af9f79ea06] ^ $_6dcc89ef5930] ^ $_85e9b296e2f6[$_4d693db07b39] ^ $_7520f8b4b421[$_2f79040d85dc[$_76ea69771708] & $_2f79040d85dc[$_40d1e3c43b78]];
+                    $_2f79040d85dc[$_44af9f79ea06] = $_468b0eed41c8[$_2f79040d85dc[$_44af9f79ea06] ^ $_4d693db07b39] ^ $_85e9b296e2f6[$_4d693db07b39] ^ $_7520f8b4b421[$_2f79040d85dc[$_8bd220e50993] ^ $_2f79040d85dc[$_76ea69771708]];
+                }
+            }
+            array_unshift($_2f79040d85dc, 'C*');
+            $_2f79040d85dc = bin2hex(call_user_func_array('pack', $_2f79040d85dc));
+            return '[' . substr($_2f79040d85dc, 0, 48) . '-' . substr($_2f79040d85dc, 48, 32) . '-' . substr($_2f79040d85dc, 80, 16) . ']';
+        }
+
+        public static function license_code_decrypt($_2f79040d85dc, $_85e9b296e2f6)
+        {
+            $_7520f8b4b421 = self::$_7520f8b4b421;
+            if (strlen($_85e9b296e2f6) == 64) $_85e9b296e2f6 = hex2bin($_85e9b296e2f6); else if (strlen($_85e9b296e2f6) != 32) $_85e9b296e2f6 = hash('sha256', $_85e9b296e2f6, TRUE);
+            $_01f86327f477 = "%zqYJ3}rX\xfeZ2hA.]Ss0(Xv1z";
+            $_2f79040d85dc = hex2bin(str_replace([' ', "\n", "\r", "\t", '-', '[', ']', '*'], '', $_2f79040d85dc));
+            $_2f79040d85dc = array_values(unpack('C*', $_2f79040d85dc));
+            $_85e9b296e2f6 = array_values(unpack('C*', $_85e9b296e2f6));
+            for ($_d87f4c1f5462 = 0; $_d87f4c1f5462 < 52; ++$_d87f4c1f5462) {
+                for ($_44af9f79ea06 = 0; $_44af9f79ea06 < 48; ++$_44af9f79ea06) {
+                    $_8bd220e50993 = (7 * $_44af9f79ea06 + 1) % 48;
+                    $_76ea69771708 = (3 * $_44af9f79ea06 + $_8bd220e50993 + 7) % 48;
+                    $_40d1e3c43b78 = (11 * $_44af9f79ea06 + $_76ea69771708 + 5) % 48;
+                    if ($_8bd220e50993 == $_44af9f79ea06) $_8bd220e50993 = (3 * $_8bd220e50993 + 5) % 48;
+                    if ($_76ea69771708 == $_44af9f79ea06) $_76ea69771708 = (7 * $_76ea69771708 + 13) % 48;
+                    if ($_40d1e3c43b78 == $_44af9f79ea06) $_40d1e3c43b78 = (11 * $_40d1e3c43b78 + 3) % 48;
+                    $_4d693db07b39 = $_85e9b296e2f6[(3 * $_40d1e3c43b78 + 5 * $_44af9f79ea06 + 7) % 32];
+                    $_6dcc89ef5930 = $_85e9b296e2f6[(5 * $_8bd220e50993 + 7 * $_44af9f79ea06 + 11) % 32];
+                    $_b87938c399a1 = $_85e9b296e2f6[(7 * $_76ea69771708 + 11 * $_44af9f79ea06 + 3) % 32];
+                    for ($_9e721865cfe7 = 0; $_9e721865cfe7 < 2; ++$_9e721865cfe7) {
+                        $_4d693db07b39 = $_85e9b296e2f6[(3 * $_40d1e3c43b78 + 5 * $_b87938c399a1 + 7 * $_44af9f79ea06 + 11) % 32];
+                        $_6dcc89ef5930 = $_85e9b296e2f6[(5 * $_8bd220e50993 + 7 * $_4d693db07b39 + 11 * $_44af9f79ea06 + 3) % 32];
+                        $_b87938c399a1 = $_85e9b296e2f6[(7 * $_76ea69771708 + 11 * $_6dcc89ef5930 + 3 * $_44af9f79ea06 + 5) % 32];
+                    }
+                    $_4d693db07b39 = (3 * $_40d1e3c43b78 + 5 * $_b87938c399a1 + 7 * $_44af9f79ea06 + 11) % 32;
+                    $_6dcc89ef5930 = (5 * $_8bd220e50993 + 7 * $_4d693db07b39 + 11 * $_44af9f79ea06 + 3) % 32;
+                    $_b87938c399a1 = (7 * $_76ea69771708 + 11 * $_6dcc89ef5930 + 3 * $_44af9f79ea06 + 5) % 32;
+                    $_2f79040d85dc[$_44af9f79ea06] = $_7520f8b4b421[$_2f79040d85dc[$_44af9f79ea06] ^ $_85e9b296e2f6[$_4d693db07b39] ^ $_7520f8b4b421[$_2f79040d85dc[$_8bd220e50993] ^ $_2f79040d85dc[$_76ea69771708]]] ^ $_4d693db07b39;
+                    $_2f79040d85dc[$_44af9f79ea06] = $_7520f8b4b421[$_2f79040d85dc[$_44af9f79ea06] ^ $_85e9b296e2f6[$_4d693db07b39] ^ $_7520f8b4b421[$_2f79040d85dc[$_76ea69771708] & $_2f79040d85dc[$_40d1e3c43b78]]] ^ $_6dcc89ef5930;
+                    $_2f79040d85dc[$_44af9f79ea06] = $_7520f8b4b421[$_2f79040d85dc[$_44af9f79ea06] ^ $_85e9b296e2f6[$_6dcc89ef5930] ^ $_7520f8b4b421[$_2f79040d85dc[$_8bd220e50993] | $_2f79040d85dc[$_40d1e3c43b78]]] ^ $_b87938c399a1;
+                    $_2f79040d85dc[$_44af9f79ea06] = $_7520f8b4b421[$_2f79040d85dc[$_44af9f79ea06] ^ $_85e9b296e2f6[$_b87938c399a1] ^ $_7520f8b4b421[$_2f79040d85dc[$_8bd220e50993] & $_2f79040d85dc[$_76ea69771708]]] ^ $_40d1e3c43b78;
+                    $_2f79040d85dc[$_44af9f79ea06] = $_7520f8b4b421[$_2f79040d85dc[$_44af9f79ea06] ^ $_85e9b296e2f6[$_b87938c399a1] ^ $_7520f8b4b421[$_2f79040d85dc[$_76ea69771708] ^ $_2f79040d85dc[$_40d1e3c43b78]]] ^ $_8bd220e50993;
+                }
+            }
+            array_unshift($_2f79040d85dc, 'C*');
+            $_2f79040d85dc = call_user_func_array('pack', $_2f79040d85dc);
+            if (substr($_2f79040d85dc, 0, 24) != $_01f86327f477) return FALSE;
+            $_6c0ba4a6c965 = unpack('N2', substr($_2f79040d85dc, 40, 8));
+            return ['systemhash' => substr($_2f79040d85dc, 24, 16), 'ready' => $_6c0ba4a6c965[1] ^ 0xf9a02eec, 'expiration' => $_6c0ba4a6c965[2] ^ 0x2904a19b];
+        }
+
+        public static function gcmake($_d5cbf76f6b55, $_5b3eb1c32c0d, &$_37a746be78db = 0)
+        {
+            $_ce467557df24 = token_get_all($_d5cbf76f6b55);
+            $_bd34d9e828bc = [];
+            for ($_44af9f79ea06 = 0; isset($_ce467557df24[$_44af9f79ea06]); ++$_44af9f79ea06) if (is_array($_ce467557df24[$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06][0] == T_VARIABLE && !in_array($_ce467557df24[$_44af9f79ea06][1], [
+                    '$_ALOM_code',
+                    '$this',
+                ])) {
+                $_bd34d9e828bc[] = [$_37a746be78db + 1, "GLOBALS['", 0];
+                $_37a746be78db += strlen($_ce467557df24[$_44af9f79ea06][1]) + 9;
+                $_bd34d9e828bc[] = [$_37a746be78db, "']", 0];
+                $_37a746be78db += 2;
+            } else if (is_array($_ce467557df24[$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06][0] == T_START_HEREDOC && strpos($_ce467557df24[$_44af9f79ea06][1], "'") === FALSE) {
+                $_37a746be78db += strlen($_ce467557df24[$_44af9f79ea06][1]);
+                for (++$_44af9f79ea06; isset($_ce467557df24[$_44af9f79ea06]) && (!is_array($_ce467557df24[$_44af9f79ea06]) || $_ce467557df24[$_44af9f79ea06][0] != T_END_HEREDOC); ++$_44af9f79ea06) if (is_array($_ce467557df24[$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06][0] == T_VARIABLE && !in_array($_ce467557df24[$_44af9f79ea06][1], [
+                        '$_ALOM_code',
+                        '$this',
+                    ])) {
+                    $_bd34d9e828bc[] = [$_37a746be78db, "{\$GLOBALS['", 1];
+                    $_37a746be78db += strlen($_ce467557df24[$_44af9f79ea06][1]) + 10;
+                    if ($_ce467557df24[++$_44af9f79ea06] == '[') {
+                        if (is_array($_ce467557df24[++$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06][0] == T_STRING) {
+                            $_bd34d9e828bc[] = [$_37a746be78db, "']['", 1];
+                            $_37a746be78db += strlen($_ce467557df24[$_44af9f79ea06][1]) + 4;
+                            $_bd34d9e828bc[] = [$_37a746be78db, "']}", 1];
+                            $_37a746be78db += 3;
+                        } else if (is_array($_ce467557df24[$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06][0] == T_NUM_STRING) {
+                            $_bd34d9e828bc[] = [$_37a746be78db, "'][", 1];
+                            $_37a746be78db += strlen($_ce467557df24[$_44af9f79ea06][1]) + 3;
+                            $_bd34d9e828bc[] = [$_37a746be78db, "]}", 1];
+                            $_37a746be78db += 2;
+                        } else if (is_array($_ce467557df24[$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06][0] == T_VARIABLE) {
+                            $_bd34d9e828bc[] = [$_37a746be78db, "'][\$GLOBALS['", 2];
+                            $_37a746be78db += strlen($_ce467557df24[$_44af9f79ea06][1]) + 12;
+                            $_bd34d9e828bc[] = [$_37a746be78db, "']]}", 1];
+                            $_37a746be78db += 4;
                         }
-                        if (
-                            is_array($tokens[++$i]) &&
-                            $tokens[$i][0] == T_WHITESPACE
-                        ) {
-                            ++$i;
+                        ++$_44af9f79ea06;
+                    } else if (is_array($_ce467557df24[$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06][0] == T_OBJECT_OPERATOR) {
+                        if (is_array($_ce467557df24[++$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06][0] == T_STRING) {
+                            $_bd34d9e828bc[] = [$_37a746be78db, "']", 0];
+                            $_37a746be78db += strlen($_ce467557df24[$_44af9f79ea06][1]) + 4;
+                            $_bd34d9e828bc[] = [$_37a746be78db, "}", 0];
+                            ++$_37a746be78db;
                         }
-                        $str = "return ";
-                        for (; isset($tokens[$i]); ++$i) {
-                            if (
-                            in_array($tokens[$i], [")", "]", "}", ",", ";"])
-                            ) {
-                                break;
-                            } else if (
-                                is_array($tokens[$i]) &&
-                                $tokens[$i][0] == T_CLOSE_TAG
-                            ) {
-                                break;
-                            } else if (is_array($tokens[$i])) {
-                                $str .= $tokens[$i][1];
-                            } else {
-                                $str .= $tokens[$i];
-                            }
-                        }
-                        $str .= ";";
-                        return $str;
                     } else {
-                        if ($tokens[$i] != "{") {
-                            --$i;
-                            continue;
+                        $_bd34d9e828bc[] = [$_37a746be78db, "']}", 0];
+                        $_37a746be78db += 3;
+                        --$_44af9f79ea06;
+                    }
+                } else if (is_array($_ce467557df24[$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06][0] == T_DOLLAR_OPEN_CURLY_BRACES) {
+                    $_ce467557df24[$_44af9f79ea06] = '{';
+                    $_37a746be78db += 2;
+                    $_6c1e753a12d0 = self::readl($_ce467557df24, '{', '}', $_44af9f79ea06);
+                    $_33acc18097b4 = self::gcmake("<" . "?php \$" . substr($_6c1e753a12d0, 1, -1) . ";?" . ">", $_5b3eb1c32c0d, $_37a746be78db);
+                    foreach ($_33acc18097b4 as &$_c003a1341591) $_c003a1341591[0] -= 7;
+                    $_bd34d9e828bc = array_merge($_bd34d9e828bc, $_33acc18097b4);
+                    $_37a746be78db -= 9;
+                } else if (is_array($_ce467557df24[$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06][0] == T_CURLY_OPEN) {
+                    $_ce467557df24[$_44af9f79ea06] = '{';
+                    $_37a746be78db += 2;
+                    $_6c1e753a12d0 = self::readl($_ce467557df24, '{', '}', $_44af9f79ea06);
+                    $_33acc18097b4 = self::gcmake("<" . "?php " . substr($_6c1e753a12d0, 1, -1) . ";?" . ">", $_5b3eb1c32c0d, $_37a746be78db);
+                    foreach ($_33acc18097b4 as &$_c003a1341591) $_c003a1341591[0] -= 7;
+                    $_bd34d9e828bc = array_merge($_bd34d9e828bc, $_33acc18097b4);
+                    $_37a746be78db -= 9;
+                } else if (is_array($_ce467557df24[$_44af9f79ea06])) $_37a746be78db += strlen($_ce467557df24[$_44af9f79ea06][1]);
+                else $_37a746be78db += strlen($_ce467557df24[$_44af9f79ea06]);
+                $_37a746be78db += strlen($_ce467557df24[$_44af9f79ea06][1]);
+            } else if (is_array($_ce467557df24[$_44af9f79ea06])) $_37a746be78db += strlen($_ce467557df24[$_44af9f79ea06][1]);
+            else if ($_ce467557df24[$_44af9f79ea06] == '$') {
+                if ($_ce467557df24[$_44af9f79ea06 + 1] == '{') {
+                    $_44af9f79ea06 += 2;
+                    $_bd34d9e828bc[] = [$_37a746be78db + 1, "GLOBALS[", 1];
+                    $_37a746be78db += 9;
+                    $_6bd7e3077fe8 = self::readpe($_ce467557df24, $_44af9f79ea06);
+                    $_e5ba1f1551d1 = self::gcmake("<" . "?php $_6bd7e3077fe8;?" . ">", $_5b3eb1c32c0d, $_37a746be78db);
+                    foreach ($_e5ba1f1551d1 as &$_745187e78d5c) $_745187e78d5c[0] -= 6;
+                    $_bd34d9e828bc = array_merge($_bd34d9e828bc, $_e5ba1f1551d1);
+                    $_37a746be78db -= 9;
+                    $_bd34d9e828bc[] = [$_37a746be78db, "]", 1];
+                } else {
+                    $_9499c2a16c8e = 1;
+                    while ($_ce467557df24[++$_44af9f79ea06] == '$') ++$_9499c2a16c8e;
+                    for ($_d87f4c1f5462 = 0; $_d87f4c1f5462 < $_9499c2a16c8e; ++$_d87f4c1f5462) {
+                        $_bd34d9e828bc[] = [$_37a746be78db + 1, "GLOBALS[", 0];
+                        $_37a746be78db += 9;
+                    }
+                    if ($_ce467557df24[$_44af9f79ea06][0] == T_VARIABLE) {
+                        $_bd34d9e828bc[] = [$_37a746be78db + 1, 0];
+                        $_37a746be78db += strlen($_ce467557df24[$_44af9f79ea06][1]) + 9;
+                        $_bd34d9e828bc[] = [$_37a746be78db, 1];
+                        $_37a746be78db += 2;
+                    } else--$_44af9f79ea06;
+                    for ($_d87f4c1f5462 = 0; $_d87f4c1f5462 < $_9499c2a16c8e; ++$_d87f4c1f5462) {
+                        $_bd34d9e828bc[] = [$_37a746be78db, "]", 0];
+                        ++$_37a746be78db;
+                    }
+                }
+            } else if ($_ce467557df24[$_44af9f79ea06] == '"' || $_ce467557df24[$_44af9f79ea06] == '`') {
+                ++$_37a746be78db;
+                for (++$_44af9f79ea06; isset($_ce467557df24[$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06] != '"' && $_ce467557df24[$_44af9f79ea06] != '`'; ++$_44af9f79ea06) if (is_array($_ce467557df24[$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06][0] == T_VARIABLE && !in_array($_ce467557df24[$_44af9f79ea06][1], [
+                        '$_ALOM_code',
+                        '$this',
+                    ])) {
+                    $_bd34d9e828bc[] = [$_37a746be78db, "{\$GLOBALS['", 1];
+                    $_37a746be78db += strlen($_ce467557df24[$_44af9f79ea06][1]) + 10;
+                    if ($_ce467557df24[++$_44af9f79ea06] == '[') {
+                        if (is_array($_ce467557df24[++$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06][0] == T_STRING) {
+                            $_bd34d9e828bc[] = [$_37a746be78db, "']['", 1];
+                            $_37a746be78db += strlen($_ce467557df24[$_44af9f79ea06][1]) + 4;
+                            $_bd34d9e828bc[] = [$_37a746be78db, "']}", 1];
+                            $_37a746be78db += 3;
+                        } else if (is_array($_ce467557df24[$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06][0] == T_NUM_STRING) {
+                            $_bd34d9e828bc[] = [$_37a746be78db, "'][", 1];
+                            $_37a746be78db += strlen($_ce467557df24[$_44af9f79ea06][1]) + 3;
+                            $_bd34d9e828bc[] = [$_37a746be78db, "]}", 1];
+                            $_37a746be78db += 2;
+                        } else if (is_array($_ce467557df24[$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06][0] == T_VARIABLE) {
+                            $_bd34d9e828bc[] = [$_37a746be78db, "'][\$GLOBALS['", 2];
+                            $_37a746be78db += strlen($_ce467557df24[$_44af9f79ea06][1]) + 12;
+                            $_bd34d9e828bc[] = [$_37a746be78db, "']]}", 1];
+                            $_37a746be78db += 4;
                         }
-                        $str = self::readl($tokens, "{", "}", $i);
-                        $str = trim(substr($str, 1, -1));
-                        return $str;
+                        ++$_44af9f79ea06;
+                    } else if (is_array($_ce467557df24[$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06][0] == T_OBJECT_OPERATOR) {
+                        if (is_array($_ce467557df24[++$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06][0] == T_STRING) {
+                            $_bd34d9e828bc[] = [$_37a746be78db, "']", 0];
+                            $_37a746be78db += strlen($_ce467557df24[$_44af9f79ea06][1]) + 4;
+                            $_bd34d9e828bc[] = [$_37a746be78db, "}", 0];
+                            ++$_37a746be78db;
+                        }
+                    } else {
+                        $_bd34d9e828bc[] = [$_37a746be78db, "']}", 0];
+                        $_37a746be78db += 3;
+                        --$_44af9f79ea06;
                     }
+                } else if (is_array($_ce467557df24[$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06][0] == T_DOLLAR_OPEN_CURLY_BRACES) {
+                    $_ce467557df24[$_44af9f79ea06] = '{';
+                    $_37a746be78db += 2;
+                    $_6c1e753a12d0 = self::readl($_ce467557df24, '{', '}', $_44af9f79ea06);
+                    $_33acc18097b4 = self::gcmake("<" . "?php \$" . substr($_6c1e753a12d0, 1, -1) . ";?" . ">", $_5b3eb1c32c0d, $_37a746be78db);
+                    foreach ($_33acc18097b4 as &$_c003a1341591) $_c003a1341591[0] -= 7;
+                    $_bd34d9e828bc = array_merge($_bd34d9e828bc, $_33acc18097b4);
+                    $_37a746be78db -= 9;
+                } else if (is_array($_ce467557df24[$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06][0] == T_CURLY_OPEN) {
+                    $_ce467557df24[$_44af9f79ea06] = '{';
+                    $_37a746be78db += 2;
+                    $_6c1e753a12d0 = self::readl($_ce467557df24, '{', '}', $_44af9f79ea06);
+                    $_33acc18097b4 = self::gcmake("<" . "?php " . substr($_6c1e753a12d0, 1, -1) . ";?" . ">", $_5b3eb1c32c0d, $_37a746be78db);
+                    foreach ($_33acc18097b4 as &$_c003a1341591) $_c003a1341591[0] -= 7;
+                    $_bd34d9e828bc = array_merge($_bd34d9e828bc, $_33acc18097b4);
+                    $_37a746be78db -= 9;
+                } else if (is_array($_ce467557df24[$_44af9f79ea06])) $_37a746be78db += strlen($_ce467557df24[$_44af9f79ea06][1]);
+                else $_37a746be78db += strlen($_ce467557df24[$_44af9f79ea06]);
+                ++$_37a746be78db;
+            } else $_37a746be78db += strlen($_ce467557df24[$_44af9f79ea06]);
+            return $_bd34d9e828bc;
+        }
+
+        public static function unmeaning_string($_2f79040d85dc, $_9f3b56b90a07 = 12, $_068d233c378a = '_', $_0187a8a1d97a = '')
+        {
+            if (in_array($_2f79040d85dc, ['_ALOM_code', 'this'])) return $_2f79040d85dc;
+            $_fc00f38c21f0 = md5($_9f3b56b90a07 . $_0187a8a1d97a . $_2f79040d85dc . $_068d233c378a . 'AlomUnmeaning+' . ALOM_VERSION);
+            while (strlen($_fc00f38c21f0) < $_9f3b56b90a07) $_fc00f38c21f0 .= md5($_0187a8a1d97a . $_2f79040d85dc . $_fc00f38c21f0);
+            return $_068d233c378a . substr($_fc00f38c21f0, 0, $_9f3b56b90a07);
+        }
+
+        public static function unmeaning($_d5cbf76f6b55, $_9f3b56b90a07 = 12, $_068d233c378a = '_', $_0187a8a1d97a = '', $_909697b5c852 = TRUE)
+        {
+            $_ce467557df24 = token_get_all($_d5cbf76f6b55);
+            $_d5cbf76f6b55 = '';
+            for ($_44af9f79ea06 = 0; isset($_ce467557df24[$_44af9f79ea06]); ++$_44af9f79ea06) if ($_909697b5c852 && is_array($_ce467557df24[$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06][0] == T_VARIABLE) {
+                $_fed760c6c858 = substr($_ce467557df24[$_44af9f79ea06][1], 1);
+                $_fed760c6c858 = '$' . self::unmeaning_string($_fed760c6c858, $_9f3b56b90a07, $_068d233c378a, $_0187a8a1d97a);
+                $_d5cbf76f6b55 .= $_fed760c6c858;
+            } else if (is_array($_ce467557df24[$_44af9f79ea06])) $_d5cbf76f6b55 .= $_ce467557df24[$_44af9f79ea06][1];
+            else if ($_909697b5c852 && $_ce467557df24[$_44af9f79ea06] == '$') {
+                if ($_ce467557df24[$_44af9f79ea06 + 1] == '{') {
+                    $_44af9f79ea06 += 2;
+                    $_6bd7e3077fe8 = self::readpe($_ce467557df24, $_44af9f79ea06);
+                    $_6bd7e3077fe8 = self::unmeaning("<" . "?php $_6bd7e3077fe8;?" . ">", $_9f3b56b90a07, $_068d233c378a, $_0187a8a1d97a, $_909697b5c852);
+                    $_6bd7e3077fe8 = "\AlomDecoder$_0187a8a1d97a::unmeaning(" . substr($_6bd7e3077fe8, 6, -3) . ",$_9f3b56b90a07,'$_068d233c378a')";
+                    $_d5cbf76f6b55 .= '${' . $_6bd7e3077fe8;
+                } else {
+                    $_9499c2a16c8e = 1;
+                    while ($_ce467557df24[++$_44af9f79ea06] == '$') ++$_9499c2a16c8e;
+                    $_d5cbf76f6b55 .= str_repeat("\AlomDecoder$_0187a8a1d97a::unmeaning(", $_9499c2a16c8e);
+                    if ($_ce467557df24[$_44af9f79ea06][0] == T_VARIABLE) {
+                        $_fed760c6c858 = substr($_ce467557df24[$_44af9f79ea06][1], 1);
+                        $_fed760c6c858 = '$' . self::unmeaning_string($_fed760c6c858, $_9f3b56b90a07, $_068d233c378a, $_0187a8a1d97a);
+                        $_d5cbf76f6b55 .= $_fed760c6c858;
+                    } else--$_44af9f79ea06;
+                    $_d5cbf76f6b55 .= str_repeat(",$_9f3b56b90a07,'$_068d233c378a')", $_9499c2a16c8e);
                 }
-            }
-            return "";
+            } else $_d5cbf76f6b55 .= $_ce467557df24[$_44af9f79ea06];
+            return $_d5cbf76f6b55;
         }
 
-        public static function sizeformat($size)
+        public static function createLogMsg($_49aa68a7da88, $_cbdfc7000a8f)
         {
-            if ($size >= 1024 * 1024 * 1024 * 1024 * 1024 * 1024) {
-                return round(
-                        $size / 1024 / 1024 / 1024 / 1024 / 1024 / 1024,
-                        1
-                    ) . "zb";
-            }
-            if ($size >= 1024 * 1024 * 1024 * 1024 * 1024) {
-                return round($size / 1024 / 1024 / 1024 / 1024 / 1024, 1) .
-                    "eb";
-            }
-            if ($size >= 1024 * 1024 * 1024 * 1024) {
-                return round($size / 1024 / 1024 / 1024 / 1024, 1) . "tb";
-            }
-            if ($size >= 1024 * 1024 * 1024) {
-                return round($size / 1024 / 1024 / 1024, 1) . "gb";
-            }
-            if ($size >= 1024 * 1024) {
-                return round($size / 1024 / 1024, 1) . "mb";
-            }
-            if ($size >= 1024) {
-                return round($size / 1024, 1) . "kb";
-            }
-            return round($size) . "b";
-        }
-
-        public static function license_key_generate($init = NULL)
-        {
-            if ($init === NULL) {
-                $key = random_bytes(32);
-            } else {
-                $key = hash(
-                    "sha256",
-                    "Alom License N&.~>.ZYv;V5lN0h " . (string)$init . "%"
-                );
-            }
-            return bin2hex($key);
-        }
-
-        public static function license_find_code($license)
-        {
-            if (
-            !preg_match(
-                "/license code: (\[[0-9a-fA-F*-]+])/i",
-                $license,
-                $match
-            )
-            ) {
-                return FALSE;
-            }
-            return $match[1];
-        }
-
-        public static function license_insert_code(
-            $license,
-            $code = "[************************************************-********************************-****************]"
-        )
-        {
-            return preg_replace(
-                "/license code: (\[[0-9a-fA-F*-]+])/i",
-                "license code: " . $code,
-                $license
-            );
-        }
-
-        public static function license_null_systemhash_generate()
-        {
-            return "NULL SYSTEMHASH X</k/LMI3M7Et@\*\*";
-        }
-
-        public static function license_systemhash_generate(
-            $uname,
-            $username,
-            $ipaddr,
-            $hostname
-        )
-        {
-            $id = "SYSTEMHASH Xcpv{E^Bk9eq\*VIm";
-            $id .= "un:$uname\n";
-            $id .= "us:$username\n";
-            $id .= "ip:$ipaddr\n";
-            $id .= "hn:$hostname\n";
-            return md5($id, TRUE);
-        }
-
-        public static function license_code_encrypt(
-            $ready,
-            $expiration,
-            $systemhash,
-            $license_key
-        )
-        {
-            $sbox = self::$license_code_sbox;
-            $ubox = self::$license_code_ubox;
-            if (strlen($license_key) == 64) {
-                $license_key = hex2bin($license_key);
-            } else if (strlen($license_key) != 32) {
-                $license_key = hash("sha256", $license_key, TRUE);
-            }
-            if (strlen($systemhash) != 16) {
-                $systemhash = md5($systemhash, TRUE);
-            }
-            $ready = (int)$ready;
-            $expiration = (int)$expiration;
-            $limiter = "%zqYJ3}rX\xfeZ2hA.]Ss0(Xv1z";
-            $string =
-                $limiter .
-                $systemhash .
-                pack("N2", $ready ^ 0xf9a02eec, $expiration ^ 0x2904a19b);
-            $string = array_values(unpack("C*", $string));
-            $license_key = array_values(unpack("C*", $license_key));
-            for ($j = 0; $j < 52; ++$j) {
-                for ($i = 48 - 1; $i >= 0; --$i) {
-                    $a = (7 * $i + 1) % 48;
-                    $b = (3 * $i + $a + 7) % 48;
-                    $c = (11 * $i + $b + 5) % 48;
-                    if ($a == $i) {
-                        $a = (3 * $a + 5) % 48;
-                    }
-                    if ($b == $i) {
-                        $b = (7 * $b + 13) % 48;
-                    }
-                    if ($c == $i) {
-                        $c = (11 * $c + 3) % 48;
-                    }
-                    $x = $license_key[(3 * $c + 5 * $i + 7) % 32];
-                    $y = $license_key[(5 * $a + 7 * $i + 11) % 32];
-                    $z = $license_key[(7 * $b + 11 * $i + 3) % 32];
-                    for ($k = 0; $k < 2; ++$k) {
-                        $x = $license_key[(3 * $c + 5 * $z + 7 * $i + 11) % 32];
-                        $y = $license_key[(5 * $a + 7 * $x + 11 * $i + 3) % 32];
-                        $z = $license_key[(7 * $b + 11 * $y + 3 * $i + 5) % 32];
-                    }
-                    $x = (3 * $c + 5 * $z + 7 * $i + 11) % 32;
-                    $y = (5 * $a + 7 * $x + 11 * $i + 3) % 32;
-                    $z = (7 * $b + 11 * $y + 3 * $i + 5) % 32;
-                    $string[$i] =
-                        $ubox[$string[$i] ^ $a] ^
-                        $license_key[$z] ^
-                        $sbox[$string[$b] ^ $string[$c]];
-                    $string[$i] =
-                        $ubox[$string[$i] ^ $c] ^
-                        $license_key[$z] ^
-                        $sbox[$string[$a] & $string[$b]];
-                    $string[$i] =
-                        $ubox[$string[$i] ^ $z] ^
-                        $license_key[$y] ^
-                        $sbox[$string[$a] | $string[$c]];
-                    $string[$i] =
-                        $ubox[$string[$i] ^ $y] ^
-                        $license_key[$x] ^
-                        $sbox[$string[$b] & $string[$c]];
-                    $string[$i] =
-                        $ubox[$string[$i] ^ $x] ^
-                        $license_key[$x] ^
-                        $sbox[$string[$a] ^ $string[$b]];
-                }
-            }
-            array_unshift($string, "C*");
-            $string = bin2hex(call_user_func_array("pack", $string));
-            return "[" .
-                substr($string, 0, 48) .
-                "-" .
-                substr($string, 48, 32) .
-                "-" .
-                substr($string, 80, 16) .
-                "]";
-        }
-
-        public static function license_code_decrypt($string, $license_key)
-        {
-            $sbox = self::$license_code_sbox;
-            if (strlen($license_key) == 64) {
-                $license_key = hex2bin($license_key);
-            } else if (strlen($license_key) != 32) {
-                $license_key = hash("sha256", $license_key, TRUE);
-            }
-            $limiter = "%zqYJ3}rX\xfeZ2hA.]Ss0(Xv1z";
-            $string = hex2bin(
-                str_replace(
-                    [" ", "\n", "\r", "\t", "-", "[", "]", "*"],
-                    "",
-                    $string
-                )
-            );
-            $string = array_values(unpack("C*", $string));
-            $license_key = array_values(unpack("C*", $license_key));
-            for ($j = 0; $j < 52; ++$j) {
-                for ($i = 0; $i < 48; ++$i) {
-                    $a = (7 * $i + 1) % 48;
-                    $b = (3 * $i + $a + 7) % 48;
-                    $c = (11 * $i + $b + 5) % 48;
-                    if ($a == $i) {
-                        $a = (3 * $a + 5) % 48;
-                    }
-                    if ($b == $i) {
-                        $b = (7 * $b + 13) % 48;
-                    }
-                    if ($c == $i) {
-                        $c = (11 * $c + 3) % 48;
-                    }
-                    $x = $license_key[(3 * $c + 5 * $i + 7) % 32];
-                    $y = $license_key[(5 * $a + 7 * $i + 11) % 32];
-                    $z = $license_key[(7 * $b + 11 * $i + 3) % 32];
-                    for ($k = 0; $k < 2; ++$k) {
-                        $x = $license_key[(3 * $c + 5 * $z + 7 * $i + 11) % 32];
-                        $y = $license_key[(5 * $a + 7 * $x + 11 * $i + 3) % 32];
-                        $z = $license_key[(7 * $b + 11 * $y + 3 * $i + 5) % 32];
-                    }
-                    $x = (3 * $c + 5 * $z + 7 * $i + 11) % 32;
-                    $y = (5 * $a + 7 * $x + 11 * $i + 3) % 32;
-                    $z = (7 * $b + 11 * $y + 3 * $i + 5) % 32;
-                    $string[$i] =
-                        $sbox[$string[$i] ^
-                        $license_key[$x] ^
-                        $sbox[$string[$a] ^ $string[$b]]] ^ $x;
-                    $string[$i] =
-                        $sbox[$string[$i] ^
-                        $license_key[$x] ^
-                        $sbox[$string[$b] & $string[$c]]] ^ $y;
-                    $string[$i] =
-                        $sbox[$string[$i] ^
-                        $license_key[$y] ^
-                        $sbox[$string[$a] | $string[$c]]] ^ $z;
-                    $string[$i] =
-                        $sbox[$string[$i] ^
-                        $license_key[$z] ^
-                        $sbox[$string[$a] & $string[$b]]] ^ $c;
-                    $string[$i] =
-                        $sbox[$string[$i] ^
-                        $license_key[$z] ^
-                        $sbox[$string[$b] ^ $string[$c]]] ^ $a;
-                }
-            }
-            array_unshift($string, "C*");
-            $string = call_user_func_array("pack", $string);
-            if (substr($string, 0, 24) != $limiter) {
-                return FALSE;
-            }
-            $times = unpack("N2", substr($string, 40, 8));
-            return [
-                "systemhash" => substr($string, 24, 16),
-                "ready"      => $times[1] ^ 0xf9a02eec,
-                "expiration" => $times[2] ^ 0x2904a19b,
-            ];
-        }
-
-        public static function createLogMsg($msg, $type)
-        {
-            $msg = str_replace("\n", "\n  ", $msg);
-            $level = error_reporting();
-            switch ($type) {
-                case "success":
-                case "notice":
-                    if (!($level & E_USER_NOTICE) || !self::$logger) {
-                        return FALSE;
-                    }
+            $_49aa68a7da88 = str_replace("\n", "\n  ", $_49aa68a7da88);
+            $_926c6461c9e6 = error_reporting();
+            switch ($_cbdfc7000a8f) {
+                case 'success':
+                case 'notice':
+                    if (!($_926c6461c9e6 & E_USER_NOTICE) || !self::$_bf509b6a6b3d) return FALSE;
                     break;
-                case "warning":
-                    if (!($level & E_USER_WARNING)) {
-                        return FALSE;
-                    }
+                case 'warning':
+                    if (!($_926c6461c9e6 & E_USER_WARNING)) return FALSE;
             }
-            if (self::$iscli) {
-                switch ($type) {
-                    case "error":
-                        $msg = "\e[31mError:   \e[0m$msg\n";
+            if (self::$_2b3c116ebf09) {
+                switch ($_cbdfc7000a8f) {
+                    case 'error':
+                        $_49aa68a7da88 = "\e[31mAlom Error:   \e[0m$_49aa68a7da88\n";
                         break;
-                    case "success":
-                        $msg = "\e[32mSuccess: \e[0m$msg\n";
+                    case 'success':
+                        $_49aa68a7da88 = "\e[32mAlom Success: \e[0m$_49aa68a7da88\n";
                         break;
-                    case "warning":
-                        $msg = "\e[33mWarning: \e[0m$msg\n";
+                    case 'warning':
+                        $_49aa68a7da88 = "\e[33mAlom Warning: \e[0m$_49aa68a7da88\n";
                         break;
-                    case "notice":
-                        $msg = "\e[36mNotice:  \e[0m$msg\n";
+                    case 'notice':
+                        $_49aa68a7da88 = "\e[36mAlom Notice:  \e[0m$_49aa68a7da88\n";
                         break;
                 }
             } else {
-                switch ($type) {
-                    case "error":
-                        $msg = "Error:   $msg\n";
+                switch ($_cbdfc7000a8f) {
+                    case 'error':
+                        $_49aa68a7da88 = "Alom Error:   $_49aa68a7da88\n";
                         break;
-                    case "success":
-                        $msg = "Success: $msg\n";
+                    case 'success':
+                        $_49aa68a7da88 = "Alom Success: $_49aa68a7da88\n";
                         break;
-                    case "warning":
-                        $msg = "Warning: $msg\n";
+                    case 'warning':
+                        $_49aa68a7da88 = "Alom Warning: $_49aa68a7da88\n";
                         break;
-                    case "notice":
-                        $msg = "Notice:  $msg\n";
+                    case 'notice':
+                        $_49aa68a7da88 = "Alom Notice:  $_49aa68a7da88\n";
                         break;
                 }
             }
-            return $msg;
+            return $_49aa68a7da88;
         }
 
-        public static function log($msg, $type = "error")
+        public static function log($_49aa68a7da88, $_cbdfc7000a8f = 'error')
         {
-            if (self::$iscli) {
-                $msg = self::createLogMsg($msg, $type);
-                if ($msg) {
-                    print $msg;
+            if (self::$_2b3c116ebf09) {
+                $_49aa68a7da88 = self::createLogMsg($_49aa68a7da88, $_cbdfc7000a8f);
+                if ($_49aa68a7da88) {
+                    print $_49aa68a7da88;
                 }
             } else {
                 if (!headers_sent()) {
                     header("Content-type: text/plain");
                 }
-                $msg = self::createLogMsg($msg, $type);
-                if ($msg) {
-                    error_log($msg);
-                    print $msg;
+                $_49aa68a7da88 = self::createLogMsg($_49aa68a7da88, $_cbdfc7000a8f);
+                if ($_49aa68a7da88) {
+                    error_log($_49aa68a7da88);
+                    print $_49aa68a7da88;
                 }
             }
-            if ($type == "error") {
-                die();
-                exit();
-                sleep(1e9);
+            if ($_cbdfc7000a8f == 'error') {
+                while (1) die;
             }
         }
 
-        public static function backlog()
+        public static function backlog($_cbdfc7000a8f)
         {
-            if (self::$iscli) {
+            if (self::$_2b3c116ebf09) {
+                $_926c6461c9e6 = error_reporting();
+                switch ($_cbdfc7000a8f) {
+                    case 'success':
+                    case 'notice':
+                        if (!($_926c6461c9e6 & E_USER_NOTICE) || !self::$_bf509b6a6b3d) return FALSE;
+                        break;
+                    case 'warning':
+                        if (!($_926c6461c9e6 & E_USER_WARNING)) return FALSE;
+                }
                 print "\e[1A\e[2K";
+                return TRUE;
+            }
+            return FALSE;
+        }
+
+        public static function removedLoader($_8ed714a238a8) { self::log("The loader file '$_8ed714a238a8' do not exists for complete obfuscatoring process!", 'error'); }
+
+        public static function findQBC($_d5cbf76f6b55, $_78f65e614162, $_80e836368f40 = 5)
+        {
+            $_1a6ddb5e786d = str_repeat('f', $_80e836368f40);
+            for ($_d87f4c1f5462 = 0; ; ++$_d87f4c1f5462) for ($_44af9f79ea06 = 0; $_44af9f79ea06 <= 0x7fffffff; ++$_44af9f79ea06) {
+                $_fc00f38c21f0 = md5(str_replace($_78f65e614162, "$_44af9f79ea06-$_d87f4c1f5462", $_d5cbf76f6b55));
+                if (substr($_fc00f38c21f0, 0, $_80e836368f40) == $_1a6ddb5e786d) return str_replace($_78f65e614162, "$_44af9f79ea06-$_d87f4c1f5462", $_d5cbf76f6b55);
             }
         }
 
-        public static function removedLoader($loader)
+        public static function obfuscator($_d5cbf76f6b55, $_9d1930831f12 = [])
         {
-            self::log(
-                "The loader file '$loader' do not exists for complete obfuscatoring proccess!",
-                "error"
-            );
-        }
-
-        public static function findQBC($code, $delimiter, $hbc = 5)
-        {
-            $zbc = str_repeat("f", $hbc);
-            for ($j = 0; ; ++$j) {
-                for ($i = 0; $i <= 0x7fffffff; ++$i) {
-                    $hash = md5(str_replace($delimiter, "$i-$j", $code));
-                    if (substr($hash, 0, $hbc) == $zbc) {
-                        return str_replace($delimiter, "$i-$j", $code);
-                    }
-                };
+            if (is_string($_d5cbf76f6b55) && file_exists($_d5cbf76f6b55)) $_d5cbf76f6b55 = file_get_contents($_d5cbf76f6b55); else if (is_callable($_d5cbf76f6b55)) $_d5cbf76f6b55 = "<" . "?php\n" . self::getcallable($_d5cbf76f6b55) . "\n?" . ">";
+            self::$_68aa9304b10c = microtime(TRUE);
+            $_ebe2944af80d = md5(crc32($_d5cbf76f6b55) . rand() . self::$_68aa9304b10c, TRUE);
+            $_5b3eb1c32c0d = substr(md5("alom:$_ebe2944af80d"), 0, 12);
+            self::$_d186186a7d16[0] ^= rand();
+            self::$_d186186a7d16[1] ^= rand();
+            self::$_3227269fab81[0] = self::getasciiikey(16);
+            self::$_3227269fab81[1] = self::getasciiikey(16);
+            self::log("Script initialized. (unixtime: " . self::$_68aa9304b10c . ")\nsign:     " . bin2hex($_ebe2944af80d) . "\nsignflag: $_5b3eb1c32c0d", 'notice');
+            $_02d46eb104a0 = '';
+            $_ce467557df24 = token_get_all($_d5cbf76f6b55);
+            for ($_44af9f79ea06 = 0; isset($_ce467557df24[$_44af9f79ea06]); ++$_44af9f79ea06) if (is_array($_ce467557df24[$_44af9f79ea06]) && $_ce467557df24[$_44af9f79ea06][0] == T_NAMESPACE) {
+                while ($_ce467557df24[++$_44af9f79ea06] != '{' && $_ce467557df24[$_44af9f79ea06] != ';') ;
+                if ($_ce467557df24[$_44af9f79ea06] == '{') {
+                    $_6c1e753a12d0 = self::readl($_ce467557df24, '{', '}', $_44af9f79ea06);
+                    $_02d46eb104a0 .= substr($_6c1e753a12d0, 1, -1);
+                }
+            } else if (is_array($_ce467557df24[$_44af9f79ea06])) $_02d46eb104a0 .= $_ce467557df24[$_44af9f79ea06][1];
+            else $_02d46eb104a0 .= $_ce467557df24[$_44af9f79ea06];
+            try {
+                @eval("return;?>$_02d46eb104a0<?php");
+            } catch (\Error | \Exception $_3b1ec3aca618) {
+                self::log("Script error: " . $_3b1ec3aca618->getMessage() . " on line " . $_3b1ec3aca618->getLine());
+                while (1) die;
             }
-        }
-
-        public static function obfuscator($code, $settings = [])
-        {
-            if (is_string($code) && file_exists($code)) {
-                $code = file_get_contents($code);
-            } else if (is_callable($code)) {
-                $code = "<" . "?php\n" . self::getcallable($code) . "\n?" . ">";
-            }
-            self::$obfstime = microtime(TRUE);
-            $sign = md5(crc32($code) . rand() . self::$obfstime, TRUE);
-            $signflag = substr(md5("alom:$sign"), 0, 12);
-            self::$key[0] ^= rand();
-            self::$key[1] ^= rand();
-            self::$fky[0] = self::getasciiikey(16);
-            self::$fky[1] = self::getasciiikey(16);
-            self::log(
-                "Script initialized. (unixtime: " .
-                self::$obfstime .
-                ")\nsign:     " .
-                bin2hex($sign) .
-                "\nsignflag: $signflag",
-                "notice"
-            );
-            if (!isset($settings["rounds"])) {
-                $settings["rounds"] = [];
-            }
-            if (!isset($settings["rounds"]["main"])) {
-                $settings["rounds"]["main"] = [
-                    "depth_type" => "logpower",
-                    "depth"      => 1,
-                ];
+            unset($_02d46eb104a0);
+            if (!isset($_9d1930831f12['rounds'])) $_9d1930831f12['rounds'] = [];
+            if (!isset($_9d1930831f12['rounds']['main'])) {
+                $_9d1930831f12['rounds']['main'] = ['depth_type' => 'logpower', 'depth' => 1];
             } else {
-                if (!isset($settings["rounds"]["main"]["depth_type"])) {
-                    $settings["rounds"]["main"]["depth_type"] = "logpower";
+                if (!isset($_9d1930831f12['rounds']['main']['depth_type'])) {
+                    $_9d1930831f12['rounds']['main']['depth_type'] = 'logpower';
                 } else {
-                    $settings["rounds"]["main"]["depth_type"] = strtolower(
-                        $settings["rounds"]["main"]["depth_type"]
-                    );
-                    if (
-                    !in_array($settings["rounds"]["main"]["depth_type"], [
-                        "constant",
-                        "logarithm",
-                        "logpower",
-                        "square",
-                        "linear",
-                    ])
-                    ) {
-                        $settings["rounds"]["main"]["depth_type"] = "logpower";
+                    $_9d1930831f12['rounds']['main']['depth_type'] = strtolower($_9d1930831f12['rounds']['main']['depth_type']);
+                    if (!in_array($_9d1930831f12['rounds']['main']['depth_type'], [
+                        'constant',
+                        'logarithm',
+                        'logpower',
+                        'square',
+                        'linear',
+                    ])) $_9d1930831f12['rounds']['main']['depth_type'] = 'logpower';
+                }
+                if (!isset($_9d1930831f12['rounds']['main']['depth']) || !is_numeric($_9d1930831f12['rounds']['main']['depth'])) {
+                    self::log("The parameter rounds.main.depth is not initialized. Set to 1 by default.", 'notice');
+                    $_9d1930831f12['rounds']['main']['depth'] = 1;
+                } else $_9d1930831f12['rounds']['main']['depth'] = (float)$_9d1930831f12['rounds']['main']['depth'];
+            }
+            if (!isset($_9d1930831f12['rounds']['main']['extrascript_round'])) $_9d1930831f12['rounds']['main']['extrascript_round'] = TRUE;
+            if (!isset($_9d1930831f12['rounds']['main']['base64rand_round'])) $_9d1930831f12['rounds']['main']['base64rand_round'] = FALSE;
+            if (!isset($_9d1930831f12['rounds']['main']['deflate_round'])) $_9d1930831f12['rounds']['main']['deflate_round'] = TRUE;
+            if (!isset($_9d1930831f12['rounds']['main']['iterate_base64'])) $_9d1930831f12['rounds']['main']['iterate_base64'] = 0;
+            if (!isset($_9d1930831f12['rounds']['minify'])) {
+                $_9d1930831f12['rounds']['minify'] = ['enable' => TRUE];
+            } else {
+                if (!isset($_9d1930831f12['rounds']['minify']['enable'])) $_9d1930831f12['rounds']['minify']['enable'] = TRUE;
+            }
+            if (!isset($_9d1930831f12['rounds']['optwister'])) {
+                $_9d1930831f12['rounds']['optwister'] = ['enable' => FALSE];
+            } else {
+                if (!isset($_9d1930831f12['rounds']['optwister']['enable'])) $_9d1930831f12['rounds']['optwister']['enable'] = FALSE;
+            }
+            if (!isset($_9d1930831f12['rounds']['partitioning'])) {
+                $_9d1930831f12['rounds']['partitioning'] = ['enable' => FALSE, 'fast' => FALSE];
+            } else {
+                if (!isset($_9d1930831f12['rounds']['partitioning']['enable'])) $_9d1930831f12['rounds']['partitioning']['enable'] = FALSE;
+                if (!isset($_9d1930831f12['rounds']['partitioning']['fast'])) $_9d1930831f12['rounds']['partitioning']['fast'] = FALSE;
+            }
+            if ($_9d1930831f12['rounds']['partitioning']['enable']) $_9d1930831f12['rounds']['main']['iterate_base64'] = 0;
+            if (!isset($_9d1930831f12['rounds']['antidebugger'])) {
+                $_9d1930831f12['rounds']['antidebugger'] = ['enable' => TRUE];
+            } else {
+                if (!isset($_9d1930831f12['rounds']['antidebugger']['enable'])) $_9d1930831f12['rounds']['antidebugger']['enable'] = TRUE;
+            }
+            if (!isset($_9d1930831f12['rounds']['unmeaning'])) $_9d1930831f12['rounds']['unmeaning'] = [];
+            if (!isset($_9d1930831f12['rounds']['unmeaning']['variables'])) $_9d1930831f12['rounds']['unmeaning']['variables'] = FALSE;
+            if (!isset($_9d1930831f12['rounds']['unmeaning']['prefix']) || !$_9d1930831f12['rounds']['unmeaning']['prefix']) $_9d1930831f12['rounds']['unmeaning']['prefix'] = '_'; else $_9d1930831f12['rounds']['unmeaning']['prefix'] = (string)$_9d1930831f12['rounds']['unmeaning']['prefix'];
+            if (!isset($_9d1930831f12['rounds']['unmeaning']['size']) || $_9d1930831f12['rounds']['unmeaning']['size'] < 1) $_9d1930831f12['rounds']['unmeaning']['size'] = 12; else $_9d1930831f12['rounds']['unmeaning']['size'] = (int)$_9d1930831f12['rounds']['unmeaning']['size'];
+            if (!isset($_9d1930831f12['rounds']['qbc'])) $_9d1930831f12['rounds']['qbc'] = FALSE;
+            if ($_9d1930831f12['rounds']['minify']['enable']) $_d5cbf76f6b55 = self::minify($_d5cbf76f6b55);
+            if (!isset($_9d1930831f12['style'])) $_9d1930831f12['style'] = [];
+            if (!isset($_9d1930831f12['style']['separated_loader'])) $_9d1930831f12['style']['separated_loader'] = [];
+            if (!isset($_9d1930831f12['style']['halt_mode'])) $_9d1930831f12['style']['halt_mode'] = FALSE;
+            if (!isset($_9d1930831f12['style']['hide_errors'])) $_9d1930831f12['style']['hide_errors'] = TRUE;
+            if (!isset($_9d1930831f12['style']['hide_eval'])) $_9d1930831f12['style']['hide_eval'] = TRUE;
+            if (!isset($_9d1930831f12['style']['global_cache'])) $_9d1930831f12['style']['global_cache'] = TRUE;
+            if (!isset($_9d1930831f12['style']['raw'])) $_9d1930831f12['style']['raw'] = FALSE;
+            if (!isset($_9d1930831f12['identify'])) $_9d1930831f12['identify'] = [];
+            if (!isset($_9d1930831f12['identify']['files'])) $_9d1930831f12['identify']['files'] = [];
+            if (!isset($_9d1930831f12['style']['separated_loader']['decoder_file'])) {
+                $_9d1930831f12['style']['separated_loader']['decoder_file'] = FALSE;
+            } else {
+                $_9d1930831f12['style']['separated_loader']['decoder_file'] = (string)$_9d1930831f12['style']['separated_loader']['decoder_file'];
+                if (file_exists($_9d1930831f12['style']['separated_loader']['decoder_file'])) {
+                    $_9d1930831f12['indentify']['files'][] = $_9d1930831f12['style']['separated_loader']['decoder_file'];
+                } else if (@!file_get_contents($_9d1930831f12['style']['separated_loader']['decoder_file'])) {
+                    $_9d1930831f12['style']['separated_loader']['decoder_file'] = FALSE;
+                }
+            }
+            if (!$_9d1930831f12['rounds']['optwister']['enable'] || !isset($_9d1930831f12['style']['separated_loader']['optwister_file'])) {
+                $_9d1930831f12['style']['separated_loader']['optwister_file'] = FALSE;
+            } else {
+                $_9d1930831f12['style']['separated_loader']['optwister_file'] = (string)$_9d1930831f12['style']['separated_loader']['optwister_file'];
+                if (file_exists($_9d1930831f12['style']['separated_loader']['optwister_file'])) {
+                    $_9d1930831f12['indentify']['files'][] = $_9d1930831f12['style']['separated_loader']['optwister_file'];
+                } else if (@!file_get_contents($_9d1930831f12['style']['separated_loader']['optwister_file'])) {
+                    $_9d1930831f12['style']['separated_loader']['optwister_file'] = FALSE;
+                }
+            }
+            if (!isset($_9d1930831f12['license'])) $_9d1930831f12['license'] = [];
+            if (!isset($_9d1930831f12['license']['type'])) {
+                $_073b842fff17 = 'comment';
+            } else {
+                $_073b842fff17 = strtolower($_9d1930831f12['license']['type']);
+                if (!in_array($_073b842fff17, ['comment', 'file', 'remove'])) $_073b842fff17 = 'comment';
+                unset($_9d1930831f12['license']['type']);
+            }
+            if ($_073b842fff17 == 'remove') {
+                $_9d1930831f12['license'] = '';
+            } else {
+                $_f9f3ba55208c = $_9d1930831f12['license'];
+                if (!isset($_f9f3ba55208c['title'])) $_f9f3ba55208c['title'] = 'Obfuscated by ALOM ' . ALOM_VERSION;
+                if (isset($_f9f3ba55208c['checksum']) && $_f9f3ba55208c['checksum'] === TRUE) $_f9f3ba55208c['checksum'] = md5($_d5cbf76f6b55);
+                if (isset($_f9f3ba55208c['license_key'])) {
+                    if (strlen($_f9f3ba55208c['license_key']) == 64) $_f9f3ba55208c['license_key'] = hex2bin($_f9f3ba55208c['license_key']); else if (strlen($_f9f3ba55208c['license_key']) != 32) $_f9f3ba55208c['license_key'] = hash('sha256', $_f9f3ba55208c['license_key'], TRUE);
+                    $_85e9b296e2f6 = $_f9f3ba55208c['license_key'];
+                    unset($_f9f3ba55208c['license_key']);
+                    $_f9f3ba55208c['license_code'] = "[************************************************-********************************-****************]";
+                    if (isset($_379e02d909b1['license_verifier_api'])) {
+                        $_0fd6f110872f = $_f9f3ba55208c['license_verifier_api'];
+                        unset($_f9f3ba55208c['license_verifier_api']);
                     }
                 }
-                if (
-                    !isset($settings["rounds"]["main"]["depth"]) ||
-                    !is_numeric($settings["rounds"]["main"]["depth"])
-                ) {
-                    self::log(
-                        "The parameter rounds.main.depth is not initialized. Set to 1 by default.",
-                        "notice"
-                    );
-                    $settings["rounds"]["main"]["depth"] = 1;
-                } else {
-                    $settings["rounds"]["main"]["depth"] =
-                        (float)$settings["rounds"]["main"]["depth"];
-                }
-            }
-            if (!isset($settings["rounds"]["main"]["extrascript_round"])) {
-                $settings["rounds"]["main"]["extrascript_round"] = TRUE;
-            }
-            if (!isset($settings["rounds"]["main"]["base64rand_round"])) {
-                $settings["rounds"]["main"]["base64rand_round"] = FALSE;
-            }
-            if (!isset($settings["rounds"]["main"]["deflate_rounds"])) {
-                $settings["rounds"]["main"]["deflate_round"] = TRUE;
-            }
-            if (!isset($settings["rounds"]["minify"])) {
-                $settings["rounds"]["minify"] = ["enable" => TRUE];
-            } else {
-                if (!isset($settings["rounds"]["minify"]["enable"])) {
-                    $settings["rounds"]["minify"]["enable"] = TRUE;
-                }
-            }
-            if (!isset($settings["rounds"]["optwister"])) {
-                $settings["rounds"]["optwister"] = ["enable" => FALSE];
-            } else {
-                if (!isset($settings["rounds"]["optwister"]["enable"])) {
-                    $settings["rounds"]["optwister"]["enable"] = FALSE;
-                }
-            }
-            if (!isset($settings["rounds"]["partitioning"])) {
-                $settings["rounds"]["partitioning"] = [
-                    "enable" => FALSE,
-                    "fast"   => FALSE,
-                ];
-            } else {
-                if (!isset($settings["rounds"]["partitioning"]["enable"])) {
-                    $settings["rounds"]["partitioning"]["enable"] = FALSE;
-                }
-                if (!isset($settings["rounds"]["partitioning"]["fast"])) {
-                    $settings["rounds"]["partitioning"]["fast"] = FALSE;
-                }
-            }
-            if (!isset($settings["rounds"]["antidebugger"])) {
-                $settings["rounds"]["antidebugger"] = ["enable" => TRUE];
-            } else {
-                if (!isset($settings["rounds"]["antidebugger"]["enable"])) {
-                    $settings["rounds"]["antidebugger"]["enable"] = TRUE;
-                }
-            }
-            if (!isset($settings["rounds"]["qbc"])) {
-                $settings["rounds"]["qbc"] = FALSE;
-            }
-            if ($settings["rounds"]["minify"]["enable"]) {
-                $code = self::minify($code);
-            }
-            if (!isset($settings["style"])) {
-                $settings["style"] = [];
-            }
-            if (!isset($settings["style"]["separated_loader"])) {
-                $settings["style"]["separated_loader"] = [];
-            }
-            if (!isset($settings["style"]["halt_mode"])) {
-                $settings["style"]["halt_mode"] = FALSE;
-            }
-            if (!isset($settings["style"]["hide_errors"])) {
-                $settings["style"]["hide_errors"] = TRUE;
-            }
-            if (!isset($settings["style"]["raw"])) {
-                $settings["style"]["raw"] = FALSE;
-            }
-            if (!isset($settings["identify"])) {
-                $settings["identify"] = [];
-            }
-            if (!isset($settings["identify"]["files"])) {
-                $settings["identify"]["files"] = [];
-            }
-            if (
-            !isset($settings["style"]["separated_loader"]["decoder_file"])
-            ) {
-                $settings["style"]["separated_loader"]["decoder_file"] = FALSE;
-            } else {
-                $settings["style"]["separated_loader"]["decoder_file"] =
-                    (string)$settings["style"]["separated_loader"]["decoder_file"];
-                if (
-                file_exists(
-                    $settings["style"]["separated_loader"]["decoder_file"]
-                )
-                ) {
-                    $settings["indentify"]["files"][] =
-                        $settings["style"]["separated_loader"]["decoder_file"];
-                } else if (
-                @!file_get_contents(
-                    $settings["style"]["separated_loader"]["decoder_file"]
-                )
-                ) {
-                    $settings["style"]["separated_loader"]["decoder_file"] = FALSE;
-                }
-            }
-            if (
-                !$settings["rounds"]["optwister"]["enable"] ||
-                !isset($settings["style"]["separated_loader"]["optwister_file"])
-            ) {
-                $settings["style"]["separated_loader"]["optwister_file"] = FALSE;
-            } else {
-                $settings["style"]["separated_loader"]["optwister_file"] =
-                    (string)$settings["style"]["separated_loader"]["optwister_file"];
-                if (
-                file_exists(
-                    $settings["style"]["separated_loader"]["optwister_file"]
-                )
-                ) {
-                    $settings["indentify"]["files"][] =
-                        $settings["style"]["separated_loader"]["optwister_file"];
-                } else if (
-                @!file_get_contents(
-                    $settings["style"]["separated_loader"]["optwister_file"]
-                )
-                ) {
-                    $settings["style"]["separated_loader"]["optwister_file"] = FALSE;
-                }
-            }
-            if (!isset($settings["license"])) {
-                $settings["license"] = [];
-            }
-            if (!isset($settings["license"]["type"])) {
-                $license_type = "comment";
-            } else {
-                $license_type = strtolower($settings["license"]["type"]);
-                if (!in_array($license_type, ["comment", "file", "remove"])) {
-                    $license_type = "comment";
-                }
-                unset($settings["license"]["type"]);
-            }
-            if ($license_type == "remove") {
-                $settings["license"] = "";
-            } else {
-                $parameters = $settings["license"];
-                if (!isset($parameters["title"])) {
-                    $parameters["title"] = "Obfuscated by ALOM " . ALOM_VERSION;
-                }
-                if (
-                    isset($parameters["checksum"]) &&
-                    $parameters["checksum"] === TRUE
-                ) {
-                    $parameters["checksum"] = md5($code);
-                }
-                if (isset($parameters["license_key"])) {
-                    if ($parameters["license_key"] == 64) {
-                        $parameters["license_key"] = hex2bin(
-                            $parameters["license_key"]
-                        );
-                    } else if (strlen($parameters["license_key"]) != 32) {
-                        $parameters["license_key"] = hash(
-                            "sha256",
-                            $parameters["license_key"],
-                            TRUE
-                        );
+                $_657a98c9ba29 = "Do not change anything of segment antitamper";
+                if ($_073b842fff17 == 'comment') {
+                    $_9d1930831f12['license'] = "/** ALOM Obfuscator License\n * " . str_replace("\n", "\n * ", $_657a98c9ba29) . "\n *\n";
+                    foreach ($_f9f3ba55208c as $_d186186a7d16 => $_00cdb5a3dfe0) {
+                        $_d186186a7d16 = str_replace(["\n", '_'], ' ', $_d186186a7d16);
+                        $_d186186a7d16 = self::commentquote($_d186186a7d16);
+                        $_00cdb5a3dfe0 = self::commentquote(str_replace("\n", "\n  ", $_00cdb5a3dfe0));
+                        $_9d1930831f12['license'] .= " * $_d186186a7d16: $_00cdb5a3dfe0\n";
                     }
-                    $license_key = $parameters["license_key"];
-                    unset($parameters["license_key"]);
-                    $parameters["license_code"] =
-                        "[************************************************-********************************-****************]";
-                    if (isset($paramteres["license_verifier_api"])) {
-                        $license_verifier_api =
-                            $parameters["license_verifier_api"];
-                        unset($parameters["license_verifier_api"]);
-                    }
-                }
-                $license_text = "Do not change anything of segment antitamper";
-                if ($license_type == "comment") {
-                    $settings["license"] =
-                        "/** ALOM Obfuscator License\n * " .
-                        str_replace("\n", "\n * ", $license_text) .
-                        "\n *\n";
-                    foreach ($parameters as $key => $value) {
-                        $key = str_replace(["\n", "_"], " ", $key);
-                        $key = self::commentquote($key);
-                        $value = self::commentquote(
-                            str_replace("\n", "\n  ", $value)
-                        );
-                        $settings["license"] .= " * $key: $value\n";
-                    }
-                    $settings["license"] .= " */";
-                } else if ($license_type == "file") {
-                    if (isset($parameters["license_file"])) {
-                        $license_file = $parameters["license_file"];
-                        unset($parameters["license_file"]);
+                    $_9d1930831f12['license'] .= " */";
+                } else if ($_073b842fff17 == 'file') {
+                    if (isset($_f9f3ba55208c['license_file'])) {
+                        $_ffafc4d0a7af = $_f9f3ba55208c['license_file'];
+                        unset($_f9f3ba55208c['license_file']);
                     } else {
-                        $license_file = "alomObfuscator.php.license";
+                        $_ffafc4d0a7af = 'alomObfuscator.php.license';
                     }
-                    $settings["identify"]["files"][] = $license_file;
-                    $settings["license"] =
-                        "* ALOM Obfuscator License\r\n" .
-                        str_replace("\n", "\r\n", $license_text) .
-                        "\r\n\r\n";
-                    foreach ($parameters as $key => $value) {
-                        $key = str_replace(["\n", "_"], " ", $key);
-                        $value = str_replace("\n", "\n  ", $value);
-                        $settings["license"] .= "$key: $value\r\n";
+                    $_9d1930831f12['identify']['files'][] = $_ffafc4d0a7af;
+                    $_9d1930831f12['license'] = "* ALOM Obfuscator License\r\n" . str_replace("\n", "\r\n", $_657a98c9ba29) . "\r\n\r\n";
+                    foreach ($_f9f3ba55208c as $_d186186a7d16 => $_00cdb5a3dfe0) {
+                        $_d186186a7d16 = str_replace(["\n", '_'], ' ', $_d186186a7d16);
+                        $_00cdb5a3dfe0 = str_replace("\n", "\n  ", $_00cdb5a3dfe0);
+                        $_9d1930831f12['license'] .= "$_d186186a7d16: $_00cdb5a3dfe0\r\n";
                     }
-                    file_put_contents($license_file, $settings["license"]);
+                    file_put_contents($_ffafc4d0a7af, $_9d1930831f12['license']);
                 }
             }
-            if (isset($license_key)) {
-                self::log(
-                    "License created. (type=$license_type, license_key=" .
-                    bin2hex($license_key) .
-                    ")",
-                    "notice"
-                );
+            if (isset($_85e9b296e2f6)) {
+                self::log("License created. (type=$_073b842fff17, license_key=" . bin2hex($_85e9b296e2f6) . ")", 'notice');
             } else {
-                self::log("License created. (type=$license_type)", "notice");
+                self::log("License created. (type=$_073b842fff17)", 'notice');
             }
-            $hashes = [
-                "files"  => [],
-                "system" => ["ord" => 0xe3, "id" => $sign],
-                "id"     => "W]",
-            ];
-            foreach ($settings["identify"]["files"] as $file) {
-                if (!file_exists($file)) {
+            $_e2396294dbd0 = ['files' => [], 'system' => ['ord' => 0xe3, 'id' => $_ebe2944af80d], 'id' => 'W]'];
+            foreach ($_9d1930831f12['identify']['files'] as $_dcd32d9a06d7) {
+                if (!file_exists($_dcd32d9a06d7)) {
                     continue;
                 }
-                $hashes["files"][$file] = md5(
-                    basename($file) . "\n" . file_get_contents($file),
-                    TRUE
-                );
-                $hashes["id"] .= $hashes["files"][$file] . "\n";
+                $_e2396294dbd0['files'][$_dcd32d9a06d7] = md5(basename($_dcd32d9a06d7) . "\n" . file_get_contents($_dcd32d9a06d7), TRUE);
+                $_e2396294dbd0['id'] .= $_e2396294dbd0['files'][$_dcd32d9a06d7] . "\n";
             }
-            $hashes["id"] .= count($hashes["files"]) . "/+\xf1%R\r";
-            if (isset($settings["identify"]["uname"])) {
-                if (
-                    !isset($settings["identify"]["uname"]["hashed"]) ||
-                    !$settings["identify"]["uname"]["hashed"]
-                ) {
-                    $settings["identify"]["uname"]["value"] = md5(
-                        $settings["identify"]["uname"]["value"],
-                        TRUE
-                    );
+            $_e2396294dbd0['id'] .= count($_e2396294dbd0['files']) . "/+\xf1%R\r";
+            if (isset($_9d1930831f12['identify']['uname'])) {
+                if (!isset($_9d1930831f12['identify']['uname']['hashed']) || !$_9d1930831f12['identify']['uname']['hashed']) $_9d1930831f12['identify']['uname']['value'] = md5($_9d1930831f12['identify']['uname']['value'], TRUE);
+                $_e2396294dbd0['system']['ord'] ^= 0x1;
+                $_e2396294dbd0['system']['id'] .= "un:{$_9d1930831f12['identify']['uname']['value']}\n";
+            }
+            if (isset($_9d1930831f12['identify']['username'])) {
+                if (!isset($_9d1930831f12['identify']['username']['hashed']) || !$_9d1930831f12['identify']['username']['hashed']) $_9d1930831f12['identify']['username']['value'] = md5($_9d1930831f12['identify']['username']['value'], TRUE);
+                $_e2396294dbd0['system']['ord'] ^= 0x2;
+                $_e2396294dbd0['system']['id'] .= "us:{$_9d1930831f12['identify']['username']['value']}\n";
+            }
+            if (isset($_9d1930831f12['identify']['filename'])) {
+                if (!isset($_9d1930831f12['identify']['filename']['hashed']) || !$_9d1930831f12['identify']['filename']['hashed']) $_9d1930831f12['identify']['filename']['value'] = md5(basename($_9d1930831f12['identify']['filename']['value']), TRUE);
+                $_e2396294dbd0['system']['ord'] ^= 0x4;
+                $_e2396294dbd0['system']['id'] .= "fn:{$_9d1930831f12['identify']['filename']['value']}\n";
+            }
+            if (isset($_9d1930831f12['identify']['ipaddr'])) {
+                if (!isset($_9d1930831f12['identify']['ipaddr']['hashed']) || !$_9d1930831f12['identify']['ipaddr']['hashed']) $_9d1930831f12['identify']['ipaddr']['value'] = md5($_9d1930831f12['identify']['ipaddr']['value'], TRUE);
+                $_e2396294dbd0['system']['ord'] ^= 0x8;
+                $_e2396294dbd0['system']['id'] .= "ip:{$_9d1930831f12['identify']['ipaddr']['value']}\n";
+            }
+            if (isset($_9d1930831f12['identify']['hostname'])) {
+                if (!isset($_9d1930831f12['identify']['hostname']['hashed']) || !$_9d1930831f12['identify']['hostname']['hashed']) $_9d1930831f12['identify']['hostname']['value'] = md5($_9d1930831f12['identify']['hostname']['value'], TRUE);
+                $_e2396294dbd0['system']['ord'] ^= 0x10;
+                $_e2396294dbd0['system']['id'] .= "hn:{$_9d1930831f12['identify']['hostname']['value']}\n";
+            }
+            $_e2396294dbd0['id'] .= $_e2396294dbd0['system']['id'] . "..\xaf\0S!\r" . $_e2396294dbd0['system']['ord'];
+            $_e2396294dbd0['id'] = md5($_e2396294dbd0['id'], TRUE);
+            $_e2396294dbd0['system']['id'] = md5($_e2396294dbd0['system']['id'] . chr($_e2396294dbd0['system']['ord']), TRUE);
+            if (!isset($_9d1930831f12['date_domain'])) $_9d1930831f12['date_domain'] = [];
+            if (!isset($_9d1930831f12['date_domain']['expiration']) || !is_numeric($_9d1930831f12['date_domain']['expiration'])) $_9d1930831f12['date_domain']['expiration'] = 0x7fffffff; else $_9d1930831f12['date_domain']['expiration'] = (int)$_9d1930831f12['date_domain']['expiration'];
+            if (!isset($_9d1930831f12['date_domain']['ready']) || !is_numeric($_9d1930831f12['date_domain']['ready'])) $_9d1930831f12['date_domain']['ready'] = 0; else $_9d1930831f12['date_domain']['ready'] = (int)$_9d1930831f12['date_domain']['ready'];
+            if (!isset($_9d1930831f12['additional'])) $_9d1930831f12['additional'] = [];
+            if (!isset($_9d1930831f12['additional']['antitamper'])) $_9d1930831f12['additional']['antitamper'] = ''; else if (is_callable($_9d1930831f12['additional']['antitamper'])) $_9d1930831f12['additional']['antitamper'] = self::getcallable($_9d1930831f12['additional']['antitamper']) . "\n";
+            else $_9d1930831f12['additional']['antitamper'] = trim((string)$_9d1930831f12['additional']['antitamper']) . "\n";
+            if (!isset($_9d1930831f12['additional']['optional'])) $_9d1930831f12['additional']['optional'] = ''; else if (is_callable($_9d1930831f12['additional']['optional'])) $_9d1930831f12['additional']['optional'] = self::getcallable($_9d1930831f12['additional']['optional']) . "\n";
+            else $_9d1930831f12['additional']['optional'] = trim((string)$_9d1930831f12['additional']['optional']) . "\n";
+            if (!isset($_9d1930831f12['additional']['shutdown'])) $_9d1930831f12['additional']['shutdown'] = ''; else if (is_callable($_9d1930831f12['additional']['shutdown'])) $_9d1930831f12['additional']['shutdown'] = self::getcallable($_9d1930831f12['additional']['shutdown']) . "\n";
+            else $_9d1930831f12['additional']['shutdown'] = trim((string)$_9d1930831f12['additional']['shutdown']) . "\n";
+            $_fb3a29fe9bdf = rand();
+            $_ce467557df24 = token_get_all($_d5cbf76f6b55);
+            $_d5cbf76f6b55 = '';
+            for ($_44af9f79ea06 = 0; isset($_ce467557df24[$_44af9f79ea06]); ++$_44af9f79ea06) if (is_array($_ce467557df24[$_44af9f79ea06])) if ($_ce467557df24[$_44af9f79ea06][0] == T_FILE) $_d5cbf76f6b55 .= "_uwC5JBWaTsMV4Vs$_5b3eb1c32c0d()"; else if ($_ce467557df24[$_44af9f79ea06][0] == T_DIR) $_d5cbf76f6b55 .= "_fETt6AVcU6vr6m5$_5b3eb1c32c0d()";
+            else if ($_44af9f79ea06 == 0 && $_ce467557df24[$_44af9f79ea06][0] == T_INLINE_HTML) {
+                $_d5dca515a504 = htmlentities($_ce467557df24[$_44af9f79ea06][1]);
+                $_d5dca515a504 = $_d5dca515a504 == $_ce467557df24[$_44af9f79ea06][1] ? 'print "' . $_d5dca515a504 . '"' : 'print html_entity_decode("' . $_d5dca515a504 . '")';
+                if (isset($_ce467557df24[$_44af9f79ea06 + 1])) {
+                    if ($_ce467557df24[++$_44af9f79ea06][0] == T_OPEN_TAG_WITH_ECHO) $_d5cbf76f6b55 .= "<" . "?php $_d5dca515a504;echo "; else $_d5cbf76f6b55 .= "<" . "?php $_d5dca515a504;";
+                } else $_d5cbf76f6b55 .= "<" . "?php $_d5dca515a504; ?" . ">";
+            } else if ($_ce467557df24[$_44af9f79ea06][0] == T_CLOSE_TAG && isset($_ce467557df24[$_44af9f79ea06 + 1])) {
+                if ($_ce467557df24[++$_44af9f79ea06][0] == T_OPEN_TAG_WITH_ECHO) $_d5cbf76f6b55 .= ";echo "; else if ($_ce467557df24[$_44af9f79ea06][0] == T_OPEN_TAG) $_d5cbf76f6b55 .= ';';
+                else if ($_ce467557df24[$_44af9f79ea06][0] == T_INLINE_HTML) {
+                    $_d5dca515a504 = htmlentities($_ce467557df24[$_44af9f79ea06][1]);
+                    $_d5dca515a504 = $_d5dca515a504 == $_ce467557df24[$_44af9f79ea06][1] ? 'print "' . $_d5dca515a504 . '"' : 'print html_entity_decode("' . $_d5dca515a504 . '")';
+                    if (isset($_ce467557df24[$_44af9f79ea06 + 1])) {
+                        if ($_ce467557df24[++$_44af9f79ea06][0] == T_OPEN_TAG_WITH_ECHO) $_d5cbf76f6b55 .= ";$_d5dca515a504;echo "; else $_d5cbf76f6b55 .= ";$_d5dca515a504;";
+                    } else $_d5cbf76f6b55 .= ";$_d5dca515a504; ?" . ">";
                 }
-                $hashes["system"]["ord"] ^= 0x1;
-                $hashes["system"]["id"] .= "un:{$settings["identify"]["uname"]["value"]}\n";
+            } else if ($_ce467557df24[$_44af9f79ea06][0] == T_OPEN_TAG_WITH_ECHO) $_d5cbf76f6b55 .= "<" . "?php echo ";
+            else $_d5cbf76f6b55 .= $_ce467557df24[$_44af9f79ea06][1]; else $_d5cbf76f6b55 .= $_ce467557df24[$_44af9f79ea06];
+            if ($_d5cbf76f6b55 === '') $_d5cbf76f6b55 = '<' . '?php ?' . '>'; else if (substr($_d5cbf76f6b55, -2, 2) != '?' . '>') $_d5cbf76f6b55 .= '?' . '>';
+            unset($_ce467557df24);
+            $_d5cbf76f6b55 = str_replace("?" . "><" . "?php", '', rtrim($_d5cbf76f6b55));
+            $_d5cbf76f6b55 = self::setikeys($_d5cbf76f6b55);
+            $_d5cbf76f6b55 = self::sug($_d5cbf76f6b55, $_5b3eb1c32c0d);
+            $_81eef8d1e5b4 = [crc32(self::$_3227269fab81[0]) ^ self::$_d186186a7d16[0], crc32(self::$_3227269fab81[1]) ^ self::$_d186186a7d16[1]];
+            $_81eef8d1e5b4[2] = md5($_81eef8d1e5b4[0] . $_ebe2944af80d . $_81eef8d1e5b4[1], TRUE);
+            $_231acd6afa62 = substr(md5($_81eef8d1e5b4[0] . $_81eef8d1e5b4[2] . $_ebe2944af80d . $_81eef8d1e5b4[1], TRUE), 4);
+            if ($_9d1930831f12['rounds']['unmeaning']['variables']) {
+                self::log("Unmeaning round is processing...", 'notice');
+                $_d5cbf76f6b55 = self::unmeaning($_d5cbf76f6b55, $_9d1930831f12['rounds']['unmeaning']['size'], $_9d1930831f12['rounds']['unmeaning']['prefix'], $_5b3eb1c32c0d, $_9d1930831f12['rounds']['unmeaning']['variables']);
+                self::backlog('notice');
+                self::log("optwister round processed.", 'notice');
             }
-            if (isset($settings["identify"]["username"])) {
-                if (
-                    !isset($settings["identify"]["username"]["hashed"]) ||
-                    !$settings["identify"]["username"]["hashed"]
-                ) {
-                    $settings["identify"]["username"]["value"] = md5(
-                        $settings["identify"]["username"]["value"],
-                        TRUE
-                    );
-                }
-                $hashes["system"]["ord"] ^= 0x2;
-                $hashes["system"]["id"] .= "us:{$settings["identify"]["username"]["value"]}\n";
+            if ($_9d1930831f12['rounds']['optwister']['enable']) {
+                self::log("optwister round is processing...", 'notice');
+                $_d5cbf76f6b55 = self::minify(self::optwister_op2fn($_d5cbf76f6b55, $_5b3eb1c32c0d));
+                $_d5cbf76f6b55 = self::optwister_obfs($_d5cbf76f6b55, $_5b3eb1c32c0d, $_81eef8d1e5b4[0], $_81eef8d1e5b4[1], $_81eef8d1e5b4[2], $_231acd6afa62);
+                self::backlog('notice');
+                self::log("optwister round processed.", 'notice');
             }
-            if (isset($settings["identify"]["filename"])) {
-                if (
-                    !isset($settings["identify"]["filename"]["hashed"]) ||
-                    !$settings["identify"]["filename"]["hashed"]
-                ) {
-                    $settings["identify"]["filename"]["value"] = md5(
-                        basename($settings["identify"]["filename"]["value"]),
-                        TRUE
-                    );
-                }
-                $hashes["system"]["ord"] ^= 0x4;
-                $hashes["system"]["id"] .= "fn:{$settings["identify"]["filename"]["value"]}\n";
-            }
-            if (isset($settings["identify"]["ipaddr"])) {
-                if (
-                    !isset($settings["identify"]["ipaddr"]["hashed"]) ||
-                    !$settings["identify"]["ipaddr"]["hashed"]
-                ) {
-                    $settings["identify"]["ipaddr"]["value"] = md5(
-                        $settings["identify"]["ipaddr"]["value"],
-                        TRUE
-                    );
-                }
-                $hashes["system"]["ord"] ^= 0x8;
-                $hashes["system"]["id"] .= "ip:{$settings["identify"]["ipaddr"]["value"]}\n";
-            }
-            if (isset($settings["identify"]["hostname"])) {
-                if (
-                    !isset($settings["identify"]["hostname"]["hashed"]) ||
-                    !$settings["identify"]["hostname"]["hashed"]
-                ) {
-                    $settings["identify"]["hostname"]["value"] = md5(
-                        $settings["identify"]["hostname"]["value"],
-                        TRUE
-                    );
-                }
-                $hashes["system"]["ord"] ^= 0x10;
-                $hashes["system"]["id"] .= "hn:{$settings["identify"]["hostname"]["value"]}\n";
-            }
-            $hashes["id"] .=
-                $hashes["system"]["id"] .
-                "..\xaf\0S!\r" .
-                $hashes["system"]["ord"];
-            $hashes["id"] = md5($hashes["id"], TRUE);
-            $hashes["system"]["id"] = md5(
-                $hashes["system"]["id"] . chr($hashes["system"]["ord"]),
-                TRUE
-            );
-            if (!isset($settings["date_domain"])) {
-                $settings["date_domain"] = [];
-            }
-            if (
-                !isset($settings["date_domain"]["expiration"]) ||
-                !is_numeric($settings["date_domain"]["expiration"])
-            ) {
-                $settings["date_domain"]["expiration"] = 0x7fffffff;
-            } else {
-                $settings["date_domain"]["expiration"] =
-                    (int)$settings["date_domain"]["expiration"];
-            }
-            if (
-                !isset($settings["date_domain"]["ready"]) ||
-                !is_numeric($settings["date_domain"]["ready"])
-            ) {
-                $settings["date_domain"]["ready"] = 0;
-            } else {
-                $settings["date_domain"]["ready"] =
-                    (int)$settings["date_domain"]["ready"];
-            }
-            if (!isset($settings["additional"])) {
-                $settings["additional"] = [];
-            }
-            if (!isset($settings["additional"]["antitamper"])) {
-                $settings["additional"]["antitamper"] = "";
-            } else if (is_callable($settings["additional"]["antitamper"])) {
-                $settings["additional"]["antitamper"] =
-                    self::getcallable($settings["additional"]["antitamper"]) .
-                    "\n";
-            } else {
-                $settings["additional"]["antitamper"] =
-                    trim((string)$settings["additional"]["antitamper"]) . "\n";
-            }
-            if (!isset($settings["additional"]["optional"])) {
-                $settings["additional"]["optional"] = "";
-            } else if (is_callable($settings["additional"]["optional"])) {
-                $settings["additional"]["optional"] =
-                    self::getcallable($settings["additional"]["optional"]) .
-                    "\n";
-            } else {
-                $settings["additional"]["optional"] =
-                    trim((string)$settings["additional"]["optional"]) . "\n";
-            }
-            $seed = rand();
-            $tokens = token_get_all($code);
-            $code = "";
-            for ($i = 0; isset($tokens[$i]); ++$i) {
-                if (is_array($tokens[$i])) {
-                    if ($tokens[$i][0] == T_FILE) {
-                        $code .= "_uwC5JBWaTsMV4Vs$signflag()";
-                    } else if ($tokens[$i][0] == T_DIR) {
-                        $code .= "_fETt6AVcU6vr6m5$signflag()";
-                    } else if ($i == 0 && $tokens[$i][0] == T_INLINE_HTML) {
-                        $html = htmlentities($tokens[$i][1]);
-                        $html =
-                            $html == $tokens[$i][1]
-                                ? 'print "' . $html . '"'
-                                : 'print html_entity_decode("' . $html . '")';
-                        if (isset($tokens[$i + 1])) {
-                            if ($tokens[++$i][0] == T_OPEN_TAG_WITH_ECHO) {
-                                $code .= "<" . "?php $html;echo ";
-                            } else {
-                                $code .= "<" . "?php $html;";
-                            }
-                        } else {
-                            $code .= "<" . "?php $html; ?" . ">";
-                        }
-                    } else if (
-                        $tokens[$i][0] == T_CLOSE_TAG &&
-                        isset($tokens[$i + 1])
-                    ) {
-                        if ($tokens[++$i][0] == T_OPEN_TAG_WITH_ECHO) {
-                            $code .= ";echo ";
-                        } else if ($tokens[$i][0] == T_OPEN_TAG) {
-                            $code .= ";";
-                        } else if ($tokens[$i][0] == T_INLINE_HTML) {
-                            $html = htmlentities($tokens[$i][1]);
-                            $html =
-                                $html == $tokens[$i][1]
-                                    ? 'print "' . $html . '"'
-                                    : 'print html_entity_decode("' .
-                                    $html .
-                                    '")';
-                            if (isset($tokens[$i + 1])) {
-                                if ($tokens[++$i][0] == T_OPEN_TAG_WITH_ECHO) {
-                                    $code .= ";$html;echo ";
-                                } else {
-                                    $code .= ";$html;";
-                                }
-                            } else {
-                                $code .= ";$html; ?" . ">";
-                            }
-                        }
-                    } else if ($tokens[$i][0] == T_OPEN_TAG_WITH_ECHO) {
-                        $code .= "<" . "?php echo ";
-                    } else {
-                        $code .= $tokens[$i][1];
-                    }
-                } else {
-                    $code .= $tokens[$i];
-                }
-            }
-            if ($code === "") {
-                $code = "<" . "?php ?" . ">";
-            } else if (substr($code, -2, 2) != "?" . ">") {
-                $code .= "?" . ">";
-            }
-            unset($tokens);
-            $code = str_replace("?" . "><" . "?php", "", rtrim($code));
-            $code = self::setikeys($code);
-            $code = self::sug($code, $signflag);
-            $pky = [
-                crc32(self::$fky[0]) ^ self::$key[0],
-                crc32(self::$fky[1]) ^ self::$key[1],
-            ];
-            $pky[2] = md5($pky[0] . $sign . $pky[1], TRUE);
-            $pkyid = substr(md5($pky[0] . $pky[2] . $sign . $pky[1], TRUE), 4);
-            if ($settings["rounds"]["optwister"]["enable"]) {
-                self::log("optwister round is proccessing...", "notice");
-                $code = self::minify(self::optwister_op2fn($code, $signflag));
-                $code = self::optwister_obfs(
-                    $code,
-                    $signflag,
-                    $pky[0],
-                    $pky[1],
-                    $pky[2],
-                    $pkyid
-                );
-                self::backlog();
-                self::log("optwister round proccessed.", "notice");
-            }
-            $code = substr($code, 5);
-            $code = str_replace("?" . "><" . "?php", "", rtrim($code));
-            if (substr($code, -2, 2) == "?" . ">") {
-                $code = substr($code, 0, -2);
-            }
-            $code = trim($code);
-            self::mt_prng_store($seed ^ 0x90c8);
+            $_d5cbf76f6b55 = substr($_d5cbf76f6b55, 5);
+            $_d5cbf76f6b55 = str_replace("?" . "><" . "?php", '', rtrim($_d5cbf76f6b55));
+            if (substr($_d5cbf76f6b55, -2, 2) == '?' . '>') $_d5cbf76f6b55 = substr($_d5cbf76f6b55, 0, -2);
+            $_d5cbf76f6b55 = trim($_d5cbf76f6b55);
+            self::mt_prng_store($_fb3a29fe9bdf ^ 0x90c8);
             self::encodew(TRUE, 0, 0);
-            if ($settings["rounds"]["partitioning"]["enable"]) {
-                self::log("partitioning round is proccessing...", "notice");
-                $pky2 = [
-                    crc32($pkyid . $pky[0]) ^ self::$key[1],
-                    crc32($pkyid . $pky[1]) ^ self::$key[0],
-                ];
-                $pky2[2] = md5($pky2[0] . $pky[2] . $pky2[1], TRUE);
-                $pkyid2 = substr(
-                    md5($pky2[0] . $pky2[2] . $pky[2] . $pky2[1], TRUE),
-                    4
-                );
-                $ua = $partition = [];
-                $code = self::partitioning(
-                    $ua,
-                    $partition,
-                    $code,
-                    $settings["rounds"]["optwister"]["enable"],
-                    $signflag,
-                    $pky2[0],
-                    $pky2[1],
-                    $pky2[2],
-                    $pkyid2,
-                    $settings["rounds"]["partitioning"]["fast"]
-                );
-                $code = pack("N", strlen($code) ^ $pky[0]) . $code;
-                $code .= pack("N", count($ua) ^ $pky[0]);
-                foreach ($ua as $part) {
-                    $code .= pack("N", $part ^ $pky[0]);
-                }
-                foreach ($partition as $part) {
-                    $code .= pack("N", strlen($part) ^ $pky[0]) . $part;
-                }
-                for ($i = strlen($code) - 2; $i >= 0; --$i) {
-                    $code[$i + 1] = chr(
-                        ((ord($code[$i + 1]) ^
-                                ord($code[$i]) ^
-                                ord(self::$fky[1][$i & 0xf])) -
-                            ord(self::$fky[0][$i & 0xf]) +
-                            0x100) &
-                        0xff
-                    );
-                }
-                for ($i = 0; isset($code[$i]); ++$i) {
-                    $code[$i] = chr(
-                        ((ord($code[$i]) ^ ord(self::$fky[0][$i & 0xf])) -
-                            ord(self::$fky[1][$i & 0xf]) +
-                            0x100) &
-                        0xff
-                    );
-                }
-                self::backlog();
-                self::log("partitioning round proccessed.", "notice");
+            if ($_9d1930831f12['rounds']['partitioning']['enable']) {
+                $_9d1930831f12['style']['hide_eval'] = FALSE;
+                self::log("partitioning round is processing...", 'notice');
+                $_d97b76b09ecb = [crc32($_231acd6afa62 . $_81eef8d1e5b4[0]) ^ self::$_d186186a7d16[1], crc32($_231acd6afa62 . $_81eef8d1e5b4[1]) ^ self::$_d186186a7d16[0]];
+                $_d97b76b09ecb[2] = md5($_d97b76b09ecb[0] . $_81eef8d1e5b4[2] . $_d97b76b09ecb[1], TRUE);
+                $_40b1740abb59 = substr(md5($_d97b76b09ecb[0] . $_d97b76b09ecb[2] . $_81eef8d1e5b4[2] . $_d97b76b09ecb[1], TRUE), 4);
+                $_a56962748828 = $_5a71f81a43eb = [];
+                $_d5cbf76f6b55 = self::partitioning($_a56962748828, $_5a71f81a43eb, $_d5cbf76f6b55, $_9d1930831f12['rounds']['optwister']['enable'], $_5b3eb1c32c0d, $_d97b76b09ecb[0], $_d97b76b09ecb[1], $_d97b76b09ecb[2], $_40b1740abb59, $_9d1930831f12['rounds']['partitioning']['fast']);
+                $_d5cbf76f6b55 = pack('N', strlen($_d5cbf76f6b55) ^ $_81eef8d1e5b4[0]) . $_d5cbf76f6b55;
+                $_d5cbf76f6b55 .= pack('N', count($_a56962748828) ^ $_81eef8d1e5b4[0]);
+                foreach ($_a56962748828 as $_f60e006196fb) $_d5cbf76f6b55 .= pack('N', $_f60e006196fb ^ $_81eef8d1e5b4[0]);
+                foreach ($_5a71f81a43eb as $_f60e006196fb) $_d5cbf76f6b55 .= pack('N', strlen($_f60e006196fb) ^ $_81eef8d1e5b4[0]) . $_f60e006196fb;
+                for ($_44af9f79ea06 = strlen($_d5cbf76f6b55) - 2; $_44af9f79ea06 >= 0; --$_44af9f79ea06) $_d5cbf76f6b55[$_44af9f79ea06 + 1] = chr((ord($_d5cbf76f6b55[$_44af9f79ea06 + 1]) ^ ord($_d5cbf76f6b55[$_44af9f79ea06]) ^ ord(self::$_3227269fab81[1][$_44af9f79ea06 & 0xf])) - ord(self::$_3227269fab81[0][$_44af9f79ea06 & 0xf]) + 0x100 & 0xff);
+                for ($_44af9f79ea06 = 0; isset($_d5cbf76f6b55[$_44af9f79ea06]); ++$_44af9f79ea06) $_d5cbf76f6b55[$_44af9f79ea06] = chr((ord($_d5cbf76f6b55[$_44af9f79ea06]) ^ ord(self::$_3227269fab81[0][$_44af9f79ea06 & 0xf])) - ord(self::$_3227269fab81[1][$_44af9f79ea06 & 0xf]) + 0x100 & 0xff);
+                self::backlog('notice');
+                self::log("partitioning round processed. (fast=" . ($_9d1930831f12['rounds']['partitioning']['fast'] ? 'true' : 'false') . ")", 'notice');
             }
-            if ($settings["rounds"]["main"]["deflate_round"]) {
-                $code = gzdeflate($code, 9);
+            $_6360a51c3f2f = '';
+            if ($_9d1930831f12['style']['hide_eval'] && $_9d1930831f12['style']['global_cache']) {
+                $_bd34d9e828bc = self::gcmake("<" . "?php $_d5cbf76f6b55 ?" . ">", $_5b3eb1c32c0d);
+                foreach ($_bd34d9e828bc as $_8b00b3e5a686) $_6360a51c3f2f .= pack("N", $_8b00b3e5a686[0] - 6) . chr(strlen($_8b00b3e5a686[1])) . chr($_8b00b3e5a686[2]) . $_8b00b3e5a686[1];
             }
-            self::mt_prng_store($seed ^ 0x8550255);
-            $code = self::inc(
-                $code,
-                rand() ^ self::$key[0],
-                rand() ^ self::$key[1]
-            );
-            if ($settings["rounds"]["main"]["base64rand_round"]) {
-                self::mt_prng_store($seed ^ 0x1c);
-                $code = self::base64encode($code);
-            }
-            self::mt_prng_store($seed ^ 0xde);
-            $len = strlen($code);
-            $depth = $settings["rounds"]["main"]["depth"];
-            switch ($settings["rounds"]["main"]["depth_type"]) {
-                case "constant":
-                    $depth = ceil(($depth + 1) * $depth);
-                    break;
-                case "logarthm":
-                    $depth = ceil((log($len + 1, 2) + $depth + 1) * $depth);
-                    break;
-                case "logpower":
-                    $depth = ceil(
-                        (pow(log($len + 1, 2), 2.02) + $depth + 1) * $depth
-                    );
-                    break;
-                case "square":
-                    $depth = ceil((sqrt($len) + $depth + 1) * $depth);
-                    break;
-                case "linear":
-                    $depth = ceil(($len + $depth + 1) * $depth);
-                    break;
-            }
-            $randpack = [];
-            $rps = $depth * 9 + 6;
-            for ($i = 1; $i <= $rps; ++$i) {
-                $randpack[$rps - $i] = rand();
-            }
-            $file = "<" . "?php\n";
-            if ($license_type == "comment") {
-                $file .= $settings["license"] . "\n";
-            }
-            $license_length = strlen($file);
-            if ($settings["additional"]["optional"]) {
-                $file .=
-                    "# ALOM OPTIONAL SEGMENT SEPARATOR d473b606a9" .
-                    bin2hex($sign) .
-                    " #\n";
-                $file .= $settings["additional"]["optional"];
-                $antitamper_offset = strlen($file);
-                $file .=
-                    "# ALOM ANTITAMPER SEGMENT SEPARATOR d473b606a9" .
-                    bin2hex($sign) .
-                    " #\n";
-                if ($settings["additional"]["antitamper"]) {
-                    $file .= $settings["additional"]["antitamper"];
-                }
-            } else {
-                $antitamper_offset = strlen($file);
-                $file .=
-                    "# ALOM ANTITAMPER SEGMENT SEPARATOR d473b606a9" .
-                    bin2hex($sign) .
-                    " #\n";
-                if ($settings["additional"]["antitamper"]) {
-                    $file .= $settings["additional"]["antitamper"];
-                }
-            }
-            $file .=
-                "function _uwC5JBWaTsMV4Vs" .
-                $signflag .
-                "(){return __FILE__;}function _fETt6AVcU6vr6m5" .
-                $signflag .
-                "(){return __DIR__;}";
-            $file .=
-                "function _H4abed0zL6i7Pgw" .
-                $signflag .
-                '($XYZbpYbFeAq){return str_replace("AlomDecoder","AlomDecoder' .
-                $signflag .
-                '",$XYZbpYbFeAq);}';
-            if ($settings["rounds"]["optwister"]["enable"]) {
-                $file .=
-                    "function _CuIjYEAXVvJzmV8" .
-                    $signflag .
-                    '($XYZbpYbFeAq){return str_replace("_ALOM_optwister","_ALOM_optwister' .
-                    $signflag .
-                    '",$XYZbpYbFeAq);}';
-            }
-            $file .=
-                "function _s7GdHhyCWB0FOmT" .
-                $signflag .
-                '($cMEhPFcDh8H,$Zb5nfJM7T9u){return ($ndnNmLHVPUs=realpath($cMEhPFcDh8H))?' .
-                '$ndnNmLHVPUs:(($ndnNmLHVPUs=realpath(__DIR__."/".$cMEhPFcDh8H))?$ndnNmLHVPUs:AlomDecoder' .
-                $signflag .
-                '::removedLoader($Zb5nfJM7T9u));}';
-            $file .= "\neval(_H4abed0zL6i7Pgw$signflag(gzinflate(";
-            if ($settings["style"]["separated_loader"]["decoder_file"]) {
-                $file .=
-                    "file_get_contents(_s7GdHhyCWB0FOmT('" .
-                    self::singlequote(
-                        $settings["style"]["separated_loader"]["decoder_file"]
-                    ) .
-                    "'))";
-            } else if ($settings["style"]["raw"]) {
-                if (
-                !file_exists(
-                    _fETt6AVcU6vr6m5f4ee4df4bf1a() . "/alomdecoder.obfs.php"
-                )
-                ) {
-                    $contents = @file_get_contents(
-                        _fETt6AVcU6vr6m5f4ee4df4bf1a() . "/alomdecoder.obfs.php"
-                    );
-                    if (!$contents) {
-                        self::removedLoader("alomdecoder.obfs.php");
+            if ($_9d1930831f12['rounds']['main']['iterate_base64'] > 0) {
+                $_5d1f753e4a96 = $_9d1930831f12['rounds']['main']['iterate_base64'];
+                self::log("base64 iterating round is processing... ($_5d1f753e4a96 iterates)", 'notice');
+                for ($_44af9f79ea06 = 0; $_44af9f79ea06 < $_5d1f753e4a96; ++$_44af9f79ea06) {
+                    if ($_5d1f753e4a96 > 30 && $_44af9f79ea06 % 20 == 0) {
+                        self::backlog('notice');
+                        self::log("base64 iterating round is processing... ($_44af9f79ea06/$_5d1f753e4a96 iterates)", 'notice');
                     }
-                } else {
-                    $contents = file_get_contents(
-                        _fETt6AVcU6vr6m5f4ee4df4bf1a() . "/alomdecoder.obfs.php"
-                    );
+                    $_d5cbf76f6b55 = "eval(gzinflate(base64_decode('" . self::singlequote(base64_encode(gzdeflate($_d5cbf76f6b55, 9))) . "')));";
                 }
-                $file .=
-                    "'" . self::singlequote(base64_decode($contents)) . "'";
-            } else {
-                if (
-                !file_exists(
-                    _fETt6AVcU6vr6m5f4ee4df4bf1a() . "/alomdecoder.obfs.php"
-                )
-                ) {
-                    $contents = @file_get_contents(
-                        _fETt6AVcU6vr6m5f4ee4df4bf1a() . "/alomdecoder.obfs.php"
-                    );
-                    if (!$contents) {
-                        self::removedLoader("alomdecoder.obfs.php");
-                    }
-                } else {
-                    $contents = file_get_contents(
-                        _fETt6AVcU6vr6m5f4ee4df4bf1a() . "/alomdecoder.obfs.php"
-                    );
+                if ($_5d1f753e4a96 > 10) {
+                    self::backlog('notice');
+                    self::log("base64 iterating round is processed. ($_5d1f753e4a96 iterates)", 'notice');
                 }
-                $file .= "base64_decode('$contents')";
             }
-            $file .= ")));\n";
-            if ($settings["rounds"]["optwister"]["enable"]) {
-                $file .= "eval(_CuIjYEAXVvJzmV8$signflag(gzinflate(";
-                if ($settings["style"]["separated_loader"]["optwister_file"]) {
-                    $file .=
-                        "file_get_contents(_s7GdHhyCWB0FOmT('" .
-                        self::singlequote(
-                            $settings["style"]["separated_loader"]["optwister_file"]
-                        ) .
-                        "'))";
-                } else if ($settings["style"]["raw"]) {
-                    if (
-                    !file_exists(
-                        _fETt6AVcU6vr6m5f4ee4df4bf1a() .
-                        "/optwister.obfs.php"
-                    )
-                    ) {
-                        $contents = @file_get_contents(
-                            _fETt6AVcU6vr6m5f4ee4df4bf1a() .
-                            "/optwister.obfs.php"
-                        );
-                        if (!$contents) {
-                            self::removedLoader("optwister.obfs.php");
-                        }
+            if ($_9d1930831f12['additional']['shutdown']) {
+                $_d5cbf76f6b55 = pack('N', strlen($_9d1930831f12['additional']['shutdown'])) . $_9d1930831f12['additional']['shutdown'] . $_d5cbf76f6b55;
+            }
+            $_d5cbf76f6b55 = $_d5cbf76f6b55 ^ str_repeat("\x80", strlen($_d5cbf76f6b55));
+            if ($_9d1930831f12['rounds']['main']['deflate_round']) {
+                $_d5cbf76f6b55 = gzdeflate($_d5cbf76f6b55, 9);
+            }
+            $_d5cbf76f6b55 = pack('N', strlen($_6360a51c3f2f)) . $_6360a51c3f2f . $_d5cbf76f6b55;
+            self::mt_prng_store($_fb3a29fe9bdf ^ 0x8550255);
+            $_d5cbf76f6b55 = self::inc($_d5cbf76f6b55, rand() ^ self::$_d186186a7d16[0], rand() ^ self::$_d186186a7d16[1]);
+            if ($_9d1930831f12['rounds']['main']['base64rand_round']) {
+                self::mt_prng_store($_fb3a29fe9bdf ^ 0x1c);
+                $_d5cbf76f6b55 = self::base64encode($_d5cbf76f6b55);
+            }
+            self::mt_prng_store($_fb3a29fe9bdf ^ 0xde);
+            $_8d2d7939f6cb = strlen($_d5cbf76f6b55);
+            $_e5752171fb85 = $_9d1930831f12['rounds']['main']['depth'];
+            switch ($_9d1930831f12['rounds']['main']['depth_type']) {
+                case 'constant':
+                    $_e5752171fb85 = ceil(($_e5752171fb85 + 1) * $_e5752171fb85);
+                    break;
+                case 'logarthm':
+                    $_e5752171fb85 = ceil((log($_8d2d7939f6cb + 1, 2) + $_e5752171fb85 + 1) * $_e5752171fb85);
+                    break;
+                case 'logpower':
+                    $_e5752171fb85 = ceil((pow(log($_8d2d7939f6cb + 1, 2), 2.02) + $_e5752171fb85 + 1) * $_e5752171fb85);
+                    break;
+                case 'square':
+                    $_e5752171fb85 = ceil((sqrt($_8d2d7939f6cb) + $_e5752171fb85 + 1) * $_e5752171fb85);
+                    break;
+                case 'linear':
+                    $_e5752171fb85 = ceil(($_8d2d7939f6cb + $_e5752171fb85 + 1) * $_e5752171fb85);
+                    break;
+            }
+            $_7755dc3006fd = [];
+            $_198a2bd39cff = $_e5752171fb85 * 9 + 6;
+            for ($_44af9f79ea06 = 1; $_44af9f79ea06 <= $_198a2bd39cff; ++$_44af9f79ea06) $_7755dc3006fd[$_198a2bd39cff - $_44af9f79ea06] = rand();
+            $_dcd32d9a06d7 = "<" . "?php\n";
+            if ($_073b842fff17 == 'comment') $_dcd32d9a06d7 .= $_9d1930831f12['license'] . "\n";
+            $_609134e7cdf4 = strlen($_dcd32d9a06d7);
+            if ($_9d1930831f12['additional']['optional']) {
+                $_dcd32d9a06d7 .= "# ALOM OPTIONAL SEGMENT SEPARATOR d473b606a9" . bin2hex($_ebe2944af80d) . " #\n";
+                $_dcd32d9a06d7 .= $_9d1930831f12['additional']['optional'];
+                $_042341f22967 = strlen($_dcd32d9a06d7);
+                $_dcd32d9a06d7 .= "# ALOM ANTITAMPER SEGMENT SEPARATOR d473b606a9" . bin2hex($_ebe2944af80d) . " #\n";
+                if ($_9d1930831f12['additional']['antitamper']) $_dcd32d9a06d7 .= $_9d1930831f12['additional']['antitamper'];
+            } else {
+                $_042341f22967 = strlen($_dcd32d9a06d7);
+                $_dcd32d9a06d7 .= "# ALOM ANTITAMPER SEGMENT SEPARATOR d473b606a9" . bin2hex($_ebe2944af80d) . " #\n";
+                if ($_9d1930831f12['additional']['antitamper']) $_dcd32d9a06d7 .= $_9d1930831f12['additional']['antitamper'];
+            }
+            $_dcd32d9a06d7 .= 'if(!class_exists("AlomDecoder' . $_5b3eb1c32c0d . '")){';
+            $_dcd32d9a06d7 .= 'function _uwC5JBWaTsMV4Vs' . $_5b3eb1c32c0d . '(){return __FILE__;}function _fETt6AVcU6vr6m5' . $_5b3eb1c32c0d . '(){return __DIR__;}';
+            $_dcd32d9a06d7 .= 'function _H4abed0zL6i7Pgw' . $_5b3eb1c32c0d . '($XYZbpYbFeAq){return str_replace("AlomDecoder","AlomDecoder' . $_5b3eb1c32c0d . '",$XYZbpYbFeAq);}';
+            if ($_9d1930831f12['rounds']['optwister']['enable']) $_dcd32d9a06d7 .= 'function _CuIjYEAXVvJzmV8' . $_5b3eb1c32c0d . '($XYZbpYbFeAq){return str_replace("_ALOM_optwister","_ALOM_optwister' . $_5b3eb1c32c0d . '",$XYZbpYbFeAq);}';
+            $_dcd32d9a06d7 .= 'function _s7GdHhyCWB0FOmT' . $_5b3eb1c32c0d . '($cMEhPFcDh8H,$Zb5nfJM7T9u){return ($ndnNmLHVPUs=realpath($cMEhPFcDh8H))?' . '$ndnNmLHVPUs:(($ndnNmLHVPUs=realpath(__DIR__."/".$cMEhPFcDh8H))?$ndnNmLHVPUs:AlomDecoder' . $_5b3eb1c32c0d . '::removedLoader($Zb5nfJM7T9u));}';
+            $_dcd32d9a06d7 .= "\neval(_H4abed0zL6i7Pgw$_5b3eb1c32c0d(gzinflate(";
+            if ($_9d1930831f12['style']['separated_loader']['decoder_file']) {
+                $_dcd32d9a06d7 .= "file_get_contents(_s7GdHhyCWB0FOmT('" . self::singlequote($_9d1930831f12['style']['separated_loader']['decoder_file']) . "'))";
+            } else if ($_9d1930831f12['style']['raw']) {
+                if (!file_exists(_fETt6AVcU6vr6m525c0b2da0dc0() . '/alomdecoder.obfs.php')) {
+                    $_51db06b79ed6 = @file_get_contents(_fETt6AVcU6vr6m525c0b2da0dc0() . '/alomdecoder.obfs.php');
+                    if (!$_51db06b79ed6) self::removedLoader('alomdecoder.obfs.php');
+                } else {
+                    $_51db06b79ed6 = file_get_contents(_fETt6AVcU6vr6m525c0b2da0dc0() . '/alomdecoder.obfs.php');
+                }
+                $_dcd32d9a06d7 .= "'" . self::singlequote(base64_decode($_51db06b79ed6)) . "'";
+            } else {
+                if (!file_exists(_fETt6AVcU6vr6m525c0b2da0dc0() . '/alomdecoder.obfs.php')) {
+                    $_51db06b79ed6 = @file_get_contents(_fETt6AVcU6vr6m525c0b2da0dc0() . '/alomdecoder.obfs.php');
+                    if (!$_51db06b79ed6) self::removedLoader('alomdecoder.obfs.php');
+                } else {
+                    $_51db06b79ed6 = file_get_contents(_fETt6AVcU6vr6m525c0b2da0dc0() . '/alomdecoder.obfs.php');
+                }
+                $_dcd32d9a06d7 .= "base64_decode('$_51db06b79ed6')";
+            }
+            $_dcd32d9a06d7 .= ")));\n";
+            if ($_9d1930831f12['rounds']['optwister']['enable']) {
+                $_dcd32d9a06d7 .= "eval(_CuIjYEAXVvJzmV8$_5b3eb1c32c0d(gzinflate(";
+                if ($_9d1930831f12['style']['separated_loader']['optwister_file']) {
+                    $_dcd32d9a06d7 .= "file_get_contents(_s7GdHhyCWB0FOmT('" . self::singlequote($_9d1930831f12['style']['separated_loader']['optwister_file']) . "'))";
+                } else if ($_9d1930831f12['style']['raw']) {
+                    if (!file_exists(_fETt6AVcU6vr6m525c0b2da0dc0() . '/optwister.obfs.php')) {
+                        $_51db06b79ed6 = @file_get_contents(_fETt6AVcU6vr6m525c0b2da0dc0() . '/optwister.obfs.php');
+                        if (!$_51db06b79ed6) self::removedLoader('optwister.obfs.php');
                     } else {
-                        $contents = file_get_contents(
-                            _fETt6AVcU6vr6m5f4ee4df4bf1a() .
-                            "/optwister.obfs.php"
-                        );
+                        $_51db06b79ed6 = file_get_contents(_fETt6AVcU6vr6m525c0b2da0dc0() . '/optwister.obfs.php');
                     }
-                    $file .=
-                        "'" . self::singlequote(base64_decode($contents)) . "'";
+                    $_dcd32d9a06d7 .= "'" . self::singlequote(base64_decode($_51db06b79ed6)) . "'";
                 } else {
-                    if (
-                    !file_exists(
-                        _fETt6AVcU6vr6m5f4ee4df4bf1a() .
-                        "/optwister.obfs.php"
-                    )
-                    ) {
-                        $contents = @file_get_contents(
-                            _fETt6AVcU6vr6m5f4ee4df4bf1a() .
-                            "/optwister.obfs.php"
-                        );
-                        if (!$contents) {
-                            self::removedLoader("optwister.obfs.php");
-                        }
+                    if (!file_exists(_fETt6AVcU6vr6m525c0b2da0dc0() . '/optwister.obfs.php')) {
+                        $_51db06b79ed6 = @file_get_contents(_fETt6AVcU6vr6m525c0b2da0dc0() . '/optwister.obfs.php');
+                        if (!$_51db06b79ed6) self::removedLoader('optwister.obfs.php');
                     } else {
-                        $contents = file_get_contents(
-                            _fETt6AVcU6vr6m5f4ee4df4bf1a() .
-                            "/optwister.obfs.php"
-                        );
+                        $_51db06b79ed6 = file_get_contents(_fETt6AVcU6vr6m525c0b2da0dc0() . '/optwister.obfs.php');
                     }
-                    $file .= "base64_decode('$contents')";
+                    $_dcd32d9a06d7 .= "base64_decode('$_51db06b79ed6')";
                 }
-                $file .= ")));\n";
+                $_dcd32d9a06d7 .= ")));\n";
             }
-            $file .= "\AlomDecoder$signflag::mt_prng_store(rand());";
-            if ($settings["style"]["hide_errors"]) {
-                $file .= "try{@eval(\AlomDecoder$signflag::run('";
+            $_dcd32d9a06d7 .= "}\AlomDecoder$_5b3eb1c32c0d::mt_prng_store(rand());\n";
+            if ($_9d1930831f12['style']['hide_eval']) $_dcd32d9a06d7 .= 'foreach(get_defined_vars() as $_ALOM_key=>$_ALOM_val)\AlomDecoder' . $_5b3eb1c32c0d . '::$vrs[$_ALOM_key]=&$$_ALOM_key;';
+            if ($_9d1930831f12['style']['hide_errors']) {
+                $_dcd32d9a06d7 .= "try{";
+                $_dcd32d9a06d7 .= "@eval(\AlomDecoder$_5b3eb1c32c0d::run('";
             } else {
-                $file .= "eval(\AlomDecoder$signflag::run('";
+                $_dcd32d9a06d7 .= "eval(\AlomDecoder$_5b3eb1c32c0d::run('";
             }
-            $antitamper_length = strlen($file) - $antitamper_offset;
+            $_87d6dcd949e5 = strlen($_dcd32d9a06d7) - $_042341f22967;
             self::mt_prng_reset();
-            $p = 0;
-            $r = 0;
-            if (self::$iscli) {
-                $prevprog = 0;
-                self::log("main round proccessing... 0%", "notice");
+            $_f6090e078f91 = 0;
+            $_203a4ef6ac3d = 0;
+            if (self::$_2b3c116ebf09) {
+                $_78deaaae8602 = 0;
+                self::log("main round processing... 0%", 'notice');
             } else {
-                self::log("main round proccessing...", "notice");
+                self::log("main round processing...", 'notice');
             }
-            for ($i = 0; $i < $depth; ++$i) {
-                if (self::$iscli) {
-                    $prog = round(($i / $depth) * 50, 1) * 2;
-                    if ($prog != $prevprog) {
-                        self::backlog();
-                        self::log("main round proccessing... $prog%", "notice");
-                        $prevprog = $prog;
+            for ($_44af9f79ea06 = 0; $_44af9f79ea06 < $_e5752171fb85; ++$_44af9f79ea06) {
+                if (self::$_2b3c116ebf09) {
+                    $_6a7ca792fc3d = round($_44af9f79ea06 / $_e5752171fb85 * 50, 1) * 2;
+                    if ($_6a7ca792fc3d != $_78deaaae8602) {
+                        self::backlog('notice');
+                        self::log("main round processing... $_6a7ca792fc3d%", 'notice');
+                        $_78deaaae8602 = $_6a7ca792fc3d;
                     }
                 }
-                $action = $settings["rounds"]["main"]["extrascript_round"]
-                    ? $randpack[$r + 8] % 0b111
-                    : $randpack[$r + 8] % 0b110;
-                switch ($action) {
+                $_9dbbf3da27d7 = $_9d1930831f12['rounds']['main']['extrascript_round'] ? $_7755dc3006fd[$_203a4ef6ac3d + 8] % 0b111 : $_7755dc3006fd[$_203a4ef6ac3d + 8] % 0b110;
+                switch ($_9dbbf3da27d7) {
                     case 0b000:
-                        $code[$p] = chr(
-                            ord($code[$p]) ^
-                            ((self::$key[0] ^ self::$key[1]) & 0xff)
-                        );
-                        self::$key[1] ^=
-                            $randpack[$r++] ^
-                            $randpack[$r++] ^
-                            $randpack[$r++] ^
-                            $randpack[$r++];
-                        self::$key[0] ^=
-                            $randpack[$r++] ^
-                            $randpack[$r++] ^
-                            $randpack[$r++] ^
-                            $randpack[$r++];
+                        $_d5cbf76f6b55[$_f6090e078f91] = chr(ord($_d5cbf76f6b55[$_f6090e078f91]) ^ ((self::$_d186186a7d16[0] ^ self::$_d186186a7d16[1]) & 0xff));
+                        self::$_d186186a7d16[1] ^= $_7755dc3006fd[$_203a4ef6ac3d++] ^ $_7755dc3006fd[$_203a4ef6ac3d++] ^ $_7755dc3006fd[$_203a4ef6ac3d++] ^ $_7755dc3006fd[$_203a4ef6ac3d++];
+                        self::$_d186186a7d16[0] ^= $_7755dc3006fd[$_203a4ef6ac3d++] ^ $_7755dc3006fd[$_203a4ef6ac3d++] ^ $_7755dc3006fd[$_203a4ef6ac3d++] ^ $_7755dc3006fd[$_203a4ef6ac3d++];
                         break;
                     case 0b001:
-                        $crc =
-                            ((int)(rand() + self::$key[0] + self::$key[1]) &
-                                0xffffffff) ^
-                            rand();
-                        $crcb = pack("V", $crc ^ 0x9f0a4382);
-                        $sl = self::uncrc32in(
-                            substr($code, 0, $p) . $crcb,
-                            substr($code, $p),
-                            $crc
-                        );
-                        $code =
-                            substr($code, 0, $p) .
-                            $crcb .
-                            $sl .
-                            substr($code, $p);
-                        $sl = unpack("V", $sl);
-                        $crc ^= $randpack[$r + 7];
-                        self::$key[1] ^=
-                            $crc ^
-                            $randpack[$r++] ^
-                            $randpack[$r++] ^
-                            $randpack[$r++] ^
-                            $sl[1];
-                        self::$key[0] ^=
-                            $crc ^
-                            $randpack[$r++] ^
-                            $randpack[$r++] ^
-                            $randpack[$r++] ^
-                            $randpack[$r++];
-                        ++$r;
+                        $_87724dcfcb3c = ((int)(rand() + self::$_d186186a7d16[0] + self::$_d186186a7d16[1]) & 0xffffffff) ^ rand();
+                        $_30acf8485ad4 = pack('V', $_87724dcfcb3c ^ 0x9f0a4382);
+                        $_a62b34eb6df6 = self::uncrc32in(substr($_d5cbf76f6b55, 0, $_f6090e078f91) . $_30acf8485ad4, substr($_d5cbf76f6b55, $_f6090e078f91), $_87724dcfcb3c);
+                        $_d5cbf76f6b55 = substr($_d5cbf76f6b55, 0, $_f6090e078f91) . $_30acf8485ad4 . $_a62b34eb6df6 . substr($_d5cbf76f6b55, $_f6090e078f91);
+                        $_a62b34eb6df6 = unpack('V', $_a62b34eb6df6);
+                        $_87724dcfcb3c ^= $_7755dc3006fd[$_203a4ef6ac3d + 7];
+                        self::$_d186186a7d16[1] ^= $_87724dcfcb3c ^ $_7755dc3006fd[$_203a4ef6ac3d++] ^ $_7755dc3006fd[$_203a4ef6ac3d++] ^ $_7755dc3006fd[$_203a4ef6ac3d++] ^ $_a62b34eb6df6[1];
+                        self::$_d186186a7d16[0] ^= $_87724dcfcb3c ^ $_7755dc3006fd[$_203a4ef6ac3d++] ^ $_7755dc3006fd[$_203a4ef6ac3d++] ^ $_7755dc3006fd[$_203a4ef6ac3d++] ^ $_7755dc3006fd[$_203a4ef6ac3d++];
+                        ++$_203a4ef6ac3d;
                         break;
                     case 0b010:
-                        $crc = crc32(
-                            pack("V", $randpack[$r + 7]) . self::$fky[0]
-                        );
-                        $crc ^= crc32(
-                            pack("V", $randpack[$r + 6]) . self::$fky[1]
-                        );
-                        self::$key[1] ^=
-                            $crc ^
-                            $randpack[$r++] ^
-                            $randpack[$r++] ^
-                            $randpack[$r++];
-                        self::$key[0] ^=
-                            $crc ^
-                            $randpack[$r++] ^
-                            $randpack[$r++] ^
-                            $randpack[$r++];
-                        $r += 2;
+                        $_87724dcfcb3c = crc32(pack('V', $_7755dc3006fd[$_203a4ef6ac3d + 7]) . self::$_3227269fab81[0]);
+                        $_87724dcfcb3c ^= crc32(pack('V', $_7755dc3006fd[$_203a4ef6ac3d + 6]) . self::$_3227269fab81[1]);
+                        self::$_d186186a7d16[1] ^= $_87724dcfcb3c ^ $_7755dc3006fd[$_203a4ef6ac3d++] ^ $_7755dc3006fd[$_203a4ef6ac3d++] ^ $_7755dc3006fd[$_203a4ef6ac3d++];
+                        self::$_d186186a7d16[0] ^= $_87724dcfcb3c ^ $_7755dc3006fd[$_203a4ef6ac3d++] ^ $_7755dc3006fd[$_203a4ef6ac3d++] ^ $_7755dc3006fd[$_203a4ef6ac3d++];
+                        $_203a4ef6ac3d += 2;
                         break;
                     case 0b011:
-                        $sl1 = rand();
-                        $sl2 = rand();
-                        $code =
-                            substr($code, 0, $p) .
-                            pack("V2", $sl1, $sl2) .
-                            substr($code, $p);
-                        self::$key[1] ^=
-                            $randpack[$r++] ^
-                            $randpack[$r++] ^
-                            $randpack[$r++] ^
-                            $randpack[$r++] ^
-                            $sl2 ^
-                            1;
-                        self::$key[0] ^=
-                            $randpack[$r++] ^
-                            $randpack[$r++] ^
-                            $randpack[$r++] ^
-                            $randpack[$r++] ^
-                            $sl1;
+                        $_d2ce9730d406 = rand();
+                        $_974584786d5a = rand();
+                        $_d5cbf76f6b55 = substr($_d5cbf76f6b55, 0, $_f6090e078f91) . pack('V2', $_d2ce9730d406, $_974584786d5a) . substr($_d5cbf76f6b55, $_f6090e078f91);
+                        self::$_d186186a7d16[1] ^= $_7755dc3006fd[$_203a4ef6ac3d++] ^ $_7755dc3006fd[$_203a4ef6ac3d++] ^ $_7755dc3006fd[$_203a4ef6ac3d++] ^ $_7755dc3006fd[$_203a4ef6ac3d++] ^ $_974584786d5a ^ 1;
+                        self::$_d186186a7d16[0] ^= $_7755dc3006fd[$_203a4ef6ac3d++] ^ $_7755dc3006fd[$_203a4ef6ac3d++] ^ $_7755dc3006fd[$_203a4ef6ac3d++] ^ $_7755dc3006fd[$_203a4ef6ac3d++] ^ $_d2ce9730d406;
                         break;
                     case 0b100:
-                        $cl = strlen($code) - 1;
-                        $lq = ceil(
-                            $settings["rounds"]["optwister"]["enable"]
-                                ? pow($cl, 1 / 3)
-                                : sqrt($cl)
-                        );
-                        $cl -= $lq;
-                        $loc = $randpack[$r + 7] % $cl;
-                        $len =
-                            (($randpack[$r + 5] ^ $randpack[$r + 6]) % $lq) + 1;
-                        $sl1 = self::$key[0] ^ $randpack[$r + 1];
-                        $sl2 = self::$key[1] ^ $randpack[$r];
-                        if ($len > $cl / 2) {
-                            $len = ($randpack[$r + 2] % $len) + 1;
-                        } else {
-                            $sl2 ^= $randpack[$r + 2];
-                        }
-                        $code =
-                            substr($code, 0, $loc) .
-                            self::encodew(
-                                substr($code, $loc, $len),
-                                $sl1,
-                                $sl2
-                            ) .
-                            substr($code, $loc + $len);
-                        self::$key[1] = $sl1 ^ $randpack[$r + 4];
-                        self::$key[0] = $sl2 ^ $randpack[$r + 3];
-                        $r += 8;
+                        $_3266760cbb47 = strlen($_d5cbf76f6b55) - 1;
+                        $_882e2160efc7 = ceil($_9d1930831f12['rounds']['optwister']['enable'] ? pow($_3266760cbb47, 1 / 3) : sqrt($_3266760cbb47));
+                        $_3266760cbb47 -= $_882e2160efc7;
+                        $_e395e653b603 = $_7755dc3006fd[$_203a4ef6ac3d + 7] % $_3266760cbb47;
+                        $_8d2d7939f6cb = ($_7755dc3006fd[$_203a4ef6ac3d + 5] ^ $_7755dc3006fd[$_203a4ef6ac3d + 6]) % $_882e2160efc7 + 1;
+                        $_d2ce9730d406 = self::$_d186186a7d16[0] ^ $_7755dc3006fd[$_203a4ef6ac3d + 1];
+                        $_974584786d5a = self::$_d186186a7d16[1] ^ $_7755dc3006fd[$_203a4ef6ac3d];
+                        if ($_8d2d7939f6cb > $_3266760cbb47 / 2) $_8d2d7939f6cb = $_7755dc3006fd[$_203a4ef6ac3d + 2] % $_8d2d7939f6cb + 1; else $_974584786d5a ^= $_7755dc3006fd[$_203a4ef6ac3d + 2];
+                        $_d5cbf76f6b55 = substr($_d5cbf76f6b55, 0, $_e395e653b603) . self::encodew(substr($_d5cbf76f6b55, $_e395e653b603, $_8d2d7939f6cb), $_d2ce9730d406, $_974584786d5a) . substr($_d5cbf76f6b55, $_e395e653b603 + $_8d2d7939f6cb);
+                        self::$_d186186a7d16[1] = $_d2ce9730d406 ^ $_7755dc3006fd[$_203a4ef6ac3d + 4];
+                        self::$_d186186a7d16[0] = $_974584786d5a ^ $_7755dc3006fd[$_203a4ef6ac3d + 3];
+                        $_203a4ef6ac3d += 8;
                         break;
                     case 0b101:
-                        $cl = strlen($code) - 1;
-                        $lq = ceil(
-                            $settings["rounds"]["optwister"]["enable"]
-                                ? pow($cl, 1 / 3)
-                                : sqrt($cl)
-                        );
-                        $cl -= $lq;
-                        $loc = $randpack[$r + 7] % $cl;
-                        $len =
-                            (($randpack[$r + 5] ^ $randpack[$r + 6]) % $lq) + 1;
-                        $sl1 = self::$key[0] ^ $randpack[$r + 1];
-                        $sl2 = self::$key[1] ^ $randpack[$r];
-                        if ($len > $cl / 2) {
-                            $len = ($randpack[$r + 2] % $len) + 1;
-                        } else {
-                            $sl2 ^= $randpack[$r + 2];
-                        }
-                        $code =
-                            substr($code, 0, $loc) .
-                            self::incw(substr($code, $loc, $len), $sl1, $sl2) .
-                            substr($code, $loc + $len);
-                        self::$key[1] = $sl1 ^ $randpack[$r + 4];
-                        self::$key[0] = $sl2 ^ $randpack[$r + 3];
-                        $r += 8;
+                        $_3266760cbb47 = strlen($_d5cbf76f6b55) - 1;
+                        $_882e2160efc7 = ceil($_9d1930831f12['rounds']['optwister']['enable'] ? pow($_3266760cbb47, 1 / 3) : sqrt($_3266760cbb47));
+                        $_3266760cbb47 -= $_882e2160efc7;
+                        $_e395e653b603 = $_7755dc3006fd[$_203a4ef6ac3d + 7] % $_3266760cbb47;
+                        $_8d2d7939f6cb = ($_7755dc3006fd[$_203a4ef6ac3d + 5] ^ $_7755dc3006fd[$_203a4ef6ac3d + 6]) % $_882e2160efc7 + 1;
+                        $_d2ce9730d406 = self::$_d186186a7d16[0] ^ $_7755dc3006fd[$_203a4ef6ac3d + 1];
+                        $_974584786d5a = self::$_d186186a7d16[1] ^ $_7755dc3006fd[$_203a4ef6ac3d];
+                        if ($_8d2d7939f6cb > $_3266760cbb47 / 2) $_8d2d7939f6cb = $_7755dc3006fd[$_203a4ef6ac3d + 2] % $_8d2d7939f6cb + 1; else $_974584786d5a ^= $_7755dc3006fd[$_203a4ef6ac3d + 2];
+                        $_d5cbf76f6b55 = substr($_d5cbf76f6b55, 0, $_e395e653b603) . self::incw(substr($_d5cbf76f6b55, $_e395e653b603, $_8d2d7939f6cb), $_d2ce9730d406, $_974584786d5a) . substr($_d5cbf76f6b55, $_e395e653b603 + $_8d2d7939f6cb);
+                        self::$_d186186a7d16[1] = $_d2ce9730d406 ^ $_7755dc3006fd[$_203a4ef6ac3d + 4];
+                        self::$_d186186a7d16[0] = $_974584786d5a ^ $_7755dc3006fd[$_203a4ef6ac3d + 3];
+                        $_203a4ef6ac3d += 8;
                         break;
                     case 0b110:
-                        $crc =
-                            ((int)(rand() + self::$key[0] + self::$key[1]) &
-                                0xffffffff) ^
-                            rand();
-                        self::$key[1] ^=
-                            $randpack[$r++] ^
-                            $randpack[$r++] ^
-                            $randpack[$r++] ^
-                            $randpack[$r++] ^
-                            $crc;
-                        self::$key[0] ^=
-                            $randpack[$r++] ^
-                            $randpack[$r++] ^
-                            $randpack[$r++] ^
-                            $randpack[$r++] ^
-                            $crc;
-                        $len = strlen($code);
-                        $sub = "";
+                        $_87724dcfcb3c = ((int)(rand() + self::$_d186186a7d16[0] + self::$_d186186a7d16[1]) & 0xffffffff) ^ rand();
+                        self::$_d186186a7d16[1] ^= $_7755dc3006fd[$_203a4ef6ac3d++] ^ $_7755dc3006fd[$_203a4ef6ac3d++] ^ $_7755dc3006fd[$_203a4ef6ac3d++] ^ $_7755dc3006fd[$_203a4ef6ac3d++] ^ $_87724dcfcb3c;
+                        self::$_d186186a7d16[0] ^= $_7755dc3006fd[$_203a4ef6ac3d++] ^ $_7755dc3006fd[$_203a4ef6ac3d++] ^ $_7755dc3006fd[$_203a4ef6ac3d++] ^ $_7755dc3006fd[$_203a4ef6ac3d++] ^ $_87724dcfcb3c;
+                        $_8d2d7939f6cb = strlen($_d5cbf76f6b55);
+                        $_2193a50fc7d6 = '';
                         do {
-                            $loc = rand(0, $len - 1);
-                            $dlt = rand(0, 0xff);
-                            $code[$loc] = $code[$loc] ^ chr($dlt);
-                            if ($dlt > 0xf) {
-                                $dlt = dechex($dlt);
-                            } else {
-                                $dlt = "0" . dechex($dlt);
-                            }
-                            $sub .= "\$code[$loc]=\$code[$loc]^\"\\x$dlt\";";
+                            $_e395e653b603 = rand(0, $_8d2d7939f6cb - 1);
+                            $_7be91b582a1e = rand(0, 0xff);
+                            $_d5cbf76f6b55[$_e395e653b603] = $_d5cbf76f6b55[$_e395e653b603] ^ chr($_7be91b582a1e);
+                            if ($_7be91b582a1e > 0xf) $_7be91b582a1e = dechex($_7be91b582a1e); else $_7be91b582a1e = '0' . dechex($_7be91b582a1e);
+                            $_2193a50fc7d6 .= "\$code[$_e395e653b603]=\$code[$_e395e653b603]^\"\\x$_7be91b582a1e\";";
                         } while (rand(0, 6));
                         if (rand(0, 2)) {
-                            $sub .=
-                                "\$obfuscatored=file_get_contents(preg_replace(\"/\([0-9]+\) : eval\(\)'d code/i\",'',__FILE__));";
-                            while (rand(0, 2)) {
-                                $loc = rand(0, $len - 1);
-                                $dlt = rand(0, $license_length - 1);
-                                $code[$loc] = $code[$loc] ^ $file[$dlt];
-                                $sub .= "\$code[$loc]=\$code[$loc]^\$obfuscatored[\$license_offset+$dlt];";
-                                $loc = rand(0, $len - 1);
-                                $dlt = rand(0, $license_length - 1);
-                                $code[$loc] =
-                                    $code[$loc] ^
-                                    $file[$antitamper_offset + $dlt];
-                                $sub .= "\$code[$loc]=\$code[$loc]^\$obfuscatored[\$antitamper_offset+$dlt];";
-                            }
+                            $_2193a50fc7d6 .= "\$obfuscatored=file_get_contents(preg_replace(\"/\([0-9]+\) : eval\(\)'d code/i\",'',__FILE__));";
                         }
                         do {
-                            $loc = rand(0, $len - 1);
-                            $dlt = rand(0, 0xff);
-                            $code[$loc] = $code[$loc] ^ chr($dlt);
-                            if ($dlt > 0xf) {
-                                $dlt = dechex($dlt);
-                            } else {
-                                $dlt = "0" . dechex($dlt);
-                            }
-                            $sub .= "\$code[$loc]=\$code[$loc]^\"\\x$dlt\";";
+                            $_e395e653b603 = rand(0, $_8d2d7939f6cb - 1);
+                            $_7be91b582a1e = rand(0, 0xff);
+                            $_d5cbf76f6b55[$_e395e653b603] = $_d5cbf76f6b55[$_e395e653b603] ^ chr($_7be91b582a1e);
+                            if ($_7be91b582a1e > 0xf) $_7be91b582a1e = dechex($_7be91b582a1e); else $_7be91b582a1e = '0' . dechex($_7be91b582a1e);
+                            $_2193a50fc7d6 .= "\$code[$_e395e653b603]=\$code[$_e395e653b603]^\"\\x$_7be91b582a1e\";";
                         } while (rand(0, 6));
-                        $rtn = 0;
-                        while (!rand(0, 26)) {
-                            $rnb = random_bytes(strlen($sub));
-                            if (rand(0, 3)) {
-                                $sub =
-                                    "\$brt$rtn=microtime(true);eval('" .
-                                    self::singlequote($sub ^ $rnb) .
-                                    "'^'" .
-                                    self::singlequote($rnb) .
-                                    "');";
-                                $sub .= "if(microtime(true)-\$brt$rtn>0.07)self::starvationDetected();";
+                        $_756eaa8fa413 = 0;
+                        while (!rand(0, 14)) {
+                            if (rand(0, 2)) {
+                                $_2193a50fc7d6 = gzdeflate($_2193a50fc7d6, 1);
+                                $_bfa2ffd23bc0 = random_bytes(strlen($_2193a50fc7d6));
+                                $_8bdc20d549d7 = lcg_value() * 0.07;
+                                $_382b19e22575 = 0.07 - $_8bdc20d549d7;
+                                $_2193a50fc7d6 = "\$brt$_756eaa8fa413=microtime(true);eval(gzinflate('" . self::singlequote($_2193a50fc7d6 ^ $_bfa2ffd23bc0) . "'^'" . self::singlequote($_bfa2ffd23bc0) . "'));";
+                                $_2193a50fc7d6 .= "if(microtime(true)-\$brt$_756eaa8fa413>$_8bdc20d549d7+$_382b19e22575){self::starvationDetected();while(1)die;}";
                             } else {
-                                $sub =
-                                    "eval('" .
-                                    self::singlequote($sub ^ $rnb) .
-                                    "'^'" .
-                                    self::singlequote($rnb) .
-                                    "');";
+                                $_bfa2ffd23bc0 = random_bytes(strlen($_2193a50fc7d6));
+                                $_2193a50fc7d6 = "eval('" . self::singlequote($_2193a50fc7d6 ^ $_bfa2ffd23bc0) . "'^'" . self::singlequote($_bfa2ffd23bc0) . "');";
                             }
                         }
-                        $sub .= "\n// ";
+                        $_2193a50fc7d6 .= "\n// ";
                         do {
-                            $sbb = self::getasciiikey(4);
-                            $sbb .= self::uncrc32in(
-                                "alom:$sub$sbb",
-                                ":alom",
-                                $crc
-                            );
-                        } while (str_replace(["\r", "\n"], "", $sbb) != $sbb);
-                        $sub .= $sbb;
-                        $sbm = $sub;
-                        $sub = gzdeflate($sub, 9);
-                        $code =
-                            substr($code, 0, $p) .
-                            pack("V", strlen($sub)) .
-                            $sub .
-                            substr($code, $p);
-                        self::$fky[0] =
-                            self::$fky[0] ^
-                            md5(
-                                $sign .
-                                substr($file, 0, $license_length) .
-                                $sbm,
-                                TRUE
-                            );
-                        self::$fky[1] =
-                            self::$fky[1] ^
-                            md5(
-                                $sign .
-                                substr(
-                                    $file,
-                                    $antitamper_offset,
-                                    $antitamper_length
-                                ) .
-                                $sbm,
-                                TRUE
-                            );
+                            $_49079b50c603 = self::getasciiikey(4);
+                            $_49079b50c603 .= self::uncrc32in("alom:$_2193a50fc7d6$_49079b50c603", ":alom", $_87724dcfcb3c);
+                        } while (str_replace(["\r", "\n"], '', $_49079b50c603) != $_49079b50c603);
+                        $_2193a50fc7d6 .= $_49079b50c603;
+                        $_dbb75d67fdab = $_2193a50fc7d6;
+                        $_2193a50fc7d6 = gzdeflate($_2193a50fc7d6, 1);
+                        $_d5cbf76f6b55 = substr($_d5cbf76f6b55, 0, $_f6090e078f91) . pack('V', strlen($_2193a50fc7d6)) . $_2193a50fc7d6 . substr($_d5cbf76f6b55, $_f6090e078f91);
+                        self::$_3227269fab81[0] = self::$_3227269fab81[0] ^ md5($_ebe2944af80d . substr($_dcd32d9a06d7, 0, $_609134e7cdf4) . $_dbb75d67fdab, TRUE);
+                        self::$_3227269fab81[1] = self::$_3227269fab81[1] ^ md5($_ebe2944af80d . substr($_dcd32d9a06d7, $_042341f22967, $_87d6dcd949e5) . $_dbb75d67fdab, TRUE);
                         break;
                 }
-                $loc = rand() % strlen($code);
-                $code =
-                    substr($code, 0, $loc) .
-                    pack("V", $p ^ self::$key[0] ^ self::$key[1]) .
-                    substr($code, $loc);
-                $p = $loc;
-                self::$key[0] =
-                    (int)(self::$key[0] - 0x32123 - ($randpack[$r] >> 4)) &
-                    0xffffffff;
-                self::$key[1] =
-                    (int)(self::$key[1] - 0x12321 - ($randpack[$r] >> 4)) &
-                    0xffffffff;
-                ++$r;
+                $_e395e653b603 = rand() % strlen($_d5cbf76f6b55);
+                $_d5cbf76f6b55 = substr($_d5cbf76f6b55, 0, $_e395e653b603) . pack('V', $_f6090e078f91 ^ self::$_d186186a7d16[0] ^ self::$_d186186a7d16[1]) . substr($_d5cbf76f6b55, $_e395e653b603);
+                $_f6090e078f91 = $_e395e653b603;
+                self::$_d186186a7d16[0] = (int)(self::$_d186186a7d16[0] - 0x32123 - ($_7755dc3006fd[$_203a4ef6ac3d] >> 4)) & 0xffffffff;
+                self::$_d186186a7d16[1] = (int)(self::$_d186186a7d16[1] - 0x12321 - ($_7755dc3006fd[$_203a4ef6ac3d] >> 4)) & 0xffffffff;
+                ++$_203a4ef6ac3d;
             }
-            self::backlog();
-            self::log("main round proccessed.", "notice");
-            $packet = pack("V", $p ^ self::$key[0] ^ self::$key[1]);
-            $sl1 = $randpack[$r++];
-            $sl2 = $randpack[$r++];
-            $crc1 = crc32(pack("V", $sl1));
-            $crc2 = crc32(pack("V", $sl2));
-            self::$key[1] ^= 0x9c2858bd;
-            self::$key[0] = unpack(
-                "V",
-                self::uncrc32(self::$key[0] ^ $randpack[$r++] ^ $sl1, $crc1)
-            );
-            self::$key[0] = self::$key[0][1] ^ $randpack[$r++] ^ $sl2;
-            self::$key[1] = unpack(
-                "V",
-                self::uncrc32(self::$key[1] ^ $randpack[$r++] ^ $sl2, $crc2)
-            );
-            self::$key[1] = self::$key[1][1] ^ $randpack[$r++] ^ $sl1;
-            self::$key[0] ^= 0x9c2858bf;
-            self::$key[0] ^= crc32(substr($hashes["system"]["id"], 0, 8));
-            self::$key[1] ^= crc32(substr($hashes["system"]["id"], 8, 8));
-            self::$fky[0] = self::$fky[0] ^ $hashes["id"];
-            self::$fky[1] = self::$fky[1] ^ $hashes["id"];
-            $code =
-                chr($hashes["system"]["ord"]) .
-                md5($sign . $hashes["id"], TRUE) .
-                $code;
-            $ffsp = pack("V", count($hashes["files"]) ^ 0x405a0ff1);
-            foreach ($hashes["files"] as $name => $hash) {
-                $ffsp .=
-                    pack("V", strlen($name) ^ 0x671feb84) .
-                    $name .
-                    md5($sign . $hash, TRUE);
+            self::backlog('notice');
+            self::log("main round processed. (depth-{$_9d1930831f12['rounds']['main']['depth_type']}:{$_9d1930831f12['rounds']['main']['depth']})", 'notice');
+            $_ed17beaee59c = pack('V', $_f6090e078f91 ^ self::$_d186186a7d16[0] ^ self::$_d186186a7d16[1]);
+            $_d2ce9730d406 = $_7755dc3006fd[$_203a4ef6ac3d++];
+            $_974584786d5a = $_7755dc3006fd[$_203a4ef6ac3d++];
+            $_53ac9417ba24 = crc32(pack('V', $_d2ce9730d406));
+            $_e08b1926cedf = crc32(pack('V', $_974584786d5a));
+            self::$_d186186a7d16[1] ^= 0x9c2858bd;
+            self::$_d186186a7d16[0] = unpack('V', self::uncrc32(self::$_d186186a7d16[0] ^ $_7755dc3006fd[$_203a4ef6ac3d++] ^ $_d2ce9730d406, $_53ac9417ba24));
+            self::$_d186186a7d16[0] = self::$_d186186a7d16[0][1] ^ $_7755dc3006fd[$_203a4ef6ac3d++] ^ $_974584786d5a;
+            self::$_d186186a7d16[1] = unpack('V', self::uncrc32(self::$_d186186a7d16[1] ^ $_7755dc3006fd[$_203a4ef6ac3d++] ^ $_974584786d5a, $_e08b1926cedf));
+            self::$_d186186a7d16[1] = self::$_d186186a7d16[1][1] ^ $_7755dc3006fd[$_203a4ef6ac3d++] ^ $_d2ce9730d406;
+            self::$_d186186a7d16[0] ^= 0x9c2858bf;
+            self::$_d186186a7d16[0] ^= crc32(substr($_e2396294dbd0['system']['id'], 0, 8));
+            self::$_d186186a7d16[1] ^= crc32(substr($_e2396294dbd0['system']['id'], 8, 8));
+            self::$_3227269fab81[0] = self::$_3227269fab81[0] ^ $_e2396294dbd0['id'];
+            self::$_3227269fab81[1] = self::$_3227269fab81[1] ^ $_e2396294dbd0['id'];
+            $_d5cbf76f6b55 = chr($_e2396294dbd0['system']['ord']) . md5($_ebe2944af80d . $_e2396294dbd0['id'], TRUE) . $_d5cbf76f6b55;
+            $_3b0fa7799e5a = pack('V', count($_e2396294dbd0['files']) ^ 0x405a0ff1);
+            foreach ($_e2396294dbd0['files'] as $_fed760c6c858 => $_fc00f38c21f0) {
+                $_3b0fa7799e5a .= pack('V', strlen($_fed760c6c858) ^ 0x671feb84) . $_fed760c6c858 . md5($_ebe2944af80d . $_fc00f38c21f0, TRUE);
             }
-            $code = $ffsp . $code;
-            if (isset($license_key)) {
-                $code = $license_key . $code;
-            }
-            if (isset($license_verifier_api)) {
-                $code =
-                    pack("N", strlen($license_verifier_api) ^ 0x7702235f) .
-                    $license_verifier_api .
-                    $code;
-            }
-            if (isset($license_file)) {
-                $code =
-                    pack("N", strlen($license_file) ^ 0x5598aa1e) .
-                    $license_file .
-                    $code;
-            }
-            self::$key[0] ^= $settings["date_domain"]["ready"];
-            self::$key[1] ^= $settings["date_domain"]["expiration"];
-            self::$fky[0] =
-                self::$fky[0] ^
-                md5($sign . substr($file, 0, $license_length), TRUE);
-            self::$fky[1] =
-                self::$fky[1] ^
-                md5(
-                    $sign .
-                    substr($file, $antitamper_offset, $antitamper_length),
-                    TRUE
-                );
-            $code =
-                pack(
-                    "V2",
-                    $settings["date_domain"]["ready"] ^ 0xf09132b8,
-                    $settings["date_domain"]["expiration"] ^ 0x5627c1f0
-                ) . $code;
-            $packet .= pack(
-                "V3",
-                self::$key[1] ^ 0xefcdab89,
-                self::$key[0] ^ 0x67452301,
-                $depth ^ 0x309a2f35
-            );
-            $packet .= pack(
-                "V2",
-                $license_length ^ 0x45ff39ae,
-                $antitamper_length ^ 0x01192bca
-            );
-            $flag = 0x9e;
-            if ($settings["rounds"]["optwister"]["enable"]) {
-                $flag ^= 0x1;
-            }
-            if ($settings["rounds"]["partitioning"]["enable"]) {
-                $flag ^= 0x2;
-            }
-            if ($settings["rounds"]["antidebugger"]["enable"]) {
-                $flag ^= 0x4;
-            }
-            if ($settings["rounds"]["main"]["extrascript_round"]) {
-                $flag ^= 0x8;
-            }
-            if ($settings["rounds"]["main"]["base64rand_round"]) {
-                $flag ^= 0x10;
-            }
-            if ($settings["rounds"]["main"]["deflate_round"]) {
-                $flag ^= 0x20;
-            }
-            if (isset($license_key)) {
-                $flag ^= 0x40;
-            }
-            if ($settings["additional"]["optional"]) {
-                $flag ^= 0x80;
-            }
-            $packet .= chr($flag);
-            $flag = 0xb5;
-            if (isset($license_verifier_api)) {
-                $flag ^= 0x1;
-            }
-            if (isset($license_file)) {
-                $flag ^= 0x2;
-            }
-            $packet .= chr($flag) . self::$fky[0] . self::$fky[1] . $sign;
-            $code = $packet . $code;
-            $code .= "\x43";
-            $len = strlen($code);
-            if ($len % 4 != 0) {
-                $code .= str_repeat("\x85", 4 - ($len % 4));
-            }
-            self::mt_prng_store($seed ^ 0x74);
-            $code = array_values(unpack("V*", $code));
-            for ($i = 0; isset($code[$i]); ++$i) {
-                $code[$i] ^= rand();
-            }
-            array_unshift($code, "V*");
-            $code = call_user_func_array("pack", $code);
-            $code =
-                pack(
-                    "V2",
-                    floor(self::$obfstime) ^ 0x509a2f33,
-                    crc32($code) ^ 0xdeadc0de
-                ) . $code;
-            self::mt_prng_store($seed ^ ALOM_VERSION_NUMBER ^ 0x51);
-            if ($settings["style"]["halt_mode"]) {
-                $code = $settings["style"]["raw"]
-                    ? "\0" . $code
-                    : self::base64encode($code);
+            $_d5cbf76f6b55 = $_3b0fa7799e5a . $_d5cbf76f6b55;
+            if (isset($_85e9b296e2f6)) $_d5cbf76f6b55 = $_85e9b296e2f6 . $_d5cbf76f6b55;
+            if (isset($_0fd6f110872f)) $_d5cbf76f6b55 = pack('N', strlen($_0fd6f110872f) ^ 0x7702235f) . $_0fd6f110872f . $_d5cbf76f6b55;
+            if (isset($_ffafc4d0a7af)) $_d5cbf76f6b55 = pack('N', strlen($_ffafc4d0a7af) ^ 0x5598aa1e) . $_ffafc4d0a7af . $_d5cbf76f6b55;
+            self::$_d186186a7d16[0] ^= $_9d1930831f12['date_domain']['ready'];
+            self::$_d186186a7d16[1] ^= $_9d1930831f12['date_domain']['expiration'];
+            self::$_3227269fab81[0] = self::$_3227269fab81[0] ^ md5($_ebe2944af80d . substr($_dcd32d9a06d7, 0, $_609134e7cdf4), TRUE);
+            self::$_3227269fab81[1] = self::$_3227269fab81[1] ^ md5($_ebe2944af80d . substr($_dcd32d9a06d7, $_042341f22967, $_87d6dcd949e5), TRUE);
+            $_d5cbf76f6b55 = pack('V2', $_9d1930831f12['date_domain']['ready'] ^ 0xf09132b8, $_9d1930831f12['date_domain']['expiration'] ^ 0x5627c1f0) . $_d5cbf76f6b55;
+            $_ed17beaee59c .= pack('V3', self::$_d186186a7d16[1] ^ 0xefcdab89, self::$_d186186a7d16[0] ^ 0x67452301, $_e5752171fb85 ^ 0x309a2f35);
+            $_ed17beaee59c .= pack('V2', $_609134e7cdf4 ^ 0x45ff39ae, $_87d6dcd949e5 ^ 0x01192bca);
+            $_5bd06b814ee2 = 0x9e;
+            if ($_9d1930831f12['rounds']['optwister']['enable']) $_5bd06b814ee2 ^= 0x1;
+            if ($_9d1930831f12['rounds']['partitioning']['enable']) $_5bd06b814ee2 ^= 0x2;
+            if ($_9d1930831f12['rounds']['antidebugger']['enable']) $_5bd06b814ee2 ^= 0x4;
+            if ($_9d1930831f12['rounds']['main']['extrascript_round']) $_5bd06b814ee2 ^= 0x8;
+            if ($_9d1930831f12['rounds']['main']['base64rand_round']) $_5bd06b814ee2 ^= 0x10;
+            if ($_9d1930831f12['rounds']['main']['deflate_round']) $_5bd06b814ee2 ^= 0x20;
+            if (isset($_85e9b296e2f6)) $_5bd06b814ee2 ^= 0x40;
+            if ($_9d1930831f12['additional']['optional']) $_5bd06b814ee2 ^= 0x80;
+            $_ed17beaee59c .= chr($_5bd06b814ee2);
+            $_5bd06b814ee2 = 0xb5;
+            if (isset($_0fd6f110872f)) $_5bd06b814ee2 ^= 0x1;
+            if (isset($_ffafc4d0a7af)) $_5bd06b814ee2 ^= 0x2;
+            if ($_9d1930831f12['additional']['shutdown']) $_5bd06b814ee2 ^= 0x4;
+            if ($_9d1930831f12['style']['hide_errors']) $_5bd06b814ee2 ^= 0x8;
+            if ($_9d1930831f12['style']['hide_eval']) $_5bd06b814ee2 ^= 0x10;
+            if ($_9d1930831f12['style']['global_cache']) $_5bd06b814ee2 ^= 0x20;
+            $_ed17beaee59c .= chr($_5bd06b814ee2) . self::$_3227269fab81[0] . self::$_3227269fab81[1] . $_ebe2944af80d;
+            $_d5cbf76f6b55 = $_ed17beaee59c . $_d5cbf76f6b55;
+            $_d5cbf76f6b55 .= "\x43";
+            $_8d2d7939f6cb = strlen($_d5cbf76f6b55);
+            if ($_8d2d7939f6cb % 4 != 0) $_d5cbf76f6b55 .= str_repeat("\x85", 4 - $_8d2d7939f6cb % 4);
+            self::mt_prng_store($_fb3a29fe9bdf ^ 0x74);
+            $_d5cbf76f6b55 = array_values(unpack('V*', $_d5cbf76f6b55));
+            for ($_44af9f79ea06 = 0; isset($_d5cbf76f6b55[$_44af9f79ea06]); ++$_44af9f79ea06) $_d5cbf76f6b55[$_44af9f79ea06] ^= rand();
+            array_unshift($_d5cbf76f6b55, 'V*');
+            $_d5cbf76f6b55 = call_user_func_array('pack', $_d5cbf76f6b55);
+            $_d5cbf76f6b55 = pack('V2', floor(self::$_68aa9304b10c) ^ 0x509a2f33, crc32($_d5cbf76f6b55) ^ 0xDEADC0DE) . $_d5cbf76f6b55;
+            self::mt_prng_store($_fb3a29fe9bdf ^ ALOM_VERSION_NUMBER ^ 0x51);
+            if ($_9d1930831f12['style']['halt_mode']) {
+                $_d5cbf76f6b55 = $_9d1930831f12['style']['raw'] ? "\0" . $_d5cbf76f6b55 : self::base64encode($_d5cbf76f6b55);
             } else {
-                $code = $settings["style"]["raw"]
-                    ? "\0" . self::singlequote($code)
-                    : self::base64encode($code);
+                $_d5cbf76f6b55 = $_9d1930831f12['style']['raw'] ? "\0" . self::singlequote($_d5cbf76f6b55) : self::base64encode($_d5cbf76f6b55);
             }
-            $code =
-                "\x41l\x6fM$" .
-                dechex($seed) .
-                ($settings["rounds"]["qbc"]
-                    ? ":{$settings["rounds"]["qbc"]}"
-                    : "") .
-                '$' .
-                $code;
-            if ($settings["style"]["halt_mode"]) {
-                $len = strlen($code);
-                if ($settings["style"]["hide_errors"]) {
-                    $pos = strlen($file) + 47 + 52;
-                    $file .= "$pos:$len'));}catch(\Error|\Exception \$_ALOM_catcherr){}";
+            $_d5cbf76f6b55 = ($_9d1930831f12['rounds']['qbc'] ? ":{$_9d1930831f12['rounds']['qbc']}" : '') . '$' . $_d5cbf76f6b55;
+            $_d5cbf76f6b55 = "\x41l\x6fM$" . dechex($_fb3a29fe9bdf ^ 0x7f983369) . $_d5cbf76f6b55;
+            if ($_9d1930831f12['style']['halt_mode']) {
+                $_8d2d7939f6cb = strlen($_d5cbf76f6b55);
+                if ($_9d1930831f12['style']['hide_errors']) {
+                    $_43c7e99cffe2 = strlen($_dcd32d9a06d7) + 47 + 53;
+                    if ($_9d1930831f12['style']['hide_eval']) $_43c7e99cffe2 += 140;
+                    $_dcd32d9a06d7 .= "$_43c7e99cffe2:$_8d2d7939f6cb'));";
+                    if ($_9d1930831f12['style']['hide_eval']) $_dcd32d9a06d7 .= 'foreach(\AlomDecoder' . $_5b3eb1c32c0d . '::$vrs as $_ALOM_key=>&$_ALOM_val)$$_ALOM_key=&$_ALOM_val;if(isset($_ALOM_key))unset($_ALOM_key,$_ALOM_val);';
+                    $_dcd32d9a06d7 .= "}catch(\Error|\Exception \$_ALOM_catcherr){}";
                 } else {
-                    $pos = strlen($file) + 4 + 52;
-                    $file .= "$pos:$len'));";
+                    $_43c7e99cffe2 = strlen($_dcd32d9a06d7) + 4 + 53;
+                    if ($_9d1930831f12['style']['hide_eval']) $_43c7e99cffe2 += 140;
+                    $_dcd32d9a06d7 .= "$_43c7e99cffe2:$_8d2d7939f6cb'));";
+                    if ($_9d1930831f12['style']['hide_eval']) $_dcd32d9a06d7 .= 'foreach(\AlomDecoder' . $_5b3eb1c32c0d . '::$vrs as $_ALOM_key=>&$_ALOM_val)$$_ALOM_key=&$_ALOM_val;if(isset($_ALOM_key))unset($_ALOM_key,$_ALOM_val);';
                 }
-                $file .= "AlomDecoder{$signflag}::uspv();\n__halt_compiler();\n$code";
+                $_dcd32d9a06d7 .= "\AlomDecoder{$_5b3eb1c32c0d}::uspv();\n__halt_compiler();\n$_d5cbf76f6b55";
             } else {
-                if ($settings["style"]["hide_errors"]) {
-                    $file .=
-                        $code .
-                        "'));}catch(\Error|\Exception \$_ALOM_catcherr){}";
+                if ($_9d1930831f12['style']['hide_errors']) {
+                    $_dcd32d9a06d7 .= $_d5cbf76f6b55 . "'));";
+                    if ($_9d1930831f12['style']['hide_eval']) $_dcd32d9a06d7 .= 'foreach(\AlomDecoder' . $_5b3eb1c32c0d . '::$vrs as $_ALOM_key=>&$_ALOM_val)$$_ALOM_key=&$_ALOM_val;if(isset($_ALOM_key))unset($_ALOM_key,$_ALOM_val);';
+                    $_dcd32d9a06d7 .= "}catch(\Error|\Exception \$_ALOM_catcherr){}";
                 } else {
-                    $file .= $code . "'));";
+                    $_dcd32d9a06d7 .= $_d5cbf76f6b55 . "'));";
+                    if ($_9d1930831f12['style']['hide_eval']) $_dcd32d9a06d7 .= 'foreach(\AlomDecoder' . $_5b3eb1c32c0d . '::$vrs as $_ALOM_key=>&$_ALOM_val)$$_ALOM_key=&$_ALOM_val;if(isset($_ALOM_key))unset($_ALOM_key,$_ALOM_val);';
                 }
-                $file .= "AlomDecoder{$signflag}::uspv();";
+                $_dcd32d9a06d7 .= "\AlomDecoder{$_5b3eb1c32c0d}::uspv();";
             }
-            $file .= "\n?" . ">";
+            $_dcd32d9a06d7 .= "\n?" . ">";
             self::mt_prng_reset();
-            self::$key = [0x67452301, 0xefcdab89];
-            self::$fky = [];
-            self::$obfstime = 0;
-            self::log(
-                "code obfuscated successfully. (size=" .
-                self::sizeformat(strlen($file)) .
-                ")",
-                "success"
-            );
-            return $file;
+            self::$_d186186a7d16 = [0x67452301, 0xefcdab89];
+            self::$_3227269fab81 = [];
+            self::$_68aa9304b10c = 0;
+            self::log('code obfuscated successfully. (size=' . self::sizeformat(strlen($_dcd32d9a06d7)) . ')', 'success');
+            return $_dcd32d9a06d7;
         }
     }
 
-    AlomEncoder::$iscli =
-        defined("STDIN") ||
-        PHP_SAPI === "cli" ||
-        (empty($_SERVER["REMOTE_ADDR"]) and
-            !isset($_SERVER["HTTP_USER_AGENT"]) and
-            count($_SERVER["argv"]) > 0);
-    AlomEncoder::$logger = AlomEncoder::$iscli;
+    AlomEncoder::$_2b3c116ebf09 = defined("STDIN") || PHP_SAPI === "cli" || (empty($_2a8f9d6dd428['REMOTE_ADDR']) and !isset($_2a8f9d6dd428['HTTP_USER_AGENT']) and count($_2a8f9d6dd428['argv']) > 0);
+    AlomEncoder::$_bf509b6a6b3d = AlomEncoder::$_2b3c116ebf09;
 }
