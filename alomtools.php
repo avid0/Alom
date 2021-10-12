@@ -2,6 +2,7 @@
 /**
  * ALOM 2.3 Tools
  * Author: Avid [@Av_id]
+ * Fixed md5() bug
  */
 if(!defined('ALOM_VERSION')){define('ALOM_VERSION', '2.3');}
 if(!defined('ALOM_VERSION_NUMBER')){define('ALOM_VERSION_NUMBER', 20300);}
