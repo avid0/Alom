@@ -19,7 +19,7 @@ after that, we define $settings parameter, then use method AlomEncoder::obfuscat
 $settings = [
   'rounds' => [
     'main' => [
-      'depth' => 1.5
+      'depth' => 1
     ]
   ],
   'license' => [
@@ -115,7 +115,7 @@ __fast__ | boolean | false
 #### Unmeaning round settings
 Index | Type | Default
 ----- | ---- | -------
-__variables__ | boolean | false
+__variables__ | boolean | true
 __prefix__ | string | '\_'
 __size__ | int | 12
 
@@ -268,3 +268,13 @@ alom_minify_into(string $script, string $file); //
 alom_obfuscate(string|callable $script); //
 alom_obfuscate_into(string $script, string $file); //
 ```
+
+-----------
+### Updates
+- [x] 2.4: Exception bug fixed. [#9](https://github.com/avid0/Alom/issues/9) (with help (Tesla)[https://github.com/0x11DFE])
+- [x] 2.4: Improve Antidebugger round. (with help (Serqati)[https://github.com/Serqati])
+- [x] 2.4: Default settings.rounds.unmeaning.variables was activated.
+- [x] 2.4: Global cache bug fixed. (some scripts were not applicable by default)
+- [x] 2.4: Execution speed increased. (~x3)
+- [x] 2.4: Output code size decreased. (~%20)
+- [ ] 2.5: The settings.rounds.unmeaming.shuffling option will be added.
