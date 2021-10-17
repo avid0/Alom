@@ -1,9 +1,9 @@
 <?php
 /**
- * ALOM 2.3 Tools
+ * ALOM 2.4 Tools
  * Author: Avid [@Av_id]
  */
-if(!defined('ALOM_VERSION')){define('ALOM_VERSION', '2.3');}
+if(!defined('ALOM_VERSION')){define('ALOM_VERSION', '2.4');}
 if(!defined('ALOM_VERSION_NUMBER')){define('ALOM_VERSION_NUMBER', 20300);}
 if(!class_exists('AlomEncoder'))
     require __DIR__."/alomencoder.obfs.php";
@@ -58,13 +58,13 @@ function alom_protect($file, $settings = array()){
         ];
     }
     if(!isset($settings['identify']['username']) || !isset($settings['identify']['username']['value'])){
-        $settings['identify']['username']['value'] = [
+        $settings['identify']['username'] = [
             "value" => get_current_user(),
             "hashed" => false
         ];
     }
     if(!isset($settings['identify']['ipaddr']) || !isset($settings['identify']['ipaddr']['value'])){
-        $settings['identify']['ipaddr']['value'] = [
+        $settings['identify']['ipaddr'] = [
             "value" => getenv('SERVER_ADDR'),
             "hashed" => false
         ];
@@ -72,7 +72,7 @@ function alom_protect($file, $settings = array()){
     if(!isset($settings['identify']['hostname']) || !isset($settings['identify']['hostname']['value'])){
         $host = getenv('SERVER_NAME');
         if(!$host)$host = getenv('HTTP_HOST');
-        $settings['identify']['hostname']['value'] = [
+        $settings['identify']['hostname'] = [
             "value" => $host,
             "hashed" => false
         ];
@@ -88,7 +88,7 @@ function alom_protect($file, $settings = array()){
     if(!isset($settings['license']))
         $settings['license'] = [];
     if(!isset($settings['license']['title']))
-        $settings['license']['title'] = 'Obfuscated by ALOM 2.3 | Auto Protection';
+        $settings['license']['title'] = 'Obfuscated by ALOM '.ALOM_VERSION.' | Auto Protection';
 
     $source = AlomEncoder::obfuscator($source, $settings);
     return file_put_contents($file, $source) > 0;
