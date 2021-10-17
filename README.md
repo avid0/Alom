@@ -271,8 +271,8 @@ alom_obfuscate_into(string $script, string $file); //
 
 -----------
 ### Updates
-- [x] 2.4: Exception bug fixed. [#9](https://github.com/avid0/Alom/issues/9) (with help (Tesla)[https://github.com/0x11DFE])
-- [x] 2.4: Improve Antidebugger round. (with help (Serqati)[https://github.com/Serqati])
+- [x] 2.4: Exception bug fixed. [#9](https://github.com/avid0/Alom/issues/9) (with help 0x11DFE)
+- [x] 2.4: Improve Antidebugger round. (with help Serqati)
 - [x] 2.4: Default settings.rounds.unmeaning.variables was activated.
 - [x] 2.4: Global cache bug fixed. (some scripts were not applicable by default)
 - [x] 2.4: Execution speed increased. (~x3)
