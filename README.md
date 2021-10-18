@@ -92,7 +92,7 @@ __main__ | array | [Main round settings](https://github.com/avid0/Alom#main-roun
 __minify__ | array | [Minify round settings](https://github.com/avid0/Alom#rounds-property-settings)
 __optwister__ | array | [Optwister round settings](https://github.com/avid0/Alom#rounds-property-settings) (slow running)
 __partitioning__ | array | [Partitioning round settings](https://github.com/avid0/Alom#partitioning-round-settings) (slow running)
-__antidebugger__ | array | [Antidebugger round settings](https://github.com/avid0/Alom#antidebugger-property-settings)
+__antidebugger__ | array | [Antidebugger round settings](https://github.com/avid0/Alom#antidebugger-round-settings)
 __unmeaning__ | array | [Unmeaning round settings](https://github.com/avid0/Alom#unmeaning-round-settings)
 __qbc__ | array | [QBC round settings](https://github.com/avid0/Alom#rounds-property-settings)
 
