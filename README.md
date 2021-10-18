@@ -92,7 +92,7 @@ __main__ | array | [Main round settings](https://github.com/avid0/Alom#main-roun
 __minify__ | array | [Minify round settings](https://github.com/avid0/Alom#rounds-property-settings)
 __optwister__ | array | [Optwister round settings](https://github.com/avid0/Alom#rounds-property-settings) (slow running)
 __partitioning__ | array | [Partitioning round settings](https://github.com/avid0/Alom#partitioning-round-settings) (slow running)
-__antidebugger__ | array | [Antidebugger round settings](https://github.com/avid0/Alom#rounds-property-settings)
+__antidebugger__ | array | [Antidebugger round settings](https://github.com/avid0/Alom#antidebugger-property-settings)
 __unmeaning__ | array | [Unmeaning round settings](https://github.com/avid0/Alom#unmeaning-round-settings)
 __qbc__ | array | [QBC round settings](https://github.com/avid0/Alom#rounds-property-settings)
 
@@ -101,7 +101,6 @@ Index | Type | Default | Description
 ----- | ---- | ------- | -----------
 __depth_type__ | string | "logpower" | Complexity function of depth. It can be one of the values of constant, logarithm, logpower, square, linear.
 __depth__ | float | 1 | Complexity of obfuscator steps.
-__extrascript_round__ | boolean | true |
 __base64rand_round__ | boolean | false |
 __deflate_round__ | boolean | true |
 __iterate_base64__ | int | 0 |
@@ -111,6 +110,12 @@ Index | Type | Default
 ----- | ---- | -------
 __enable__ | boolean | false
 __fast__ | boolean | false
+
+#### Antidebugger round settings
+Index | Type | Default
+----- | ---- | -------
+__enable__ | boolean | true
+__antihooking__ | boolean | true
 
 #### Unmeaning round settings
 Index | Type | Default
