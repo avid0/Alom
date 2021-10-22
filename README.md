@@ -121,8 +121,9 @@ __antihooking__ | boolean | true
 Index | Type | Default
 ----- | ---- | -------
 __variables__ | boolean | true
+__salt__ | string | ALOM_UNIQUE_RANDOM
 __prefix__ | string | '\_'
-__size__ | int | 12
+__size__ | int | 10
 
 #### Rounds property settings
 Index | Type | Default
