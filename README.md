@@ -1,4 +1,4 @@
-# Alom Obfuscator / PHP Encoder version 2.4
+# Alom Obfuscator / PHP Encoder version 2.5
 
 This powerful php-base obfuscator can protect from your codes for making non-readable scripts.
 Of the capabilities of this mixer is setting access for specific system, antitamper, expiration of application, license, obfuscator output style (raw/base64), etc.
@@ -278,9 +278,5 @@ alom_obfuscate_into(string $script, string $file); //
 -----------
 ### Updates
 - [x] 2.4: Exception bug fixed. [#9](https://github.com/avid0/Alom/issues/9) (with help 0x11DFE)
-- [x] 2.4: Improve Antidebugger round. (with help Serqati)
-- [x] 2.4: Default settings.rounds.unmeaning.variables was activated.
-- [x] 2.4: Global cache bug fixed. (some scripts were not applicable by default)
-- [x] 2.4: Execution speed increased. (~x3)
-- [x] 2.4: Output code size decreased. (~%20)
-- [ ] 2.5: The settings.rounds.unmeaming.shuffling option will be added.
+- [x] 2.5: Bugs fixed. [#11](https://github.com/avid0/Alom/issues/9) and others
+- [ ] 2.6: The settings.rounds.unmeaming.shuffling option will be added.
