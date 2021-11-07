@@ -280,3 +280,4 @@ alom_obfuscate_into(string $script, string $file); //
 - [x] 2.4: Exception bug fixed. [#9](https://github.com/avid0/Alom/issues/9) (with help 0x11DFE)
 - [x] 2.5: Bugs fixed. [#11](https://github.com/avid0/Alom/issues/9) and others
 - [ ] 2.6: The settings.rounds.unmeaming.shuffling option will be added.
+- [ ] 2.6: The directory obfuscatoring methods will be added.
