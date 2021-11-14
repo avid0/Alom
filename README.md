@@ -124,6 +124,7 @@ __variables__ | boolean | true
 __salt__ | string | ALOM_UNIQUE_RANDOM
 __prefix__ | string | '\_'
 __size__ | int | 10
+__free__ | array | []
 
 #### Rounds property settings
 Index | Type | Default
