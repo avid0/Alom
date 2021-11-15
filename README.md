@@ -1,4 +1,4 @@
-# Alom Obfuscator / PHP Encoder version 2.5
+# Alom Obfuscator / PHP Encoder version 2.6
 
 This powerful php-base obfuscator can protect from your codes for making non-readable scripts.
 Of the capabilities of this mixer is setting access for specific system, antitamper, expiration of application, license, obfuscator output style (raw/base64), etc.
@@ -92,7 +92,8 @@ __main__ | array | [Main round settings](https://github.com/avid0/Alom#main-roun
 __minify__ | array | [Minify round settings](https://github.com/avid0/Alom#rounds-property-settings)
 __optwister__ | array | [Optwister round settings](https://github.com/avid0/Alom#rounds-property-settings) (slow running)
 __partitioning__ | array | [Partitioning round settings](https://github.com/avid0/Alom#partitioning-round-settings) (slow running)
-__antidebugger__ | array | [Antidebugger round settings](https://github.com/avid0/Alom#antidebugger-round-settings)
+__antidebugger__ | array | [Antidebugger round settings](https://github.com/avid0/Alom#rounds-property-settings)
+__antihooking__ | array | [Antihooking round settings](https://github.com/avid0/Alom#antihooking-round-settings)
 __unmeaning__ | array | [Unmeaning round settings](https://github.com/avid0/Alom#unmeaning-round-settings)
 __qbc__ | array | [QBC round settings](https://github.com/avid0/Alom#rounds-property-settings)
 
@@ -111,11 +112,11 @@ Index | Type | Default
 __enable__ | boolean | false
 __fast__ | boolean | false
 
-#### Antidebugger round settings
+#### Antihooking round settings
 Index | Type | Default
 ----- | ---- | -------
 __enable__ | boolean | true
-__antihooking__ | boolean | true
+__deep__ | boolean | false (because slow running)
 
 #### Unmeaning round settings
 Index | Type | Default
@@ -224,18 +225,46 @@ file_put_contents("file.min.php", $dst); // save code
 
 ### License code generator
 We can generate a license code for users to use the script by keeping the key used in the license secret. This license code can restrict the user's system or have a specific time frame to run the script.
+First we need alomtools.php file:
 ```php
 require_once "alomtools.php";
+```
+We have three thing for making license code:
+## License key
+License key is an private string for making license codes. We can create license key with:
+```php
+string alom_license_key_generate(string $init = null);
+```
+If no text is entered, it will generate a random key.
+## SystemHash
+A hash to restrict systems from running scripts.
+You can not set a limit by not entering options, but creating a systemhash is required.
+```php
+string alom_license_key_generate(array $info = []);
+```
+The following is a list of variable $info options:
+Index | Type | Default
+----- | ---- | -------
+__uname__ | string | will not be limited
+__username__ | string | will not be limited
+__ipaddr__ | string | will not be limited
+__hostname__ | string | will not be limited
+## License code
+After creating the systemhash, you must apply the key to it so that no one but you can create the license code.
+```php
+string alom_license_code_encrypt(string $systemhash, string $license_key, int(unix) $expiration = will not be limited, int(unix) $ready = will not be limited);
+```
+You can also decrypt the license code to systemhash, expiration time and ready time using the code and key.
+```php
+array alom_license_code_decrypt(string $license_code, string $license_key);
+```
+## License file
+You can paste or read the license code in the license file with the following functions.
+```php
 string alom_get_license_code(string $file); // get license code from license file
 bool alom_exists_license_code(string $file); // check if exists license code in license file
 bool alom_insert_license_code(string $file, string $license_code); // insert license code into license file
-string alom_license_key_generate(string $init = null); // return random license_key when $init == null and for othertimes, return specified license_key with $init parameter
-string alom_license_null_systemhash_generate(); //
-string alom_license_systemhash_generate(string(raw md5) $uname, string(raw md5)$username, string(raw md5)$ipaddr, string(raw md5)$hostname); //
-string alom_license_code_encrypt(int(unix time) $ready, int(unix time) $expiration, string $systemhash, string $license_key); // generate license_code
-string alom_license_code_decrypt(string $license_code, string $license_key); // return false for invalid license_code or return array of ready, expiration, systemhash of license_code with successfully
 ```
-
 ### OScript
 You can set up an API system on your server to provide an online script so that you need to call this API for each run. It is not possible to run the script without connecting to the server.
 ```php
