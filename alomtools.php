@@ -3,8 +3,8 @@
  * ALOM 2.5 Tools
  * Author: Avid [@Av_id]
  */
-if(!defined('ALOM_VERSION')){define('ALOM_VERSION', '2.5.3');}
-if(!defined('ALOM_VERSION_NUMBER')){define('ALOM_VERSION_NUMBER', 20503);}
+if(!defined('ALOM_VERSION')){define('ALOM_VERSION', '2.6.0');}
+if(!defined('ALOM_VERSION_NUMBER')){define('ALOM_VERSION_NUMBER', 20600);}
 if(!class_exists('AlomEncoder'))
     require __DIR__."/alomencoder.obfs.php";
 
@@ -203,25 +203,18 @@ function alom_license_key_generate($init = null){
 }
 
 /**
- * Alom generate null systemhash for license code
- * @method alom_license_null_systemhash_generate
- * @return string
- */
-function alom_license_null_systemhash_generate(){
-    return AlomEncoder::license_null_systemhash_generate();
-}
-
-/**
  * Alom generate systemhash for license code
  * @method alom_license_systemhash_generate
- * @param string $uname md5 hash
- * @param string $username md5 hash
- * @param string $ipaddr md5 hash
- * @param string $hostname md5 hash
+ * @param array $datas [
+ *   string $uname,
+ *   string $username,
+ *   string $ipaddr,
+ *   string $hostname
+ * ] = []
  * @return string
  */
-function alom_license_systemhash_generate($uname, $username, $ipaddr, $hostname){
-    return AlomEncoder::license_systemhash_generate($uname, $username, $ipaddr, $hostname);
+function alom_license_systemhash_generate($datas = array()){
+    return AlomEncoder::license_systemhash_generate($datas);
 }
 
 /**
