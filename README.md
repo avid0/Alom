@@ -230,13 +230,13 @@ First we need alomtools.php file:
 require_once "alomtools.php";
 ```
 We have three thing for making license code:
-## License key
+#### License key
 License key is an private string for making license codes. We can create license key with:
 ```php
 string alom_license_key_generate(string $init = null);
 ```
 If no text is entered, it will generate a random key.
-## SystemHash
+#### SystemHash
 A hash to restrict systems from running scripts.
 You can not set a limit by not entering options, but creating a systemhash is required.
 ```php
@@ -249,7 +249,7 @@ __uname__ | string | will not be limited
 __username__ | string | will not be limited
 __ipaddr__ | string | will not be limited
 __hostname__ | string | will not be limited
-## License code
+#### License code
 After creating the systemhash, you must apply the key to it so that no one but you can create the license code.
 ```php
 string alom_license_code_encrypt(string $systemhash, string $license_key, int(unix) $expiration = will not be limited, int(unix) $ready = will not be limited);
@@ -258,7 +258,7 @@ You can also decrypt the license code to systemhash, expiration time and ready t
 ```php
 array alom_license_code_decrypt(string $license_code, string $license_key);
 ```
-## License file
+#### License file
 You can paste or read the license code in the license file with the following functions.
 ```php
 string alom_get_license_code(string $file); // get license code from license file
@@ -307,8 +307,6 @@ alom_obfuscate_into(string $script, string $file); //
 
 -----------
 ### Updates
-- [x] 2.4: Exception bug fixed. [#9](https://github.com/avid0/Alom/issues/9) (with help 0x11DFE)
-- [x] 2.5: Bugs fixed. [#11](https://github.com/avid0/Alom/issues/11) and others in memtwister
-- [x] 2.5: Bugs fixed. [#12](https://github.com/avid0/Alom/issues/12)
-- [ ] 2.6: The settings.rounds.unmeaming.shuffling option will be added.
+- [x] 2.6: Bugs fixed. [#12](https://github.com/avid0/Alom/issues/12)
 - [ ] 2.6: The directory obfuscatoring methods will be added.
+- [ ] 2.7: The settings.rounds.unmeaming.shuffling option will be added.
