@@ -220,13 +220,13 @@ function alom_license_systemhash_generate($datas = array()){
 /**
  * Alom license code generator
  * @method alom_license_code_encrypt
- * @param int $ready Unix time
- * @param int $expiration Unix time
  * @param string $systemhash
  * @param string $license_key
+ * @param int $expiration = 0x7fffffff Unix time
+ * @param int $ready = 0 Unix time
  * @return string license code
  */
-function alom_license_code_encrypt($ready, $expiration, $systemhash, $license_key){
+function alom_license_code_encrypt($systemhash, $license_key, $expiration = 0x7fffffff, $ready = 0){
     return AlomEncoder::license_code_encrypt($ready, $expiration, $systemhash, $license_key);
 }
 
