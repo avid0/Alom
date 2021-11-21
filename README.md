@@ -240,7 +240,7 @@ If no text is entered, it will generate a random key.
 A hash to restrict systems from running scripts.
 You can not set a limit by not entering options, but creating a systemhash is required.
 ```php
-string alom_license_key_generate(array $info = []);
+string license_systemhash_generate(array $info = []);
 ```
 The following is a list of variable $info options:
 Index | Type | Default
