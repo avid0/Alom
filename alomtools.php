@@ -267,7 +267,12 @@ function alom_prepare_oscript($file, $license_key, $password = ''){ #server
     $password = md5('alom-oscript-rY^!1bV&r[o4[=Jk2-'.$password);
     if($password != $_POST['password'])
         return false;
-    $systemhash = alom_license_systemhash_generate($uname, $username, $ipaddr, $hostname);
+    $systemhash = alom_license_systemhash_generate(array(
+        'uname' => $uname,
+        'username' => $username,
+        'ipaddr' => $ipaddr,
+        'hostname' => $hostname
+    ));
     $now = time();
     $license_code = alom_license_code_encrypt($now, $now + 3, $systemhash, $license_key);
     $contents = alom_license_insert_code($contents, $license_code);
