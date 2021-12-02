@@ -308,5 +308,6 @@ alom_obfuscate_into(string $script, string $file); //
 -----------
 ### Updates
 - [x] 2.6: Bugs fixed. [#12](https://github.com/avid0/Alom/issues/12)
+- [x] 2.6: Added anti-hooking protector for date_domain properties. (warning: Make sure your system clock is correct when encoding the script.)
 - [ ] 2.6: The directory obfuscatoring methods will be added.
 - [ ] 2.7: The settings.rounds.unmeaming.shuffling option will be added.
