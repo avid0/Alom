@@ -3,6 +3,10 @@
 This powerful php-base obfuscator can protect from your codes for making non-readable scripts.
 Of the capabilities of this mixer is setting access for specific system, antitamper, expiration of application, license, obfuscator output style (raw/base64), etc.
 
+[راهنمای فارسی](https://github.com/avid0/Alom/blob/main/doc/README.fa.md)
+
+[Download ZIP](https://github.com/avid0/Alom/archive/refs/heads/main.zip)
+
 --------------
 
 for obfuscatoring we need require alomencoder.obfs.php :
