@@ -37,12 +37,12 @@ file_put_contents("file.obfs.php", $obfs); // save obfuscated script
 
 Index | Type | Description
 ----- | ---- | -----------
-__license__ | array | [تنظیمات لایسنس](https://github.com/avid0/Alom#license-settings)
-__additional__ | array | [تنظیمات کد اضافه](https://github.com/avid0/Alom#additional-settings)
-__identify__ | array | [تنظیمات هویتی](https://github.com/avid0/Alom#identfy-settings)
-__date_domain__ | array | [تنظیمات بازه زمانی](https://github.com/avid0/Alom#date-domain-settings)
-__rounds__ | array | [تنظیمات لایه های امنیتی](https://github.com/avid0/Alom#rounds-settings)
-__style__ | array | [تنظیمات استایل](https://github.com/avid0/Alom#style-settings)
+__license__ | array | [تنظیمات لایسنس](https://github.com/avid0/Alom/main/doc/README.fa.md#license-settings)
+__additional__ | array | [تنظیمات کد اضافه](https://github.com/avid0/Alom/main/doc/README.fa.md#additional-settings)
+__identify__ | array | [تنظیمات هویتی](https://github.com/avid0/Alom/main/doc/README.fa.md#identfy-settings)
+__date_domain__ | array | [تنظیمات بازه زمانی](https://github.com/avid0/Alom/main/doc/README.fa.md#date-domain-settings)
+__rounds__ | array | [تنظیمات لایه های امنیتی](https://github.com/avid0/Alom/main/doc/README.fa.md#rounds-settings)
+__style__ | array | [تنظیمات استایل](https://github.com/avid0/Alom/main/doc/README.fa.md#style-settings)
 
 ### License settings
 Index | Type | Default | Description
@@ -68,11 +68,11 @@ __shutdown__ | string\|callable | بخشی از سورس درهم شده که ه
 ### Identify settings
 Index | Type | Description
 ----- | ---- | -----------
-__uname__ | array | [Uname identify settings](https://github.com/avid0/Alom#identify-property-settings)
-__username__ | array | [Username identify settings](https://github.com/avid0/Alom#identify-property-settings)
-__ipaddr__ | array | [Ipaddr identify settings](https://github.com/avid0/Alom#identify-property-settings)
-__hostname__ | array | [Hostname identify settings](https://github.com/avid0/Alom#identify-property-settings)
-__filename__ | array | [Filename identify settings](https://github.com/avid0/Alom#identify-property-settings) unique file name of obfuscated file
+__uname__ | array | [Uname identify settings](https://github.com/avid0/Alom/main/doc/README.fa.md#identify-property-settings)
+__username__ | array | [Username identify settings](https://github.com/avid0/Alom/main/doc/README.fa.md#identify-property-settings)
+__ipaddr__ | array | [Ipaddr identify settings](https://github.com/avid0/Alom/main/doc/README.fa.md#identify-property-settings)
+__hostname__ | array | [Hostname identify settings](https://github.com/avid0/Alom/main/doc/README.fa.md#identify-property-settings)
+__filename__ | array | [Filename identify settings](https://github.com/avid0/Alom/main/doc/README.fa.md#identify-property-settings) unique file name of obfuscated file
 __files__ | array | لیستی از ادرس فایل ها که برای اجرای فایل درهم شده وجودشون اجباری و محتوای انها غیرقابل تغییر باشد.
 
 #### Identify property settings
@@ -90,14 +90,14 @@ __expiration__ | int(unix time) | پایان بازه زمانی مجاز یا �
 ### Rounds settings
 Index | Type | Description
 ----- | ---- | -----------
-__main__ | array | [Main round settings](https://github.com/avid0/Alom#main-round-settings)
-__minify__ | array | [Minify round settings](https://github.com/avid0/Alom#rounds-property-settings)
-__optwister__ | array | [Optwister round settings](https://github.com/avid0/Alom#rounds-property-settings) (slow running)
-__partitioning__ | array | [Partitioning round settings](https://github.com/avid0/Alom#partitioning-round-settings) (slow running)
-__antidebugger__ | array | [Antidebugger round settings](https://github.com/avid0/Alom#rounds-property-settings)
-__antihooking__ | array | [Antihooking round settings](https://github.com/avid0/Alom#antihooking-round-settings)
-__unmeaning__ | array | [Unmeaning round settings](https://github.com/avid0/Alom#unmeaning-round-settings)
-__qbc__ | array | [QBC round settings](https://github.com/avid0/Alom#rounds-property-settings)
+__main__ | array | [Main round settings](https://github.com/avid0/Alom/main/doc/README.fa.md#main-round-settings)
+__minify__ | array | [Minify round settings](https://github.com/avid0/Alom/main/doc/README.fa.md#rounds-property-settings)
+__optwister__ | array | [Optwister round settings](https://github.com/avid0/Alom/main/doc/README.fa.md#rounds-property-settings) (slow running)
+__partitioning__ | array | [Partitioning round settings](https://github.com/avid0/Alom/main/doc/README.fa.md#partitioning-round-settings) (slow running)
+__antidebugger__ | array | [Antidebugger round settings](https://github.com/avid0/Alom/main/doc/README.fa.md#rounds-property-settings)
+__antihooking__ | array | [Antihooking round settings](https://github.com/avid0/Alom/main/doc/README.fa.md#antihooking-round-settings)
+__unmeaning__ | array | [Unmeaning round settings](https://github.com/avid0/Alom/main/doc/README.fa.md#unmeaning-round-settings)
+__qbc__ | array | [QBC round settings](https://github.com/avid0/Alom/main/doc/README.fa.md#rounds-property-settings)
 
 #### Main round settings
 Index | Type | Default | Description
@@ -137,7 +137,7 @@ __enable__ | boolean | false(for optwister, qbc)/true(for minify, antidebugger)
 ### Style settings
 Index | Type | Default | Description
 ----- | ---- | ------- | -----------
-__separated_loader__ | array | null | [Separated loader settings](https://github.com/avid0/Alom#separated-loader-settings)
+__separated_loader__ | array | null | [Separated loader settings](https://github.com/avid0/Alom/main/doc/README.fa.md#separated-loader-settings)
 __halt_mode__ | boolean | false | فعال یا غیر فعال کردن halt mode.
 __hide_errors__ | boolean | true | فعال یا غیر فعال کردن نمایش لاگ ها.
 __hide_eval__ | boolean | true | فعال یا غیر فعال کردن اجرای کد در eval داخلی.
