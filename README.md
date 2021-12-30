@@ -144,7 +144,8 @@ __halt_mode__ | boolean | false | enable/disable halt mode.
 __hide_errors__ | boolean | true | enable/disable display errors.
 __hide_eval__ | boolean | true | enable/disable run main script in inner eval.
 __global_cache__ | boolean | true | enable/disable global caching for enabled hide_eval setting.
-__raw__ | boolean | false | raw/base64 display style.
+__display__ | string | "base64" | raw/hex/bin/base64 display model.
+__raw__ | boolean | false | (depressed) set raw display.
 
 #### Separated loader settings
 Index | Type | Description
