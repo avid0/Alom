@@ -142,8 +142,7 @@ __halt_mode__ | boolean | false | فعال یا غیر فعال کردن halt mo
 __hide_errors__ | boolean | true | فعال یا غیر فعال کردن نمایش لاگ ها.
 __hide_eval__ | boolean | true | فعال یا غیر فعال کردن اجرای کد در eval داخلی.
 __global_cache__ | boolean | true | فعال یا غیر فعال کردن کش شدن متغییر های گلوبال.
-__display__ | string | "base64" | raw/hex/bin/base64 شیوه نمایش کد درهم شده.
-__raw__ | boolean | false | (منسوخ شده) تنظیم نمایش کد درهم شده به صورت خام
+__display__ | string | "base64" | raw/hex/bin/base64/base64r شیوه نمایش کد درهم شده.
 
 #### Separated loader settings
 Index | Type | Description
