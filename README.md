@@ -144,8 +144,7 @@ __halt_mode__ | boolean | false | enable/disable halt mode.
 __hide_errors__ | boolean | true | enable/disable display errors.
 __hide_eval__ | boolean | true | enable/disable run main script in inner eval.
 __global_cache__ | boolean | true | enable/disable global caching for enabled hide_eval setting.
-__display__ | string | "base64" | raw/hex/bin/base64 display model.
-__raw__ | boolean | false | (depressed) set raw display.
+__display__ | string | "base64" | raw/hex/bin/base64/base64r display model.
 
 #### Separated loader settings
 Index | Type | Description
@@ -314,5 +313,7 @@ alom_obfuscate_into(string $script, string $file); //
 ### Updates
 - [x] 2.6: Bugs fixed. [#12](https://github.com/avid0/Alom/issues/12)
 - [x] 2.6: Added anti-hooking protector for date_domain properties. (warning: Make sure your system clock is correct when encoding the script.)
-- [ ] 2.6: The directory obfuscatoring methods will be added.
+- [x] 2.6: The settings.style.display option added.
+- [x] 2.6: Fix bug of not returning from the included file.
+- [ ] 2.7: The static including method will be added.
 - [ ] 2.7: The settings.rounds.unmeaming.shuffling option will be added.
