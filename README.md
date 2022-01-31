@@ -339,9 +339,12 @@ alom_obfuscate_dir(string $source, string $dest, array $settings = [], bool $cop
 
 -----------
 ### Updates
-- [x] 2.6: Bugs fixed. [#12](https://github.com/avid0/Alom/issues/12)
-- [x] 2.6: Added anti-hooking protector for date_domain properties. (warning: Make sure your system clock is correct when encoding the script.)
 - [x] 2.6: The settings.style.display option added.
 - [x] 2.6: Fix bug of not returning from the included file.
-- [ ] 2.7: The static including method will be added.
-- [ ] 2.7: The settings.rounds.unmeaming.shuffling option will be added.
+- [x] 2.7: fixed bug variables in string
+- [x] 2.7: fixed wrong antihooking detections
+- [x] 2.7: fixed unmeaning variables inside includes and evals
+- [x] 2.7: the antihooking round was improved
+- [x] 2.7: add IKE encryption
+- [x] 2.7: add alom_obfuscate_dir tool function
+- [ ] 2.8: The settings.rounds.unmeaming.shuffling option will be added.
