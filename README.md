@@ -1,4 +1,4 @@
-# Alom Obfuscator / PHP Encoder version 2.6
+# Alom Obfuscator / PHP Encoder version 2.7
 
 This powerful php-base obfuscator can protect from your codes for making non-readable scripts.
 Of the capabilities of this mixer is setting access for specific system, antitamper, expiration of application, license, obfuscator output style (raw/base64), etc.
@@ -75,6 +75,7 @@ __username__ | array | [Username identify settings](https://github.com/avid0/Alo
 __ipaddr__ | array | [Ipaddr identify settings](https://github.com/avid0/Alom#identify-property-settings)
 __hostname__ | array | [Hostname identify settings](https://github.com/avid0/Alom#identify-property-settings)
 __filename__ | array | [Filename identify settings](https://github.com/avid0/Alom#identify-property-settings) unique file name of obfuscated file
+__include_key__ | string | decryption key for IKE including files
 __files__ | array | List of file paths that are required to run the script.
 
 #### Identify property settings
@@ -300,6 +301,27 @@ require_once "alomtools.php";
 include(alom_exec_oscript("https://example.code/oscript.php"));
 ```
 
+### IKE Encryption
+You can encrypt files that are being called indirectly by being included in obfuscatored scripts for more speed with this method. Note that your file is no longer executable without the key used, and you can use it by entering the key when scrambling the main script.
+#### Include key
+Include key is an private string for making IKE files. We can create include key with:
+```php
+string alom_includekey_generate(string $init = null);
+```
+If no text is entered, it will generate a random key.
+### IKE encrypt and decrypt
+For make an IKE file you need source script (example file.php) and dest file name (example file.php.ike). then:
+```php
+alom_includekey_encrypt_into("file.php", "file.php.ike", $key);
+```
+Also you can use other functions:
+```php
+string alom_includekey_encrypt(string|callable $code, string $key);
+string alom_includekey_decrypt(string $code, string $key);
+int alom_includekey_encrypt_into(string|callable $code, string $file, string $key);
+int alom_includekey_decrypt_into(string $code, string $file, string $key);
+```
+
 ### Other alomtools.php functions
 ```php
 is_alom_obfuscated(string $file); // check if file is obfuscated by alom
@@ -307,6 +329,12 @@ alom_minify(string $script); //
 alom_minify_into(string $script, string $file); //
 alom_obfuscate(string|callable $script); //
 alom_obfuscate_into(string $script, string $file); //
+```
+#### Obfuscate directory
+You can obfuscate all php files in source directory into dest directory.
+You can also specify whether or not to copy other files.
+```php
+alom_obfuscate_dir(string $source, string $dest, array $settings = [], bool $copy = false);
 ```
 
 -----------
