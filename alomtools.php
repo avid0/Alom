@@ -3,8 +3,8 @@
  * ALOM Tools
  * Author: Avid [@Av_id]
  */
-if(!defined('ALOM_VERSION')){define('ALOM_VERSION', '2.6.5');}
-if(!defined('ALOM_VERSION_NUMBER')){define('ALOM_VERSION_NUMBER', 20605);}
+if(!defined('ALOM_VERSION')){define('ALOM_VERSION', '2.7');}
+if(!defined('ALOM_VERSION_NUMBER')){define('ALOM_VERSION_NUMBER', 20700);}
 if(!class_exists('AlomEncoder'))
     require __DIR__."/alomencoder.obfs.php";
 
@@ -242,6 +242,74 @@ function alom_license_code_decrypt($license_code, $license_key){
 }
 
 /**
+ * Alom include key generate
+ * @method alom_includekey_generate
+ * @param string $init = Random
+ * @return string
+ */
+function alom_includekey_generate($init = null){
+    return AlomEncoder::include_key_generate($init);
+}
+
+/**
+ * Alom include key encrypt
+ * @method alom_includekey_encrypt
+ * @param string|callable $code
+ * @param string $key
+ * @return string
+ */
+function alom_includekey_encrypt($code, $key){
+    if(is_string($code) && file_exists($code))
+        $code = file_get_contents($code);
+    elseif(is_callable($code))
+        $code = "<"."?php\n".AlomEncoder::getcallable($code)."\n?".">";
+    return AlomEncoder::include_key_encrypt($code, $key);
+}
+
+/**
+ * Alom include key decrypt
+ * @method alom_includekey_decrypt
+ * @param string $code
+ * @param string $key
+ * @return string
+ */
+function alom_includekey_decrypt($code, $key){
+    if(is_string($code) && file_exists($code))
+        $code = file_get_contents($code);
+    return AlomEncoder::include_key_decrypt($code, $key);
+}
+
+/**
+ * Alom include key encrypt into file
+ * @method alom_includekey_encrypt_into
+ * @param string|callable $code
+ * @param string $file
+ * @param string $key
+ * @return int
+ */
+function alom_includekey_encrypt_into($code, $file, $key){
+    if(is_string($code) && file_exists($code))
+        $code = file_get_contents($code);
+    elseif(is_callable($code))
+        $code = "<"."?php\n".AlomEncoder::getcallable($code)."\n?".">";
+    return file_put_contents($file, AlomEncoder::include_key_encrypt($code, $key));
+}
+
+/**
+ * Alom include key decrypt into file
+ * @method alom_includekey_decrypt_into
+ * @param string $code
+ * @param string $file
+ * @param string $key
+ * @return int
+ */
+function alom_includekey_decrypt_into($code, $file, $key){
+    if(is_string($code) && file_exists($code))
+        $code = file_get_contents($code);
+    return file_put_contents($file, AlomEncoder::include_key_decrypt($code, $key));
+}
+
+/**
  * Alom oscript web server (send to output)
  * @method alom_prepare_oscript
  * @param string $file obfuscated script with license_code
@@ -319,6 +387,43 @@ function alom_exec_oscript($url, $password = ''){
     $result = "<?php file_put_contents(__FILE__,substr(file_get_contents(__FILE__),79,-25));?>$result<?php unlink(__FILE__);?>";
     file_put_contents($filename, $result);
   	return $filename;
+}
+
+/**
+ * Alom directory obfuscator
+ * obfuscate all php files in directory into another directory
+ * @method alom_obfuscate_dir
+ * @param string $from directory
+ * @param string $to directory
+ * @param array $settings = []
+ * @param bool $copy = false Copy non php files
+ * @param bool
+ */
+function alom_obfuscate_dir($from, $to, $settings = [], $copy = false){
+    if(!file_exists($to)){
+        if(!mkdir($to))
+            return false;
+    }elseif(is_file($to))
+        return false;
+    $files = scandir($from);
+    if(!$files)
+        return false;
+    foreach($files as $file)
+        if($file == '.' || $file == '..');
+        elseif(is_file("$from/$file")){
+            if(strtolower(substr($file, -4)) == '.php')
+                alom_obfuscate_into("$from/$file", "$to/$file", $settings);
+            elseif($copy)
+                copy("$from/$file", "$to/$file");
+        }else{
+            if(!file_exists("$to/$file")){
+                if(!mkdir("$to/$file"))
+                    continue;
+            }elseif(is_file($to))
+                continue;
+            alom_obfuscate_dir("$from/$file", "$to/$file", $settings);
+        }
+    return true;
 }
 
 ?>
