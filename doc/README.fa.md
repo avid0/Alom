@@ -1,4 +1,4 @@
-# Alom Obfuscator / PHP Encoder version 2.6
+# Alom Obfuscator / PHP Encoder version 2.7
 
 این درهم ساز زبان پی اچ پی میتونه با تبدیل اسکریپت های شما به یک اسکریپت غیرقابل فهم و تغییر از انها در برابر ادیت شدن محافظت کنه.
 و البته تنظیمات مختلفی هم ارائه داده شده برای نمونه تنظیم قابل اجرا بودن فقط روی یک سیستم خاص یا در یک بازه زمانی خاص, ساختن لایسنس, تنظیم نمایش فایل انکد شده و غیره.
@@ -73,6 +73,7 @@ __username__ | array | [Username identify settings](https://github.com/avid0/Alo
 __ipaddr__ | array | [Ipaddr identify settings](https://github.com/avid0/Alom/blob/main/doc/README.fa.md#identify-property-settings)
 __hostname__ | array | [Hostname identify settings](https://github.com/avid0/Alom/blob/main/doc/README.fa.md#identify-property-settings)
 __filename__ | array | [Filename identify settings](https://github.com/avid0/Alom/blob/main/doc/README.fa.md#identify-property-settings) unique file name of obfuscated file
+__include_key__ | string | کلید دکریپت برای فایل های IKE اینکلود شده
 __files__ | array | لیستی از ادرس فایل ها که برای اجرای فایل درهم شده وجودشون اجباری و محتوای انها غیرقابل تغییر باشد.
 
 #### Identify property settings
@@ -233,7 +234,7 @@ require_once "alomtools.php";
 ```
 ما سه چیز برای ساخت کد لایسنس نیاز داریم:
 #### License key
-کد لایسنس یک متن خصوصی برای سختن کد لایسنس میباشد. ما میتوانیم به صورت زیر کد لایسنس بسازیم:
+کلید لایسنس یک متن خصوصی برای سختن کد لایسنس میباشد. ما میتوانیم به صورت زیر کلید لایسنس بسازیم:
 ```php
 string alom_license_key_generate(string $init = null);
 ```
@@ -298,6 +299,27 @@ require_once "alomtools.php";
 include(alom_exec_oscript("https://example.code/oscript.php"));
 ```
 
+### IKE Encryption
+شما میتوانید فایل هایی که به صورت غیرمستقیم در فایل درهم شده اینکلود میشوند را برای سرعت بیشتر با استفاده از این متد انکریپت کنید. این فایل ها دیگه بدون استفاده از کلید استفاده شده قابل اجرا نمیباشند و میتوانید با ورودی دادن کلید هنگام درهم کردن سورس اصلی از انها استفاده کنید.
+#### Include key
+کلید اینکلود یک متن مخفی برای ساختن فایل های IKE میباشد. ما میتونیم کلید اینکلود را به این شکل بسازیم: 
+```php
+string alom_includekey_generate(string $init = null);
+```
+اگر متنی ورودی داده نشود خروجی یک کلید تصادفی میدهد.
+### IKE encrypt and decrypt
+برای ساختن یک فایل IKE شما نیاز به کد اولیه (مثل file.php) و ادرس فایل IKE (مثل file.php.ike) دارید. سپس:
+```php
+alom_includekey_encrypt_into("file.php", "file.php.ike", $key);
+```
+همچنین میتوانید از توابع دیگر استفاده کنید:
+```php
+string alom_includekey_encrypt(string|callable $code, string $key);
+string alom_includekey_decrypt(string $code, string $key);
+int alom_includekey_encrypt_into(string|callable $code, string $file, string $key);
+int alom_includekey_decrypt_into(string $code, string $file, string $key);
+```
+
 ### توابع دیگر مربوط به alomtools.php
 ```php
 is_alom_obfuscated(string $file); // check if file is obfuscated by alom
@@ -305,4 +327,10 @@ alom_minify(string $script); //
 alom_minify_into(string $script, string $file); //
 alom_obfuscate(string|callable $script); //
 alom_obfuscate_into(string $script, string $file); //
+```
+#### درهم سازی دایرکتوری
+شما میتوانید تمام فایل های php در یک دایرکتوری را در دایرکتوری دیگری درهم سازی کنید.
+همچنین میتوانید تعیین کنید که فایل های غیر php کپی شوند یا خیر.
+```php
+alom_obfuscate_dir(string $source, string $dest, array $settings = [], bool $copy = false);
 ```
