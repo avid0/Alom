@@ -327,6 +327,7 @@ alom_minify(string $script); //
 alom_minify_into(string $script, string $file); //
 alom_obfuscate(string|callable $script); //
 alom_obfuscate_into(string $script, string $file); //
+alom_put(string $file, string|callable $script); //
 ```
 #### درهم سازی دایرکتوری
 شما میتوانید تمام فایل های php در یک دایرکتوری را در دایرکتوری دیگری درهم سازی کنید.
