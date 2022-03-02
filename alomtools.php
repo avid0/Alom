@@ -3,8 +3,8 @@
  * ALOM Tools
  * Author: Avid [@Av_id]
  */
-if(!defined('ALOM_VERSION')){define('ALOM_VERSION', '2.7.2');}
-if(!defined('ALOM_VERSION_NUMBER')){define('ALOM_VERSION_NUMBER', 20702);}
+if(!defined('ALOM_VERSION')){define('ALOM_VERSION', '2.7.3');}
+if(!defined('ALOM_VERSION_NUMBER')){define('ALOM_VERSION_NUMBER', 20703);}
 if(!class_exists('AlomEncoder'))
     require __DIR__."/alomencoder.obfs.php";
 
@@ -165,6 +165,19 @@ function alom_minify($code){
  */
 function alom_obfuscate($code, $settings = []){
     return AlomEncoder::obfuscator($code, $settings);
+}
+
+/**
+ * Alom file put script
+ * @method alom_put
+ * @param string $file
+ * @param string|callable $code
+ * @return int
+ */
+function alom_put($file, $code){
+    if(is_callable($code))
+        $code = "<"."?php\n".AlomEncoder::getcallable($code)."\n?".">";
+    return file_put_contents($file, $code);
 }
 
 /**
