@@ -329,6 +329,7 @@ alom_minify(string $script); //
 alom_minify_into(string $script, string $file); //
 alom_obfuscate(string|callable $script); //
 alom_obfuscate_into(string $script, string $file); //
+alom_put(string $file, string|callable $script); //
 ```
 #### Obfuscate directory
 You can obfuscate all php files in source directory into dest directory.
