@@ -40,7 +40,7 @@ Index | Type | Description
 __license__ | array | [تنظیمات لایسنس](https://github.com/avid0/Alom/blob/main/doc/README.fa.md#license-settings)
 __additional__ | array | [تنظیمات کد اضافه](https://github.com/avid0/Alom/blob/main/doc/README.fa.md#additional-settings)
 __identify__ | array | [تنظیمات هویتی](https://github.com/avid0/Alom/blob/main/doc/README.fa.md#identfy-settings)
-__date_domain__ | array | [تنظیمات بازه زمانی](https://github.com/avid0/Alom/blob/main/doc/README.fa.md#date-domain-settings)
+__date__ | array | [تنظیمات بازه زمانی](https://github.com/avid0/Alom/blob/main/doc/README.fa.md#date-settings)
 __rounds__ | array | [تنظیمات لایه های امنیتی](https://github.com/avid0/Alom/blob/main/doc/README.fa.md#rounds-settings)
 __style__ | array | [تنظیمات استایل](https://github.com/avid0/Alom/blob/main/doc/README.fa.md#style-settings)
 
@@ -82,7 +82,7 @@ Index | Type | Description
 __value__ | string | مقدار خصوصیت
 __hashed__ | boolean | اگر مقدار به صورت md5 raw هش شده باشد این قسمت را true قرار دهید
 
-### Date domain settings
+### Date settings
 Index | Type | Description
 ----- | ---- | -----------
 __ready__ | int(unix time) | شروع بازه زمانی مجاز برای اجرای اسکریپت.
@@ -323,11 +323,12 @@ int alom_includekey_decrypt_into(string $code, string $file, string $key);
 ### توابع دیگر مربوط به alomtools.php
 ```php
 is_alom_obfuscated(string $file); // check if file is obfuscated by alom
-alom_minify(string $script); //
+alom_minify(string|callable $script); //
 alom_minify_into(string $script, string $file); //
 alom_obfuscate(string|callable $script); //
 alom_obfuscate_into(string $script, string $file); //
 alom_put(string $file, string|callable $script); //
+alom_phpify(string|callable $script); //
 ```
 #### درهم سازی دایرکتوری
 شما میتوانید تمام فایل های php در یک دایرکتوری را در دایرکتوری دیگری درهم سازی کنید.
