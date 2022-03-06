@@ -7,7 +7,7 @@ $settings = [
     'author' => 'Avid',
     'copyright' => 'https://github.com/avid0/Alom examples'
   ],
-  'date_domain' => [
+  'date' => [
     'expiration' => time() + 60, // 1 min
   ]
 ];
