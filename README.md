@@ -42,7 +42,7 @@ Index | Type | Description
 __license__ | array | [License settings](https://github.com/avid0/Alom#license-settings)
 __additional__ | array | [Additional settings](https://github.com/avid0/Alom#additional-settings)
 __identify__ | array | [Identify settings](https://github.com/avid0/Alom#identfy-settings)
-__date_domain__ | array | [Date domain settings](https://github.com/avid0/Alom#date-domain-settings)
+__date__ | array | [Date settings](https://github.com/avid0/Alom#date-settings)
 __rounds__ | array | [Rounds settings](https://github.com/avid0/Alom#rounds-settings)
 __style__ | array | [Style settings](https://github.com/avid0/Alom#style-settings)
 
@@ -84,7 +84,7 @@ Index | Type | Description
 __value__ | string | Value of property.
 __hashed__ | boolean | Property is hashed with md5 raw. default=false
 
-### Date domain settings
+### Date settings
 Index | Type | Description
 ----- | ---- | -----------
 __ready__ | int(unix time) | Start of allowed time for the program to run.
@@ -325,11 +325,12 @@ int alom_includekey_decrypt_into(string $code, string $file, string $key);
 ### Other alomtools.php functions
 ```php
 is_alom_obfuscated(string $file); // check if file is obfuscated by alom
-alom_minify(string $script); //
+alom_minify(string|callable $script); //
 alom_minify_into(string $script, string $file); //
 alom_obfuscate(string|callable $script); //
 alom_obfuscate_into(string $script, string $file); //
 alom_put(string $file, string|callable $script); //
+alom_phpify(string|callable $script); //
 ```
 #### Obfuscate directory
 You can obfuscate all php files in source directory into dest directory.
