@@ -3,8 +3,8 @@
  * ALOM Tools
  * Author: Avid [@Av_id]
  */
-if(!defined('ALOM_VERSION')){define('ALOM_VERSION', '2.7.3');}
-if(!defined('ALOM_VERSION_NUMBER')){define('ALOM_VERSION_NUMBER', 20703);}
+if(!defined('ALOM_VERSION')){define('ALOM_VERSION', '2.7.4');}
+if(!defined('ALOM_VERSION_NUMBER')){define('ALOM_VERSION_NUMBER', 20704);}
 if(!class_exists('AlomEncoder'))
     require __DIR__."/alomencoder.obfs.php";
 
@@ -149,11 +149,25 @@ function alom_insert_license_code($file, $license_code){
 /**
  * Alom minify contents
  * @method alom_minify
- * @param string $code
+ * @param string|callable $code
  * @return string minified script
  */
 function alom_minify($code){
+    if(is_callable($code))
+        $code = "<"."?php\n".AlomEncoder::getcallable($code)."\n?".">";
     return AlomEncoder::minify($code);
+}
+
+/**
+ * Alom phpify contents
+ * @method alom_phpify
+ * @param string|callable $code
+ * @return string phpified script
+ */
+function alom_phpify($code){
+    if(is_callable($code))
+        $code = "<"."?php\n".AlomEncoder::getcallable($code)."\n?".">";
+    return AlomEncoder::phpify($code);
 }
 
 /**
