@@ -1,5 +1,5 @@
 <?php
-require_once "alomtools.php";
+require_once "../alomtools.php";
 
 $key = alom_license_key_generate("password 1234");
 $settings = [
