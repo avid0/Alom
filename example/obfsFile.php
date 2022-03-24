@@ -1,5 +1,5 @@
 <?php
-include_once "alomtoos.php";
+include_once "../alomtoos.php";
 
 $settings = [
   'license' => [
