@@ -1,4 +1,4 @@
-# Alom Obfuscator / PHP Encoder version 2.7
+# Alom Obfuscator / PHP Encoder version 2.8
 
 این درهم ساز زبان پی اچ پی میتونه با تبدیل اسکریپت های شما به یک اسکریپت غیرقابل فهم و تغییر از انها در برابر ادیت شدن محافظت کنه.
 و البته تنظیمات مختلفی هم ارائه داده شده برای نمونه تنظیم قابل اجرا بودن فقط روی یک سیستم خاص یا در یک بازه زمانی خاص, ساختن لایسنس, تنظیم نمایش فایل انکد شده و غیره.
@@ -43,6 +43,7 @@ __identify__ | array | [تنظیمات هویتی](https://github.com/avid0/Alom
 __date__ | array | [تنظیمات بازه زمانی](https://github.com/avid0/Alom/blob/main/doc/README.fa.md#date-settings)
 __rounds__ | array | [تنظیمات لایه های امنیتی](https://github.com/avid0/Alom/blob/main/doc/README.fa.md#rounds-settings)
 __style__ | array | [تنظیمات استایل](https://github.com/avid0/Alom/blob/main/doc/README.fa.md#style-settings)
+__handler__ | array | [تنظیمات هندلر](https://github.com/avid0/Alom#handler-settings)
 
 ### License settings
 Index | Type | Default | Description
@@ -51,9 +52,10 @@ __type__ | string | "comment" | نوع لایسنس comment/file/remove
 __license_file__ | string | "alomObfuscator.php.license" | اگر لایسنس از نوع فایل باشد, این پارامتر نام فایل لایسنس خواهد بود.
 __license_key__ | string | null | ما میتوانیم یک سیستم کد لایسنس با تنظیم کلید لایسنس مخفی بسازیم.
 __license_verifier_api__ | string | null | برای سیستم کد لایسنس میتوانیم یک لینک ای پی ای برای اعتبار سنجی کد لایسنس و کنترل موارد دیگر استفاده کنیم. فرمت لینک ای پی ای باشد به شکل https://example.com/%code% باشد. سپس الوم بجای %code% مقدار md5(license_code) را جایگذاری میکند. خروجی ای پی ای میتواند به فرم "status" یا به فرم باشد "status/warning_log" به طوری که status یک مقدار 0 یا 1 و یا true یا false هست و warning_log یه متن هست.
+__text__ | string | "This script has protected by Alom." | متن اصلی لایسنس در بالا
 __title__ | string | "Obfuscated by Alom" |
 __copyright__ | string | null |
-__description__ | string | null |
+__description__ | string | null | اطلاعات مربوط به اسکریپت
 __checksum__ | bool | false | اگر به مقدار true تنظیم شود, یک مولفه اثرانگشت مانند برای اسکریپت به جای این پارامتر در نظر گرفته میشود.
 __sience__ | string | null |
 __...__ | string | null | بقیه پارامتر های لایسنس
@@ -149,7 +151,12 @@ __display__ | string | "base64" | raw/hex/bin/base64/base64r شیوه نمایش
 Index | Type | Description
 ----- | ---- | -----------
 __decoder_file__ | string | اگر شما ادرس فایل alomdecoder.obfs.php را در این قسمت بگذارید, از تکرار شدن محتوای این فایل برای هر فایل درهم شده جلوگیری میشه و برای اجرا از محتویات این فایل استفاده میشه.
-__optwister_file__ | string | اگر شما ادرس فایل optwister.obfs.php را در این قسمت بگذارید, از تکرار شدن محتوای این فایل برای هر فایل درهم شده جلوگیری میشه و برای اجرا از محتویات این فایل استفاده میشه.
+
+### Handler settings
+Index | Type | Parameters | Description
+----- | ---- | ---------- | -----------
+__error__ | callable | string $message, int $line | برای اررور های سینتاکس اسکریپت.
+__status__ | callable | string $status, int $progress = null | برای وضعیت و پیشرفت درهم سازی. (طولانی ترین سطح درهم سازی وضعیت main_walk هست)
 
 ### Static properties
 Index | Type | Default
