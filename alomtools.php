@@ -1,10 +1,10 @@
 <?php
 /**
  * ALOM Tools
- * Author: Avid [@Av_id]
+ * @author: Avid [@Av_id]
  */
-if(!defined('ALOM_VERSION')){define('ALOM_VERSION', '2.7.4');}
-if(!defined('ALOM_VERSION_NUMBER')){define('ALOM_VERSION_NUMBER', 20704);}
+if(!defined('ALOM_VERSION')){define('ALOM_VERSION', '2.8.0');}
+if(!defined('ALOM_VERSION_NUMBER')){define('ALOM_VERSION_NUMBER', 20800);}
 if(!class_exists('AlomEncoder'))
     require __DIR__."/alomencoder.obfs.php";
 
