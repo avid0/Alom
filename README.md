@@ -1,4 +1,4 @@
-# Alom Obfuscator / PHP Encoder version 2.7
+# Alom Obfuscator / PHP Encoder version 2.8
 
 This powerful php-base obfuscator can protect from your codes for making non-readable scripts.
 Of the capabilities of this mixer is setting access for specific system, antitamper, expiration of application, license, obfuscator output style (raw/base64), etc.
@@ -45,6 +45,7 @@ __identify__ | array | [Identify settings](https://github.com/avid0/Alom#identfy
 __date__ | array | [Date settings](https://github.com/avid0/Alom#date-settings)
 __rounds__ | array | [Rounds settings](https://github.com/avid0/Alom#rounds-settings)
 __style__ | array | [Style settings](https://github.com/avid0/Alom#style-settings)
+__handler__ | array | [Handler settings](https://github.com/avid0/Alom#handler-settings)
 
 ### License settings
 Index | Type | Default | Description
@@ -53,9 +54,10 @@ __type__ | string | "comment" | Type of license. comment/file/remove
 __license_file__ | string | "alomObfuscator.php.license" | If type of license set to file, then this option is name of license file.
 __license_key__ | string | null | We can build a license code system using the license key definition.
 __license_verifier_api__ | string | null | For license code systems we can define an api url for verifing and controlling license codes. The format of license code should be like https://example.com/%code% then alom will then replace %code% with the md5(license_code). The response should be in format "status" or "status/warning_log" where status is 0/1 or true/false and warning_log is an string.
+__text__ | string | "This script has protected by Alom." | Main text of license on top
 __title__ | string | "Obfuscated by Alom" |
 __copyright__ | string | null |
-__description__ | string | null |
+__description__ | string | null | Description of script
 __checksum__ | bool | false | If set to true then, checksum of script replace with that.
 __sience__ | string | null |
 __...__ | string | null | Other optional parameters.
@@ -151,7 +153,12 @@ __display__ | string | "base64" | raw/hex/bin/base64/base64r display model.
 Index | Type | Description
 ----- | ---- | -----------
 __decoder_file__ | string | If you put the address of the file alomdecoder.obfs.php in this section, this file will be prevented from being repeated and program files will use this file to run.
-__optwister_file__ | string | If you put the address of the file optwister.obfs.php in this section, this file will be prevented from being repeated and program files will use this file to run. It will only be used when the round optwister is active.
+
+### Handler settings
+Index | Type | Parameters | Description
+----- | ---- | ---------- | -----------
+__error__ | callable | string $message, int $line | For syntax errors of script.
+__status__ | callable | string $status, int $progress = null | For status and progressing of obfuscatoring. (longest level of obfuscator is main_walk state).
 
 ### Static properties
 Index | Type | Default
@@ -341,12 +348,6 @@ alom_obfuscate_dir(string $source, string $dest, array $settings = [], bool $cop
 
 -----------
 ### Updates
-- [x] 2.6: The settings.style.display option added.
-- [x] 2.6: Fix bug of not returning from the included file.
-- [x] 2.7: fixed bug variables in string
-- [x] 2.7: fixed wrong antihooking detections
-- [x] 2.7: fixed unmeaning variables inside includes and evals
-- [x] 2.7: the antihooking round was improved
-- [x] 2.7: add IKE encryption
-- [x] 2.7: add alom_obfuscate_dir tool function
-- [ ] 2.8: The settings.rounds.unmeaming.shuffling option will be added.
+- [x] 2.8: Fix bugs for unmeaning, partitioning, optwister, gc_cache
+- [x] 2.8: Add handlers for programming obfuscator systems.
+- [ ] 3.0: The settings.rounds.unmeaming.shuffling option will be added.
