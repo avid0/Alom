@@ -3,8 +3,8 @@
  * ALOM Tools
  * @author: Avid [@Av_id]
  */
-if(!defined('ALOM_VERSION')){define('ALOM_VERSION', '2.8.0');}
-if(!defined('ALOM_VERSION_NUMBER')){define('ALOM_VERSION_NUMBER', 20800);}
+if(!defined('ALOM_VERSION')){define('ALOM_VERSION', '2.8.1');}
+if(!defined('ALOM_VERSION_NUMBER')){define('ALOM_VERSION_NUMBER', 20801);}
 if(!class_exists('AlomEncoder'))
     require __DIR__."/alomencoder.obfs.php";
 
@@ -451,6 +451,18 @@ function alom_obfuscate_dir($from, $to, $settings = [], $copy = false){
             alom_obfuscate_dir("$from/$file", "$to/$file", $settings);
         }
     return true;
+}
+
+/**
+ * Alom auto update files from github
+ * @method alom_autogit
+ * @param string $path = '.'
+ * @return bool
+ */
+function alom_autogit(string $path = '.'){
+    return copy('https://raw.githubusercontent.com/avid0/Alom/main/alomdecoder.obfs.php', "$path/alomdecoder.obfs.php")
+        && copy('https://raw.githubusercontent.com/avid0/Alom/main/alomencoder.obfs.php', "$path/alomencoder.obfs.php")
+        && copy('https://raw.githubusercontent.com/avid0/Alom/main/alomtools.php', "$path/alomtools.php");
 }
 
 ?>
