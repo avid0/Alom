@@ -167,6 +167,19 @@ __AlomEncoder::$logger__ | boolean | is cli
 
 ## Properties
 
+### Alom auto update
+You can use the function alom_autogit on top of your scripts for auto updating alom files.
+```php
+require_once "alomtools.php";
+/**
+ * Alom auto update files from github
+ * @method alom_autogit
+ * @param string $path = '.'
+ * @return bool
+ */
+alom_autogit("path/alom");
+```
+
 ### Alom auto protection
 You can use this feature to automatically protect scripts on your system.
 ```php
