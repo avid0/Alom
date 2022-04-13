@@ -165,6 +165,19 @@ __AlomEncoder::$logger__ | boolean | اگر محیط cli باشد مقدار ا�
 
 ## Properties
 
+### Alom auto update
+شما میتوانید با اضافه کردن تابع alom_autogit دربالای اسکریپت خود فایل های آلوم را به طور خودکار اپدیت کنید.
+```php
+require_once "alomtools.php";
+/**
+ * Alom auto update files from github
+ * @method alom_autogit
+ * @param string $path = '.'
+ * @return bool
+ */
+alom_autogit("path/alom");
+```
+
 ### Alom auto protection
 شما میتونید از این خاصیت برای درهم سازی اتوماتیک سورس ها در یک سرور مشخص استفاده کنید.
 ```php
