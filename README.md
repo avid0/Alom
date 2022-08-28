@@ -1,4 +1,5 @@
 # Alom Obfuscator / PHP Encoder version 2.8
+### (Deprecated - A new version will be written soon)
 
 This powerful php-base obfuscator can protect from your codes for making non-readable scripts.
 Of the capabilities of this mixer is setting access for specific system, antitamper, expiration of application, license, obfuscator output style (raw/base64), etc.
