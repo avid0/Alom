@@ -15,8 +15,11 @@ alom_protect(__FILE__, [
   ]
 ]);
 
-$var = "Hello i am hidden! find me :)";
-print "Hello Tortoise!";
-unset($var);
+$obfuscatored = AlomEncoder::Obfuscator(function(){
+  $var = "Hello I am hidden! find me";
+  print "Hello Tortoise!";
+  alom_protect_var($var);
+}, $settings);
+file_put_contents('helloTortoise.obfs.php', $obfuscatored);
 
 ?>
