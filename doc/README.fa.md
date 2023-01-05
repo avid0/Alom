@@ -1,4 +1,4 @@
-# Alom Obfuscator / PHP Encoder version 2.8
+# Alom Obfuscator / PHP Encoder version 3.0
 
 این درهم ساز زبان پی اچ پی میتونه با تبدیل اسکریپت های شما به یک اسکریپت غیرقابل فهم و تغییر از انها در برابر ادیت شدن محافظت کنه.
 و البته تنظیمات مختلفی هم ارائه داده شده برای نمونه تنظیم قابل اجرا بودن فقط روی یک سیستم خاص یا در یک بازه زمانی خاص, ساختن لایسنس, تنظیم نمایش فایل انکد شده و غیره.
@@ -127,6 +127,9 @@ __deep__ | boolean | false (بخاطر اجرای کند)
 Index | Type | Default
 ----- | ---- | -------
 __variables__ | boolean | true
+__strings__ | boolean | true
+__statements__ | boolean | true
+__var2str__ | boolean | false
 __salt__ | string | ALOM_UNIQUE_RANDOM
 __prefix__ | string | '\_'
 __size__ | int | 10
