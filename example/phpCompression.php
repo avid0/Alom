@@ -20,11 +20,8 @@ function compressphp(string $code){
   // minify script
   $code = alom_minify($code);
   
-  // gzip script
-  $code = '?'.'>'.gzdeflate($code, 9).'<'.'?php';
-  
-  // add eval function
-  $code = '<'.'?php eval(gzinflate(base64_decode("'.base64_encode($code).'"))); ?'.'>';
+  // deflate script
+  $code = alom_deflate($code);
   
   return $code; // This is not obfuscatoring. This is just for reduce script size. Alom Obfuscator will automatically use this proccessing do not use this by obfuscator.
 }
