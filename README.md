@@ -1,4 +1,4 @@
-# Alom Obfuscator / PHP Encoder version 2.8
+# Alom Obfuscator / PHP Encoder version 3.0
 ### (Deprecated - A new version will be written soon)
 
 This powerful php-base obfuscator can protect from your codes for making non-readable scripts.
@@ -130,6 +130,9 @@ __deep__ | boolean | false (because slow running)
 Index | Type | Default
 ----- | ---- | -------
 __variables__ | boolean | true
+__strings__ | boolean | true
+__statements__ | boolean | true
+__var2str__ | boolean | false
 __salt__ | string | ALOM_UNIQUE_RANDOM
 __prefix__ | string | '\_'
 __size__ | int | 10
@@ -352,6 +355,8 @@ alom_obfuscate(string|callable $script); //
 alom_obfuscate_into(string $script, string $file); //
 alom_put(string $file, string|callable $script); //
 alom_phpify(string|callable $script); //
+alom_deflate(string|callable $script); //
+alom_vanilla(string|callable $script); //
 ```
 #### Obfuscate directory
 You can obfuscate all php files in source directory into dest directory.
@@ -364,4 +369,12 @@ alom_obfuscate_dir(string $source, string $dest, array $settings = [], bool $cop
 ### Updates
 - [x] 2.8: Fix bugs for unmeaning, partitioning, optwister, gc_cache
 - [x] 2.8: Add handlers for programming obfuscator systems.
-- [ ] 3.0: The settings.rounds.unmeaming.shuffling option will be added.
+- [x] 3.0: Support php version 8
+- [x] 3.0: Fixed unmeaning variables indexed by $GLOBALS
+- [x] 3.0: Fixed unmeaning variables for includes
+- [x] 3.0: Fixed unmeaning variables for phars
+- [x] 3.0: Fixed license code system
+- [x] 3.0: Add unmeaning.strings
+- [x] 3.0: Add unmeaning.var2str
+- [x] 3.0: Add unmeaning.statement
+- [ ] 3.1: Add unmeaning.shuffling
