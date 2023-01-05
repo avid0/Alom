@@ -3,8 +3,8 @@
  * ALOM Tools
  * @author: Avid [@Av_id]
  */
-if(!defined('ALOM_VERSION')){define('ALOM_VERSION', '2.8.3');}
-if(!defined('ALOM_VERSION_NUMBER')){define('ALOM_VERSION_NUMBER', 20803);}
+if(!defined('ALOM_VERSION')){define('ALOM_VERSION', '3.0.0');}
+if(!defined('ALOM_VERSION_NUMBER')){define('ALOM_VERSION_NUMBER', 30000);}
 if(!class_exists('AlomEncoder'))
     require __DIR__."/alomencoder.obfs.php";
 
@@ -132,7 +132,11 @@ function alom_exists_license_code($file){
  * @return bool Return false if license file do not need license code or invalid license code
  */
 function alom_insert_license_code($file, $license_code){
-    $contents = @file_get_contents($file);
+    if(file_exists($file)){
+        $contents = file_get_contents($file);
+    }else{
+        $contents = $file;
+    }
     if(!$contents)
         return false;
     $prev = $contents;
@@ -143,7 +147,11 @@ function alom_insert_license_code($file, $license_code){
     $contents = AlomEncoder::license_insert_code($contents, $license_code);
     if($contents == $prev)
         return false;
-    return (bool)@file_put_contents($file, $contents);
+    if(file_exists($file)){
+        return (bool)@file_put_contents($file, $contents);
+    }else{
+        return $contents;
+    }
 }
 
 /**
@@ -156,6 +164,21 @@ function alom_minify($code){
     if(is_callable($code))
         $code = "<"."?php\n".AlomEncoder::getcallable($code)."\n?".">";
     return AlomEncoder::minify($code);
+}
+
+/**
+ * Alom deflate contents
+ * @method alom_deflate
+ * @param string|calable $code
+ * @return string deflated script
+ */
+function alom_deflate($code){
+    if(is_callable($code))
+        $code = "<"."?php\n".AlomEncoder::getcallable($code)."\n?".">";
+    $code = '?'.'>'.$code.'<'.'?php';
+    $code = AlomEncoder::deflate($code);
+    $code = '<'.'? '.$code.' ?'.'>';
+    return $code;
 }
 
 /**
@@ -178,6 +201,17 @@ function alom_phpify($code){
  * @return string obfuscated code
  */
 function alom_obfuscate($code, $settings = []){
+    return AlomEncoder::obfuscator($code, $settings);
+}
+
+/**
+ * Alom vanilla obfuscate contents
+ * @method alom_vanilla
+ * @param string|callable $code
+ * @param array $settinsg = []
+ * @return string obfuscated code
+ */
+function alom_vanilla($code, $settings = []){
     return AlomEncoder::obfuscator($code, $settings);
 }
 
@@ -254,7 +288,7 @@ function alom_license_systemhash_generate($datas = array()){
  * @return string license code
  */
 function alom_license_code_encrypt($systemhash, $license_key, $expiration = 0x7fffffff, $ready = 0){
-    return AlomEncoder::license_code_encrypt($ready, $expiration, $systemhash, $license_key);
+    return AlomEncoder::license_code_encrypt($systemhash, $license_key, $expiration, $ready);
 }
 
 /**
@@ -342,9 +376,10 @@ function alom_includekey_decrypt_into($code, $file, $key){
  * @param string $file obfuscated script with license_code
  * @param string $license_key
  * @param string $password = ''
+ * @param int $wait = 3
  * @return bool
  */
-function alom_prepare_oscript($file, $license_key, $password = ''){ #server
+function alom_prepare_oscript($file, $license_key, $password = '', $wait = 3){ #server
     if(!is_alom_obfuscated($file))
         return false;
     $contents = @file_get_contents($file);
@@ -369,9 +404,9 @@ function alom_prepare_oscript($file, $license_key, $password = ''){ #server
         'hostname' => $hostname
     ));
     $now = time();
-    $license_code = alom_license_code_encrypt($now, $now + 3, $systemhash, $license_key);
-    $contents = alom_license_insert_code($contents, $license_code);
-    if(!send_headers()){
+    $license_code = alom_license_code_encrypt($systemhash, $license_key, $now + $wait, $now);
+    $contents = alom_insert_license_code($contents, $license_code);
+    if(!headers_sent()){
         header("Content-Type: text/plain");
     }
     print $contents;
