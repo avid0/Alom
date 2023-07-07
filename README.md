@@ -7,6 +7,8 @@ Of the capabilities of this mixer is setting access for specific system, antitam
 
 [Download ZIP](https://github.com/avid0/Alom/archive/refs/heads/main.zip)
 
+## Supports for PHP version <= 8.0
+
 --------------
 
 for obfuscatoring we need require alomencoder.obfs.php :
